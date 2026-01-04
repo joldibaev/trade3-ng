@@ -1,1 +1,51 @@
+<div class="p-8 flex flex-col gap-4 items-start">
+  <h1 class="text-xl font-bold mb-4">1C GUI Components</h1>
+
+  <div class="flex gap-2">
+    <button uiButton variant="primary">Записать и закрыть</button>
+    <button uiButton variant="secondary">Записать</button>
+    <button uiButton variant="secondary">Закрыть</button>
+  </div>
+
+  <div class="flex gap-2 mt-4">
+    <button uiButton variant="ghost">
+      Печать
+    </button>
+    <button uiButton variant="ghost">Отправить</button>
+  </div>
+
+  <div class="mt-8 grid grid-cols-1 gap-4 w-full max-w-md">
+    <h2 class="text-lg font-semibold">Данные документа</h2>
+
+    <ui-input label="Номер" [control]="numberControl" placeholder="Авто" />
+    <ui-input label="Организация" [control]="orgControl" />
+    <ui-input label="Комментарий" [control]="commentControl" placeholder="Введите текст..." disabled />
+  </div>
+
+  <div class="mt-8 w-full max-w-md">
+    <h2 class="text-lg font-semibold mb-2">Детализация</h2>
+    <ui-accordion [items]="accordionItems" />
+  </div>
+
+  <div class="mt-8 w-full max-w-2xl">
+    <h2 class="text-lg font-semibold mb-2">Товары</h2>
+    <ui-table [columns]="tableColumns" [data]="tableData" />
+  </div>
+</div>
+
+<button uiButton variant="ghost" ngMenuTrigger #trigger="ngMenuTrigger" [menu]="printMenuComp()?.menu() ?? undefined"
+  cdkOverlayOrigin #origin="cdkOverlayOrigin">
+  Печать
+</button>
+
+<ng-template [cdkConnectedOverlayOpen]="trigger.expanded()" [cdkConnectedOverlay]="{origin, usePopover: 'inline'}">
+  <ui-menu #printMenuCompRef [items]="printMenuItems" (itemSelected)="onMenuAction($event)" />
+</ng-template>
+
+
+<div class="text-9xl my-10">
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias consectetur dicta expedita, explicabo maxime mollitia
+  natus nihil non optio recusandae saepe, veniam voluptatum? Accusamus ad aspernatur, dicta fuga minus quia?
+</div>
+
 <router-outlet />

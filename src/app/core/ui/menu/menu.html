@@ -1,0 +1,7 @@
+<div ngMenu class="menu">
+    @for (item of items(); track item.id) {
+    <div ngMenuItem [value]="item" (click)="itemSelected.emit(item.id)" class="menu-item">
+        {{ item.label }}
+    </div>
+    }
+</div>

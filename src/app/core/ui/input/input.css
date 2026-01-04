@@ -1,0 +1,21 @@
+@reference './../../../../styles.css';
+
+label {
+  @apply text-xs text-gray-400 select-none;
+}
+
+input {
+  @apply px-2 py-1 text-sm border border-gray-300 text-gray-800 bg-white rounded-sm transition-all outline-none w-full;
+}
+
+input:focus, input:focus-visible, input:focus-within {
+  @apply focus-ring bg-primary-50 border-gray-300;
+}
+
+input::placeholder {
+  @apply text-gray-400 italic;
+}
+
+input:disabled {
+  @apply bg-gray-100 text-gray-400 cursor-not-allowed;
+}
