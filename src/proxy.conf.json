@@ -1,0 +1,6 @@
+{
+  "/api/**": {
+    "target": "http://server.joldibaev.uz",
+    "secure": false
+  }
+}

@@ -1,13 +1,15 @@
-import { ChangeDetectionStrategy, Component, viewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Button } from './core/ui/button/button';
-import { Input } from './core/ui/input/input';
-import { Accordion } from './core/ui/accordion/accordion';
-import { Menu as UiMenu } from './core/ui/menu/menu';
-import { Table } from './core/ui/table/table';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MenuTrigger } from '@angular/aria/menu';
-import { OverlayModule } from '@angular/cdk/overlay';
+import {ChangeDetectionStrategy, Component, inject, viewChild} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {Button} from './core/ui/button/button';
+import {Input} from './core/ui/input/input';
+import {Accordion} from './core/ui/accordion/accordion';
+import {Menu as UiMenu} from './core/ui/menu/menu';
+import {Table} from './core/ui/table/table';
+import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {MenuTrigger} from '@angular/aria/menu';
+import {OverlayModule} from '@angular/cdk/overlay';
+import {UserService} from './core/services/user.service';
+import {JsonPipe} from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +22,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
     Table,
     ReactiveFormsModule,
     MenuTrigger,
-    OverlayModule
+    OverlayModule,
+    JsonPipe
   ],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -63,4 +66,7 @@ export class App {
     { id: 4, name: 'Монитор Dell P2419H', quantity: 2, price: '18 000', sum: '36 000' },
     { id: 5, name: 'Кабель HDMI 2.0', quantity: 5, price: '800', sum: '4 000' }
   ];
+
+  private usersService = inject(UserService);
+  users = this.usersService.getAll();
 }
