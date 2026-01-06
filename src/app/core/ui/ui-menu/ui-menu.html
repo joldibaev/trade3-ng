@@ -1,37 +1,58 @@
-<ng-template
-  [cdkConnectedOverlayOpen]="trigger().expanded()"
-  [cdkConnectedOverlay]="{ origin: origin(), usePopover: 'inline' }"
->
-  <ul ngMenu #formatMenu="ngMenu" class="ui-menu">
-    @for (item of items(); track item) {
-      @if ('id' in item) {
-        <li ngMenuItem [value]="item.id" class="ui-menu-item">
-          <span>{{ item.label }}</span>
-
-          @if (item.items?.length) {
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              color="#261818"
+@if (items()?.length) {
+  <ng-template
+    [cdkConnectedOverlayOpen]="visible()"
+    [cdkConnectedOverlay]="{ origin: origin(), usePopover: 'inline' }"
+    [cdkConnectedOverlayPositions]="overlayPositions()"
+    [cdkConnectedOverlayPush]="true"
+  >
+    <div ngMenu #menuEl="ngMenu" class="ui-menu">
+      <ng-template ngMenuContent>
+        @for (item of items(); track item) {
+          @if ('id' in item) {
+            <div
+              ngMenuItem
+              cdkOverlayOrigin
+              #origin="cdkOverlayOrigin"
+              class="ui-menu-item"
+              [value]="item.id"
+              [submenu]="subMenu.menu()"
             >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M8.71299 18.6929C8.43273 18.5768 8.25 18.3033 8.25 18V5.99998C8.25 5.69663 8.43273 5.42315 8.71299 5.30707C8.99324 5.19098 9.31583 5.25515 9.53033 5.46965L15.5303 11.4696C15.8232 11.7625 15.8232 12.2374 15.5303 12.5303L9.53033 18.5303C9.31583 18.7448 8.99324 18.809 8.71299 18.6929Z"
-                fill="#261818"
-              ></path>
-            </svg>
+              <span>{{ item.label }}</span>
+
+              @if (item.items?.length) {
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  color="#261818"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.71299 18.6929C8.43273 18.5768 8.25 18.3033 8.25 18V5.99998C8.25 5.69663 8.43273 5.42315 8.71299 5.30707C8.99324 5.19098 9.31583 5.25515 9.53033 5.46965L15.5303 11.4696C15.8232 11.7625 15.8232 12.2374 15.5303 12.5303L9.53033 18.5303C9.31583 18.7448 8.99324 18.809 8.71299 18.6929Z"
+                    fill="#261818"
+                  ></path>
+                </svg>
+              }
+            </div>
+
+            <ui-menu
+              [overlayPositions]="[
+                { originX: 'end', originY: 'top', overlayY: 'top', overlayX: 'start', offsetX: 6 },
+              ]"
+              #subMenu
+              [items]="item.items"
+              [origin]="origin"
+              [visible]="menuEl.visible()"
+            />
+          } @else if ('divider' in item) {
+            <hr role="separator" class="border-gray-200" />
           }
-        </li>
-      } @else if ('divider' in item) {
-        <li>
-          <hr class="border-gray-200" />
-        </li>
-      }
-    }
-  </ul>
-</ng-template>
+        }
+      </ng-template>
+    </div>
+  </ng-template>
+}

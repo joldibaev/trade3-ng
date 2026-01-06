@@ -6,7 +6,7 @@
     variant="ghost"
     ngMenuTrigger
     #trigger="ngMenuTrigger"
-    [menu]="menuComp.formatMenu()"
+    [menu]="menuComp.menu()"
     cdkOverlayOrigin
     #origin="cdkOverlayOrigin"
   >
@@ -18,7 +18,7 @@
     variant="secondary"
     ngMenuTrigger
     #trigger2="ngMenuTrigger"
-    [menu]="menuComp2.formatMenu()"
+    [menu]="menuComp2.menu()"
     cdkOverlayOrigin
     #origin2="cdkOverlayOrigin"
   >
@@ -26,5 +26,5 @@
   </button>
 </div>
 
-<ui-menu #menuComp [trigger]="trigger" [origin]="origin" [items]="menuItems" />
-<ui-menu #menuComp2 [trigger]="trigger2" [origin]="origin2" [items]="menuItems" />
+<ui-menu #menuComp [visible]="trigger.expanded()" [origin]="origin" [items]="menuItems" />
+<ui-menu #menuComp2 [visible]="trigger2.expanded()" [origin]="origin2" [items]="menuItems" />

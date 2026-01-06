@@ -1,6 +1,10 @@
 @layer components {
   .ui-menu {
-    @apply flex min-w-[200px] flex-col rounded-sm border border-gray-300 bg-white py-1 shadow-lg outline-none;
+    @apply relative flex min-w-[200px] flex-col rounded-sm border border-gray-300 bg-white py-1 shadow-lg outline-none;
+
+    &[data-visible='false'] {
+      @apply hidden;
+    }
   }
 
   .ui-menu-item {

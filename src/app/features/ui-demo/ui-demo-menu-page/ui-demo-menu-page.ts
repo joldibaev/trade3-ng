@@ -21,19 +21,22 @@ export class UiDemoMenuPage {
     {
       id: 'share',
       label: 'Поделиться',
-      // items: [
-      //   { id: 'telegram', label: 'Телеграм' },
-      //   { id: 'instagram', label: 'Инстаграм' },
-      // ],
+      items: [
+        { id: 'mail', label: 'Почта' },
+        { id: 'telegram', label: 'Телеграм' },
+        {
+          id: 'meta',
+          label: 'Мета',
+          items: [
+            { id: 'facebook', label: 'Facebook' },
+            { id: 'instagram', label: 'Instagram' },
+          ],
+        },
+      ],
     },
     { id: 'print', label: 'Распечатать' },
     { id: 'rename', label: 'Переименовать' },
     { divider: true },
     { id: 'delete', label: 'Удалить' },
   ];
-
-  onAction(item: { id: string; label: string }) {
-    console.log('Menu Action:', item);
-    alert(`Selected: ${item.label}`);
-  }
 }

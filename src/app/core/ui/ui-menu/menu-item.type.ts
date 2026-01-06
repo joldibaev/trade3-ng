@@ -1,12 +1,12 @@
-interface MenuItemLabel {
+export interface MenuItemLabel {
   id: string;
   label: string;
-  // items?: MenuItemCollection[];
+  items?: MenuItemCollection;
   // class?: string[];
 }
 
-interface MenuItemDivider {
+export interface MenuItemDivider {
   divider: true;
 }
 
-export type MenuItemCollection = Array<MenuItemLabel | MenuItemDivider>;
+export type MenuItemCollection = (MenuItemLabel | MenuItemDivider)[];
