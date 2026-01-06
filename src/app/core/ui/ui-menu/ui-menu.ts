@@ -1,9 +1,11 @@
-import { Menu, MenuItem } from '@angular/aria/menu';
+import { Menu, MenuItem, MenuTrigger } from '@angular/aria/menu';
+import { CdkConnectedOverlay, CdkOverlayOrigin, OverlayModule } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, Component, input, viewChild } from '@angular/core';
+import { MenuItemCollection } from './menu-item.type';
 
 @Component({
   selector: 'ui-menu',
-  imports: [Menu, MenuItem],
+  imports: [Menu, MenuItem, CdkConnectedOverlay, OverlayModule],
   templateUrl: './ui-menu.html',
   styleUrl: './ui-menu.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,6 +14,9 @@ import { ChangeDetectionStrategy, Component, input, viewChild } from '@angular/c
   },
 })
 export class UiMenu {
-  items = input<{ id: string; label: string }[]>([]);
-  formatMenu = viewChild.required<Menu<string>>('formatMenu');
+  items = input<MenuItemCollection>([]);
+  formatMenu = viewChild<Menu<string>>('formatMenu');
+
+  trigger = input.required<MenuTrigger<string>>();
+  origin = input.required<CdkOverlayOrigin>();
 }

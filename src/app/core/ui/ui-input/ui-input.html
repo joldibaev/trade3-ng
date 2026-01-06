@@ -1,5 +1,44 @@
-@if (label()) {
-  <label [for]="id()">{{ label() }}</label>
-}
+@if (!hidden()) {
+  @if (label()) {
+    <label class="ui-form-label" [for]="id()">
+      <span>{{ label() }}</span>
 
-<input [id]="id()" [type]="type()" [placeholder]="placeholder()" [formControl]="control()" />
+      @if (readonly()) {
+        <span>(readonly)</span>
+      }
+    </label>
+  }
+
+  <input
+    class="ui-form-control"
+    [attr.aria-label]="label()"
+    [attr.enterkeyhint]="enterKeyHint()"
+    [attr.inputmode]="inputMode()"
+    [autocomplete]="autocomplete()"
+    [id]="id()"
+    [name]="name()"
+    [placeholder]="placeholder()"
+    [readOnly]="readonly()"
+    [spellcheck]="spellCheck()"
+    [type]="type()"
+    [value]="value()"
+    (input)="onInput($event.target)"
+    [disabled]="disabled()"
+    [readonly]="readonly()"
+    [class.invalid]="invalid()"
+    [attr.aria-invalid]="invalid()"
+    (blur)="touched.set(true)"
+  />
+
+  @if (invalid()) {
+    @for (error of errors(); track error) {
+      <small class="text-xs text-red-400">{{ error.message }}</small>
+    }
+  }
+
+  @if (disabled() && disabledReasons().length > 0) {
+    @for (reason of disabledReasons(); track reason) {
+      <small class="text-xs text-gray-400">{{ reason.message }}</small>
+    }
+  }
+}

@@ -1,7 +1,10 @@
 @import 'tailwindcss';
 
+@import './styles/components/_button.css';
+@import './styles/components/_form.css';
+@import './styles/components/_menu.css';
+
 @theme {
-  /* Primary Palette (Yellow) */
   --color-primary-50: var(--color-yellow-50);
   --color-primary-100: var(--color-yellow-100);
   --color-primary-200: var(--color-yellow-200);
@@ -16,5 +19,9 @@
 }
 
 @utility focus-ring {
-  @apply ring-primary-400 ring-2 ring-offset-2;
+  @apply ring-primary-400 focus-visible:ring-2 ring-offset-2 relative z-10;
+}
+
+@utility typo-1 {
+  @apply font-bold tracking-wider text-gray-500 uppercase;
 }

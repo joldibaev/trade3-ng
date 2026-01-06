@@ -1,7 +1,5 @@
 @if (loading()) {
-  <span class="ui-button-spinner"></span>
+  <ui-loading class="h-4 w-4" />
 }
 
-<span class="ui-button-content" [class.ui-button-content--hidden]="loading()">
-  <ng-content></ng-content>
-</span>
+<span><ng-content></ng-content></span>

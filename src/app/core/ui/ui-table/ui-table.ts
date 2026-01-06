@@ -1,10 +1,6 @@
 import { Grid, GridCell, GridRow } from '@angular/aria/grid';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-
-export interface TableColumn {
-  key: string;
-  header: string;
-}
+import { TableColumn } from './table-column.interface';
 
 @Component({
   selector: 'ui-table',
@@ -18,5 +14,5 @@ export interface TableColumn {
 })
 export class UiTable {
   columns = input.required<TableColumn[]>();
-  data = input.required<unknown[]>();
+  data = input.required<Record<string, unknown>[]>();
 }

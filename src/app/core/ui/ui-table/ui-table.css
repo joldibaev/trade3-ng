@@ -5,9 +5,9 @@ th {
 }
 
 tr {
-  @apply bg-white transition-colors;
+  @apply bg-white;
   /* Highlight row on hover or when any cell inside has focus */
-  @apply hover:bg-primary-100 focus-within:bg-primary-100;
+  @apply focus-within:bg-primary-100;
 }
 
 td {
@@ -15,9 +15,7 @@ td {
 }
 
 /* Use outline for table cells as box-shadow (ring) can be clipped in border-collapse tables */
-td:focus,
-td:focus-visible {
-  @apply relative z-10;
+td:focus {
   outline: 2px solid var(--color-primary-400);
   outline-offset: -2px;
   /* Draw inside to avoid layout shift/clipping */

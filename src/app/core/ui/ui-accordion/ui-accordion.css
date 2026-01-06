@@ -8,14 +8,8 @@
   @apply border-b border-gray-300 outline-none;
 }
 
-.accordion-header:focus,
-.accordion-header:focus-visible,
-.accordion-header:focus-within {
-  @apply focus-ring relative z-10;
-}
-
 .accordion-header {
-  @apply flex cursor-pointer items-center gap-2 rounded-sm bg-gray-50 px-2 py-2 transition-colors outline-none select-none;
+  @apply focus-ring flex cursor-pointer items-center gap-2 rounded-sm bg-gray-50 px-2 py-2 outline-none select-none;
 }
 
 .accordion-header:hover {
@@ -27,7 +21,7 @@
 }
 
 .accordion-arrow {
-  @apply text-gray-500 transition-transform duration-200;
+  @apply text-gray-500;
 }
 
 .accordion-arrow.expanded {
@@ -35,7 +29,7 @@
 }
 
 .accordion-body {
-  @apply overflow-hidden bg-white transition-all duration-200;
+  @apply overflow-hidden bg-white;
 }
 
 .accordion-body.hidden {

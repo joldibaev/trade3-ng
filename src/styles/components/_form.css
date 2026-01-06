@@ -1,0 +1,30 @@
+@layer components {
+  .ui-form-label {
+    @apply flex items-center gap-1 text-xs font-medium text-gray-400 select-none;
+
+    &:has(+ .invalid) {
+      @apply text-red-400;
+    }
+  }
+
+  .ui-form-control {
+    @apply focus-ring w-full rounded-sm border border-gray-300 bg-white px-2 py-1 text-sm text-gray-800 outline-none;
+
+    &:focus-visible {
+      @apply bg-primary-50 border-gray-300;
+    }
+
+    &::placeholder {
+      @apply text-gray-400 italic;
+    }
+
+    &:disabled {
+      @apply cursor-not-allowed bg-gray-100 text-gray-400;
+    }
+
+    &:user-invalid,
+    &.invalid {
+      @apply border-red-300 ring-red-100;
+    }
+  }
+}
