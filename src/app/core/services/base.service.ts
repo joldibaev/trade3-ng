@@ -1,6 +1,6 @@
-import {HttpClient, httpResource} from '@angular/common/http';
-import {inject} from '@angular/core';
-import {ApiResponse} from '../../shared/interfaces/api-response.interface';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { ApiResponse } from '../../shared/interfaces/api-response.interface';
 
 export abstract class BaseService<T> {
   protected http = inject(HttpClient);

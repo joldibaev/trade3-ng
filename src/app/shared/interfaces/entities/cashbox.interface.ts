@@ -1,4 +1,4 @@
-import { DocumentSale } from './documentsale.interface';
+import { DocumentSale } from './document-sale.interface';
 import { Store } from './store.interface';
 
 export interface Cashbox {

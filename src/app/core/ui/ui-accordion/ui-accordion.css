@@ -1,0 +1,47 @@
+@reference './../../../../styles.css';
+
+.accordion {
+  @apply flex flex-col border-t border-gray-300;
+}
+
+.accordion-item {
+  @apply border-b border-gray-300 outline-none;
+}
+
+.accordion-header:focus,
+.accordion-header:focus-visible,
+.accordion-header:focus-within {
+  @apply focus-ring relative z-10;
+}
+
+.accordion-header {
+  @apply flex cursor-pointer items-center gap-2 rounded-sm bg-gray-50 px-2 py-2 transition-colors outline-none select-none;
+}
+
+.accordion-header:hover {
+  @apply bg-primary-100;
+}
+
+.accordion-title {
+  @apply text-sm font-semibold text-gray-800;
+}
+
+.accordion-arrow {
+  @apply text-gray-500 transition-transform duration-200;
+}
+
+.accordion-arrow.expanded {
+  @apply rotate-90;
+}
+
+.accordion-body {
+  @apply overflow-hidden bg-white transition-all duration-200;
+}
+
+.accordion-body.hidden {
+  @apply hidden;
+}
+
+.accordion-content {
+  @apply p-4 text-sm leading-relaxed text-gray-800;
+}

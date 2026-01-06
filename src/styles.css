@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   /* Primary Palette (Yellow) */
@@ -16,5 +16,5 @@
 }
 
 @utility focus-ring {
-  @apply ring-2 ring-primary-400 ring-offset-2;
+  @apply ring-primary-400 ring-2 ring-offset-2;
 }

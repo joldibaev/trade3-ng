@@ -1,4 +1,4 @@
-import { DocumentPurchase } from './documentpurchase.interface';
+import { DocumentPurchase } from './document-purchase.interface';
 
 export interface Vendor {
   id: string;

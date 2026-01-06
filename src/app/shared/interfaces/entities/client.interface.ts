@@ -1,5 +1,5 @@
-import { DocumentReturn } from './documentreturn.interface';
-import { DocumentSale } from './documentsale.interface';
+import { DocumentReturn } from './document-return.interface';
+import { DocumentSale } from './document-sale.interface';
 
 export interface Client {
   id: string;

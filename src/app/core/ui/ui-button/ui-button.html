@@ -1,0 +1,7 @@
+@if (loading()) {
+  <span class="ui-button-spinner"></span>
+}
+
+<span class="ui-button-content" [class.ui-button-content--hidden]="loading()">
+  <ng-content></ng-content>
+</span>

@@ -1,0 +1,46 @@
+@reference './../../../../styles.css';
+
+:host {
+  @apply inline-flex cursor-pointer items-center justify-center rounded-sm border px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-colors outline-none select-none;
+}
+
+:host:focus,
+:host:focus-visible,
+:host:focus-within {
+  @apply focus-ring;
+}
+
+/* Primary */
+:host([variant='primary']) {
+  @apply bg-primary-400 border-gray-300 text-gray-800;
+}
+
+:host([variant='primary']):hover {
+  @apply bg-primary-200;
+}
+
+:host([variant='primary']):active {
+  @apply bg-primary-500;
+}
+
+/* Secondary */
+:host([variant='secondary']) {
+  @apply border-gray-300 bg-gray-100 text-gray-800;
+}
+
+:host([variant='secondary']):hover {
+  @apply bg-white;
+}
+
+:host([variant='secondary']):active {
+  @apply bg-gray-200;
+}
+
+/* Ghost */
+:host([variant='ghost']) {
+  @apply border-transparent bg-transparent text-gray-800;
+}
+
+:host([variant='ghost']):hover {
+  @apply bg-gray-100;
+}

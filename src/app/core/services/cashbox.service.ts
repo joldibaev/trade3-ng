@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BaseService } from './base.service';
 import { Cashbox } from '../../shared/interfaces/entities/cashbox.interface';
+import { BaseService } from './base.service';
 
 @Injectable({ providedIn: 'root' })
 export class CashboxService extends BaseService<Cashbox> {
-    protected apiUrl = '/api/cashboxes';
+  protected apiUrl = '/api/cashboxes';
 }

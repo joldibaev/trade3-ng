@@ -1,0 +1,22 @@
+<table ngGrid class="w-full border-collapse text-sm">
+  <thead>
+    <tr ngGridRow>
+      @for (col of columns(); track col.key) {
+        <th ngGridCell>
+          {{ col.header }}
+        </th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (row of data(); track $index) {
+      <tr ngGridRow>
+        @for (col of columns(); track col.key) {
+          <td ngGridCell>
+            <!--            {{ row[col.key] }}-->
+          </td>
+        }
+      </tr>
+    }
+  </tbody>
+</table>

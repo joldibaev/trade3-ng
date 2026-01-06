@@ -1,0 +1,18 @@
+@reference './../../../../styles.css';
+
+.menu {
+  @apply flex min-w-[200px] flex-col rounded-sm border border-gray-300 bg-white py-1 shadow-lg outline-none;
+}
+
+.menu-item {
+  @apply cursor-pointer px-4 py-2 text-sm text-gray-800 transition-colors outline-none select-none;
+}
+
+.menu-item:hover,
+.menu-item:focus {
+  @apply bg-primary-200;
+}
+
+.menu-item:focus-visible {
+  @apply focus-ring relative z-10;
+}

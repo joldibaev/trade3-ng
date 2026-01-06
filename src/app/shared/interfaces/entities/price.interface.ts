@@ -1,4 +1,4 @@
-import { PriceType } from './pricetype.interface';
+import { PriceType } from './price-type.interface';
 import { Product } from './product.interface';
 
 export interface Price {

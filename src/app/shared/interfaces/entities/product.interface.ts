@@ -1,13 +1,13 @@
 import { Barcode } from './barcode.interface';
 import { Category } from './category.interface';
-import { DocumentAdjustmentItem } from './documentadjustmentitem.interface';
-import { DocumentPurchaseItem } from './documentpurchaseitem.interface';
-import { DocumentReturnItem } from './documentreturnitem.interface';
-import { DocumentSaleItem } from './documentsaleitem.interface';
-import { DocumentTransferItem } from './documenttransferitem.interface';
+import { DocumentAdjustmentItem } from './document-adjustment-item.interface';
+import { DocumentPurchaseItem } from './document-purchase-item.interface';
+import { DocumentReturnItem } from './document-return-item.interface';
+import { DocumentSaleItem } from './document-sale-item.interface';
+import { DocumentTransferItem } from './document-transfer-item.interface';
 import { Price } from './price.interface';
+import { StockMovement } from './stock-movement.interface';
 import { Stock } from './stock.interface';
-import { StockMovement } from './stockmovement.interface';
 
 export interface Product {
   id: string;

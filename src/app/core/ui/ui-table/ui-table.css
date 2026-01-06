@@ -1,0 +1,24 @@
+@reference './../../../../styles.css';
+
+th {
+  @apply min-w-[100px] border border-gray-300 bg-gray-50 px-2 py-1 text-left font-semibold text-gray-800 outline-none select-none;
+}
+
+tr {
+  @apply bg-white transition-colors;
+  /* Highlight row on hover or when any cell inside has focus */
+  @apply hover:bg-primary-100 focus-within:bg-primary-100;
+}
+
+td {
+  @apply border border-gray-300 px-2 py-1 text-gray-800 outline-none;
+}
+
+/* Use outline for table cells as box-shadow (ring) can be clipped in border-collapse tables */
+td:focus,
+td:focus-visible {
+  @apply relative z-10;
+  outline: 2px solid var(--color-primary-400);
+  outline-offset: -2px;
+  /* Draw inside to avoid layout shift/clipping */
+}
