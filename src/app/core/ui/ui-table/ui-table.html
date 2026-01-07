@@ -1,4 +1,4 @@
-<table ngGrid class="w-full border-collapse text-sm">
+<table ngGrid [enableSelection]="true" focusMode="roving" class="w-full border-collapse text-sm">
   <thead>
     <tr ngGridRow>
       @for (col of columns(); track col.key) {
@@ -9,13 +9,40 @@
     </tr>
   </thead>
   <tbody>
-    @for (row of data(); track $index) {
-      <tr ngGridRow>
-        @for (col of columns(); track col.key) {
-          <td ngGridCell>
-            {{ row[col.key] }}
-          </td>
-        }
+    @if (data().length) {
+      @for (row of data(); track row; let i = $index) {
+        <tr ngGridRow>
+          @for (col of columns(); track col.key; let j = $index) {
+            <td
+              [rowIndex]="i"
+              [colIndex]="j"
+              ngGridCell
+              [class.active]="td.active()"
+              #td="ngGridCell"
+              (selectedChange)="onSelectedChange()"
+            >
+              @switch (col.type) {
+                @case ('date') {
+                  {{ row[col.key] | toString | date: 'dd.MM.yyyy HH:mm' }}
+                }
+                @case ('number') {
+                  {{ row[col.key] | toNumber | number }}
+                }
+                @default {
+                  {{ row[col.key] }}
+                }
+              }
+            </td>
+          }
+        </tr>
+      }
+    } @else {
+      <tr>
+        <td [attr.colspan]="columns().length" class="p-0!">
+          <div class="empty-state">
+            <span class="text-gray-500">Нет данных</span>
+          </div>
+        </td>
       </tr>
     }
   </tbody>

@@ -18,7 +18,7 @@ import { InputType } from './input-type.type';
   styleUrl: './ui-input.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-1 w-full max-w-sm empty:hidden',
+    class: 'flex flex-col gap-1 w-full empty:hidden',
   },
 })
 export class UiInput {

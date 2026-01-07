@@ -1,0 +1,13 @@
+<ui-dialog>
+  <h2 class="mb-2 text-lg font-bold">{{ data.title }}</h2>
+  <p class="mb-6 text-sm text-gray-500">{{ data.message }}</p>
+
+  <div class="flex justify-end gap-2">
+    <button uiButton variant="ghost" (click)="cancel()">
+      {{ data.cancelLabel || 'Отмена' }}
+    </button>
+    <button uiButton [variant]="data.variant || 'primary'" (click)="confirm()">
+      {{ data.confirmLabel || 'Подтвердить' }}
+    </button>
+  </div>
+</ui-dialog>

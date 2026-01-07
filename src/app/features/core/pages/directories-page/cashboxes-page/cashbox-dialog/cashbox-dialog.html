@@ -1,0 +1,45 @@
+<ui-dialog>
+  <div class="mb-4 flex items-center justify-between">
+    <h2 class="text-lg font-bold">{{ isEdit() ? 'Редактировать кассу' : 'Создать кассу' }}</h2>
+    <button
+      type="button"
+      class="rounded-full p-1 text-gray-500 hover:bg-gray-100"
+      (click)="close()"
+    >
+      <ui-icon name="x" />
+    </button>
+  </div>
+
+  <div class="flex flex-col gap-4">
+    <ui-input
+      label="Название кассы"
+      placeholder="Введите название кассы"
+      [value]="name()"
+      (valueChange)="name.set($event.toString())"
+    />
+
+    <div class="flex flex-col gap-1.5">
+      <div class="text-xs font-medium text-gray-700">Магазин</div>
+      <div class="relative">
+        <select
+          class="focus:border-primary-500 focus:ring-primary-500 w-full appearance-none rounded-sm border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:ring-1 disabled:pointer-events-none disabled:bg-gray-50"
+          [value]="storeId()"
+          (change)="onStoreChange($event)"
+        >
+          <option value="" disabled selected>Выберите магазин</option>
+          @for (store of stores.value(); track store.id) {
+            <option [value]="store.id">{{ store.name }}</option>
+          }
+        </select>
+        <div class="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 text-gray-500">
+          <ui-icon name="chevron-down" [width]="16" [height]="16" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 flex justify-end gap-2">
+    <button uiButton variant="ghost" (click)="close()">Отмена</button>
+    <button uiButton variant="primary" (click)="save()" [disabled]="!isValid()">Сохранить</button>
+  </div>
+</ui-dialog>

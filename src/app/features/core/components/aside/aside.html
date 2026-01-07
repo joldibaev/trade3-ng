@@ -1,0 +1,49 @@
+<nav class="aside-nav">
+  <ul class="menu-list">
+    @for (item of menuItems(); track item.label) {
+      @if (item.children) {
+        <!-- Parent Item (Group) -->
+        <li>
+          <button (click)="toggleGroup(item.label)" class="menu-item-parent group">
+            <span class="menu-icon-wrapper">
+              <ui-icon [name]="item.icon" [width]="18" [height]="18"></ui-icon>
+            </span>
+            <span class="menu-label">{{ item.label }}</span>
+            <!-- Arrow Icon -->
+            <span class="arrow-icon" [class.rotate-90]="isExpanded(item.label)">
+              <ui-icon name="chevron-right" [width]="14" [height]="14"></ui-icon>
+            </span>
+          </button>
+
+          <!-- Children -->
+          @if (isExpanded(item.label)) {
+            <ul class="menu-child-list">
+              @for (child of item.children; track child.route) {
+                <li>
+                  <a
+                    [routerLink]="child.route"
+                    routerLinkActive="active-link"
+                    class="menu-item-child group"
+                  >
+                    <span class="child-dot" routerLinkActive="!bg-black"></span>
+                    <span class="group-hover:text-black">{{ child.label }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        </li>
+      } @else {
+        <!-- Single Item (Leaf) -->
+        <li>
+          <a [routerLink]="item.route" routerLinkActive="active-link" class="menu-item-link group">
+            <span class="group-hover:text-black">
+              <ui-icon [name]="item.icon" [width]="18" [height]="18"></ui-icon>
+            </span>
+            <span class="font-medium group-hover:text-black">{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    }
+  </ul>
+</nav>

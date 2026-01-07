@@ -1,0 +1,45 @@
+<div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+  <h1 class="text-2xl font-bold">Магазины</h1>
+
+  <div class="flex items-center gap-2">
+    <button uiButton variant="ghost" (click)="reload()">Обновить</button>
+
+    <button uiButton variant="primary" (click)="onCreate()" icon="plus">Создать магазин</button>
+  </div>
+</div>
+
+@if (stores.hasValue()) {
+  @if (stores.value().length) {
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      @for (store of stores.value(); track store.id) {
+        <ui-directory-item-card
+          [title]="store.name"
+          [subtitle]="'ID: ' + store.id"
+          icon="store"
+          (edit)="onEdit(store)"
+          (delete)="onDelete(store)"
+        >
+          <div class="flex items-center justify-between border-t border-gray-100 pt-3 text-xs">
+            <a
+              [routerLink]="['/core', 'directories', 'stores', store.id, 'cashboxes']"
+              class="hover:text-primary-600 flex items-center gap-1.5 rounded px-2 py-1 text-gray-600 transition-colors hover:bg-gray-100"
+            >
+              <span>Кассы: {{ store.cashboxes.length }}</span>
+            </a>
+            <span class="text-gray-400"
+              >Создан: <time>{{ store.createdAt | date: 'dd.MM.yyyy' }}</time></span
+            >
+          </div>
+        </ui-directory-item-card>
+      }
+    </div>
+  } @else {
+    <ui-empty-state
+      title="Список магазинов пуст"
+      description="Создайте первый магазин, чтобы добавить кассы и товары."
+      icon="store"
+      actionLabel="Создать магазин"
+      (action)="onCreate()"
+    />
+  }
+}

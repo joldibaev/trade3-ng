@@ -1,0 +1,39 @@
+<div class="flex gap-2">
+  <button uiButton variant="secondary" (click)="loading.set(!loading())">Loading</button>
+  <button uiButton variant="secondary" (click)="disabled.set(!disabled())">
+    {{ disabled() ? 'Enable' : 'Disable' }}
+  </button>
+</div>
+
+<div class="flex gap-2">
+  <button uiButton [disabled]="disabled()" [loading]="loading()" variant="primary">
+    Записать и закрыть
+  </button>
+  <button uiButton [disabled]="disabled()" [loading]="loading()" variant="secondary">
+    Записать
+  </button>
+  <button uiButton [disabled]="disabled()" [loading]="loading()" variant="secondary">
+    Закрыть
+  </button>
+</div>
+
+<div class="mt-4 flex gap-2">
+  <button uiButton [disabled]="disabled()" [loading]="loading()" variant="ghost">Печать</button>
+  <button uiButton [disabled]="disabled()" [loading]="loading()" variant="ghost">Отправить</button>
+  <a uiButton [disabled]="disabled()" [loading]="loading()" variant="ghost">Отправить</a>
+</div>
+
+<div class="flex gap-2">
+  <button uiButton [disabled]="disabled()" [loading]="loading()" variant="primary" icon="plus">
+    Создать
+  </button>
+  <button uiButton [disabled]="disabled()" [loading]="loading()" variant="secondary" icon="edit">
+    Изменить
+  </button>
+  <button uiButton [disabled]="disabled()" [loading]="loading()" variant="ghost" icon="trash">
+    Удалить
+  </button>
+  <button uiButton variant="danger" icon="trash" [disabled]="disabled()" [loading]="loading()">
+    Удалить с загрузкой
+  </button>
+</div>

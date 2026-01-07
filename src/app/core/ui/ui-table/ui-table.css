@@ -7,16 +7,21 @@ th {
 tr {
   @apply bg-white;
   /* Highlight row on hover or when any cell inside has focus */
-  @apply focus-within:bg-primary-100;
+
+  &:has(> td.active) {
+    @apply bg-primary-100;
+  }
 }
 
 td {
   @apply border border-gray-300 px-2 py-1 text-gray-800 outline-none;
+
+  &.active {
+    outline: 2px solid var(--color-primary-400);
+    outline-offset: -2px;
+  }
 }
 
-/* Use outline for table cells as box-shadow (ring) can be clipped in border-collapse tables */
-td:focus {
-  outline: 2px solid var(--color-primary-400);
-  outline-offset: -2px;
-  /* Draw inside to avoid layout shift/clipping */
+.empty-state {
+  @apply flex h-32 w-full items-center justify-center bg-gray-50 text-gray-500;
 }

@@ -1,25 +1,58 @@
 import { HttpClient, httpResource } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { ApiResponse } from '../../shared/interfaces/api-response.interface';
 
-export abstract class BaseService<T> {
+// Helper type to exclude primitive properties and keep only object/array relations
+export type RelationKeys<T> = {
+  [K in keyof T]: T[K] extends string | number | boolean | Date | undefined | null ? never : K;
+}[keyof T] &
+  string;
+
+export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>> {
   protected http = inject(HttpClient);
   protected abstract apiUrl: string;
 
-  getAll() {
-    return httpResource<ApiResponse<T[]>>(() => this.apiUrl);
+  getAll(options?: { includes?: TIncludes[]; params?: Record<string, string | number | boolean> }) {
+    return httpResource<T[]>(() => {
+      let url = this.apiUrl;
+      const queryParams: string[] = [];
+
+      if (options?.includes && options.includes.length > 0) {
+        options.includes.forEach((inc) => queryParams.push(`include=${inc}`));
+      }
+
+      if (options?.params) {
+        Object.entries(options.params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            queryParams.push(`${key}=${encodeURIComponent(value)}`);
+          }
+        });
+      }
+
+      if (queryParams.length > 0) {
+        url += `?${queryParams.join('&')}`;
+      }
+
+      return url;
+    });
   }
 
-  getById(id: string | number) {
-    return httpResource<ApiResponse<T>>(() => `${this.apiUrl}/${id}`);
+  getById(id: string | number, includes?: TIncludes[]) {
+    return httpResource<T>(() => {
+      let url = `${this.apiUrl}/${id}`;
+      if (includes && includes.length > 0) {
+        const params = includes.map((inc) => `include=${inc}`).join('&');
+        url += `?${params}`;
+      }
+      return url;
+    });
   }
 
   create(entity: T) {
-    return this.http.post<ApiResponse<T>>(this.apiUrl, entity);
+    return this.http.post<T>(this.apiUrl, entity);
   }
 
-  update(id: string | number, entity: T) {
-    return this.http.put<ApiResponse<T>>(`${this.apiUrl}/${id}`, entity);
+  update(id: string | number, entity: Partial<T>) {
+    return this.http.patch<T>(`${this.apiUrl}/${id}`, entity);
   }
 
   delete(id: string | number) {

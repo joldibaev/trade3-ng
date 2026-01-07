@@ -8,9 +8,11 @@ import {
 import { ChangeDetectionStrategy, Component, input, viewChild } from '@angular/core';
 import { MenuItemCollection } from './menu-item.type';
 
+import { UiIcon } from '../ui-icon/ui-icon.component';
+
 @Component({
   selector: 'ui-menu',
-  imports: [Menu, CdkConnectedOverlay, OverlayModule, MenuContent, MenuItem],
+  imports: [Menu, CdkConnectedOverlay, OverlayModule, MenuContent, MenuItem, UiIcon],
   templateUrl: './ui-menu.html',
   styleUrl: './ui-menu.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
