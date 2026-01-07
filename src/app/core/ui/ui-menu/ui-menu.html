@@ -12,7 +12,7 @@
             <div
               ngMenuItem
               cdkOverlayOrigin
-              #origin="cdkOverlayOrigin"
+              #cdkOverlayOrigin="cdkOverlayOrigin"
               class="ui-menu-item"
               [value]="item.id"
               [submenu]="subMenu.menu()"
@@ -30,7 +30,7 @@
               ]"
               #subMenu
               [items]="item.items"
-              [origin]="origin"
+              [origin]="cdkOverlayOrigin"
               [visible]="menuEl.visible()"
             />
           } @else if ('divider' in item) {

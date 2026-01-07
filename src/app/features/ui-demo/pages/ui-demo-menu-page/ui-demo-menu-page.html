@@ -8,7 +8,7 @@
     #trigger="ngMenuTrigger"
     [menu]="menuComp.menu()"
     cdkOverlayOrigin
-    #origin="cdkOverlayOrigin"
+    #cdkOverlayOrigin="cdkOverlayOrigin"
   >
     Печать
   </button>
@@ -20,11 +20,11 @@
     #trigger2="ngMenuTrigger"
     [menu]="menuComp2.menu()"
     cdkOverlayOrigin
-    #origin2="cdkOverlayOrigin"
+    #cdkOverlayOrigin2="cdkOverlayOrigin"
   >
     Действия
   </button>
 </div>
 
-<ui-menu #menuComp [visible]="trigger.expanded()" [origin]="origin" [items]="menuItems" />
-<ui-menu #menuComp2 [visible]="trigger2.expanded()" [origin]="origin2" [items]="menuItems" />
+<ui-menu #menuComp [visible]="trigger.expanded()" [origin]="cdkOverlayOrigin" [items]="menuItems" />
+<ui-menu #menuComp2 [visible]="trigger2.expanded()" [origin]="cdkOverlayOrigin2" [items]="menuItems" />

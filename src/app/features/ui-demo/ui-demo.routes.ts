@@ -30,6 +30,11 @@ export const routes: Routes = [
           import('./pages/ui-demo-menu-page/ui-demo-menu-page').then((m) => m.UiDemoMenuPage),
       },
       {
+        path: 'select',
+        loadComponent: () =>
+          import('./pages/ui-demo-select-page/ui-demo-select-page').then((m) => m.UiDemoSelectPage),
+      },
+      {
         path: 'table',
         loadComponent: () =>
           import('./pages/ui-demo-table-page/ui-demo-table-page').then((m) => m.UiDemoTablePage),
