@@ -3,4 +3,6 @@ export interface TableColumn<T> {
   header: string;
   editable?: boolean;
   type?: 'text' | 'number' | 'date';
+  width?: string;
+  valueGetter?: (row: T, index: number) => string | number | null | undefined;
 }

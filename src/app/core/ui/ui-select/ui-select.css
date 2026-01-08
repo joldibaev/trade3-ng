@@ -14,6 +14,6 @@
   }
 }
 
-:host [ngCombobox]:has([ngComboboxInput][aria-expanded='false']) .ui-menu {
+[ngCombobox]:has([ngComboboxInput][aria-expanded='false']) .ui-menu {
   @apply hidden;
 }

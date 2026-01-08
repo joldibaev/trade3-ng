@@ -2,14 +2,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { UiButton } from '../ui-button/ui-button';
 import { UiDialog } from '../ui-dialog/ui-dialog';
-
-export interface UiDialogConfirmData {
-  title: string;
-  message: string;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  variant?: 'danger' | 'primary';
-}
+import { UiDialogConfirmData } from './ui-dialog-confirm-data.interface';
 
 @Component({
   selector: 'ui-dialog-confirm',

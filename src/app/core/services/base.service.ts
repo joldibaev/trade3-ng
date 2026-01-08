@@ -11,7 +11,12 @@ export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>>
   protected http = inject(HttpClient);
   protected abstract apiUrl: string;
 
-  getAll(options?: { includes?: TIncludes[]; params?: Record<string, string | number | boolean> }) {
+  getAll(options?: {
+    includes?: TIncludes[];
+    params?:
+      | Record<string, string | number | boolean>
+      | (() => Record<string, string | number | boolean | undefined | null>);
+  }) {
     return httpResource<T[]>(() => {
       let url = this.apiUrl;
       const queryParams: string[] = [];
@@ -20,8 +25,10 @@ export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>>
         options.includes.forEach((inc) => queryParams.push(`include=${inc}`));
       }
 
-      if (options?.params) {
-        Object.entries(options.params).forEach(([key, value]) => {
+      const params = typeof options?.params === 'function' ? options.params() : options?.params;
+
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
             queryParams.push(`${key}=${encodeURIComponent(value)}`);
           }

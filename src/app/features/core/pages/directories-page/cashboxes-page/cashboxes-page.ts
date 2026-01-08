@@ -7,6 +7,7 @@ import { StoresService } from '../../../../../core/services/stores.service';
 import { UiBreadcrumb } from '../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
+import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiDirectoryItemCard } from '../../../../../core/ui/ui-directory-item-card/ui-directory-item-card';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
@@ -63,14 +64,13 @@ export class CashboxesPage {
   }
 
   onDelete(cashbox: Cashbox) {
-    const dialogRef = this.dialog.open<boolean>(UiDialogConfirm, {
+    const dialogRef = this.dialog.open<boolean, UiDialogConfirmData>(UiDialogConfirm, {
       data: {
         title: 'Удалить кассу',
         message: `Вы уверены, что хотите удалить кассу "${cashbox.name}"?`,
         confirmLabel: 'Удалить',
         variant: 'danger',
       },
-      backdropClass: 'bg-black/30',
     });
 
     dialogRef.closed.subscribe((result) => {
@@ -85,8 +85,6 @@ export class CashboxesPage {
   private openDialog(cashbox?: Cashbox) {
     const dialogRef = this.dialog.open<CashboxDialogResult>(CashboxDialog, {
       data: { cashbox, storeId: this.storeId },
-      disableClose: true,
-      backdropClass: 'bg-black/30',
     });
 
     dialogRef.closed.subscribe((result) => {
@@ -115,9 +113,9 @@ export class CashboxesPage {
 
   back() {
     if (this.storeId) {
-      this.router.navigate(['/core/directories/stores']);
+      void this.router.navigate(['/core/directories/stores']);
     } else {
-      this.router.navigate(['/core/directories']);
+      void this.router.navigate(['/core/directories']);
     }
   }
 }

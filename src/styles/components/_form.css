@@ -30,5 +30,5 @@
 }
 
 @utility ui-form-placeholder {
-  @apply text-gray-400 italic;
+  @apply text-sm text-gray-400 italic;
 }

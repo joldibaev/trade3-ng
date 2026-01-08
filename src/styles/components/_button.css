@@ -41,13 +41,17 @@
       }
     }
 
+    &.ui-button-size-sm {
+      @apply px-3 py-1 text-sm;
+    }
+
     &.ui-button-disabled {
       @apply pointer-events-none;
       @apply opacity-50;
     }
 
     &.ui-button-icon-only {
-      @apply px-2! text-gray-500 hover:text-gray-900;
+      @apply !px-2 text-gray-500 hover:text-gray-900;
     }
   }
 }

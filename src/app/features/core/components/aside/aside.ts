@@ -27,8 +27,7 @@ export class Aside {
       icon: 'folder',
       children: [
         { label: 'Магазины', route: '/core/directories/stores', icon: 'circle' },
-        { label: 'Категории', route: '/core/directories/categories', icon: 'circle' },
-        { label: 'Товары', route: '/core/directories/products', icon: 'circle' },
+        { label: 'Номенклатура', route: '/core/directories/nomenclature', icon: 'circle' },
         { label: 'Клиенты', route: '/core/directories/clients', icon: 'circle' },
         { label: 'Поставщики', route: '/core/directories/vendors', icon: 'circle' },
       ],

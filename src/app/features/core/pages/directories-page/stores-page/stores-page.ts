@@ -6,6 +6,7 @@ import { StoresService } from '../../../../../core/services/stores.service';
 import { UiBreadcrumb } from '../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
+import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiDirectoryItemCard } from '../../../../../core/ui/ui-directory-item-card/ui-directory-item-card';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
@@ -48,14 +49,13 @@ export class StoresPage {
   }
 
   onDelete(store: Store) {
-    const dialogRef = this.dialog.open<boolean>(UiDialogConfirm, {
+    const dialogRef = this.dialog.open<boolean, UiDialogConfirmData>(UiDialogConfirm, {
       data: {
         title: 'Удалить магазин',
         message: `Вы уверены, что хотите удалить магазин "${store.name}"?`,
         confirmLabel: 'Удалить',
         variant: 'danger',
       },
-      backdropClass: 'bg-black/30',
     });
 
     dialogRef.closed.subscribe((result) => {
@@ -70,9 +70,6 @@ export class StoresPage {
   private openDialog(store?: Store) {
     const dialogRef = this.dialog.open<StoreDialogResult>(StoreDialog, {
       data: { store },
-      disableClose: true,
-      backdropClass: 'bg-black/30',
-      // panelClass: 'w-full', // Removed to allow CDK to center the pane properly based on content size
     });
 
     dialogRef.closed.subscribe((result) => {

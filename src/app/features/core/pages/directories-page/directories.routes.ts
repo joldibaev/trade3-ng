@@ -12,12 +12,10 @@ export const routes: Routes = [
     title: 'Кассы',
   },
   {
-    path: 'categories',
-    loadComponent: () => import('./categories-page/categories-page').then((m) => m.CategoriesPage),
-  },
-  {
-    path: 'products',
-    loadComponent: () => import('./products-page/products-page').then((m) => m.ProductsPage),
+    path: 'nomenclature',
+    loadComponent: () =>
+      import('./nomenclature-page/nomenclature-page').then((m) => m.NomenclaturePage),
+    title: 'Номенклатура',
   },
   {
     path: 'clients',

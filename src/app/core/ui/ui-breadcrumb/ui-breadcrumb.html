@@ -2,7 +2,7 @@
   @for (item of items(); track $index; let last = $last) {
     <div class="flex items-center">
       @if (!last && item.url) {
-        <a class="hover:text-primary-600 transition-colors duration-200" [routerLink]="item.url">
+        <a class="hover:text-primary-600" [routerLink]="item.url">
           {{ item.label }}
         </a>
       } @else {

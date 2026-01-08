@@ -4,8 +4,8 @@ import { DocumentPurchase } from './document-purchase.interface';
 import { DocumentReturn } from './document-return.interface';
 import { DocumentSale } from './document-sale.interface';
 import { DocumentTransfer } from './document-transfer.interface';
-import { StockMovement } from './stock-movement.interface';
 import { Stock } from './stock.interface';
+import { StockMovement } from './stock-movement.interface';
 
 export interface Store {
   id: string;
