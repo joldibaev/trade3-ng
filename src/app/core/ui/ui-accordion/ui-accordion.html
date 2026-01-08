@@ -2,10 +2,10 @@
   @for (item of items(); track $index) {
     <div class="accordion-item">
       <div
-        ngAccordionTrigger
-        [panelId]="'panel-' + $index"
         #trigger="ngAccordionTrigger"
+        ngAccordionTrigger
         class="accordion-header"
+        [panelId]="'panel-' + $index"
       >
         <span class="accordion-arrow" [class.expanded]="trigger.expanded()">
           <ui-icon name="chevron-right" [width]="14" [height]="14"></ui-icon>
@@ -13,7 +13,7 @@
         <span class="accordion-title">{{ item.title }}</span>
       </div>
 
-      <div ngAccordionPanel [panelId]="'panel-' + $index" class="accordion-body">
+      <div ngAccordionPanel class="accordion-body" [panelId]="'panel-' + $index">
         <ng-template ngAccordionContent>
           <div class="accordion-content">
             {{ item.content }}

@@ -4,25 +4,31 @@
   <div class="flex items-center gap-2">
     <button uiButton variant="ghost" (click)="reload()">Обновить</button>
 
-    <button uiButton variant="primary" (click)="onCreate()" icon="plus">Создать магазин</button>
+    <button uiButton variant="primary" icon="plus" (click)="onCreate()">Создать магазин</button>
   </div>
 </div>
 
-@if (stores.hasValue()) {
+<ui-breadcrumb class="mb-4 block" [items]="breadcrumbItems" />
+
+@if (stores.isLoading()) {
+  <div class="flex h-64 items-center justify-center">
+    <ui-loading [width]="40" [height]="40" />
+  </div>
+} @else if (stores.hasValue()) {
   @if (stores.value().length) {
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       @for (store of stores.value(); track store.id) {
         <ui-directory-item-card
+          icon="store"
           [title]="store.name"
           [subtitle]="'ID: ' + store.id"
-          icon="store"
           (edit)="onEdit(store)"
           (delete)="onDelete(store)"
         >
           <div class="flex items-center justify-between border-t border-gray-100 pt-3 text-xs">
             <a
-              [routerLink]="['/core', 'directories', 'stores', store.id, 'cashboxes']"
               class="hover:text-primary-600 flex items-center gap-1.5 rounded px-2 py-1 text-gray-600 transition-colors hover:bg-gray-100"
+              [routerLink]="['/core', 'directories', 'stores', store.id, 'cashboxes']"
             >
               <span>Кассы: {{ store.cashboxes.length }}</span>
             </a>

@@ -3,8 +3,10 @@ import { Listbox, Option } from '@angular/aria/listbox';
 import { OverlayModule } from '@angular/cdk/overlay';
 import {
   afterRenderEffect,
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  computed,
   input,
   model,
   signal,
@@ -14,6 +16,7 @@ import {
 } from '@angular/core';
 import { generateId } from '../../../shared/utils/generate-id';
 import { UiIcon } from '../ui-icon/ui-icon.component';
+import { UiLoading } from '../ui-loading/ui-loading';
 
 @Component({
   selector: 'ui-select',
@@ -27,20 +30,37 @@ import { UiIcon } from '../ui-icon/ui-icon.component';
     OverlayModule,
     ComboboxInput,
     UiIcon,
+    UiLoading,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class UiSelect<T> {
   label = input<string>();
-  placeholder = input('');
+  placeholder = input('Ничего не выбрано');
+  disabled = input(false, { transform: booleanAttribute });
+  loading = input(false, { transform: booleanAttribute });
 
   items = input.required<T[] | undefined>();
-  itemLabel = input.required<keyof T>();
+  labelField = input.required<keyof T>();
 
+  selectField = input.required<keyof T>();
   selectedList = model<string[]>([]);
 
   id = signal(`input-${generateId()}`);
+
+  /** The string that is displayed in the combobox. */
+  displayValue = computed<string | undefined>(() => {
+    const values = this.selectedList() || [];
+    const value = values.at(0);
+
+    if (value) {
+      const item = this.items()?.find((item) => item[this.selectField()] === value);
+      return item ? String(item[this.labelField()]) : undefined;
+    }
+
+    return undefined;
+  });
 
   /** The combobox listbox popup. */
   listbox = viewChild<Listbox<string>>(Listbox);

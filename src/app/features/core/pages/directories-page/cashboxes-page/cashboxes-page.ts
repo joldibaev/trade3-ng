@@ -1,19 +1,22 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CashboxesService } from '../../../../../core/services/cashboxes.service';
 import { StoresService } from '../../../../../core/services/stores.service';
+import { UiBreadcrumb } from '../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDirectoryItemCard } from '../../../../../core/ui/ui-directory-item-card/ui-directory-item-card';
-import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
+import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
+import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { Cashbox } from '../../../../../shared/interfaces/entities/cashbox.interface';
-import { CashboxDialog, CashboxDialogResult } from './cashbox-dialog/cashbox-dialog';
+import { CashboxDialog } from './cashbox-dialog/cashbox-dialog';
+import { CashboxDialogResult } from './cashbox-dialog/cashbox-dialog-result.interface';
 
 @Component({
   selector: 'app-cashboxes-page',
-  imports: [UiButton, UiIcon, UiDirectoryItemCard, DatePipe],
+  imports: [UiButton, UiDirectoryItemCard, DatePipe, UiBreadcrumb, UiEmptyState, UiLoading],
   templateUrl: './cashboxes-page.html',
   styleUrl: './cashboxes-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +26,7 @@ export class CashboxesPage {
   private storesService = inject(StoresService);
   private dialog = inject(Dialog);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   storeId = this.route.snapshot.paramMap.get('storeId');
 
@@ -33,6 +37,21 @@ export class CashboxesPage {
   cashboxes = this.cashboxesService.getAll({
     includes: ['store'],
     params: this.storeId ? { storeId: this.storeId } : {},
+  });
+
+  breadcrumbItems = computed(() => {
+    const base = [
+      { label: 'Главная', url: '/core/dashboard' },
+      { label: 'Справочники' },
+      { label: 'Магазины', url: '/core/directories/stores' },
+    ];
+
+    if (this.storeId) {
+      const storeName = this.store?.value()?.name ?? '...';
+      return [...base, { label: storeName }, { label: 'Кассы' }];
+    }
+
+    return [...base, { label: 'Кассы' }];
   });
 
   onCreate() {
@@ -92,5 +111,13 @@ export class CashboxesPage {
 
   reload() {
     this.cashboxes.reload();
+  }
+
+  back() {
+    if (this.storeId) {
+      this.router.navigate(['/core/directories/stores']);
+    } else {
+      this.router.navigate(['/core/directories']);
+    }
   }
 }

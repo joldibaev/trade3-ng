@@ -1,26 +1,18 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { Field, form } from '@angular/forms/signals';
 import { StoresService } from '../../../../../../core/services/stores.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
-import { Cashbox } from '../../../../../../shared/interfaces/entities/cashbox.interface';
-
-export interface CashboxDialogData {
-  cashbox?: Cashbox;
-  storeId?: string;
-}
-
-export interface CashboxDialogResult {
-  name: string;
-  storeId: string;
-}
+import { CashboxDialogData } from './cashbox-dialog-data.interface';
+import { CashboxDialogResult } from './cashbox-dialog-result.interface';
 
 @Component({
   selector: 'app-cashbox-dialog',
-  imports: [UiInput, UiButton, UiIcon, UiDialog, UiSelect],
+  imports: [UiInput, UiButton, UiIcon, UiDialog, UiSelect, Field],
   templateUrl: './cashbox-dialog.html',
   styleUrl: './cashbox-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,26 +24,22 @@ export class CashboxDialog {
 
   stores = this.storesService.getAll();
 
-  name = signal(this.data?.cashbox?.name ?? '');
-  storeId = signal(this.data?.cashbox?.storeId ?? this.data?.storeId ?? '');
-  isStoreFixed = signal(!!this.data?.storeId);
+  formData = form(
+    signal<CashboxDialogResult>({
+      name: this.data.cashbox?.name ?? '',
+      storeId: this.data.storeId ?? '',
+    }),
+  );
 
-  isEdit = computed(() => !!this.data?.cashbox);
-  isValid = computed(() => !!this.name() && !!this.storeId());
+  selectedList = computed(() => [this.formData().value().storeId]);
+
+  isEdit = computed(() => Boolean(this.data?.cashbox));
 
   close() {
     this.dialogRef.close();
   }
 
   save() {
-    this.dialogRef.close({
-      name: this.name(),
-      storeId: this.storeId(),
-    });
-  }
-
-  onStoreChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    this.storeId.set(target.value);
+    this.dialogRef.close(this.formData().value());
   }
 }

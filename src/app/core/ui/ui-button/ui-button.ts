@@ -27,11 +27,16 @@ export class UiButton {
   loading = input(false, { transform: booleanAttribute });
   disabled = input(false, { transform: booleanAttribute });
   icon = input<IconName>();
+  onlyIcon = input(false, { transform: booleanAttribute });
 
   classList = computed(() => {
     const classList: string[] = [];
 
     classList.push(`ui-button-variant-${this.variant()}`);
+
+    if (this.onlyIcon()) {
+      classList.push('ui-button-icon-only');
+    }
 
     return classList;
   });

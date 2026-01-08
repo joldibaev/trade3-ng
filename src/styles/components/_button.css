@@ -45,5 +45,9 @@
       @apply pointer-events-none;
       @apply opacity-50;
     }
+
+    &.ui-button-icon-only {
+      @apply px-2! text-gray-500 hover:text-gray-900;
+    }
   }
 }

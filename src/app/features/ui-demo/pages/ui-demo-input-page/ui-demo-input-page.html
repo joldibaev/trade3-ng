@@ -11,55 +11,55 @@
   <div class="flex flex-col gap-4">
     <h3 class="typo-1 text-sm">Основная информация</h3>
 
-    <ui-input [field]="demoForm.email" label="Email" placeholder="user@example.com" type="email" />
+    <ui-input label="Email" placeholder="user@example.com" type="email" [field]="demoForm.email" />
 
-    <ui-input [field]="demoForm.age" label="Возраст" type="number" />
+    <ui-input label="Возраст" type="number" [field]="demoForm.age" />
 
     <ui-input
-      [field]="demoForm.password"
       label="Пароль"
       type="password"
       placeholder="Введите пароль..."
+      [field]="demoForm.password"
     />
   </div>
 
   <div class="flex flex-col gap-4">
     <h3 class="text-sm font-bold tracking-wider text-gray-500 uppercase">Контактные данные</h3>
 
-    <ui-input [field]="demoForm.phone" label="Телефон" type="tel" placeholder="+79991234455" />
+    <ui-input label="Телефон" type="tel" placeholder="+79991234455" [field]="demoForm.phone" />
 
     <ui-input
-      [field]="demoForm.website"
       label="Сайт"
       type="url"
       placeholder="https://example.com"
+      [field]="demoForm.website"
     />
 
-    <ui-input [field]="demoForm.birthday" label="Дата рождения" type="date" />
+    <ui-input label="Дата рождения" type="date" [field]="demoForm.birthday" />
   </div>
 
   <div class="col-span-1 flex flex-col gap-4 md:col-span-2">
     <h3 class="text-sm font-bold tracking-wider text-gray-500 uppercase">Разное</h3>
 
     <ui-input
-      [field]="demoForm.search"
       label="Поиск"
       type="search"
       inputMode="search"
       placeholder="Найти..."
+      [field]="demoForm.search"
     />
 
     <ui-input
-      [field]="demoForm.notes"
       label="Заметки"
       placeholder="Максимум 50 символов..."
       autocomplete="off"
+      [field]="demoForm.notes"
     />
 
     <ui-input
-      [field]="demoForm.secretKey"
       label="Секретный ключ (скрываемый)"
       placeholder="Секрет..."
+      [field]="demoForm.secretKey"
     />
   </div>
 </div>

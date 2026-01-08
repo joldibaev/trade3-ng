@@ -1,14 +1,25 @@
 <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-  <h1 class="text-2xl font-bold">Кассы</h1>
+  <div class="flex items-center gap-3">
+    <button uiButton variant="ghost" icon="arrow-left" onlyIcon (click)="back()">
+      <span class="sr-only">Назад</span>
+    </button>
+    <h1 class="text-2xl font-bold">Кассы</h1>
+  </div>
 
   <div class="flex items-center gap-2">
     <button uiButton variant="ghost" (click)="reload()">Обновить</button>
 
-    <button uiButton variant="primary" (click)="onCreate()" icon="plus">Создать кассу</button>
+    <button uiButton variant="primary" icon="plus" (click)="onCreate()">Создать кассу</button>
   </div>
 </div>
 
-@if (cashboxes.hasValue()) {
+<ui-breadcrumb class="mb-4 block" [items]="breadcrumbItems()" />
+
+@if (cashboxes.isLoading()) {
+  <div class="flex h-64 items-center justify-center">
+    <ui-loading [width]="40" [height]="40" />
+  </div>
+} @else if (cashboxes.hasValue()) {
   @if (cashboxes.value().length > 0) {
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       @for (cashbox of cashboxes.value(); track cashbox.id) {
@@ -28,17 +39,12 @@
       }
     </div>
   } @else {
-    <div class="flex flex-col items-center justify-center py-16 text-center">
-      <div
-        class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-yellow-50 text-yellow-600"
-      >
-        <ui-icon name="box" [width]="32" [height]="32" />
-      </div>
-      <h3 class="mb-1 text-lg font-semibold text-gray-900">Список касс пуст</h3>
-      <p class="mb-6 max-w-sm text-sm text-balance text-gray-500">
-        В данном магазине пока нет ни одной кассы. Создайте первую кассу, чтобы начать работу.
-      </p>
-      <button uiButton variant="primary" (click)="onCreate()" icon="plus">Создать кассу</button>
-    </div>
+    <ui-empty-state
+      title="Список касс пуст"
+      description="В данном магазине пока нет ни одной кассы. Создайте первую кассу, чтобы начать работу."
+      icon="box"
+      actionLabel="Создать кассу"
+      (action)="onCreate()"
+    />
   }
 }

@@ -1,22 +1,31 @@
-<div ngCombobox #ngCombobox="ngCombobox" readonly>
+<div #ngCombobox="ngCombobox" ngCombobox readonly [disabled]="loading() || disabled()">
   <div #cdkOverlayOrigin cdkOverlayOrigin="cdkOverlayOrigin">
     @if (label()) {
       <label class="ui-form-label mb-1" [for]="id()">{{ label() }}</label>
     }
 
     <div class="relative">
+      <span
+        class="pointer-events-none absolute top-1/2 left-2 z-20 -translate-y-1/2"
+        [class.ui-form-placeholder]="!displayValue()"
+      >
+        {{ displayValue() ?? placeholder() }}
+      </span>
+
       <input
+        ngComboboxInput
+        class="ui-form-control text-transparent"
         [disabled]="ngCombobox.disabled()"
         [id]="id()"
-        class="ui-form-control"
-        [placeholder]="placeholder()"
-        ngComboboxInput
       />
 
-      <ui-icon
-        class="absolute top-1/2 right-2 z-10 -translate-y-1/2 text-gray-400"
-        name="chevron-down"
-      />
+      <div class="absolute top-1/2 right-2 z-20 -translate-y-1/2 text-gray-400">
+        @if (loading()) {
+          <ui-loading height="18" width="18" />
+        } @else {
+          <ui-icon name="chevron-down" />
+        }
+      </div>
     </div>
   </div>
 
@@ -34,8 +43,8 @@
         @if (items()?.length) {
           <div ngListbox [(values)]="selectedList">
             @for (item of items(); track item) {
-              <div #ngOption="ngOption" class="ui-menu-item" ngOption [value]="item">
-                <span>{{ item[itemLabel()] }}</span>
+              <div #ngOption="ngOption" ngOption class="ui-menu-item" [value]="item[selectField()]">
+                <span>{{ item[labelField()] }}</span>
 
                 @if (ngOption.selected()) {
                   <ui-icon name="check"></ui-icon>

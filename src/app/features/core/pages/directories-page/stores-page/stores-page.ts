@@ -3,16 +3,26 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { StoresService } from '../../../../../core/services/stores.service';
+import { UiBreadcrumb } from '../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDirectoryItemCard } from '../../../../../core/ui/ui-directory-item-card/ui-directory-item-card';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
+import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { Store } from '../../../../../shared/interfaces/entities/store.interface';
 import { StoreDialog, StoreDialogResult } from './store-dialog/store-dialog';
 
 @Component({
   selector: 'app-stores-page',
-  imports: [UiButton, UiDirectoryItemCard, UiEmptyState, RouterLink, DatePipe],
+  imports: [
+    UiButton,
+    UiDirectoryItemCard,
+    UiEmptyState,
+    RouterLink,
+    DatePipe,
+    UiBreadcrumb,
+    UiLoading,
+  ],
   templateUrl: './stores-page.html',
   styleUrl: './stores-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +32,12 @@ export class StoresPage {
   private dialog = inject(Dialog);
 
   stores = this.storesService.getAll({ includes: ['cashboxes'] });
+
+  breadcrumbItems = [
+    { label: 'Главная', url: '/core/dashboard' },
+    { label: 'Справочники' },
+    { label: 'Магазины' },
+  ];
 
   onCreate() {
     this.openDialog();

@@ -5,14 +5,14 @@
     [cdkConnectedOverlayPositions]="overlayPositions()"
     [cdkConnectedOverlayPush]="true"
   >
-    <div ngMenu #ngMenu="ngMenu" class="ui-menu">
+    <div #ngMenu="ngMenu" ngMenu class="ui-menu">
       <ng-template ngMenuContent>
         @for (item of items(); track item) {
           @if ('id' in item) {
             <div
+              #cdkOverlayOrigin="cdkOverlayOrigin"
               ngMenuItem
               cdkOverlayOrigin
-              #cdkOverlayOrigin="cdkOverlayOrigin"
               class="ui-menu-item"
               [value]="item.id"
               [submenu]="subMenu.menu()"
@@ -25,10 +25,10 @@
             </div>
 
             <ui-menu
+              #subMenu
               [overlayPositions]="[
                 { originX: 'end', originY: 'top', overlayY: 'top', overlayX: 'start', offsetX: 6 },
               ]"
-              #subMenu
               [items]="item.items"
               [origin]="cdkOverlayOrigin"
               [visible]="ngMenu.visible()"

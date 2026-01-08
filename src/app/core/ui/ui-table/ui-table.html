@@ -1,4 +1,4 @@
-<table ngGrid [enableSelection]="true" focusMode="roving" class="w-full border-collapse text-sm">
+<table ngGrid focusMode="roving" class="w-full border-collapse text-sm" [enableSelection]="true">
   <thead>
     <tr ngGridRow>
       @for (col of columns(); track col.key) {
@@ -14,11 +14,11 @@
         <tr ngGridRow>
           @for (col of columns(); track col.key; let j = $index) {
             <td
+              #td="ngGridCell"
+              ngGridCell
               [rowIndex]="i"
               [colIndex]="j"
-              ngGridCell
               [class.active]="td.active()"
-              #td="ngGridCell"
               (selectedChange)="onSelectedChange()"
             >
               @switch (col.type) {
@@ -38,7 +38,7 @@
       }
     } @else {
       <tr>
-        <td [attr.colspan]="columns().length" class="p-0!">
+        <td class="p-0!" [attr.colspan]="columns().length">
           <div class="empty-state">
             <span class="text-gray-500">Нет данных</span>
           </div>

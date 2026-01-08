@@ -2,25 +2,25 @@
 
 <div class="flex gap-4">
   <button
+    #trigger="ngMenuTrigger"
+    #cdkOverlayOrigin="cdkOverlayOrigin"
     uiButton
     variant="ghost"
     ngMenuTrigger
-    #trigger="ngMenuTrigger"
-    [menu]="menuComp.menu()"
     cdkOverlayOrigin
-    #cdkOverlayOrigin="cdkOverlayOrigin"
+    [menu]="menuComp.menu()"
   >
     Печать
   </button>
 
   <button
+    #trigger2="ngMenuTrigger"
+    #cdkOverlayOrigin2="cdkOverlayOrigin"
     uiButton
     variant="secondary"
     ngMenuTrigger
-    #trigger2="ngMenuTrigger"
-    [menu]="menuComp2.menu()"
     cdkOverlayOrigin
-    #cdkOverlayOrigin2="cdkOverlayOrigin"
+    [menu]="menuComp2.menu()"
   >
     Действия
   </button>
