@@ -19,7 +19,7 @@
 }
 
 @utility focus-ring {
-  @apply ring-primary-400 relative z-10 ring-offset-2 focus-visible:ring-2;
+  @apply ring-primary-400 relative z-10 ring-2 ring-offset-2;
 }
 
 @utility typo-1 {

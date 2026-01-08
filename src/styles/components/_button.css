@@ -1,6 +1,6 @@
 @layer components {
   .ui-button {
-    @apply focus-ring inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm border px-4 py-1.5 text-sm font-medium whitespace-nowrap outline-none select-none;
+    @apply focus-visible:focus-ring inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm border px-4 py-1.5 text-sm font-medium whitespace-nowrap outline-none select-none;
 
     /* Primary */
     &.ui-button-variant-primary {

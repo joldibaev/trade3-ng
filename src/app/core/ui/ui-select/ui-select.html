@@ -1,24 +1,51 @@
-{{ ngCombobox.expanded() }}
+<div ngCombobox #ngCombobox="ngCombobox" readonly>
+  <div #cdkOverlayOrigin cdkOverlayOrigin="cdkOverlayOrigin">
+    @if (label()) {
+      <label class="ui-form-label mb-1" [for]="id()">{{ label() }}</label>
+    }
 
-<div ngCombobox readonly #ngCombobox="ngCombobox">
-  <div #cdkOverlayOrigin="cdkOverlayOrigin" cdkOverlayOrigin class="select">
-    <!--    <input aria-label="Label dropdown" placeholder="Select a label" ngComboboxInput />-->
+    <div class="relative">
+      <input
+        [disabled]="ngCombobox.disabled()"
+        [id]="id()"
+        class="ui-form-control"
+        [placeholder]="placeholder()"
+        ngComboboxInput
+      />
 
-    <ui-input [label]="label()" />
+      <ui-icon
+        class="absolute top-1/2 right-2 z-10 -translate-y-1/2 text-gray-400"
+        name="chevron-down"
+      />
+    </div>
   </div>
+
   <ng-template ngComboboxPopupContainer>
     <ng-template
-      [cdkConnectedOverlay]="{ origin: cdkOverlayOrigin, usePopover: 'inline', matchWidth: true }"
+      [cdkConnectedOverlay]="{
+        origin: cdkOverlayOrigin,
+        usePopover: 'inline',
+        matchWidth: true,
+        offsetY: 6,
+      }"
       [cdkConnectedOverlayOpen]="true"
     >
-      <div class="example-popup-container">
-        <div ngListbox>
-          @for (label of labels; track label) {
-            <div ngOption [value]="label" [label]="label">
-              <span class="example-option-text">{{ label }}</span>
-            </div>
-          }
-        </div>
+      <div class="ui-menu">
+        @if (items()?.length) {
+          <div ngListbox [(values)]="selectedList">
+            @for (item of items(); track item) {
+              <div #ngOption="ngOption" class="ui-menu-item" ngOption [value]="item">
+                <span>{{ item[itemLabel()] }}</span>
+
+                @if (ngOption.selected()) {
+                  <ui-icon name="check"></ui-icon>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="ui-menu-item pointer-events-none">Список пуст</div>
+        }
       </div>
     </ng-template>
   </ng-template>

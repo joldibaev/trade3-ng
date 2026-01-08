@@ -5,12 +5,15 @@ import {
   afterRenderEffect,
   ChangeDetectionStrategy,
   Component,
-  computed,
   input,
+  model,
+  signal,
   viewChild,
   viewChildren,
+  ViewEncapsulation,
 } from '@angular/core';
-import { UiInput } from '../ui-input/ui-input';
+import { generateId } from '../../../shared/utils/generate-id';
+import { UiIcon } from '../ui-icon/ui-icon.component';
 
 @Component({
   selector: 'ui-select',
@@ -23,12 +26,21 @@ import { UiInput } from '../ui-input/ui-input';
     Option,
     OverlayModule,
     ComboboxInput,
-    UiInput,
+    UiIcon,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
-export class UiSelect {
+export class UiSelect<T> {
   label = input<string>();
+  placeholder = input('');
+
+  items = input.required<T[] | undefined>();
+  itemLabel = input.required<keyof T>();
+
+  selectedList = model<string[]>([]);
+
+  id = signal(`input-${generateId()}`);
 
   /** The combobox listbox popup. */
   listbox = viewChild<Listbox<string>>(Listbox);
@@ -39,15 +51,6 @@ export class UiSelect {
   /** A reference to the ng aria combobox. */
   combobox = viewChild<Combobox<string>>(Combobox);
 
-  /** The string that is displayed in the combobox. */
-  displayValue = computed(() => {
-    const values = this.listbox()?.values() || [];
-    return values.length ? values[0] : 'Select a label';
-  });
-
-  /** The labels that are available for selection. */
-  labels = ['Important', 'Starred', 'Work', 'Personal', 'To Do', 'Later', 'Read', 'Travel'];
-
   constructor() {
     // Scrolls to the active item when the active option changes.
     // The slight delay here is to ensure animations are done before scrolling.
@@ -55,6 +58,7 @@ export class UiSelect {
       const option = this.options().find((opt) => opt.active());
       setTimeout(() => option?.element.scrollIntoView({ block: 'nearest' }), 50);
     });
+
     // Resets the listbox scroll position when the combobox is closed.
     afterRenderEffect(() => {
       if (!this.combobox()?.expanded()) {

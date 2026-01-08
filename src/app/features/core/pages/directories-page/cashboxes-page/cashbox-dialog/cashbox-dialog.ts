@@ -5,6 +5,7 @@ import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
+import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
 import { Cashbox } from '../../../../../../shared/interfaces/entities/cashbox.interface';
 
 export interface CashboxDialogData {
@@ -19,7 +20,7 @@ export interface CashboxDialogResult {
 
 @Component({
   selector: 'app-cashbox-dialog',
-  imports: [UiInput, UiButton, UiIcon, UiDialog],
+  imports: [UiInput, UiButton, UiIcon, UiDialog, UiSelect],
   templateUrl: './cashbox-dialog.html',
   styleUrl: './cashbox-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

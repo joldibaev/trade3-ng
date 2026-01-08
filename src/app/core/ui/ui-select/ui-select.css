@@ -1,0 +1,19 @@
+@reference './../../../../styles.css';
+
+.ui-menu-item {
+  &[data-active='true'] {
+    @apply focus-ring;
+  }
+
+  &:hover {
+    @apply bg-gray-50;
+  }
+
+  &[aria-selected='true'] {
+    @apply bg-primary-50 text-primary-500;
+  }
+}
+
+[ngCombobox]:has([ngComboboxInput][aria-expanded='false']) .ui-menu {
+  @apply hidden;
+}

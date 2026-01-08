@@ -1,11 +1,23 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { UiSelect } from '../../../../core/ui/ui-select/ui-select';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-ui-demo-select-page',
-  imports: [UiSelect],
+  imports: [],
   templateUrl: './ui-demo-select-page.html',
   styleUrl: './ui-demo-select-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UiDemoSelectPage {}
+export class UiDemoSelectPage {
+  items = signal<string[]>([
+    'Important',
+    'Starred',
+    'Work',
+    'Personal',
+    'To',
+    'Later',
+    'Read',
+    'Travel',
+  ]);
+
+  selectedValue = signal<string[]>(['Important']);
+}

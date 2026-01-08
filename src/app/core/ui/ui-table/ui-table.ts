@@ -19,7 +19,7 @@ export class UiTable<T extends object> {
   columns = input.required<TableColumn<T>[]>();
   data = input.required<T[]>();
 
-  td = viewChildren('td', { read: GridCell });
+  td = viewChildren(GridCell);
   selectedChanged = output<T | undefined>();
 
   protected onSelectedChange() {
