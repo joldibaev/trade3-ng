@@ -26,3 +26,7 @@
 @utility typo-1 {
   @apply font-bold tracking-wider text-gray-500 uppercase;
 }
+
+@utility typo-h1 {
+  @apply text-2xl font-bold;
+}

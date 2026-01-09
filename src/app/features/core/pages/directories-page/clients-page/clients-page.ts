@@ -1,9 +1,18 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Field, form } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
 import { ClientsService } from '../../../../../core/services/clients.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
+import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
@@ -16,7 +25,7 @@ import { ClientDialogResult } from './client-dialog/client-dialog-result.interfa
 
 @Component({
   selector: 'app-clients-page',
-  imports: [UiButton, UiInput, UiTable, Field],
+  imports: [UiButton, UiInput, UiTable, Field, UiCard],
   templateUrl: './clients-page.html',
   styleUrl: './clients-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +36,7 @@ import { ClientDialogResult } from './client-dialog/client-dialog-result.interfa
 export class ClientsPage {
   private clientsService = inject(ClientsService);
   private dialog = inject(Dialog);
+  private destroyRef = inject(DestroyRef);
 
   // State
   selectedClient = signal<Client | undefined>(undefined);
@@ -100,13 +110,8 @@ export class ClientsPage {
       .open<ClientDialogResult>(ClientDialog, { data, width: '400px' })
       .closed.pipe(
         filter(Boolean),
-        switchMap((result) => {
-          if (client) {
-            return this.clientsService.update(client.id, result);
-          }
-          return this.clientsService.create(result as unknown as Client);
-        }),
         tap(() => this.clients.reload()),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
@@ -130,6 +135,7 @@ export class ClientsPage {
             this.selectedClient.set(undefined);
           }
         }),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }

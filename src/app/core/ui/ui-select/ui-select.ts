@@ -18,6 +18,7 @@ import { generateId } from '../../../shared/utils/generate-id';
 import { UiIcon } from '../ui-icon/ui-icon.component';
 import { UiLoading } from '../ui-loading/ui-loading';
 
+// todo validation and required state
 @Component({
   selector: 'ui-select',
   templateUrl: './ui-select.html',

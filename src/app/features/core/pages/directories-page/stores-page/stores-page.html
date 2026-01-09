@@ -1,5 +1,5 @@
-<div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-  <h1 class="text-2xl font-bold">Магазины</h1>
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <h1 class="typo-h1">Магазины</h1>
 
   <div class="flex items-center gap-2">
     <button uiButton variant="ghost" (click)="reload()">Обновить</button>
@@ -8,7 +8,7 @@
   </div>
 </div>
 
-<ui-breadcrumb class="mb-4 block" [items]="breadcrumbItems" />
+<ui-breadcrumb class="block" [items]="breadcrumbItems" />
 
 @if (stores.isLoading()) {
   <div class="flex h-64 items-center justify-center">

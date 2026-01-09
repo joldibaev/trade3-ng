@@ -20,8 +20,10 @@ import { InputType } from './input-type.type';
   host: {
     class: 'flex flex-col gap-1 w-full empty:hidden',
   },
+  imports: [],
 })
 export class UiInput {
+  // todo delete
   value = model<string | number>('');
 
   // Writable interaction state - control updates these
@@ -34,6 +36,7 @@ export class UiInput {
   hidden = input<boolean>(false);
   invalid = input<boolean>(false);
   errors = input<readonly ValidationError.WithField[]>([]);
+  required = input<boolean>(false);
 
   // component inputs
   label = input<string>();
@@ -42,7 +45,7 @@ export class UiInput {
   type = input<InputType>('text');
   enterKeyHint = input<string>();
   placeholder = input<string>('');
-  autocomplete = input<InputAutocomplete>();
+  autocomplete = input<InputAutocomplete>('on');
   inputMode = input<InputMode>();
   spellCheck = input(false, { transform: booleanAttribute });
 

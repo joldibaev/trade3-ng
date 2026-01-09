@@ -1,6 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { StoresService } from '../../../../../core/services/stores.service';
 import { UiBreadcrumb } from '../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
@@ -27,10 +28,14 @@ import { StoreDialog, StoreDialogResult } from './store-dialog/store-dialog';
   templateUrl: './stores-page.html',
   styleUrl: './stores-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'flex flex-col gap-4 h-full',
+  },
 })
 export class StoresPage {
   private storesService = inject(StoresService);
   private dialog = inject(Dialog);
+  private destroyRef = inject(DestroyRef);
 
   stores = this.storesService.getAll({ includes: ['cashboxes'] });
 
@@ -58,11 +63,14 @@ export class StoresPage {
       },
     });
 
-    dialogRef.closed.subscribe((result) => {
+    dialogRef.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
       if (result) {
-        this.storesService.delete(store.id).subscribe(() => {
-          this.reload();
-        });
+        this.storesService
+          .delete(store.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => {
+            this.reload();
+          });
       }
     });
   }
@@ -72,22 +80,9 @@ export class StoresPage {
       data: { store },
     });
 
-    dialogRef.closed.subscribe((result) => {
+    dialogRef.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
       if (!result) return;
-
-      const { name } = result;
-      if (store) {
-        this.storesService.update(store.id, { name }).subscribe(() => {
-          this.reload();
-        });
-      } else {
-        const newStore = {
-          name,
-        } as unknown as Store;
-        this.storesService.create(newStore).subscribe(() => {
-          this.reload();
-        });
-      }
+      this.reload();
     });
   }
 

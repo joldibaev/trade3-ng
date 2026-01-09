@@ -1,11 +1,11 @@
 <!-- Header -->
-<div class="mb-4 flex items-center justify-between">
-  <h1 class="text-2xl font-bold">Номенклатура товаров</h1>
+<div class="flex items-center justify-between">
+  <h1 class="typo-h1">Номенклатура товаров</h1>
 </div>
 
 <div class="flex flex-1 gap-4 overflow-hidden">
   <!-- Sidebar: Categories -->
-  <aside class="flex w-80 flex-col rounded-lg border border-gray-200 bg-white">
+  <ui-card class="h-full w-80">
     <div class="border-b border-gray-100 p-2">
       <div class="flex items-center gap-1">
         <button uiButton variant="ghost" icon="plus" size="sm" (click)="openCategoryDialog()">
@@ -23,7 +23,7 @@
         </button>
         <button
           uiButton
-          variant="ghost"
+          variant="danger"
           icon="trash"
           size="icon"
           [disabled]="!selectedCategoryId()"
@@ -55,10 +55,10 @@
         <ui-tree [items]="rootCategories()" [(selectedId)]="selectedCategoryIdForTree" />
       }
     </div>
-  </aside>
+  </ui-card>
 
   <!-- Main Content: Products Table -->
-  <main class="flex flex-1 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+  <ui-card class="flex-1 overflow-hidden">
     <!-- Toolbar -->
     <div class="flex items-center justify-between border-b border-gray-100 p-2">
       <div class="flex items-center gap-2">
@@ -147,5 +147,5 @@
       [loading]="products.isLoading()"
       (selectedChanged)="selectProduct($event)"
     />
-  </main>
+  </ui-card>
 </div>

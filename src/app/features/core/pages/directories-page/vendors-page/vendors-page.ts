@@ -1,9 +1,18 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Field, form } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
 import { VendorsService } from '../../../../../core/services/vendors.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
+import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
@@ -16,7 +25,7 @@ import { VendorDialogResult } from './vendor-dialog/vendor-dialog-result.interfa
 
 @Component({
   selector: 'app-vendors-page',
-  imports: [UiButton, UiInput, UiTable, Field],
+  imports: [UiButton, UiInput, UiTable, Field, UiCard],
   templateUrl: './vendors-page.html',
   styleUrl: './vendors-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +36,7 @@ import { VendorDialogResult } from './vendor-dialog/vendor-dialog-result.interfa
 export class VendorsPage {
   private vendorsService = inject(VendorsService);
   private dialog = inject(Dialog);
+  private destroyRef = inject(DestroyRef);
 
   // State
   selectedVendor = signal<Vendor | undefined>(undefined);
@@ -100,13 +110,8 @@ export class VendorsPage {
       .open<VendorDialogResult>(VendorDialog, { data, width: '400px' })
       .closed.pipe(
         filter(Boolean),
-        switchMap((result) => {
-          if (vendor) {
-            return this.vendorsService.update(vendor.id, result);
-          }
-          return this.vendorsService.create(result as unknown as Vendor);
-        }),
         tap(() => this.vendors.reload()),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
@@ -130,6 +135,7 @@ export class VendorsPage {
             this.selectedVendor.set(undefined);
           }
         }),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }

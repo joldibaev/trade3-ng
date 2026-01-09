@@ -11,42 +11,38 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Field, form, required } from '@angular/forms/signals';
 import { finalize } from 'rxjs';
-import { ClientsService } from '../../../../../../core/services/clients.service';
+import { PriceTypesService } from '../../../../../../core/services/price-types.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
-import { Client } from '../../../../../../shared/interfaces/entities/client.interface';
-import { ClientDialogData } from './client-dialog-data.interface';
-import { ClientDialogResult } from './client-dialog-result.interface';
+import { PriceTypeDialogData } from './price-type-dialog-data.interface';
+import { PriceTypeDialogResult } from './price-type-dialog-result.interface';
 
 @Component({
-  selector: 'app-client-dialog',
+  selector: 'app-price-type-dialog',
   imports: [UiInput, UiButton, UiDialog, Field, FormsModule],
-  templateUrl: './client-dialog.html',
-  styleUrl: './client-dialog.css',
+  templateUrl: './price-type-dialog.html',
+  styleUrl: './price-type-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClientDialog {
-  private dialogRef = inject<DialogRef<Client>>(DialogRef);
-  private data = inject<ClientDialogData>(DIALOG_DATA);
+export class PriceTypeDialog {
+  private dialogRef = inject<DialogRef<PriceTypeDialogResult>>(DialogRef);
+  private data = inject<PriceTypeDialogData>(DIALOG_DATA);
 
   formData = form(
-    signal<ClientDialogResult>({
-      name: this.data.client?.name ?? '',
-      phone: this.data.client?.phone ?? '',
-      email: this.data.client?.email ?? '',
-      address: this.data.client?.address ?? '',
+    signal<PriceTypeDialogResult>({
+      name: this.data.priceType?.name ?? '',
     }),
     (schemaPath) => {
       required(schemaPath.name, { message: 'Наименование обязательно' });
     },
   );
 
-  private clientsService = inject(ClientsService);
+  private priceTypesService = inject(PriceTypesService);
   private destroyRef = inject(DestroyRef);
   loading = signal(false);
 
-  isEdit = computed(() => Boolean(this.data?.client));
+  isEdit = computed(() => Boolean(this.data?.priceType));
 
   close() {
     this.dialogRef.close();
@@ -59,8 +55,8 @@ export class ClientDialog {
     const value = this.formData().value();
 
     const request$ = this.isEdit()
-      ? this.clientsService.update(this.data.client!.id, value)
-      : this.clientsService.create(value);
+      ? this.priceTypesService.update(this.data.priceType!.id, value)
+      : this.priceTypesService.create(value);
 
     request$
       .pipe(

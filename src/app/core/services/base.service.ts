@@ -14,8 +14,8 @@ export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>>
   getAll(options?: {
     includes?: TIncludes[];
     params?:
-    | Record<string, string | number | boolean>
-    | (() => Record<string, string | number | boolean | undefined | null>);
+      | Record<string, string | number | boolean>
+      | (() => Record<string, string | number | boolean | undefined | null>);
   }) {
     return httpResource<T[]>(() => {
       let url = this.apiUrl;
@@ -54,7 +54,7 @@ export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>>
     });
   }
 
-  create(entity: T) {
+  create(entity: Partial<T>) {
     return this.http.post<T>(this.apiUrl, entity);
   }
 

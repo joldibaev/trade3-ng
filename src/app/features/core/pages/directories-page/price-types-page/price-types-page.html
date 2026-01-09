@@ -1,15 +1,15 @@
 <!-- Header -->
 <div class="flex items-center justify-between">
-  <h1 class="typo-h1">Поставщики</h1>
+  <h1 class="typo-h1">Типы цен</h1>
 </div>
 
 <div class="flex flex-1 gap-4 overflow-hidden">
-  <!-- Main Content: Vendors Table -->
+  <!-- Main Content: Price Types Table -->
   <ui-card class="flex-1 overflow-hidden">
     <!-- Toolbar -->
     <div class="flex items-center justify-between border-b border-gray-100 p-2">
       <div class="flex items-center gap-2">
-        <button uiButton variant="ghost" icon="plus" size="sm" (click)="openVendorDialog()">
+        <button uiButton variant="ghost" icon="plus" size="sm" (click)="openPriceTypeDialog()">
           Создать
         </button>
         <button
@@ -17,8 +17,8 @@
           variant="ghost"
           icon="edit"
           size="icon"
-          [disabled]="!selectedVendor()"
-          (click)="editCurrentVendor()"
+          [disabled]="!selectedPriceType()"
+          (click)="editCurrentPriceType()"
         >
           <span class="sr-only">Редактировать</span>
         </button>
@@ -27,8 +27,8 @@
           variant="danger"
           icon="trash"
           size="icon"
-          [disabled]="!selectedVendor()"
-          (click)="deleteCurrentVendor()"
+          [disabled]="!selectedPriceType()"
+          (click)="deleteCurrentPriceType()"
         >
           <span class="sr-only">Удалить</span>
         </button>
@@ -70,13 +70,13 @@
       </div>
     </div>
 
-    <!-- No filters specific to vendors for now -->
+    <!-- No filters specific to price types for now -->
 
     <ui-table
       [columns]="columns"
-      [data]="filteredVendors()"
-      [loading]="vendors.isLoading()"
-      (selectedChanged)="selectVendor($event)"
+      [data]="filteredPriceTypes()"
+      [loading]="priceTypes.isLoading()"
+      (selectedChanged)="selectPriceType($event)"
     />
   </ui-card>
 </div>

@@ -1,5 +1,17 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { Field, form, required } from '@angular/forms/signals';
+import { finalize } from 'rxjs';
+import { StoresService } from '../../../../../../core/services/stores.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
@@ -15,7 +27,7 @@ export interface StoreDialogResult {
 
 @Component({
   selector: 'app-store-dialog',
-  imports: [UiInput, UiButton, UiDialog],
+  imports: [UiInput, UiButton, UiDialog, Field, FormsModule],
   templateUrl: './store-dialog.html',
   styleUrl: './store-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,7 +36,18 @@ export class StoreDialog {
   private dialogRef = inject<DialogRef<StoreDialogResult>>(DialogRef);
   private data = inject<StoreDialogData>(DIALOG_DATA);
 
-  name = signal(this.data?.store?.name ?? '');
+  private storesService = inject(StoresService);
+  private destroyRef = inject(DestroyRef);
+  loading = signal(false);
+
+  formData = form(
+    signal<StoreDialogResult>({
+      name: this.data.store?.name ?? '',
+    }),
+    (schemaPath) => {
+      required(schemaPath.name, { message: 'Наименование обязательно' });
+    },
+  );
 
   isEdit = computed(() => !!this.data?.store);
 
@@ -33,8 +56,22 @@ export class StoreDialog {
   }
 
   save() {
-    this.dialogRef.close({
-      name: this.name(),
-    });
+    if (!this.formData().valid()) return;
+
+    this.loading.set(true);
+    const value = this.formData().value();
+
+    const request$ = this.isEdit()
+      ? this.storesService.update(this.data.store!.id, value)
+      : this.storesService.create(value);
+
+    request$
+      .pipe(
+        finalize(() => this.loading.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((result) => {
+        this.dialogRef.close(result);
+      });
   }
 }

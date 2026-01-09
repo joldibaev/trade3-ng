@@ -1,22 +1,21 @@
-<ui-dialog>
-  <div class="mb-4 flex items-center justify-between">
-    <h2 class="text-lg font-bold">{{ isEdit() ? 'Редактировать клиента' : 'Создать клиента' }}</h2>
-    <button uiButton variant="ghost" icon="x" size="icon" (click)="close()">
-      <span class="sr-only">Закрыть</span>
-    </button>
-  </div>
-
-  <div class="flex flex-col gap-4">
+<ui-dialog [title]="isEdit() ? 'Редактировать клиента' : 'Создать клиента'" (closeAction)="close()">
+  <form id="client-form" class="flex flex-col gap-4" (ngSubmit)="save()">
     <ui-input label="Наименование" placeholder="Введите имя клиента" [field]="formData.name" />
     <ui-input label="Телефон" placeholder="Введите телефон" [field]="formData.phone" />
     <ui-input label="Email" placeholder="Введите email" [field]="formData.email" />
     <ui-input label="Адрес" placeholder="Введите адрес" [field]="formData.address" />
-  </div>
+  </form>
 
-  <div class="mt-6 flex justify-end gap-2">
-    <button uiButton variant="ghost" (click)="close()">Отмена</button>
-    <button uiButton variant="primary" [disabled]="!formData().valid()" (click)="save()">
-      Сохранить
-    </button>
-  </div>
+  <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>
+  <button
+    footer
+    type="submit"
+    form="client-form"
+    uiButton
+    variant="primary"
+    [disabled]="!formData().valid()"
+    [loading]="loading()"
+  >
+    Сохранить
+  </button>
 </ui-dialog>

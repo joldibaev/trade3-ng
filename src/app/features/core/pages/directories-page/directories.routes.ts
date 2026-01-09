@@ -8,7 +8,8 @@ export const routes: Routes = [
   },
   {
     path: 'stores/:storeId/cashboxes',
-    loadComponent: () => import('./cashboxes-page/cashboxes-page').then((m) => m.CashboxesPage),
+    loadComponent: () =>
+      import('./stores-page/cashboxes-page/cashboxes-page').then((m) => m.CashboxesPage),
     title: 'Кассы',
   },
   {
@@ -24,5 +25,11 @@ export const routes: Routes = [
   {
     path: 'vendors',
     loadComponent: () => import('./vendors-page/vendors-page').then((m) => m.VendorsPage),
+  },
+  {
+    path: 'price-types',
+    loadComponent: () =>
+      import('./price-types-page/price-types-page').then((m) => m.PriceTypesPage),
+    title: 'Типы цен',
   },
 ];

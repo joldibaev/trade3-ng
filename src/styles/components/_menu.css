@@ -1,6 +1,6 @@
 @layer components {
   .ui-menu {
-    @apply relative flex w-full flex-col rounded-sm border border-gray-300 bg-white py-1 shadow-lg outline-none;
+    @apply relative flex max-h-96 w-full flex-col overflow-y-auto rounded-sm border border-gray-300 bg-white py-1 shadow-lg outline-none;
 
     &[data-visible='false'] {
       @apply hidden;

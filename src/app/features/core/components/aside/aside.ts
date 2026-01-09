@@ -30,6 +30,7 @@ export class Aside {
         { label: 'Номенклатура', route: '/core/directories/nomenclature', icon: 'circle' },
         { label: 'Клиенты', route: '/core/directories/clients', icon: 'circle' },
         { label: 'Поставщики', route: '/core/directories/vendors', icon: 'circle' },
+        { label: 'Типы цен', route: '/core/directories/price-types', icon: 'circle' },
       ],
     },
     {

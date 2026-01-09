@@ -1,6 +1,17 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { Field, form } from '@angular/forms/signals';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { Field, form, required } from '@angular/forms/signals';
+import { finalize } from 'rxjs';
+import { CategoriesService } from '../../../../../../core/services/categories.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
@@ -9,7 +20,7 @@ import { CategoryDialogResult } from './category-dialog-result.interface';
 
 @Component({
   selector: 'app-category-dialog',
-  imports: [UiInput, UiButton, UiDialog, Field],
+  imports: [UiInput, UiButton, UiDialog, Field, FormsModule],
   templateUrl: './category-dialog.html',
   styleUrl: './category-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +33,14 @@ export class CategoryDialog {
     signal<CategoryDialogResult>({
       name: this.data.category?.name ?? '',
     }),
+    (schemaPath) => {
+      required(schemaPath.name, { message: 'Наименование обязательно' });
+    },
   );
+
+  private categoriesService = inject(CategoriesService);
+  private destroyRef = inject(DestroyRef);
+  loading = signal(false);
 
   isEdit = computed(() => Boolean(this.data?.category));
 
@@ -31,6 +49,22 @@ export class CategoryDialog {
   }
 
   save() {
-    this.dialogRef.close(this.formData().value());
+    if (!this.formData().valid()) return;
+
+    this.loading.set(true);
+    const value = this.formData().value();
+
+    const request$ = this.isEdit()
+      ? this.categoriesService.update(this.data.category!.id, value)
+      : this.categoriesService.create(value);
+
+    request$
+      .pipe(
+        finalize(() => this.loading.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((result) => {
+        this.dialogRef.close(result);
+      });
   }
 }

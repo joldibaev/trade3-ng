@@ -1,13 +1,10 @@
-<ui-dialog>
-  <h2 class="mb-2 text-lg font-bold">{{ data.title }}</h2>
+<ui-dialog [title]="data.title" (closeAction)="cancel()">
   <p class="mb-6 text-sm text-gray-500">{{ data.message }}</p>
 
-  <div class="flex justify-end gap-2">
-    <button uiButton variant="ghost" (click)="cancel()">
-      {{ data.cancelLabel || 'Отмена' }}
-    </button>
-    <button uiButton [variant]="data.variant || 'primary'" (click)="confirm()">
-      {{ data.confirmLabel || 'Подтвердить' }}
-    </button>
-  </div>
+  <button footer uiButton variant="ghost" (click)="cancel()">
+    {{ data.cancelLabel || 'Отмена' }}
+  </button>
+  <button footer uiButton [variant]="data.variant || 'primary'" (click)="confirm()">
+    {{ data.confirmLabel || 'Подтвердить' }}
+  </button>
 </ui-dialog>

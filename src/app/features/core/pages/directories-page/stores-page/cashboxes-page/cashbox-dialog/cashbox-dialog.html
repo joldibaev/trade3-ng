@@ -1,0 +1,33 @@
+<ui-dialog [title]="isEdit() ? 'Редактировать кассу' : 'Создать кассу'" (closeAction)="close()">
+  <form id="cashbox-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+    <ui-input
+      label="Название кассы"
+      placeholder="Введите название кассы"
+      [field]="formData.name"
+    />
+
+    <div class="flex flex-col gap-1.5">
+      <ui-select
+        label="Выберите магазин"
+        [selectField]="'id'"
+        [selectedList]="selectedList()"
+        [items]="stores.value()"
+        [labelField]="'name'"
+        [loading]="stores.isLoading()"
+      ></ui-select>
+    </div>
+  </form>
+
+  <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>
+  <button
+    footer
+    type="submit"
+    form="cashbox-form"
+    uiButton
+    variant="primary"
+    [disabled]="!formData().valid()"
+    [loading]="loading()"
+  >
+    Сохранить
+  </button>
+</ui-dialog>
