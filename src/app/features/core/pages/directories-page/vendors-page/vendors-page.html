@@ -12,12 +12,24 @@
         <button uiButton variant="ghost" icon="plus" size="sm" (click)="openVendorDialog()">
           Создать
         </button>
-        <button uiButton variant="ghost" icon="edit" size="icon" [disabled]="!selectedVendor()"
-          (click)="editCurrentVendor()">
+        <button
+          uiButton
+          variant="ghost"
+          icon="edit"
+          size="icon"
+          [disabled]="!selectedVendor()"
+          (click)="editCurrentVendor()"
+        >
           <span class="sr-only">Редактировать</span>
         </button>
-        <button uiButton variant="danger" icon="trash" size="icon" [disabled]="!selectedVendor()"
-          (click)="deleteCurrentVendor()">
+        <button
+          uiButton
+          variant="danger"
+          icon="trash"
+          size="icon"
+          [disabled]="!selectedVendor()"
+          (click)="deleteCurrentVendor()"
+        >
           <span class="sr-only">Удалить</span>
         </button>
 
@@ -25,24 +37,46 @@
         <div class="mx-1 h-4 w-px bg-gray-300"></div>
 
         @if (isSearchVisible()) {
-        <div class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300">
-          <ui-input type="search" placeholder="Поиск..." class="w-64" [field]="searchForm.query" />
-          <button uiButton variant="ghost" icon="x" size="icon"
-            (click)="isSearchVisible.set(false); searchForm.query().reset('')">
-            <span class="sr-only">Очистить поиск</span>
-          </button>
-        </div>
+          <div
+            class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300"
+          >
+            <ui-input
+              type="search"
+              placeholder="Поиск..."
+              class="w-64"
+              [field]="searchForm.query"
+            />
+            <button
+              uiButton
+              variant="ghost"
+              icon="x"
+              size="icon"
+              (click)="isSearchVisible.set(false); searchForm.query().reset('')"
+            >
+              <span class="sr-only">Очистить поиск</span>
+            </button>
+          </div>
         } @else {
-        <button uiButton variant="ghost" icon="search" size="sm" (click)="isSearchVisible.set(true)">
-          Найти
-        </button>
+          <button
+            uiButton
+            variant="ghost"
+            icon="search"
+            size="sm"
+            (click)="isSearchVisible.set(true)"
+          >
+            Найти
+          </button>
         }
       </div>
     </div>
 
     <!-- No filters specific to vendors for now -->
 
-    <ui-table [columns]="columns" [data]="filteredVendors()" [loading]="vendors.isLoading()"
-      (selectedChanged)="selectVendor($event)" />
+    <ui-table
+      [columns]="columns"
+      [data]="filteredVendors()"
+      [loading]="vendors.isLoading()"
+      (selectedChanged)="selectVendor($event)"
+    />
   </main>
 </div>

@@ -3,7 +3,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Field, form } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, switchMap, tap } from 'rxjs';
+import { filter, forkJoin, map, of, switchMap, tap } from 'rxjs';
+import { BarcodesService } from '../../../../../core/services/barcodes.service';
 import { CategoriesService } from '../../../../../core/services/categories.service';
 import { ProductsService } from '../../../../../core/services/products.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
@@ -37,6 +38,7 @@ import { ProductDialogResult } from './product-dialog/product-dialog-result.inte
 export class NomenclaturePage {
   private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
+  private barcodesService = inject(BarcodesService);
   private dialog = inject(Dialog);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
@@ -56,7 +58,7 @@ export class NomenclaturePage {
   // Resources
   categories = this.categoriesService.getAll();
   products = this.productsService.getAll({
-    includes: ['category', 'prices', 'stocks'],
+    includes: ['category', 'prices', 'stocks', 'barcodes'],
     params: () => {
       const categoryId = this.selectedCategoryId();
       return categoryId ? { categoryId } : {};
@@ -78,6 +80,11 @@ export class NomenclaturePage {
       key: 'article',
       header: 'Артикул',
       valueGetter: (row) => row.article || '-',
+    },
+    {
+      key: 'barcodes',
+      header: 'Штрихкод',
+      valueGetter: (row) => row.barcodes?.map((b) => b.value).join(', ') || '-',
     },
     {
       key: 'stocks',
@@ -200,7 +207,12 @@ export class NomenclaturePage {
   editCurrentProduct() {
     const product = this.selectedProduct();
     if (!product) return;
-    this.openProductDialog(product);
+
+    this.productsService
+      .fetchById(product.id, ['barcodes'])
+      .subscribe((fullProduct) => {
+        this.openProductDialog(fullProduct);
+      });
   }
 
   deleteCurrentProduct() {
@@ -261,10 +273,42 @@ export class NomenclaturePage {
       .closed.pipe(
         filter(Boolean),
         switchMap((result) => {
-          if (product) {
-            return this.productsService.update(product.id, result);
-          }
-          return this.productsService.create(result as unknown as Product);
+          // 1. Strip barcodes from product payload
+          const { barcodes, ...productData } = result;
+
+          // 2. Save or Create Product
+          const product$ = product
+            ? this.productsService.update(product.id, productData as unknown as Partial<Product>)
+            : this.productsService.create(productData as unknown as Product);
+
+          return product$.pipe(
+            switchMap((savedProduct) => {
+              // 3. Handle Barcodes
+              const newBarcodes = barcodes;
+              const originalBarcodes = product?.barcodes ?? [];
+
+              // Find added barcodes (no ID)
+              const added = newBarcodes.filter((b) => !b.id);
+
+              // Find removed barcodes (present in original but not in result)
+              const removed = originalBarcodes.filter(
+                (ob) => !newBarcodes.find((nb) => nb.id === ob.id),
+              );
+
+              const tasks = [
+                ...added.map((b) =>
+                  this.barcodesService.create({
+                    value: b.value,
+                    product: undefined as any, // Not needed for create if productId is present
+                    productId: savedProduct.id,
+                  } as any),
+                ),
+                ...removed.map((b) => this.barcodesService.delete(b.id)),
+              ];
+
+              return forkJoin(tasks.length ? tasks : [of(null)]).pipe(map(() => savedProduct));
+            }),
+          );
         }),
         tap(() => this.products.reload()),
       )

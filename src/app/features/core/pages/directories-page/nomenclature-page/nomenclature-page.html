@@ -11,12 +11,24 @@
         <button uiButton variant="ghost" icon="plus" size="sm" (click)="openCategoryDialog()">
           Создать
         </button>
-        <button uiButton variant="ghost" icon="edit" size="icon" [disabled]="!selectedCategoryId()"
-          (click)="editCurrentCategory()">
+        <button
+          uiButton
+          variant="ghost"
+          icon="edit"
+          size="icon"
+          [disabled]="!selectedCategoryId()"
+          (click)="editCurrentCategory()"
+        >
           <span class="sr-only">Редактировать категорию</span>
         </button>
-        <button uiButton variant="ghost" icon="trash" size="icon" [disabled]="!selectedCategoryId()"
-          (click)="deleteCurrentCategory()">
+        <button
+          uiButton
+          variant="ghost"
+          icon="trash"
+          size="icon"
+          [disabled]="!selectedCategoryId()"
+          (click)="deleteCurrentCategory()"
+        >
           <span class="sr-only">Удалить категорию</span>
         </button>
       </div>
@@ -25,18 +37,22 @@
     <div class="flex-1 overflow-y-auto p-2">
       <!-- Root node for "All categories" or similar -->
       <!--todo fix button style-->
-      <button type="button" class="w-full cursor-pointer rounded px-2 py-1 text-left text-sm hover:bg-gray-100"
-        [class.bg-primary-50]="!selectedCategoryId()" [class.text-primary-600]="!selectedCategoryId()"
-        (click)="selectCategory()">
+      <button
+        type="button"
+        class="w-full cursor-pointer rounded px-2 py-1 text-left text-sm hover:bg-gray-100"
+        [class.bg-primary-50]="!selectedCategoryId()"
+        [class.text-primary-600]="!selectedCategoryId()"
+        (click)="selectCategory()"
+      >
         <span class="font-medium">Все товары</span>
       </button>
 
       @if (categories.isLoading()) {
-      <div class="flex justify-center p-4">
-        <ui-loading [width]="20" [height]="20" />
-      </div>
+        <div class="flex justify-center p-4">
+          <ui-loading [width]="20" [height]="20" />
+        </div>
       } @else if (categories.hasValue()) {
-      <ui-tree [items]="rootCategories()" [(selectedId)]="selectedCategoryIdForTree" />
+        <ui-tree [items]="rootCategories()" [(selectedId)]="selectedCategoryIdForTree" />
       }
     </div>
   </aside>
@@ -49,12 +65,24 @@
         <button uiButton variant="ghost" icon="plus" size="sm" (click)="openProductDialog()">
           Создать
         </button>
-        <button uiButton variant="ghost" icon="edit" size="icon" [disabled]="!selectedProduct()"
-          (click)="editCurrentProduct()">
+        <button
+          uiButton
+          variant="ghost"
+          icon="edit"
+          size="icon"
+          [disabled]="!selectedProduct()"
+          (click)="editCurrentProduct()"
+        >
           <span class="sr-only">Редактировать товар</span>
         </button>
-        <button uiButton variant="danger" icon="trash" size="icon" [disabled]="!selectedProduct()"
-          (click)="deleteCurrentProduct()">
+        <button
+          uiButton
+          variant="danger"
+          icon="trash"
+          size="icon"
+          [disabled]="!selectedProduct()"
+          (click)="deleteCurrentProduct()"
+        >
           <span class="sr-only">Удалить товар</span>
         </button>
 
@@ -62,17 +90,35 @@
         <div class="mx-1 h-4 w-px bg-gray-300"></div>
 
         @if (isSearchVisible()) {
-        <div class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300">
-          <ui-input type="search" placeholder="Поиск..." class="w-64" [field]="searchForm.query" />
-          <button uiButton variant="ghost" icon="x" size="icon"
-            (click)="isSearchVisible.set(false); searchForm.query().reset('')">
-            <span class="sr-only">Очистить поиск</span>
-          </button>
-        </div>
+          <div
+            class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300"
+          >
+            <ui-input
+              type="search"
+              placeholder="Поиск..."
+              class="w-64"
+              [field]="searchForm.query"
+            />
+            <button
+              uiButton
+              variant="ghost"
+              icon="x"
+              size="icon"
+              (click)="isSearchVisible.set(false); searchForm.query().reset('')"
+            >
+              <span class="sr-only">Очистить поиск</span>
+            </button>
+          </div>
         } @else {
-        <button uiButton variant="ghost" icon="search" size="sm" (click)="isSearchVisible.set(true)">
-          Найти
-        </button>
+          <button
+            uiButton
+            variant="ghost"
+            icon="search"
+            size="sm"
+            (click)="isSearchVisible.set(true)"
+          >
+            Найти
+          </button>
         }
       </div>
     </div>
@@ -87,13 +133,19 @@
         </div>
         <div class="flex items-center gap-1">
           <span class="text-gray-500">Вид цены:</span>
-          <span class="border-b border-dashed border-gray-300 font-medium text-gray-900">Розничная</span>
+          <span class="border-b border-dashed border-gray-300 font-medium text-gray-900"
+            >Розничная</span
+          >
           <ui-icon name="x" class="h-3 w-3 cursor-pointer text-gray-400" />
         </div>
       </div>
     </div>
 
-    <ui-table [columns]="columns" [data]="filteredProducts()" [loading]="products.isLoading()"
-      (selectedChanged)="selectProduct($event)" />
+    <ui-table
+      [columns]="columns"
+      [data]="filteredProducts()"
+      [loading]="products.isLoading()"
+      (selectedChanged)="selectProduct($event)"
+    />
   </main>
 </div>

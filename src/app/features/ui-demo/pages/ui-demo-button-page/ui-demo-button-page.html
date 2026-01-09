@@ -39,16 +39,44 @@
 </div>
 
 <div class="flex gap-2">
-  <button uiButton variant="primary" icon="plus" size="icon" [disabled]="disabled()" [loading]="loading()">
+  <button
+    uiButton
+    variant="primary"
+    icon="plus"
+    size="icon"
+    [disabled]="disabled()"
+    [loading]="loading()"
+  >
     <span class="sr-only">Добавить</span>
   </button>
-  <button uiButton variant="secondary" icon="edit" size="icon" [disabled]="disabled()" [loading]="loading()">
+  <button
+    uiButton
+    variant="secondary"
+    icon="edit"
+    size="icon"
+    [disabled]="disabled()"
+    [loading]="loading()"
+  >
     <span class="sr-only">Изменить</span>
   </button>
-  <button uiButton variant="ghost" icon="trash" size="icon" [disabled]="disabled()" [loading]="loading()">
+  <button
+    uiButton
+    variant="ghost"
+    icon="trash"
+    size="icon"
+    [disabled]="disabled()"
+    [loading]="loading()"
+  >
     <span class="sr-only">Удалить</span>
   </button>
-  <button uiButton variant="danger" icon="trash" size="icon" [disabled]="!disabled()" [loading]="loading()">
+  <button
+    uiButton
+    variant="danger"
+    icon="trash"
+    size="icon"
+    [disabled]="!disabled()"
+    [loading]="loading()"
+  >
     <span class="sr-only">Удалить с загрузкой</span>
   </button>
 </div>
