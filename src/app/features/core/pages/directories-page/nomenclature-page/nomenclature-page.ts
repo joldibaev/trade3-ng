@@ -1,14 +1,17 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Field, form } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, switchMap, tap } from 'rxjs';
+import { filter, forkJoin, map, of, switchMap, tap } from 'rxjs';
+import { BarcodesService } from '../../../../../core/services/barcodes.service';
 import { CategoriesService } from '../../../../../core/services/categories.service';
 import { ProductsService } from '../../../../../core/services/products.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
+import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
@@ -24,7 +27,7 @@ import { ProductDialogResult } from './product-dialog/product-dialog-result.inte
 
 @Component({
   selector: 'app-nomenclature-page',
-  imports: [UiButton, UiIcon, UiLoading, UiTable, UiTree],
+  imports: [UiButton, UiIcon, UiInput, UiLoading, UiTable, UiTree, Field],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,6 +38,7 @@ import { ProductDialogResult } from './product-dialog/product-dialog-result.inte
 export class NomenclaturePage {
   private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
+  private barcodesService = inject(BarcodesService);
   private dialog = inject(Dialog);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
@@ -47,10 +51,14 @@ export class NomenclaturePage {
   );
   selectedProduct = signal<Product | undefined>(undefined);
 
+  searchForm = form(signal({ query: '' }));
+
+  isSearchVisible = signal(false);
+
   // Resources
   categories = this.categoriesService.getAll();
   products = this.productsService.getAll({
-    includes: ['category', 'prices', 'stocks'],
+    includes: ['category', 'prices', 'stocks', 'barcodes'],
     params: () => {
       const categoryId = this.selectedCategoryId();
       return categoryId ? { categoryId } : {};
@@ -72,6 +80,11 @@ export class NomenclaturePage {
       key: 'article',
       header: 'Артикул',
       valueGetter: (row) => row.article || '-',
+    },
+    {
+      key: 'barcodes',
+      header: 'Штрихкод',
+      valueGetter: (row) => row.barcodes?.map((b) => b.value).join(', ') || '-',
     },
     {
       key: 'stocks',
@@ -135,7 +148,18 @@ export class NomenclaturePage {
   });
 
   filteredProducts = computed(() => {
-    return this.products.value() || [];
+    const products = this.products.value() || [];
+    const query = this.searchForm().value().query.toLowerCase();
+
+    if (!query) {
+      return products;
+    }
+
+    return products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(query) ||
+        (p.article && p.article.toLowerCase().includes(query)),
+    );
   });
 
   // Proxy for tree selection to sync with query params
@@ -145,7 +169,7 @@ export class NomenclaturePage {
   set selectedCategoryIdForTree(id: string | undefined) {
     if (id !== this.selectedCategoryId()) {
       // Find category in the flat list
-      const category = this.categories.value()?.find(c => c.id === id);
+      const category = this.categories.value()?.find((c) => c.id === id);
       this.selectCategory(category);
     }
   }
@@ -183,7 +207,12 @@ export class NomenclaturePage {
   editCurrentProduct() {
     const product = this.selectedProduct();
     if (!product) return;
-    this.openProductDialog(product);
+
+    this.productsService
+      .fetchById(product.id, ['barcodes'])
+      .subscribe((fullProduct) => {
+        this.openProductDialog(fullProduct);
+      });
   }
 
   deleteCurrentProduct() {
@@ -244,10 +273,42 @@ export class NomenclaturePage {
       .closed.pipe(
         filter(Boolean),
         switchMap((result) => {
-          if (product) {
-            return this.productsService.update(product.id, result);
-          }
-          return this.productsService.create(result as unknown as Product);
+          // 1. Strip barcodes from product payload
+          const { barcodes, ...productData } = result;
+
+          // 2. Save or Create Product
+          const product$ = product
+            ? this.productsService.update(product.id, productData as unknown as Partial<Product>)
+            : this.productsService.create(productData as unknown as Product);
+
+          return product$.pipe(
+            switchMap((savedProduct) => {
+              // 3. Handle Barcodes
+              const newBarcodes = barcodes;
+              const originalBarcodes = product?.barcodes ?? [];
+
+              // Find added barcodes (no ID)
+              const added = newBarcodes.filter((b) => !b.id);
+
+              // Find removed barcodes (present in original but not in result)
+              const removed = originalBarcodes.filter(
+                (ob) => !newBarcodes.find((nb) => nb.id === ob.id),
+              );
+
+              const tasks = [
+                ...added.map((b) =>
+                  this.barcodesService.create({
+                    value: b.value,
+                    product: undefined as any, // Not needed for create if productId is present
+                    productId: savedProduct.id,
+                  } as any),
+                ),
+                ...removed.map((b) => this.barcodesService.delete(b.id)),
+              ];
+
+              return forkJoin(tasks.length ? tasks : [of(null)]).pipe(map(() => savedProduct));
+            }),
+          );
         }),
         tap(() => this.products.reload()),
       )
@@ -276,14 +337,5 @@ export class NomenclaturePage {
         }),
       )
       .subscribe();
-  }
-
-  private getDescendantIds(parentId: string, all: Category[]): string[] {
-    const ids = [parentId];
-    const children = all.filter(c => c.parentId === parentId);
-    children.forEach(c => {
-      ids.push(...this.getDescendantIds(c.id, all));
-    });
-    return ids;
   }
 }

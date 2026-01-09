@@ -2,7 +2,6 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
-import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { Store } from '../../../../../../shared/interfaces/entities/store.interface';
 
@@ -16,7 +15,7 @@ export interface StoreDialogResult {
 
 @Component({
   selector: 'app-store-dialog',
-  imports: [UiInput, UiButton, UiIcon, UiDialog],
+  imports: [UiInput, UiButton, UiDialog],
   templateUrl: './store-dialog.html',
   styleUrl: './store-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -21,18 +21,17 @@
       <button
         uiButton
         variant="ghost"
-        onlyIcon
+        size="icon"
         title="Редактировать"
         icon="edit"
         (click)="edit.emit()"
       ></button>
       <button
         uiButton
-        variant="ghost"
+        variant="danger"
         title="Удалить"
-        onlyIcon
+        size="icon"
         icon="trash"
-        class="text-red-500 hover:bg-red-50 hover:text-red-600"
         (click)="delete.emit()"
       ></button>
     </div>

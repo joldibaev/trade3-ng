@@ -4,7 +4,6 @@ import { Field, form } from '@angular/forms/signals';
 import { StoresService } from '../../../../../../core/services/stores.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
-import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
 import { CashboxDialogData } from './cashbox-dialog-data.interface';
@@ -12,7 +11,7 @@ import { CashboxDialogResult } from './cashbox-dialog-result.interface';
 
 @Component({
   selector: 'app-cashbox-dialog',
-  imports: [UiInput, UiButton, UiIcon, UiDialog, UiSelect, Field],
+  imports: [UiInput, UiButton, UiDialog, UiSelect, Field],
   templateUrl: './cashbox-dialog.html',
   styleUrl: './cashbox-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

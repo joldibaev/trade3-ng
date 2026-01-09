@@ -14,8 +14,8 @@ export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>>
   getAll(options?: {
     includes?: TIncludes[];
     params?:
-      | Record<string, string | number | boolean>
-      | (() => Record<string, string | number | boolean | undefined | null>);
+    | Record<string, string | number | boolean>
+    | (() => Record<string, string | number | boolean | undefined | null>);
   }) {
     return httpResource<T[]>(() => {
       let url = this.apiUrl;
@@ -64,5 +64,14 @@ export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>>
 
   delete(id: string | number) {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  fetchById(id: string | number, includes?: TIncludes[]) {
+    let url = `${this.apiUrl}/${id}`;
+    if (includes && includes.length > 0) {
+      const params = includes.map((inc) => `include=${inc}`).join('&');
+      url += `?${params}`;
+    }
+    return this.http.get<T>(url);
   }
 }

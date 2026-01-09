@@ -1,6 +1,12 @@
 @layer components {
   .ui-button {
-    @apply focus-visible:focus-ring inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm border px-4 py-1.5 text-sm font-medium whitespace-nowrap outline-none select-none;
+    @apply focus-visible:focus-ring inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm border font-medium whitespace-nowrap outline-none select-none;
+
+    /* Disabled */
+    &.ui-button-disabled {
+      @apply pointer-events-none;
+      @apply opacity-50;
+    }
 
     /* Primary */
     &.ui-button-variant-primary {
@@ -33,25 +39,25 @@
 
     /* Danger */
     &.ui-button-variant-danger {
-      @apply border-red-500 bg-red-500 text-white;
-      @apply active:bg-red-600;
+      @apply border-transparent bg-transparent;
+      @apply text-red-500 hover:text-red-600;
 
       &:not(.disabled) {
-        @apply hover:bg-red-600;
+        @apply hover:bg-red-50;
       }
     }
 
+    /* size */
     &.ui-button-size-sm {
       @apply px-3 py-1 text-sm;
     }
 
-    &.ui-button-disabled {
-      @apply pointer-events-none;
-      @apply opacity-50;
+    &.ui-button-size-md {
+      @apply px-4 py-2 text-sm;
     }
 
-    &.ui-button-icon-only {
-      @apply !px-2 text-gray-500 hover:text-gray-900;
+    &.ui-button-size-icon {
+      @apply px-2 py-1.5;
     }
   }
 }

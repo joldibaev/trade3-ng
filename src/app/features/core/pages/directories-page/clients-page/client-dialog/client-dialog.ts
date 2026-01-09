@@ -4,27 +4,30 @@ import { Field, form } from '@angular/forms/signals';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
-import { CategoryDialogData } from './category-dialog-data.interface';
-import { CategoryDialogResult } from './category-dialog-result.interface';
+import { ClientDialogData } from './client-dialog-data.interface';
+import { ClientDialogResult } from './client-dialog-result.interface';
 
 @Component({
-  selector: 'app-category-dialog',
+  selector: 'app-client-dialog',
   imports: [UiInput, UiButton, UiDialog, Field],
-  templateUrl: './category-dialog.html',
-  styleUrl: './category-dialog.css',
+  templateUrl: './client-dialog.html',
+  styleUrl: './client-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CategoryDialog {
-  private dialogRef = inject<DialogRef<CategoryDialogResult>>(DialogRef);
-  private data = inject<CategoryDialogData>(DIALOG_DATA);
+export class ClientDialog {
+  private dialogRef = inject<DialogRef<ClientDialogResult>>(DialogRef);
+  private data = inject<ClientDialogData>(DIALOG_DATA);
 
   formData = form(
-    signal<CategoryDialogResult>({
-      name: this.data.category?.name ?? '',
+    signal<ClientDialogResult>({
+      name: this.data.client?.name ?? '',
+      phone: this.data.client?.phone ?? '',
+      email: this.data.client?.email ?? '',
+      address: this.data.client?.address ?? '',
     }),
   );
 
-  isEdit = computed(() => Boolean(this.data?.category));
+  isEdit = computed(() => Boolean(this.data?.client));
 
   close() {
     this.dialogRef.close();
