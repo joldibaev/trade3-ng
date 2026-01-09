@@ -1,0 +1,21 @@
+<ui-dialog
+  [title]="isEdit() ? 'Редактировать тип цены' : 'Создать тип цены'"
+  (closeAction)="close()"
+>
+  <form id="price-type-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+    <ui-input label="Наименование" placeholder="Введите название" [field]="formData.name" />
+  </form>
+
+  <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>
+  <button
+    footer
+    type="submit"
+    form="price-type-form"
+    uiButton
+    variant="primary"
+    [disabled]="!formData().valid()"
+    [loading]="loading()"
+  >
+    Сохранить
+  </button>
+</ui-dialog>

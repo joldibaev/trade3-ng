@@ -1,0 +1,61 @@
+<div #ngCombobox="ngCombobox" ngCombobox readonly [disabled]="loading() || disabled()">
+  <div #cdkOverlayOrigin cdkOverlayOrigin="cdkOverlayOrigin">
+    @if (label()) {
+      <label class="ui-form-label mb-1" [for]="id()">{{ label() }}</label>
+    }
+
+    <div class="relative">
+      <span
+        class="pointer-events-none absolute top-1/2 left-2 z-20 -translate-y-1/2"
+        [class.ui-form-placeholder]="!displayValue()"
+      >
+        {{ displayValue() ?? placeholder() }}
+      </span>
+
+      <input
+        ngComboboxInput
+        class="ui-form-control text-transparent select-none"
+        [disabled]="ngCombobox.disabled()"
+        [id]="id()"
+      />
+
+      <div class="absolute top-1/2 right-2 z-20 -translate-y-1/2 text-gray-400">
+        @if (loading()) {
+          <ui-loading height="18" width="18" />
+        } @else {
+          <ui-icon name="chevron-down" />
+        }
+      </div>
+    </div>
+  </div>
+
+  <ng-template ngComboboxPopupContainer>
+    <ng-template
+      [cdkConnectedOverlay]="{
+        origin: cdkOverlayOrigin,
+        usePopover: 'inline',
+        matchWidth: true,
+        offsetY: 6,
+      }"
+      [cdkConnectedOverlayOpen]="true"
+    >
+      <div class="ui-menu">
+        @if (items()?.length) {
+          <div ngListbox [(values)]="selectedList">
+            @for (item of items(); track item) {
+              <div #ngOption="ngOption" ngOption class="ui-menu-item" [value]="item[selectField()]">
+                <span>{{ item[labelField()] }}</span>
+
+                @if (ngOption.selected()) {
+                  <ui-icon name="check"></ui-icon>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="ui-menu-item pointer-events-none">Список пуст</div>
+        }
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

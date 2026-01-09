@@ -1,0 +1,35 @@
+<h2 class="text-lg font-semibold">Menu Demo</h2>
+
+<div class="flex gap-4">
+  <button
+    #trigger="ngMenuTrigger"
+    #cdkOverlayOrigin="cdkOverlayOrigin"
+    uiButton
+    variant="ghost"
+    ngMenuTrigger
+    cdkOverlayOrigin
+    [menu]="menuComp.menu()"
+  >
+    Печать
+  </button>
+
+  <button
+    #trigger2="ngMenuTrigger"
+    #cdkOverlayOrigin2="cdkOverlayOrigin"
+    uiButton
+    variant="secondary"
+    ngMenuTrigger
+    cdkOverlayOrigin
+    [menu]="menuComp2.menu()"
+  >
+    Действия
+  </button>
+</div>
+
+<ui-menu #menuComp [visible]="trigger.expanded()" [origin]="cdkOverlayOrigin" [items]="menuItems" />
+<ui-menu
+  #menuComp2
+  [visible]="trigger2.expanded()"
+  [origin]="cdkOverlayOrigin2"
+  [items]="menuItems"
+/>

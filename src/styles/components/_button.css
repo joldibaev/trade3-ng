@@ -1,32 +1,63 @@
 @layer components {
   .ui-button {
-    @apply focus-ring inline-flex cursor-pointer items-center justify-center gap-4 rounded-sm border px-4 py-1.5 text-sm font-medium whitespace-nowrap outline-none select-none;
+    @apply focus-visible:focus-ring inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm border font-medium whitespace-nowrap outline-none select-none;
+
+    /* Disabled */
+    &.ui-button-disabled {
+      @apply pointer-events-none;
+      @apply opacity-50;
+    }
 
     /* Primary */
-    &[variant='primary'],
-    &:not(:has([variant])) {
+    &.ui-button-variant-primary {
       @apply bg-primary-400 border-primary-200 text-gray-800;
-      @apply hover:bg-primary-200;
       @apply active:bg-primary-500;
+
+      &:not(.disabled) {
+        @apply hover:bg-primary-200;
+      }
     }
 
     /* Secondary */
-    &[variant='secondary'] {
+    &.ui-button-variant-secondary {
       @apply border-gray-300 bg-gray-100 text-gray-800;
-      @apply hover:bg-white;
       @apply active:bg-gray-200;
+
+      &:not(.disabled) {
+        @apply hover:bg-white;
+      }
     }
 
     /* Ghost */
-    &[variant='ghost'] {
+    &.ui-button-variant-ghost {
       @apply border-transparent bg-transparent text-gray-800;
-      @apply hover:bg-gray-100;
+
+      &:not(.disabled) {
+        @apply hover:bg-gray-100;
+      }
     }
 
-    &:disabled,
-    &[disabled] {
-      @apply cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400 shadow-none;
-      @apply hover:bg-gray-50 active:bg-gray-50;
+    /* Danger */
+    &.ui-button-variant-danger {
+      @apply border-transparent bg-transparent;
+      @apply text-red-500 hover:text-red-600;
+
+      &:not(.disabled) {
+        @apply hover:bg-red-50;
+      }
+    }
+
+    /* size */
+    &.ui-button-size-sm {
+      @apply px-3 py-1 text-sm;
+    }
+
+    &.ui-button-size-md {
+      @apply px-4 py-2 text-sm;
+    }
+
+    &.ui-button-size-icon {
+      @apply px-2 py-1.5;
     }
   }
 }

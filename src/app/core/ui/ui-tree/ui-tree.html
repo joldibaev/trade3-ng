@@ -1,0 +1,59 @@
+<ul #tree="ngTree" ngTree class="ui-tree" [(values)]="selectionValues">
+  <ng-template
+    [ngTemplateOutlet]="treeNodes"
+    [ngTemplateOutletContext]="{ nodes: items(), parent: tree }"
+  />
+</ul>
+
+<ng-template #treeNodes let-nodes="nodes" let-parent="parent">
+  @for (node of nodes; track node.id) {
+    <li
+      #treeItem="ngTreeItem"
+      ngTreeItem
+      class="ui-tree-item"
+      [parent]="parent"
+      [value]="node.id"
+      [label]="node.name"
+    >
+      <div class="ui-tree-item-content">
+        @if (node.children?.length) {
+          <!--todo fix btn style-->
+          <button
+            type="button"
+            class="ui-tree-item-toggle outline-none"
+            [attr.aria-label]="treeItem.expanded() ? 'Collapse' : 'Expand'"
+            (click)="$event.stopPropagation(); treeItem.expanded.set(!treeItem.expanded())"
+          >
+            <ui-icon
+              name="chevron-right"
+              size="16"
+              class="transition-transform duration-200"
+              [class.rotate-90]="treeItem.expanded()"
+            />
+          </button>
+        } @else {
+          <div class="ui-tree-item-spacer"></div>
+        }
+
+        <ui-icon
+          size="18"
+          class="ui-tree-item-icon"
+          [name]="node.children?.length ? 'folder' : 'file-text'"
+        />
+
+        <span class="ui-tree-item-label font-medium">{{ node.name }}</span>
+      </div>
+    </li>
+
+    @if (node.children?.length) {
+      <ul role="group" class="ui-tree-group">
+        <ng-template #group="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="treeItem">
+          <ng-template
+            [ngTemplateOutlet]="treeNodes"
+            [ngTemplateOutletContext]="{ nodes: node.children, parent: group }"
+          />
+        </ng-template>
+      </ul>
+    }
+  }
+</ng-template>

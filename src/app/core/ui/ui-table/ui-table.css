@@ -1,22 +1,13 @@
 @reference './../../../../styles.css';
 
-th {
-  @apply min-w-[100px] border border-gray-300 bg-gray-50 px-2 py-1 text-left font-semibold text-gray-800 outline-none select-none;
-}
-
 tr {
-  @apply bg-white;
-  /* Highlight row on hover or when any cell inside has focus */
-  @apply focus-within:bg-primary-100;
+  &:has(> td[data-active='true']) {
+    @apply bg-primary-50;
+  }
 }
 
 td {
-  @apply border border-gray-300 px-2 py-1 text-gray-800 outline-none;
-}
-
-/* Use outline for table cells as box-shadow (ring) can be clipped in border-collapse tables */
-td:focus {
-  outline: 2px solid var(--color-primary-400);
-  outline-offset: -2px;
-  /* Draw inside to avoid layout shift/clipping */
+  &[data-active='true'] {
+    @apply outline-primary-400 outline-2 -outline-offset-2;
+  }
 }

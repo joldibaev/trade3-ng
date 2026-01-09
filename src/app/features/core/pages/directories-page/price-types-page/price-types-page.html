@@ -1,0 +1,82 @@
+<!-- Header -->
+<div class="flex items-center justify-between">
+  <h1 class="typo-h1">Типы цен</h1>
+</div>
+
+<div class="flex flex-1 gap-4 overflow-hidden">
+  <!-- Main Content: Price Types Table -->
+  <ui-card class="flex-1 overflow-hidden">
+    <!-- Toolbar -->
+    <div class="flex items-center justify-between border-b border-gray-100 p-2">
+      <div class="flex items-center gap-2">
+        <button uiButton variant="ghost" icon="plus" size="sm" (click)="openPriceTypeDialog()">
+          Создать
+        </button>
+        <button
+          uiButton
+          variant="ghost"
+          icon="edit"
+          size="icon"
+          [disabled]="!selectedPriceType()"
+          (click)="editCurrentPriceType()"
+        >
+          <span class="sr-only">Редактировать</span>
+        </button>
+        <button
+          uiButton
+          variant="danger"
+          icon="trash"
+          size="icon"
+          [disabled]="!selectedPriceType()"
+          (click)="deleteCurrentPriceType()"
+        >
+          <span class="sr-only">Удалить</span>
+        </button>
+
+        <!-- v-line -->
+        <div class="mx-1 h-4 w-px bg-gray-300"></div>
+
+        @if (isSearchVisible()) {
+          <div
+            class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300"
+          >
+            <ui-input
+              type="search"
+              placeholder="Поиск..."
+              class="w-64"
+              [field]="searchForm.query"
+            />
+            <button
+              uiButton
+              variant="ghost"
+              icon="x"
+              size="icon"
+              (click)="isSearchVisible.set(false); searchForm.query().reset('')"
+            >
+              <span class="sr-only">Очистить поиск</span>
+            </button>
+          </div>
+        } @else {
+          <button
+            uiButton
+            variant="ghost"
+            icon="search"
+            size="sm"
+            (click)="isSearchVisible.set(true)"
+          >
+            Найти
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- No filters specific to price types for now -->
+
+    <ui-table
+      [columns]="columns"
+      [data]="filteredPriceTypes()"
+      [loading]="priceTypes.isLoading()"
+      (selectedChanged)="selectPriceType($event)"
+    />
+  </ui-card>
+</div>

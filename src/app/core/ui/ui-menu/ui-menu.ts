@@ -5,18 +5,27 @@ import {
   ConnectedPosition,
   OverlayModule,
 } from '@angular/cdk/overlay';
-import { ChangeDetectionStrategy, Component, input, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MenuItemCollection } from './menu-item.type';
+
+import { UiIcon } from '../ui-icon/ui-icon.component';
 
 @Component({
   selector: 'ui-menu',
-  imports: [Menu, CdkConnectedOverlay, OverlayModule, MenuContent, MenuItem],
+  imports: [Menu, CdkConnectedOverlay, OverlayModule, MenuContent, MenuItem, UiIcon],
   templateUrl: './ui-menu.html',
   styleUrl: './ui-menu.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'block',
   },
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiMenu {
   visible = input.required<boolean>();
@@ -24,5 +33,5 @@ export class UiMenu {
   items = input<MenuItemCollection>();
   overlayPositions = input<ConnectedPosition[]>([]);
 
-  menu = viewChild<Menu<string>>('menuEl');
+  menu = viewChild<Menu<string>>('ngMenu');
 }

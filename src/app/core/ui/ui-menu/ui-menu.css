@@ -1,0 +1,7 @@
+@reference './../../../../styles.css';
+
+.ui-menu-item {
+  &[data-active='true'] {
+    @apply bg-gray-50;
+  }
+}

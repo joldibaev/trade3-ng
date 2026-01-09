@@ -1,6 +1,6 @@
 {
   "/api/**": {
-    "target": "http://server.joldibaev.uz",
+    "target": "http://localhost",
     "secure": false
   }
 }

@@ -1,0 +1,24 @@
+<ui-dialog
+  [title]="isEdit() ? 'Редактировать поставщика' : 'Создать поставщика'"
+  (closeAction)="close()"
+>
+  <form id="vendor-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+    <ui-input label="Наименование" placeholder="Введите имя поставщика" [field]="formData.name" />
+    <ui-input label="Телефон" placeholder="Введите телефон" [field]="formData.phone" />
+    <ui-input label="Email" placeholder="Введите email" [field]="formData.email" />
+    <ui-input label="Адрес" placeholder="Введите адрес" [field]="formData.address" />
+  </form>
+
+  <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>
+  <button
+    footer
+    type="submit"
+    form="vendor-form"
+    uiButton
+    variant="primary"
+    [disabled]="!formData().valid()"
+    [loading]="loading()"
+  >
+    Сохранить
+  </button>
+</ui-dialog>

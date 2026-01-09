@@ -1,0 +1,19 @@
+<nav aria-label="Breadcrumb" class="flex items-center text-sm text-gray-500">
+  @for (item of items(); track $index; let last = $last) {
+    <div class="flex items-center">
+      @if (!last && item.url) {
+        <a class="hover:text-primary-600" [routerLink]="item.url">
+          {{ item.label }}
+        </a>
+      } @else {
+        <span [class.font-medium]="last" [class.text-gray-900]="last">
+          {{ item.label }}
+        </span>
+      }
+
+      @if (!last) {
+        <ui-icon name="chevron-right" class="mx-2 h-4 w-4 text-gray-400" />
+      }
+    </div>
+  }
+</nav>

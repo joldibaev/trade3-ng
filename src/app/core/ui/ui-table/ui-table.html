@@ -1,21 +1,61 @@
-<table ngGrid class="w-full border-collapse text-sm">
-  <thead>
+<table
+  ngGrid
+  class="w-full border-separate border-spacing-0 text-left text-sm"
+  [enableSelection]="true"
+>
+  <thead class="sticky top-0 z-10 bg-gray-50 text-xs text-gray-500">
     <tr ngGridRow>
       @for (col of columns(); track col.key) {
-        <th ngGridCell>
+        <th
+          ngGridCell
+          class="border-b border-gray-100 bg-gray-50 px-4 py-2 font-medium whitespace-nowrap outline-none"
+          [style.width]="col.width"
+        >
           {{ col.header }}
         </th>
       }
     </tr>
   </thead>
-  <tbody>
-    @for (row of data(); track $index) {
-      <tr ngGridRow>
-        @for (col of columns(); track col.key) {
-          <td ngGridCell>
-            {{ row[col.key] }}
-          </td>
-        }
+  <tbody class="divide-y divide-gray-100">
+    @if (loading()) {
+      <tr>
+        <td class="p-8 text-center" [attr.colspan]="columns().length">
+          <ui-loading class="inline-block" [width]="32" [height]="32" />
+        </td>
+      </tr>
+    } @else if (data().length) {
+      @for (row of data(); track row; let i = $index) {
+        <tr ngGridRow class="cursor-pointer">
+          @for (col of columns(); track col.key; let j = $index) {
+            <td
+              ngGridCell
+              class="px-4 py-2 whitespace-nowrap text-gray-900"
+              [rowIndex]="i"
+              [colIndex]="j"
+              (selectedChange)="onSelectedChange()"
+            >
+              @switch (col.type) {
+                @case ('date') {
+                  {{ row | tableValueGetter: col : i | toString | date: 'dd.MM.yyyy HH:mm' }}
+                }
+                @case ('number') {
+                  {{ row | tableValueGetter: col : i | toNumber | number }}
+                }
+                @default {
+                  {{ row | tableValueGetter: col : i }}
+                }
+              }
+            </td>
+          }
+        </tr>
+      }
+    } @else {
+      <tr>
+        <td [attr.colspan]="columns().length">
+          <div class="flex h-32 w-full items-center justify-center text-gray-500">
+            <span>Нет данных</span>
+          </div>
+        </td>
       </tr>
     }
   </tbody>

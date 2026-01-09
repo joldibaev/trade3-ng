@@ -1,7 +1,11 @@
 @if (!hidden()) {
   @if (label()) {
     <label class="ui-form-label" [for]="id()">
-      <span>{{ label() }}</span>
+      <span>{{ label() }} </span>
+
+      @if (required()) {
+        <em class="text-red-500">*</em>
+      }
 
       @if (readonly()) {
         <span>(readonly)</span>
@@ -22,11 +26,11 @@
     [spellcheck]="spellCheck()"
     [type]="type()"
     [value]="value()"
-    (input)="onInput($event.target)"
     [disabled]="disabled()"
     [readonly]="readonly()"
     [class.invalid]="invalid()"
     [attr.aria-invalid]="invalid()"
+    (input)="onInput($event.target)"
     (blur)="touched.set(true)"
   />
 

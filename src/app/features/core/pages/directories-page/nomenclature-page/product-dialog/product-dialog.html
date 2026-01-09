@@ -1,0 +1,43 @@
+<ui-dialog [title]="isEdit() ? 'Редактировать товар' : 'Создать товар'" (closeAction)="close()">
+  <form id="product-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+    <ui-input label="Наименование" placeholder="Введите название товара" [field]="formData.name" />
+    <ui-input label="Артикул" placeholder="Введите артикул" [field]="formData.article" />
+
+    <div class="flex flex-col gap-1.5">
+      <ui-select label="Категория" [selectField]="'id'" [selectedList]="selectedCategoryList()"
+        [items]="categories.value()" [labelField]="'name'" [loading]="categories.isLoading()"
+        (selectedListChange)="handleCategoryChange($event)"></ui-select>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="text-xs font-medium text-gray-700">Штрихкоды</div>
+
+      <div class="flex flex-wrap gap-2">
+        @for (barcode of barcodes(); track barcode.value; let i = $index) {
+        <div class="flex items-center gap-1 rounded bg-gray-100 px-2 py-1 text-sm text-gray-800">
+          <span>{{ barcode.value }}</span>
+          <button type="button" class="text-gray-500 hover:text-red-500" (click)="removeBarcode(i)">
+            <ui-icon name="x" size="14" />
+            <span class="sr-only">Удалить штрихкод</span>
+          </button>
+        </div>
+        }
+      </div>
+
+      <div class="flex items-end gap-2">
+        <ui-input placeholder="Введите штрихкод" class="flex-1" [field]="newBarcodeForm.value"
+          (keydown.enter)="$event.preventDefault(); addBarcode()" />
+        <button type="button" uiButton variant="secondary" icon="plus" size="icon" [disabled]="!newBarcodeState().value"
+          (click)="addBarcode()">
+          <span class="sr-only">Добавить штрихкод</span>
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>
+  <button footer type="submit" form="product-form" uiButton variant="primary" [disabled]="!formData().valid()"
+    [loading]="loading()">
+    Сохранить
+  </button>
+</ui-dialog>

@@ -9,12 +9,16 @@
     "test": "ng test",
     "serve:ssr:trade3-ng": "node dist/trade3-ng/server/server.mjs",
     "lint": "ng lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "icons:sync": "node scripts/generate-icons/index.js",
+    "prestart": "npm run icons:sync",
+    "prebuild": "npm run icons:sync"
   },
   "private": true,
   "packageManager": "npm@10.9.4",
   "dependencies": {
     "@angular/aria": "^21.0.5",
+    "@angular/cdk": "^21.0.5",
     "@angular/common": "^21.0.0",
     "@angular/compiler": "^21.0.0",
     "@angular/core": "^21.0.0",
@@ -40,6 +44,7 @@
     "jsdom": "^27.1.0",
     "postcss": "^8.5.3",
     "prettier": "^3.7.4",
+    "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.1.12",

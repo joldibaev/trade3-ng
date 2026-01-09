@@ -1,0 +1,21 @@
+<ui-dialog [title]="isEdit() ? 'Редактировать клиента' : 'Создать клиента'" (closeAction)="close()">
+  <form id="client-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+    <ui-input label="Наименование" placeholder="Введите имя клиента" [field]="formData.name" />
+    <ui-input label="Телефон" placeholder="Введите телефон" [field]="formData.phone" />
+    <ui-input label="Email" placeholder="Введите email" [field]="formData.email" />
+    <ui-input label="Адрес" placeholder="Введите адрес" [field]="formData.address" />
+  </form>
+
+  <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>
+  <button
+    footer
+    type="submit"
+    form="client-form"
+    uiButton
+    variant="primary"
+    [disabled]="!formData().valid()"
+    [loading]="loading()"
+  >
+    Сохранить
+  </button>
+</ui-dialog>

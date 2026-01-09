@@ -1,6 +1,6 @@
 @layer components {
   .ui-menu {
-    @apply relative flex min-w-[200px] flex-col rounded-sm border border-gray-300 bg-white py-1 shadow-lg outline-none;
+    @apply relative flex max-h-96 w-full flex-col overflow-y-auto rounded-sm border border-gray-300 bg-white py-1 shadow-lg outline-none;
 
     &[data-visible='false'] {
       @apply hidden;
@@ -8,7 +8,6 @@
   }
 
   .ui-menu-item {
-    @apply focus-ring flex cursor-pointer items-center justify-between gap-4 px-4 py-2 text-sm text-gray-800 outline-none select-none;
-    @apply hover:bg-primary-100;
+    @apply focus-visible:focus-ring flex cursor-pointer items-center justify-between gap-4 px-4 py-2 text-sm text-gray-800 outline-none select-none;
   }
 }

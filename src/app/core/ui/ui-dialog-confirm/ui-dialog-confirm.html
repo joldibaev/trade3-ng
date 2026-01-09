@@ -1,0 +1,10 @@
+<ui-dialog [title]="data.title" (closeAction)="cancel()">
+  <p class="mb-6 text-sm text-gray-500">{{ data.message }}</p>
+
+  <button footer uiButton variant="ghost" (click)="cancel()">
+    {{ data.cancelLabel || 'Отмена' }}
+  </button>
+  <button footer uiButton [variant]="data.variant || 'primary'" (click)="confirm()">
+    {{ data.confirmLabel || 'Подтвердить' }}
+  </button>
+</ui-dialog>
