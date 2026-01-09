@@ -22,7 +22,6 @@ import { InputType } from './input-type.type';
   },
 })
 export class UiInput {
-  // Required
   value = model<string | number>('');
 
   // Writable interaction state - control updates these

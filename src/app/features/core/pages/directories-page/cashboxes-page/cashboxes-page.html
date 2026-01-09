@@ -1,6 +1,6 @@
 <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
   <div class="flex items-center gap-3">
-    <button uiButton variant="ghost" icon="arrow-left" onlyIcon (click)="back()">
+    <button uiButton variant="ghost" icon="arrow-left" size="icon" (click)="back()">
       <span class="sr-only">Назад</span>
     </button>
     <h1 class="text-2xl font-bold">Кассы</h1>
@@ -16,35 +16,25 @@
 <ui-breadcrumb class="mb-4 block" [items]="breadcrumbItems()" />
 
 @if (cashboxes.isLoading()) {
-  <div class="flex h-64 items-center justify-center">
-    <ui-loading [width]="40" [height]="40" />
-  </div>
+<div class="flex h-64 items-center justify-center">
+  <ui-loading [width]="40" [height]="40" />
+</div>
 } @else if (cashboxes.hasValue()) {
-  @if (cashboxes.value().length > 0) {
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      @for (cashbox of cashboxes.value(); track cashbox.id) {
-        <ui-directory-item-card
-          [title]="cashbox.name"
-          [subtitle]="'Магазин: ' + (cashbox.store.name || 'Нет магазина')"
-          (edit)="onEdit(cashbox)"
-          (delete)="onDelete(cashbox)"
-        >
-          <div
-            class="mt-auto flex items-center justify-between border-t border-gray-100 pt-3 text-xs text-gray-500"
-          >
-            <span>ID: {{ cashbox.id }}</span>
-            <span>Создан: {{ cashbox.createdAt | date: 'dd.MM.yyyy' }}</span>
-          </div>
-        </ui-directory-item-card>
-      }
+@if (cashboxes.value().length > 0) {
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  @for (cashbox of cashboxes.value(); track cashbox.id) {
+  <ui-directory-item-card [title]="cashbox.name" [subtitle]="'Магазин: ' + (cashbox.store.name || 'Нет магазина')"
+    (edit)="onEdit(cashbox)" (delete)="onDelete(cashbox)">
+    <div class="mt-auto flex items-center justify-between border-t border-gray-100 pt-3 text-xs text-gray-500">
+      <span>ID: {{ cashbox.id }}</span>
+      <span>Создан: {{ cashbox.createdAt | date: 'dd.MM.yyyy' }}</span>
     </div>
-  } @else {
-    <ui-empty-state
-      title="Список касс пуст"
-      description="В данном магазине пока нет ни одной кассы. Создайте первую кассу, чтобы начать работу."
-      icon="box"
-      actionLabel="Создать кассу"
-      (action)="onCreate()"
-    />
+  </ui-directory-item-card>
   }
+</div>
+} @else {
+<ui-empty-state title="Список касс пуст"
+  description="В данном магазине пока нет ни одной кассы. Создайте первую кассу, чтобы начать работу." icon="box"
+  actionLabel="Создать кассу" (action)="onCreate()" />
+}
 }

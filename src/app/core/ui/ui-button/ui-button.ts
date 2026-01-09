@@ -24,21 +24,16 @@ import { UiLoading } from '../ui-loading/ui-loading';
 })
 export class UiButton {
   variant = input<'primary' | 'secondary' | 'ghost' | 'danger'>('primary');
-  size = input<'md' | 'sm'>('md');
+  size = input<'icon' | 'sm' | 'md' | 'lg'>('md');
   loading = input(false, { transform: booleanAttribute });
   disabled = input(false, { transform: booleanAttribute });
   icon = input<IconName>();
-  onlyIcon = input(false, { transform: booleanAttribute });
 
   classList = computed(() => {
     const classList: string[] = [];
 
     classList.push(`ui-button-variant-${this.variant()}`);
     classList.push(`ui-button-size-${this.size()}`);
-
-    if (this.onlyIcon()) {
-      classList.push('ui-button-icon-only');
-    }
 
     return classList;
   });

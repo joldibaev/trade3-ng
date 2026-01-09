@@ -1,6 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Field, form } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, switchMap, tap } from 'rxjs';
 import { CategoriesService } from '../../../../../core/services/categories.service';
@@ -9,6 +10,7 @@ import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
+import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
@@ -24,7 +26,7 @@ import { ProductDialogResult } from './product-dialog/product-dialog-result.inte
 
 @Component({
   selector: 'app-nomenclature-page',
-  imports: [UiButton, UiIcon, UiLoading, UiTable, UiTree],
+  imports: [UiButton, UiIcon, UiInput, UiLoading, UiTable, UiTree, Field],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,6 +48,10 @@ export class NomenclaturePage {
     ),
   );
   selectedProduct = signal<Product | undefined>(undefined);
+
+  searchForm = form(signal({ query: '' }));
+
+  isSearchVisible = signal(false);
 
   // Resources
   categories = this.categoriesService.getAll();
@@ -135,7 +141,18 @@ export class NomenclaturePage {
   });
 
   filteredProducts = computed(() => {
-    return this.products.value() || [];
+    const products = this.products.value() || [];
+    const query = this.searchForm().value().query.toLowerCase();
+
+    if (!query) {
+      return products;
+    }
+
+    return products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(query) ||
+        (p.article && p.article.toLowerCase().includes(query)),
+    );
   });
 
   // Proxy for tree selection to sync with query params
@@ -145,7 +162,7 @@ export class NomenclaturePage {
   set selectedCategoryIdForTree(id: string | undefined) {
     if (id !== this.selectedCategoryId()) {
       // Find category in the flat list
-      const category = this.categories.value()?.find(c => c.id === id);
+      const category = this.categories.value()?.find((c) => c.id === id);
       this.selectCategory(category);
     }
   }
@@ -276,14 +293,5 @@ export class NomenclaturePage {
         }),
       )
       .subscribe();
-  }
-
-  private getDescendantIds(parentId: string, all: Category[]): string[] {
-    const ids = [parentId];
-    const children = all.filter(c => c.parentId === parentId);
-    children.forEach(c => {
-      ids.push(...this.getDescendantIds(c.id, all));
-    });
-    return ids;
   }
 }

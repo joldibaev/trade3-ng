@@ -1,7 +1,7 @@
 <ui-dialog>
   <div class="mb-4 flex items-center justify-between">
     <h2 class="text-lg font-bold">
-      {{ isEdit() ? 'Редактировать категорию' : 'Создать категорию' }}
+      {{ isEdit() ? 'Редактировать поставщика' : 'Создать поставщика' }}
     </h2>
     <button uiButton variant="ghost" icon="x" size="icon" (click)="close()">
       <span class="sr-only">Закрыть</span>
@@ -9,7 +9,10 @@
   </div>
 
   <div class="flex flex-col gap-4">
-    <ui-input label="Название" placeholder="Введите название категории" [field]="formData.name" />
+    <ui-input label="Наименование" placeholder="Введите имя поставщика" [field]="formData.name" />
+    <ui-input label="Телефон" placeholder="Введите телефон" [field]="formData.phone" />
+    <ui-input label="Email" placeholder="Введите email" [field]="formData.email" />
+    <ui-input label="Адрес" placeholder="Введите адрес" [field]="formData.address" />
   </div>
 
   <div class="mt-6 flex justify-end gap-2">

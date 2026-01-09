@@ -1,6 +1,6 @@
 import { Client } from './client.interface';
-import { DocumentReturnItem } from './document-return-item.interface';
 import { DocumentStatus } from './constants';
+import { DocumentReturnItem } from './document-return-item.interface';
 import { StockMovement } from './stock-movement.interface';
 import { Store } from './store.interface';
 

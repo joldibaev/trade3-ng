@@ -4,6 +4,9 @@ import { DocumentSale } from './document-sale.interface';
 export interface Client {
   id: string;
   name: string;
+  phone?: string;
+  email?: string;
+  address?: string;
   sales: DocumentSale[];
   returns: DocumentReturn[];
   createdAt?: Date;

@@ -4,7 +4,6 @@ import { Field, form } from '@angular/forms/signals';
 import { CategoriesService } from '../../../../../../core/services/categories.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
-import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
 import { ProductDialogData } from './product-dialog-data.interface';
@@ -12,7 +11,7 @@ import { ProductDialogResult } from './product-dialog-result.interface';
 
 @Component({
   selector: 'app-product-dialog',
-  imports: [UiInput, UiButton, UiIcon, UiDialog, UiSelect, Field],
+  imports: [UiInput, UiButton, UiDialog, UiSelect, Field],
   templateUrl: './product-dialog.html',
   styleUrl: './product-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

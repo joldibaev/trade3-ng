@@ -1,22 +1,14 @@
 <ui-dialog>
   <div class="mb-4 flex items-center justify-between">
     <h2 class="text-lg font-bold">{{ isEdit() ? 'Редактировать магазин' : 'Создать магазин' }}</h2>
-    <button
-      type="button"
-      class="rounded-full p-1 text-gray-500 hover:bg-gray-100"
-      (click)="close()"
-    >
-      <ui-icon name="x" />
+    <button uiButton variant="ghost" icon="x" size="icon" (click)="close()">
+      <span class="sr-only">Закрыть</span>
     </button>
   </div>
 
   <div class="flex flex-col gap-4">
-    <ui-input
-      label="Название магазина"
-      placeholder="Введите название магазина"
-      [value]="name()"
-      (valueChange)="name.set($event.toString())"
-    />
+    <ui-input label="Название магазина" placeholder="Введите название магазина" [value]="name()"
+      (valueChange)="name.set($event.toString())" />
   </div>
 
   <div class="mt-6 flex justify-end gap-2">
