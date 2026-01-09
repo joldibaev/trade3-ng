@@ -12,6 +12,7 @@ import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { UiTree } from '../../../../../core/ui/ui-tree/ui-tree';
 import { Category } from '../../../../../shared/interfaces/entities/category.interface';
 import { Product } from '../../../../../shared/interfaces/entities/product.interface';
 import { CategoryDialog } from './category-dialog/category-dialog';
@@ -23,7 +24,7 @@ import { ProductDialogResult } from './product-dialog/product-dialog-result.inte
 
 @Component({
   selector: 'app-nomenclature-page',
-  imports: [UiButton, UiIcon, UiLoading, UiTable],
+  imports: [UiButton, UiIcon, UiLoading, UiTable, UiTree],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,24 +76,79 @@ export class NomenclaturePage {
     {
       key: 'stocks',
       header: 'Количество',
-      valueGetter: (row) => row.stocks[0]?.quantity || 0,
+      valueGetter: (row) => row.stocks?.[0]?.quantity || 0,
     },
     {
-      key: 'id',
+      key: 'categoryId',
       header: 'Ед. изм.',
       valueGetter: () => 'шт',
     },
     {
       key: 'prices',
       header: 'Цена',
-      valueGetter: (row) => `${row.prices[0]?.value || 0} ₸`,
+      valueGetter: (row) => `${row.prices?.[0]?.value || 0} ₸`,
     },
   ];
 
-  // Derived state
+  // Derived state: build hierarchy from flat list
+  rootCategories = computed(() => {
+    const all = this.categories.value() || [];
+    const rootNodes: (Category & { children: Category[] })[] = [];
+    const idMap = new Map<string, Category & { children: Category[] }>();
+
+    // First pass: create nodes
+    all.forEach((c) => {
+      idMap.set(c.id, { ...c, children: [] });
+    });
+
+    // Second pass: link parents/children
+    all.forEach((c) => {
+      const node = idMap.get(c.id)!;
+      if (c.parentId && idMap.has(c.parentId)) {
+        idMap.get(c.parentId)!.children.push(node);
+      } else if (!c.parentId) {
+        rootNodes.push(node);
+      }
+    });
+
+    // Recursive sorting function
+    const sortNodes = (nodes: (Category & { children: Category[] })[]) => {
+      nodes.sort((a, b) => {
+        const aHasChildren = a.children.length > 0;
+        const bHasChildren = b.children.length > 0;
+
+        if (aHasChildren && !bHasChildren) return -1;
+        if (!aHasChildren && bHasChildren) return 1;
+
+        return a.name.localeCompare(b.name);
+      });
+
+      nodes.forEach((node) => {
+        if (node.children.length > 0) {
+          sortNodes(node.children as (Category & { children: Category[] })[]);
+        }
+      });
+    };
+
+    sortNodes(rootNodes);
+    return rootNodes;
+  });
+
   filteredProducts = computed(() => {
     return this.products.value() || [];
   });
+
+  // Proxy for tree selection to sync with query params
+  get selectedCategoryIdForTree() {
+    return this.selectedCategoryId();
+  }
+  set selectedCategoryIdForTree(id: string | undefined) {
+    if (id !== this.selectedCategoryId()) {
+      // Find category in the flat list
+      const category = this.categories.value()?.find(c => c.id === id);
+      this.selectCategory(category);
+    }
+  }
 
   selectCategory(category?: Category) {
     this.selectedProduct.set(undefined); // Reset product selection when category changes
@@ -220,5 +276,14 @@ export class NomenclaturePage {
         }),
       )
       .subscribe();
+  }
+
+  private getDescendantIds(parentId: string, all: Category[]): string[] {
+    const ids = [parentId];
+    const children = all.filter(c => c.parentId === parentId);
+    children.forEach(c => {
+      ids.push(...this.getDescendantIds(c.id, all));
+    });
+    return ids;
   }
 }

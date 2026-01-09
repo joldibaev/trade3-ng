@@ -1,0 +1,55 @@
+@reference './../../../../styles.css';
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+.ui-tree {
+  @apply flex flex-col gap-0.5 list-none m-0 p-0;
+}
+
+.ui-tree-item {
+  @apply flex flex-col outline-none;
+}
+
+.ui-tree-item-content {
+  @apply flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer transition-colors;
+  @apply hover:bg-gray-100;
+}
+
+.ui-tree-item[aria-selected='true']>.ui-tree-item-content {
+  @apply bg-primary-50 text-primary-600;
+}
+
+.ui-tree-item[aria-selected='true']>.ui-tree-item-content .ui-tree-item-icon {
+  @apply text-primary-500;
+}
+
+.ui-tree-item:focus-visible>.ui-tree-item-content {
+  @apply ring-2 ring-primary-500 ring-offset-1;
+}
+
+.ui-tree-item-toggle {
+  @apply flex items-center justify-center w-5 h-5 -ml-1 text-gray-400 hover:text-gray-600 transition-colors bg-transparent border-none cursor-pointer p-0 rounded;
+}
+
+.ui-tree-item-spacer {
+  @apply w-5;
+}
+
+.ui-tree-item-icon {
+  @apply text-gray-400 flex-shrink-0;
+}
+
+.ui-tree-item-label {
+  @apply text-sm truncate select-none;
+}
+
+.ui-tree-group {
+  @apply flex flex-col gap-0.5 list-none m-0 p-0 pl-4 border-l border-gray-100 ml-3;
+}
+
+/* Official Angular Aria Tree hiding pattern */
+.ui-tree-item[aria-expanded='false']+.ui-tree-group {
+  display: none;
+}

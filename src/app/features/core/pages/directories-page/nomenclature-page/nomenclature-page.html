@@ -5,73 +5,34 @@
 
 <div class="flex flex-1 gap-4 overflow-hidden">
   <!-- Sidebar: Categories -->
-  <aside class="flex w-64 flex-col rounded-lg border border-gray-200 bg-white">
+  <aside class="flex w-80 flex-col rounded-lg border border-gray-200 bg-white">
     <div class="border-b border-gray-100 p-2">
       <div class="flex items-center gap-1">
-        <button
-          uiButton
-          variant="ghost"
-          icon="plus"
-          aria-label="Создать категорию"
-          class="text-xs"
-          (click)="openCategoryDialog()"
-        >
+        <button uiButton variant="ghost" icon="plus" aria-label="Создать категорию" class="text-xs"
+          (click)="openCategoryDialog()">
           Создать
         </button>
-        <button
-          uiButton
-          variant="ghost"
-          icon="edit"
-          onlyIcon
-          aria-label="Редактировать категорию"
-          class="text-xs"
-          [disabled]="!selectedCategoryId()"
-          (click)="editCurrentCategory()"
-        ></button>
-        <button
-          uiButton
-          variant="ghost"
-          icon="trash"
-          onlyIcon
-          aria-label="Удалить категорию"
-          class="text-xs"
-          [disabled]="!selectedCategoryId()"
-          (click)="deleteCurrentCategory()"
-        ></button>
+        <button uiButton variant="ghost" icon="edit" onlyIcon aria-label="Редактировать категорию" class="text-xs"
+          [disabled]="!selectedCategoryId()" (click)="editCurrentCategory()"></button>
+        <button uiButton variant="ghost" icon="trash" onlyIcon aria-label="Удалить категорию" class="text-xs"
+          [disabled]="!selectedCategoryId()" (click)="deleteCurrentCategory()"></button>
       </div>
     </div>
 
     <div class="flex-1 overflow-y-auto p-2">
       <!-- Root node for "All categories" or similar -->
-      <button
-        type="button"
-        class="w-full cursor-pointer rounded px-2 py-1 text-left text-sm hover:bg-gray-100"
-        [class.bg-primary-50]="!selectedCategoryId()"
-        [class.text-primary-600]="!selectedCategoryId()"
-        (click)="selectCategory()"
-      >
+      <button type="button" class="w-full cursor-pointer rounded px-2 py-1 text-left text-sm hover:bg-gray-100"
+        [class.bg-primary-50]="!selectedCategoryId()" [class.text-primary-600]="!selectedCategoryId()"
+        (click)="selectCategory()">
         <span class="font-medium">Все товары</span>
       </button>
 
       @if (categories.isLoading()) {
-        <div class="flex justify-center p-4">
-          <ui-loading [width]="20" [height]="20" />
-        </div>
+      <div class="flex justify-center p-4">
+        <ui-loading [width]="20" [height]="20" />
+      </div>
       } @else if (categories.hasValue()) {
-        @for (category of categories.value(); track category.id) {
-          <button
-            type="button"
-            class="w-full cursor-pointer rounded px-2 py-1 text-left text-sm hover:bg-gray-100"
-            [class.bg-primary-50]="category.id === selectedCategoryId()"
-            [class.text-primary-600]="category.id === selectedCategoryId()"
-            (click)="selectCategory(category)"
-          >
-            <div class="flex items-center gap-2">
-              <ui-icon name="folder" class="h-4 w-4 text-gray-400" />
-              <span>{{ category.name }}</span>
-            </div>
-          </button>
-        }
+      <ui-tree [items]="rootCategories()" [(selectedId)]="selectedCategoryIdForTree" />
       }
     </div>
   </aside>
@@ -81,37 +42,14 @@
     <!-- Toolbar -->
     <div class="flex items-center justify-between border-b border-gray-100 p-2">
       <div class="flex items-center gap-2">
-        <button
-          uiButton
-          variant="ghost"
-          icon="plus"
-          aria-label="Создать товар"
-          size="sm"
-          (click)="openProductDialog()"
-        >
+        <button uiButton variant="ghost" icon="plus" aria-label="Создать товар" size="sm" (click)="openProductDialog()">
           Создать
         </button>
-        <button
-          uiButton
-          variant="ghost"
-          icon="edit"
-          onlyIcon
-          aria-label="Редактировать товар"
-          size="sm"
-          [disabled]="!selectedProduct()"
-          (click)="editCurrentProduct()"
-        ></button>
-        <button
-          uiButton
-          variant="ghost"
-          icon="trash"
-          onlyIcon
-          aria-label="Удалить товар"
-          size="sm"
-          class="text-red-500 hover:bg-red-50 hover:text-red-600"
-          [disabled]="!selectedProduct()"
-          (click)="deleteCurrentProduct()"
-        ></button>
+        <button uiButton variant="ghost" icon="edit" onlyIcon aria-label="Редактировать товар" size="sm"
+          [disabled]="!selectedProduct()" (click)="editCurrentProduct()"></button>
+        <button uiButton variant="ghost" icon="trash" onlyIcon aria-label="Удалить товар" size="sm"
+          class="text-red-500 hover:bg-red-50 hover:text-red-600" [disabled]="!selectedProduct()"
+          (click)="deleteCurrentProduct()"></button>
         <div class="mx-1 h-4 w-px bg-gray-300"></div>
         <button uiButton variant="ghost" icon="search" size="sm">Найти</button>
       </div>
@@ -127,19 +65,13 @@
         </div>
         <div class="flex items-center gap-1">
           <span class="text-gray-500">Вид цены:</span>
-          <span class="border-b border-dashed border-gray-300 font-medium text-gray-900"
-            >Розничная</span
-          >
+          <span class="border-b border-dashed border-gray-300 font-medium text-gray-900">Розничная</span>
           <ui-icon name="x" class="h-3 w-3 cursor-pointer text-gray-400" />
         </div>
       </div>
     </div>
 
-    <ui-table
-      [columns]="columns"
-      [data]="filteredProducts()"
-      [loading]="products.isLoading()"
-      (selectedChanged)="selectProduct($event)"
-    />
+    <ui-table [columns]="columns" [data]="filteredProducts()" [loading]="products.isLoading()"
+      (selectedChanged)="selectProduct($event)" />
   </main>
 </div>
