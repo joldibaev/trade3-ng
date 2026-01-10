@@ -3,18 +3,18 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CashboxesService } from '../../../../../../core/services/cashboxes.service';
-import { StoresService } from '../../../../../../core/services/stores.service';
-import { UiBreadcrumb } from '../../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
-import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
-import { UiDialogConfirm } from '../../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
-import { UiDialogConfirmData } from '../../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
-import { UiDirectoryItemCard } from '../../../../../../core/ui/ui-directory-item-card/ui-directory-item-card';
-import { UiEmptyState } from '../../../../../../core/ui/ui-empty-state/ui-empty-state';
-import { UiLoading } from '../../../../../../core/ui/ui-loading/ui-loading';
-import { Cashbox } from '../../../../../../shared/interfaces/entities/cashbox.interface';
+import { CashboxesService } from '../../../../../core/services/cashboxes.service';
+import { StoresService } from '../../../../../core/services/stores.service';
+import { UiBreadcrumb } from '../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
+import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
+import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
+import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
+import { UiDirectoryItemCard } from '../../../../../core/ui/ui-directory-item-card/ui-directory-item-card';
+import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
+import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
+import { CashboxDialogResult } from '../../../../../shared/interfaces/dialogs/cashbox-dialog.interface';
+import { Cashbox } from '../../../../../shared/interfaces/entities/cashbox.interface';
 import { CashboxDialog } from './cashbox-dialog/cashbox-dialog';
-import { CashboxDialogResult } from './cashbox-dialog/cashbox-dialog-result.interface';
 
 @Component({
   selector: 'app-cashboxes-page',

@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Field, form } from '@angular/forms/signals';
+import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
 import { PriceTypesService } from '../../../../../core/services/price-types.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
@@ -18,14 +18,16 @@ import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import {
+  PriceTypeDialogData,
+  PriceTypeDialogResult,
+} from '../../../../../shared/interfaces/dialogs/price-type-dialog.interface';
 import { PriceType } from '../../../../../shared/interfaces/entities/price-type.interface';
 import { PriceTypeDialog } from './price-type-dialog/price-type-dialog';
-import { PriceTypeDialogData } from './price-type-dialog/price-type-dialog-data.interface';
-import { PriceTypeDialogResult } from './price-type-dialog/price-type-dialog-result.interface';
 
 @Component({
   selector: 'app-price-types-page',
-  imports: [UiButton, UiInput, UiTable, Field, UiCard],
+  imports: [UiButton, UiInput, UiTable, FormField, UiCard],
   templateUrl: './price-types-page.html',
   styleUrl: './price-types-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,7 +42,10 @@ export class PriceTypesPage {
 
   // State
   selectedPriceType = signal<PriceType | undefined>(undefined);
-  searchForm = form(signal({ query: '' }));
+
+  formState = signal({ query: '' });
+  formData = form(this.formState);
+
   isSearchVisible = signal(false);
 
   // Resources
@@ -61,7 +66,7 @@ export class PriceTypesPage {
 
   filteredPriceTypes = computed(() => {
     const list = this.priceTypes.value() || [];
-    const query = this.searchForm().value().query.toLowerCase();
+    const query = this.formData().value().query.toLowerCase();
 
     if (!query) {
       return list;

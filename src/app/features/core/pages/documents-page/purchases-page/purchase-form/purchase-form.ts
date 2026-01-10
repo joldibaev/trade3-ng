@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Field, form, required } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, tap } from 'rxjs';
 import { DocumentPurchasesService } from '../../../../../../core/services/document-purchases.service';
@@ -23,7 +23,7 @@ import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
 
 @Component({
   selector: 'app-purchase-form',
-  imports: [UiCard, UiInput, UiSelect, UiButton, DecimalPipe, Field],
+  imports: [UiCard, UiInput, UiSelect, UiButton, DecimalPipe, FormField],
   templateUrl: './purchase-form.html',
   styleUrl: './purchase-form.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,7 +60,7 @@ export class PurchaseForm {
     storeId: '',
   });
 
-  form = form(this.formState, (schemaPath) => {
+  formData = form(this.formState, (schemaPath) => {
     required(schemaPath.date, { message: 'Дата обязательна' });
     required(schemaPath.storeId, { message: 'Магазин обязателен' });
     required(schemaPath.vendorId, { message: 'Поставщик обязателен' });
@@ -68,7 +68,7 @@ export class PurchaseForm {
 
   // Items State
   // prices is a map of priceTypeId -> signal(value)
-  items = signal<
+  itemsState = signal<
     {
       productId: ReturnType<typeof signal<string>>;
       quantity: ReturnType<typeof signal<number>>;
@@ -82,7 +82,7 @@ export class PurchaseForm {
 
   // Computed
   totalAmount = computed(() => {
-    return this.items().reduce((acc, item) => {
+    return this.itemsState().reduce((acc, item) => {
       return acc + (item.quantity() || 0) * (item.price() || 0);
     }, 0);
   });
@@ -145,7 +145,7 @@ export class PurchaseForm {
           prices,
         };
       });
-      this.items.set(newItems);
+      this.itemsState.set(newItems);
     });
   }
 
@@ -156,7 +156,7 @@ export class PurchaseForm {
       value: signal(0),
     }));
 
-    this.items.update((items) => [
+    this.itemsState.update((items) => [
       ...items,
       {
         productId: signal(''),
@@ -168,11 +168,11 @@ export class PurchaseForm {
   }
 
   removeItem(index: number) {
-    this.items.update((items) => items.filter((_, i) => i !== index));
+    this.itemsState.update((items) => items.filter((_, i) => i !== index));
   }
 
   updateProduct(index: number, productId: string) {
-    const item = this.items()[index];
+    const item = this.itemsState()[index];
     item.productId.set(productId);
 
     const product = this.products.value()?.find((p) => p.id === productId);
@@ -203,8 +203,8 @@ export class PurchaseForm {
   }
 
   save() {
-    if (!this.form().valid()) return;
-    if (this.items().length === 0) return;
+    if (!this.formData().valid()) return;
+    if (this.itemsState().length === 0) return;
 
     this.loading.set(true);
 
@@ -213,7 +213,7 @@ export class PurchaseForm {
       date: formValue.date ? new Date(formValue.date) : undefined,
       vendorId: formValue.vendorId || undefined,
       storeId: formValue.storeId,
-      items: this.items().map((item) => ({
+      items: this.itemsState().map((item) => ({
         productId: item.productId(),
         quantity: item.quantity(),
         price: item.price(),

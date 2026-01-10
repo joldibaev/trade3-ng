@@ -93,18 +93,13 @@
           <div
             class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300"
           >
-            <ui-input
-              type="search"
-              placeholder="Поиск..."
-              class="w-64"
-              [field]="searchForm.query"
-            />
+            <ui-input type="search" placeholder="Поиск..." class="w-64" [formField]="formData.query" />
             <button
               uiButton
               variant="ghost"
               icon="x"
               size="icon"
-              (click)="isSearchVisible.set(false); searchForm.query().reset('')"
+              (click)="isSearchVisible.set(false); formData.query().reset('')"
             >
               <span class="sr-only">Очистить поиск</span>
             </button>

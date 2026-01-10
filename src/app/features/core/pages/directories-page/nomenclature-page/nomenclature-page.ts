@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Field, form } from '@angular/forms/signals';
+import { form, FormField } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, switchMap, tap } from 'rxjs';
 import { CategoriesService } from '../../../../../core/services/categories.service';
@@ -23,18 +23,22 @@ import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
 import { UiTree } from '../../../../../core/ui/ui-tree/ui-tree';
+import {
+  CategoryDialogData,
+  CategoryDialogResult,
+} from '../../../../../shared/interfaces/dialogs/category-dialog.interface';
+import {
+  ProductDialogData,
+  ProductDialogResult,
+} from '../../../../../shared/interfaces/dialogs/product-dialog.interface';
 import { Category } from '../../../../../shared/interfaces/entities/category.interface';
 import { Product } from '../../../../../shared/interfaces/entities/product.interface';
 import { CategoryDialog } from './category-dialog/category-dialog';
-import { CategoryDialogData } from './category-dialog/category-dialog-data.interface';
-import { CategoryDialogResult } from './category-dialog/category-dialog-result.interface';
 import { ProductDialog } from './product-dialog/product-dialog';
-import { ProductDialogData } from './product-dialog/product-dialog-data.interface';
-import { ProductDialogResult } from './product-dialog/product-dialog-result.interface';
 
 @Component({
   selector: 'app-nomenclature-page',
-  imports: [UiButton, UiIcon, UiInput, UiLoading, UiTable, UiTree, Field, UiCard],
+  imports: [UiButton, UiIcon, UiInput, UiLoading, UiTable, UiTree, FormField, UiCard],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,7 +62,8 @@ export class NomenclaturePage {
   );
   selectedProduct = signal<Product | undefined>(undefined);
 
-  searchForm = form(signal({ query: '' }));
+  formState = signal({ query: '' });
+  formData = form(this.formState);
 
   isSearchVisible = signal(false);
 
@@ -156,7 +161,7 @@ export class NomenclaturePage {
 
   filteredProducts = computed(() => {
     const products = this.products.value() || [];
-    const query = this.searchForm().value().query.toLowerCase();
+    const query = this.formData().value().query.toLowerCase();
 
     if (!query) {
       return products;

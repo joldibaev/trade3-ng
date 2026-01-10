@@ -11,8 +11,9 @@ import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui
 import { UiDirectoryItemCard } from '../../../../../core/ui/ui-directory-item-card/ui-directory-item-card';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
+import { StoreDialogResult } from '../../../../../shared/interfaces/dialogs/store-dialog.interface';
 import { Store } from '../../../../../shared/interfaces/entities/store.interface';
-import { StoreDialog, StoreDialogResult } from './store-dialog/store-dialog';
+import { StoreDialog } from './store-dialog/store-dialog';
 
 @Component({
   selector: 'app-stores-page',

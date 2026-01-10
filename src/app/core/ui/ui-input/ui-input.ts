@@ -23,7 +23,7 @@ import { InputType } from './input-type.type';
   imports: [],
 })
 export class UiInput {
-  // todo delete
+  // todo delete number
   value = model<string | number>('');
 
   // Writable interaction state - control updates these

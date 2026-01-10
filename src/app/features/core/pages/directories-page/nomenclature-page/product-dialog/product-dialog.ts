@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Field, form, required } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 import { finalize, forkJoin, map, of, switchMap } from 'rxjs';
 import { BarcodesService } from '../../../../../../core/services/barcodes.service';
 import { CategoriesService } from '../../../../../../core/services/categories.service';
@@ -19,13 +19,15 @@ import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
+import {
+  ProductDialogData,
+  ProductDialogResult,
+} from '../../../../../../shared/interfaces/dialogs/product-dialog.interface';
 import { Product } from '../../../../../../shared/interfaces/entities/product.interface';
-import { ProductDialogData } from './product-dialog-data.interface';
-import { ProductDialogResult } from './product-dialog-result.interface';
 
 @Component({
   selector: 'app-product-dialog',
-  imports: [UiInput, UiButton, UiDialog, UiSelect, Field, UiIcon, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, UiSelect, FormField, UiIcon, FormsModule],
   templateUrl: './product-dialog.html',
   styleUrl: './product-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -78,7 +80,7 @@ export class ProductDialog {
     if (!this.formData().valid()) return;
 
     this.loading.set(true);
-    const { barcodes: _ignored, ...payload } = this.formState();
+    const { barcodes: _, ...payload } = this.formState();
 
     const product$ = this.isEdit()
       ? this.productsService.update(this.data.product!.id, payload)

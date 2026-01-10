@@ -9,25 +9,20 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Field, form, required } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 import { finalize } from 'rxjs';
 import { StoresService } from '../../../../../../core/services/stores.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
-import { Store } from '../../../../../../shared/interfaces/entities/store.interface';
-
-export interface StoreDialogData {
-  store?: Store;
-}
-
-export interface StoreDialogResult {
-  name: string;
-}
+import {
+  StoreDialogData,
+  StoreDialogResult,
+} from '../../../../../../shared/interfaces/dialogs/store-dialog.interface';
 
 @Component({
   selector: 'app-store-dialog',
-  imports: [UiInput, UiButton, UiDialog, Field, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule],
   templateUrl: './store-dialog.html',
   styleUrl: './store-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,14 +35,12 @@ export class StoreDialog {
   private destroyRef = inject(DestroyRef);
   loading = signal(false);
 
-  formData = form(
-    signal<StoreDialogResult>({
-      name: this.data.store?.name ?? '',
-    }),
-    (schemaPath) => {
-      required(schemaPath.name, { message: 'Наименование обязательно' });
-    },
-  );
+  formState = signal<StoreDialogResult>({
+    name: this.data.store?.name ?? '',
+  });
+  formData = form(this.formState, (schemaPath) => {
+    required(schemaPath.name, { message: 'Наименование обязательно' });
+  });
 
   isEdit = computed(() => !!this.data?.store);
 

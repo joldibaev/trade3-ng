@@ -1,11 +1,22 @@
 <ui-dialog [title]="isEdit() ? 'Редактировать магазин' : 'Создать магазин'" (closeAction)="close()">
   <form id="store-form" class="flex flex-col gap-4" (ngSubmit)="save()">
-    <ui-input label="Название магазина" placeholder="Введите название магазина" [field]="formData.name" />
+    <ui-input
+      label="Название магазина"
+      placeholder="Введите название магазина"
+      [formField]="formData.name"
+    />
   </form>
 
   <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>
-  <button footer type="submit" form="store-form" uiButton variant="primary" [disabled]="!formData().valid()"
-    [loading]="loading()">
+  <button
+    footer
+    type="submit"
+    form="store-form"
+    uiButton
+    variant="primary"
+    [disabled]="!formData().valid()"
+    [loading]="loading()"
+  >
     Сохранить
   </button>
 </ui-dialog>

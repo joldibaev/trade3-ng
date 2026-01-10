@@ -6,8 +6,4 @@ export const routes: Routes = [
     path: 'core',
     loadChildren: () => import('./features/core/core.routes').then((m) => m.routes),
   },
-  {
-    path: 'ui',
-    loadChildren: () => import('./features/ui-demo/ui-demo.routes').then((m) => m.routes),
-  },
 ];

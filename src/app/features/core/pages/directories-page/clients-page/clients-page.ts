@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Field, form } from '@angular/forms/signals';
+import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
 import { ClientsService } from '../../../../../core/services/clients.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
@@ -18,14 +18,16 @@ import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import {
+  ClientDialogData,
+  ClientDialogResult,
+} from '../../../../../shared/interfaces/dialogs/client-dialog.interface';
 import { Client } from '../../../../../shared/interfaces/entities/client.interface';
 import { ClientDialog } from './client-dialog/client-dialog';
-import { ClientDialogData } from './client-dialog/client-dialog-data.interface';
-import { ClientDialogResult } from './client-dialog/client-dialog-result.interface';
 
 @Component({
   selector: 'app-clients-page',
-  imports: [UiButton, UiInput, UiTable, Field, UiCard],
+  imports: [UiButton, UiInput, UiTable, FormField, UiCard],
   templateUrl: './clients-page.html',
   styleUrl: './clients-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,7 +42,10 @@ export class ClientsPage {
 
   // State
   selectedClient = signal<Client | undefined>(undefined);
-  searchForm = form(signal({ query: '' }));
+
+  formState = signal({ query: '' });
+  formData = form(this.formState);
+
   isSearchVisible = signal(false);
 
   // Resources
@@ -76,7 +81,7 @@ export class ClientsPage {
 
   filteredClients = computed(() => {
     const clients = this.clients.value() || [];
-    const query = this.searchForm().value().query.toLowerCase();
+    const query = this.formData().value().query.toLowerCase();
 
     if (!query) {
       return clients;

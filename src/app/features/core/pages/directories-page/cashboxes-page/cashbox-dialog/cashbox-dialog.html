@@ -1,10 +1,6 @@
 <ui-dialog [title]="isEdit() ? 'Редактировать кассу' : 'Создать кассу'" (closeAction)="close()">
   <form id="cashbox-form" class="flex flex-col gap-4" (ngSubmit)="save()">
-    <ui-input
-      label="Название кассы"
-      placeholder="Введите название кассы"
-      [field]="formData.name"
-    />
+    <ui-input label="Название кассы" placeholder="Введите название кассы" [formField]="formData.name" />
 
     <div class="flex flex-col gap-1.5">
       <ui-select

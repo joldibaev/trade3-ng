@@ -1,6 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { Field, form } from '@angular/forms/signals';
+import { form, FormField } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { DocumentPurchasesService } from '../../../../../core/services/document-purchases.service';
@@ -15,7 +15,7 @@ import { DocumentPurchase } from '../../../../../shared/interfaces/entities/docu
 
 @Component({
   selector: 'app-purchases-page',
-  imports: [UiButton, UiInput, UiTable, Field, UiCard],
+  imports: [UiButton, UiInput, UiTable, UiCard, FormField],
   templateUrl: './purchases-page.html',
   styleUrl: './purchases-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +31,10 @@ export class PurchasesPage {
 
   // State
   selectedPurchase = signal<DocumentPurchase | undefined>(undefined);
-  searchForm = form(signal({ query: '' }));
+
+  formState = signal({ query: '' });
+  formData = form(this.formState);
+
   isSearchVisible = signal(false);
 
   // Resources
@@ -77,7 +80,7 @@ export class PurchasesPage {
 
   filteredPurchases = computed(() => {
     const purchases = this.purchases.value() || [];
-    const query = this.searchForm().value().query.toLowerCase();
+    const query = this.formData().value().query.toLowerCase();
 
     if (!query) {
       return purchases;

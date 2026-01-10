@@ -9,20 +9,22 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Field, form, required } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 import { finalize } from 'rxjs';
-import { CashboxesService } from '../../../../../../../core/services/cashboxes.service';
-import { StoresService } from '../../../../../../../core/services/stores.service';
-import { UiButton } from '../../../../../../../core/ui/ui-button/ui-button';
-import { UiDialog } from '../../../../../../../core/ui/ui-dialog/ui-dialog';
-import { UiInput } from '../../../../../../../core/ui/ui-input/ui-input';
-import { UiSelect } from '../../../../../../../core/ui/ui-select/ui-select';
-import { CashboxDialogData } from './cashbox-dialog-data.interface';
-import { CashboxDialogResult } from './cashbox-dialog-result.interface';
+import { CashboxesService } from '../../../../../../core/services/cashboxes.service';
+import { StoresService } from '../../../../../../core/services/stores.service';
+import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
+import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
+import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
+import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
+import {
+  CashboxDialogData,
+  CashboxDialogResult,
+} from '../../../../../../shared/interfaces/dialogs/cashbox-dialog.interface';
 
 @Component({
   selector: 'app-cashbox-dialog',
-  imports: [UiInput, UiButton, UiDialog, UiSelect, Field, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, UiSelect, FormField, FormsModule],
   templateUrl: './cashbox-dialog.html',
   styleUrl: './cashbox-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,15 +40,13 @@ export class CashboxDialog {
 
   stores = this.storesService.getAll();
 
-  formData = form(
-    signal<CashboxDialogResult>({
-      name: this.data.cashbox?.name ?? '',
-      storeId: this.data.storeId ?? '',
-    }),
-    (schemaPath) => {
-      required(schemaPath.name, { message: 'Наименование обязательно' });
-    },
-  );
+  formState = signal<CashboxDialogResult>({
+    name: this.data.cashbox?.name ?? '',
+    storeId: this.data.storeId ?? '',
+  });
+  formData = form(this.formState, (schemaPath) => {
+    required(schemaPath.name, { message: 'Наименование обязательно' });
+  });
 
   selectedList = computed(() => [this.formData().value().storeId]);
 

@@ -15,7 +15,7 @@
       uiButton
       variant="primary"
       icon="check"
-      [disabled]="!form().valid() || items().length === 0"
+      [disabled]="!formData().valid() || itemsState().length === 0"
       [loading]="loading()"
       (click)="save()"
     >
@@ -34,7 +34,7 @@
       <ui-input label="Номер" [value]="id()!" [disabled]="true" [readonly]="true" />
     }
 
-    <ui-input type="datetime-local" label="Дата" [field]="form.date" />
+    <ui-input type="datetime-local" label="Дата" [formField]="formData.date" />
 
     <ui-select
       label="Склад"
@@ -92,7 +92,7 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-50">
-          @for (item of items(); track item; let i = $index) {
+          @for (item of itemsState(); track item; let i = $index) {
             <tr>
               <td class="px-4 py-2">
                 <ui-select
@@ -149,7 +149,7 @@
         </tbody>
       </table>
 
-      @if (items().length === 0) {
+      @if (itemsState().length === 0) {
         <div class="flex flex-col items-center justify-center p-8 text-gray-400">
           <span class="text-lg">Нет товаров</span>
           <span class="text-sm">Добавьте товары в документ</span>
@@ -160,7 +160,7 @@
     <div class="flex justify-end gap-8 border-t border-gray-100 bg-gray-50 p-4">
       <div class="flex flex-col text-right">
         <span class="text-xs text-gray-500">Итого товаров</span>
-        <span class="font-bold">{{ items().length }}</span>
+        <span class="font-bold">{{ itemsState().length }}</span>
       </div>
       <div class="flex flex-col text-right">
         <span class="text-xs text-gray-500">На сумму</span>

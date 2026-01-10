@@ -9,18 +9,20 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Field, form, required } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 import { finalize } from 'rxjs';
 import { CategoriesService } from '../../../../../../core/services/categories.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
-import { CategoryDialogData } from './category-dialog-data.interface';
-import { CategoryDialogResult } from './category-dialog-result.interface';
+import {
+  CategoryDialogData,
+  CategoryDialogResult,
+} from '../../../../../../shared/interfaces/dialogs/category-dialog.interface';
 
 @Component({
   selector: 'app-category-dialog',
-  imports: [UiInput, UiButton, UiDialog, Field, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule],
   templateUrl: './category-dialog.html',
   styleUrl: './category-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,14 +31,12 @@ export class CategoryDialog {
   private dialogRef = inject<DialogRef<CategoryDialogResult>>(DialogRef);
   private data = inject<CategoryDialogData>(DIALOG_DATA);
 
-  formData = form(
-    signal<CategoryDialogResult>({
-      name: this.data.category?.name ?? '',
-    }),
-    (schemaPath) => {
-      required(schemaPath.name, { message: 'Наименование обязательно' });
-    },
-  );
+  formState = signal<CategoryDialogResult>({
+    name: this.data.category?.name ?? '',
+  });
+  formData = form(this.formState, (schemaPath) => {
+    required(schemaPath.name, { message: 'Наименование обязательно' });
+  });
 
   private categoriesService = inject(CategoriesService);
   private destroyRef = inject(DestroyRef);

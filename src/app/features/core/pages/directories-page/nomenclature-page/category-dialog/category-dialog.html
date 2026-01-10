@@ -3,7 +3,7 @@
   (closeAction)="close()"
 >
   <form id="category-form" class="flex flex-col gap-4" (ngSubmit)="save()">
-    <ui-input label="Название" placeholder="Введите название категории" [field]="formData.name" />
+    <ui-input label="Название" placeholder="Введите название категории" [formField]="formData.name" />
   </form>
 
   <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>

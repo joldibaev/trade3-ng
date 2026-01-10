@@ -8,8 +8,7 @@ export const routes: Routes = [
   },
   {
     path: 'stores/:storeId/cashboxes',
-    loadComponent: () =>
-      import('./stores-page/cashboxes-page/cashboxes-page').then((m) => m.CashboxesPage),
+    loadComponent: () => import('./cashboxes-page/cashboxes-page').then((m) => m.CashboxesPage),
     title: 'Кассы',
   },
   {

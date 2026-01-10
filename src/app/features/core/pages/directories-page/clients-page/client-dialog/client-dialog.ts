@@ -9,19 +9,21 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Field, form, required } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 import { finalize } from 'rxjs';
 import { ClientsService } from '../../../../../../core/services/clients.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
+import {
+  ClientDialogData,
+  ClientDialogResult,
+} from '../../../../../../shared/interfaces/dialogs/client-dialog.interface';
 import { Client } from '../../../../../../shared/interfaces/entities/client.interface';
-import { ClientDialogData } from './client-dialog-data.interface';
-import { ClientDialogResult } from './client-dialog-result.interface';
 
 @Component({
   selector: 'app-client-dialog',
-  imports: [UiInput, UiButton, UiDialog, Field, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule],
   templateUrl: './client-dialog.html',
   styleUrl: './client-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,17 +32,15 @@ export class ClientDialog {
   private dialogRef = inject<DialogRef<Client>>(DialogRef);
   private data = inject<ClientDialogData>(DIALOG_DATA);
 
-  formData = form(
-    signal<ClientDialogResult>({
-      name: this.data.client?.name ?? '',
-      phone: this.data.client?.phone ?? '',
-      email: this.data.client?.email ?? '',
-      address: this.data.client?.address ?? '',
-    }),
-    (schemaPath) => {
-      required(schemaPath.name, { message: 'Наименование обязательно' });
-    },
-  );
+  formState = signal<ClientDialogResult>({
+    name: this.data.client?.name ?? '',
+    phone: this.data.client?.phone ?? '',
+    email: this.data.client?.email ?? '',
+    address: this.data.client?.address ?? '',
+  });
+  formData = form(this.formState, (schemaPath) => {
+    required(schemaPath.name, { message: 'Наименование обязательно' });
+  });
 
   private clientsService = inject(ClientsService);
   private destroyRef = inject(DestroyRef);
