@@ -1,3 +1,4 @@
+import { DocumentPurchase } from './document-purchase.interface';
 import { PriceType } from './price-type.interface';
 import { Product } from './product.interface';
 
@@ -8,6 +9,8 @@ export interface Price {
   productId: string;
   priceType: PriceType;
   priceTypeId: string;
+  documentPurchase?: DocumentPurchase;
+  documentPurchaseId?: string;
   createdAt?: Date;
   updatedAt: Date;
 }

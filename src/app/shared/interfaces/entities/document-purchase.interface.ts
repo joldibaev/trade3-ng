@@ -1,5 +1,6 @@
 import { DocumentPurchaseItem } from './document-purchase-item.interface';
 import { DocumentStatus } from '../constants';
+import { Price } from './price.interface';
 import { StockMovement } from './stock-movement.interface';
 import { Store } from './store.interface';
 import { Vendor } from './vendor.interface';
@@ -17,4 +18,5 @@ export interface DocumentPurchase {
   createdAt?: Date;
   updatedAt: Date;
   movements: StockMovement[];
+  generatedPrices: Price[];
 }
