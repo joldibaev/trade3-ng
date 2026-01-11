@@ -1,7 +1,27 @@
 import { HttpEvent, HttpHandlerFn, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { map, Observable } from 'rxjs';
-import { ApiResponse } from '../../shared/interfaces/api-response.interface';
+
+interface BaseApiResponse {
+  timestamp: string;
+}
+
+interface ApiResponseSuccess<T = unknown> extends BaseApiResponse {
+  success: true;
+  data: T;
+}
+
+interface ApiError {
+  title: string;
+  message: string | object;
+}
+
+interface ApiResponseError extends BaseApiResponse {
+  success: false;
+  error: ApiError;
+}
+
+type ApiResponse<T = unknown> = ApiResponseSuccess<T> | ApiResponseError;
 
 function isApiResponse(body: unknown): body is ApiResponse {
   return body !== null && typeof body === 'object' && 'success' in body && 'timestamp' in body;

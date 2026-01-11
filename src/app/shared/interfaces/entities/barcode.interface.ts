@@ -1,4 +1,4 @@
-import { BarcodeType } from './constants';
+import { BarcodeType } from '../constants';
 import { Product } from './product.interface';
 
 export interface Barcode {

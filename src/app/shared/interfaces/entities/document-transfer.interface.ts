@@ -1,4 +1,4 @@
-import { DocumentStatus } from './constants';
+import { DocumentStatus } from '../constants';
 import { DocumentTransferItem } from './document-transfer-item.interface';
 import { StockMovement } from './stock-movement.interface';
 import { Store } from './store.interface';
