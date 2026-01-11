@@ -1,0 +1,57 @@
+<div role="region" aria-label="Notifications" class="fixed top-4 right-4 z-50 flex flex-col gap-2">
+  @for (toast of notyf.toasts(); track toast.id) {
+    <div
+      role="alert"
+      class="flex w-96 items-start justify-between border border-l-4 bg-white p-3 shadow-md transition-all"
+      [class.border-l-green-600]="toast.type === 'success'"
+      [class.border-l-red-600]="toast.type === 'error'"
+      [class.border-l-yellow-500]="toast.type === 'info'"
+      [class.bg-green-50]="toast.type === 'success'"
+      [class.bg-red-50]="toast.type === 'error'"
+      [class.bg-yellow-50]="toast.type === 'info'"
+    >
+      <div class="flex gap-3">
+        <div aria-hidden="true" class="mt-0.5">
+          @if (toast.type === 'success') {
+            <ui-icon name="success-circle" size="lg" class="text-green-700" />
+          }
+          @if (toast.type === 'error') {
+            <ui-icon name="error-circle" size="lg" class="text-red-700" />
+          }
+          @if (toast.type === 'info') {
+            <ui-icon name="info-circle" size="lg" class="text-yellow-700" />
+          }
+        </div>
+        <div class="flex flex-col">
+          <span
+            class="text-sm font-bold tracking-wide uppercase"
+            [class.text-green-900]="toast.type === 'success'"
+            [class.text-red-900]="toast.type === 'error'"
+            [class.text-yellow-900]="toast.type === 'info'"
+          >
+            {{
+              toast.title
+                ? toast.title
+                : toast.type === 'success'
+                  ? 'Выполнено'
+                  : toast.type === 'error'
+                    ? 'Ошибка'
+                    : 'Информация'
+            }}
+          </span>
+          <p class="text-sm text-gray-800">
+            {{ toast.message }}
+          </p>
+        </div>
+      </div>
+      <!-- Close Button -->
+      <button
+        aria-label="Закрыть уведомление"
+        class="text-gray-400 hover:text-gray-600"
+        (click)="notyf.dismiss(toast.id)"
+      >
+        <ui-icon name="x" size="sm" />
+      </button>
+    </div>
+  }
+</div>
