@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CreateDocumentSaleDto } from '../../shared/interfaces/dtos/create-document-sale.dto';
+import { CreateDocumentSaleDto } from '../../shared/interfaces/dtos/create-document-sale.interface';
 import { DocumentSale } from '../../shared/interfaces/entities/document-sale.interface';
 import { BaseService } from './base.service';
 

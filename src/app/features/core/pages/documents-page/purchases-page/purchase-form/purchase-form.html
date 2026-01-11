@@ -119,7 +119,7 @@
                 />
               </td>
               <!-- Dynamic Price Types Inputs -->
-              @for (price of item.prices; track price.priceTypeId) {
+              @for (price of item.newPrices; track price.priceTypeId) {
                 <td class="px-4 py-2">
                   <ui-input
                     type="number"

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
+import { CreateDocumentPurchaseDto } from '../../shared/interfaces/dtos/create-document-purchase.interface';
 import { DocumentPurchase } from '../../shared/interfaces/entities/document-purchase.interface';
 import { BaseService } from './base.service';
-
-import { CreateDocumentPurchaseDto } from '../../shared/interfaces/dtos/create-document-purchase.dto';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentPurchasesService extends BaseService<DocumentPurchase> {

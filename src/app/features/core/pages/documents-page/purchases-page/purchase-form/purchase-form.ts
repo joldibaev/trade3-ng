@@ -20,6 +20,7 @@ import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../../core/ui/ui-card/ui-card';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
+import { CreateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/create-document-purchase.interface';
 
 @Component({
   selector: 'app-purchase-form',
@@ -73,7 +74,7 @@ export class PurchaseForm {
       productId: ReturnType<typeof signal<string>>;
       quantity: ReturnType<typeof signal<number>>;
       price: ReturnType<typeof signal<number>>; // Purchase price
-      prices: {
+      newPrices: {
         priceTypeId: string;
         value: ReturnType<typeof signal<number>>;
       }[];
@@ -129,8 +130,8 @@ export class PurchaseForm {
         const product = this.products.value()?.find((p) => p.id === item.productId); // Might not be loaded yet if products calls are slow?
         // In real app we might need to wait for products/priceTypes. OnPush might handle signal updates.
 
-        // Construct prices array
-        const prices = validPriceTypes.map((pt) => {
+        // Construct newPrices array
+        const newPrices = validPriceTypes.map((pt) => {
           const productPrice = product?.prices?.find((p) => p.priceTypeId === pt.id)?.value || 0;
           return {
             priceTypeId: pt.id,
@@ -142,7 +143,7 @@ export class PurchaseForm {
           productId: signal(item.productId),
           quantity: signal(item.quantity),
           price: signal(item.price),
-          prices,
+          newPrices,
         };
       });
       this.itemsState.set(newItems);
@@ -151,7 +152,7 @@ export class PurchaseForm {
 
   addItem() {
     const validPriceTypes = this.priceTypes.value() || [];
-    const prices = validPriceTypes.map((pt) => ({
+    const newPrices = validPriceTypes.map((pt) => ({
       priceTypeId: pt.id,
       value: signal(0),
     }));
@@ -162,7 +163,7 @@ export class PurchaseForm {
         productId: signal(''),
         quantity: signal(1),
         price: signal(0),
-        prices,
+        newPrices,
       },
     ]);
   }
@@ -186,7 +187,7 @@ export class PurchaseForm {
 
     // Auto-fill selling prices
     if (product?.prices) {
-      item.prices.forEach((priceSignalObj) => {
+      item.newPrices.forEach((priceSignalObj) => {
         const pVal =
           product.prices.find((p) => p.priceTypeId === priceSignalObj.priceTypeId)?.value || 0;
         priceSignalObj.value.set(pVal);
@@ -209,15 +210,15 @@ export class PurchaseForm {
     this.loading.set(true);
 
     const formValue = this.formState();
-    const payload = {
-      date: formValue.date ? new Date(formValue.date) : undefined,
+    const payload: CreateDocumentPurchaseDto = {
+      date: formValue.date ? new Date(formValue.date).toISOString() : undefined,
       vendorId: formValue.vendorId || undefined,
       storeId: formValue.storeId,
       items: this.itemsState().map((item) => ({
         productId: item.productId(),
         quantity: item.quantity(),
         price: item.price(),
-        prices: item.prices.map((p) => ({
+        newPrices: item.newPrices.map((p) => ({
           priceTypeId: p.priceTypeId,
           value: p.value(),
         })),
