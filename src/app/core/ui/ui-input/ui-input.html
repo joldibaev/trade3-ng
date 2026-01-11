@@ -13,26 +13,33 @@
     </label>
   }
 
-  <input
-    class="ui-form-control"
-    [attr.aria-label]="label()"
-    [attr.enterkeyhint]="enterKeyHint()"
-    [attr.inputmode]="inputMode()"
-    [autocomplete]="autocomplete()"
-    [id]="id()"
-    [name]="name()"
-    [placeholder]="placeholder()"
-    [readOnly]="readonly()"
-    [spellcheck]="spellCheck()"
-    [type]="type()"
-    [value]="value()"
-    [disabled]="disabled()"
-    [readonly]="readonly()"
-    [class.invalid]="invalid()"
-    [attr.aria-invalid]="invalid()"
-    (input)="onInput($event.target)"
-    (blur)="touched.set(true)"
-  />
+  <div class="relative">
+    <input
+      class="ui-form-control"
+      [attr.aria-label]="label()"
+      [attr.enterkeyhint]="enterKeyHint()"
+      [attr.inputmode]="inputMode()"
+      [autocomplete]="autocomplete()"
+      [id]="id()"
+      [name]="name()"
+      [placeholder]="placeholder()"
+      [spellcheck]="spellCheck()"
+      [type]="type()"
+      [value]="value()"
+      [disabled]="disabled()"
+      [readonly]="readonly()"
+      [class.invalid]="invalid()"
+      [attr.aria-invalid]="invalid()"
+      (input)="onInput($event.target)"
+      (blur)="touched.set(true)"
+    />
+
+    @if (loading()) {
+      <div class="absolute top-1/2 right-2 z-20 -translate-y-1/2 text-gray-400">
+        <ui-loading height="18" width="18" />
+      </div>
+    }
+  </div>
 
   @if (invalid()) {
     @for (error of errors(); track error) {

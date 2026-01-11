@@ -57,6 +57,7 @@ export class ProductDialog {
   formData = form(this.formState, (schemaPath) => {
     required(schemaPath.name, { message: 'Наименование обязательно' });
     required(schemaPath.article, { message: 'Артикул обязателен' });
+    required(schemaPath.categoryId, { message: 'Категория обязателена' });
   });
 
   barcodes = signal<{ id?: string; value: string }[]>(this.formState().barcodes);
@@ -65,8 +66,6 @@ export class ProductDialog {
   newBarcodeForm = form(this.newBarcodeState, (schemaPath) => {
     required(schemaPath.value, { message: 'Штрихкод обязателен' });
   });
-
-  selectedCategoryList = computed(() => [this.formState().categoryId]);
 
   isEdit = computed(() => Boolean(this.data?.product));
 
@@ -77,7 +76,7 @@ export class ProductDialog {
   save() {
     this.formState.update((s) => ({ ...s, barcodes: this.barcodes() }));
 
-    if (!this.formData().valid()) return;
+    if (this.formData().invalid()) return;
 
     this.loading.set(true);
     const { barcodes: _, ...payload } = this.formState();
@@ -132,11 +131,5 @@ export class ProductDialog {
 
   removeBarcode(index: number) {
     this.barcodes.update((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  handleCategoryChange(ids: string[]) {
-    if (ids.length > 0) {
-      this.formState.update((v) => ({ ...v, categoryId: ids[0] }));
-    }
   }
 }

@@ -8,12 +8,14 @@ import {
   Component,
   computed,
   input,
+  linkedSignal,
   model,
   signal,
   viewChild,
   viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
+import { DisabledReason, ValidationError } from '@angular/forms/signals';
 import { generateId } from '../../../shared/utils/generate-id';
 import { UiIcon } from '../ui-icon/ui-icon.component';
 import { UiLoading } from '../ui-loading/ui-loading';
@@ -37,29 +39,39 @@ import { UiLoading } from '../ui-loading/ui-loading';
   encapsulation: ViewEncapsulation.None,
 })
 export class UiSelect<T> {
+  value = model('');
+
   label = input<string>();
   placeholder = input('Ничего не выбрано');
-  disabled = input(false, { transform: booleanAttribute });
   loading = input(false, { transform: booleanAttribute });
 
   items = input.required<T[] | undefined>();
   labelField = input.required<keyof T>();
 
   selectField = input.required<keyof T>();
-  selectedList = model<string[]>([]);
+  protected selectedList = linkedSignal<string[]>(() => {
+    const value = this.value();
+    return value.length ? value.split(',') : [];
+  });
+
+  // Read-only state - form system manages these
+  disabled = input<boolean>(false);
+  disabledReasons = input<readonly DisabledReason[]>([]);
+  readonly = input<boolean>(false);
+  hidden = input<boolean>(false);
+  invalid = input<boolean>(false);
+  errors = input<readonly ValidationError.WithField[]>([]);
+  required = input<boolean>(false);
 
   id = signal(`input-${generateId()}`);
 
   /** The string that is displayed in the combobox. */
   displayValue = computed<string | undefined>(() => {
-    const values = this.selectedList() || [];
-    const value = values.at(0);
+    const items = this.items()?.filter((item) =>
+      this.selectedList().includes(String(item[this.selectField()])),
+    );
 
-    if (value) {
-      const item = this.items()?.find((item) => item[this.selectField()] === value);
-      return item ? String(item[this.labelField()]) : undefined;
-    }
-
+    if (items?.length) return items.map((item) => item[this.labelField()]).join(', ');
     return undefined;
   });
 
@@ -86,5 +98,14 @@ export class UiSelect<T> {
         setTimeout(() => this.listbox()?.element.scrollTo(0, 0), 150);
       }
     });
+  }
+
+  protected valuesChange(selectedList: string[]) {
+    const list = selectedList.join(',');
+    if (list.length) {
+      if (list !== this.value()) this.value.set(list);
+    } else {
+      this.value.set('');
+    }
   }
 }

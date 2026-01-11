@@ -15,7 +15,7 @@
       uiButton
       variant="primary"
       icon="check"
-      [disabled]="!formData().valid() || itemsState().length === 0"
+      [disabled]="!formData().valid() || totalItemsCount() === 0"
       [loading]="loading()"
       (click)="save()"
     >
@@ -40,18 +40,18 @@
       label="Склад"
       labelField="name"
       selectField="id"
-      [items]="stores.value() || []"
-      [selectedList]="formState().storeId ? [formState().storeId] : []"
-      (selectedListChange)="updateStoreId($event[0])"
+      [loading]="stores.isLoading()"
+      [items]="stores.value()"
+      [formField]="formData.storeId"
     />
 
     <ui-select
       label="Поставщик"
       labelField="name"
       selectField="id"
-      [items]="vendors.value() || []"
-      [selectedList]="formState().vendorId ? [formState().vendorId] : []"
-      (selectedListChange)="updateVendorId($event[0])"
+      [loading]="vendors.isLoading()"
+      [items]="vendors.value()"
+      [formField]="formData.vendorId"
     />
   </ui-card>
 
@@ -92,7 +92,7 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-50">
-          @for (item of itemsState(); track item; let i = $index) {
+          @for (item of formData().value().items; track $index; let i = $index) {
             <tr>
               <td class="px-4 py-2">
                 <ui-select
@@ -100,37 +100,24 @@
                   selectField="id"
                   placeholder="Выберите товар"
                   [items]="products.value() || []"
-                  [selectedList]="item.productId() ? [item.productId()] : []"
-                  (selectedListChange)="updateProduct(i, $event[0])"
+                  [formField]="formData.items[i].productId"
                 />
               </td>
               <td class="px-4 py-2">
-                <ui-input
-                  type="number"
-                  [value]="item.quantity()"
-                  (valueChange)="item.quantity.set(+$event)"
-                />
+                <ui-input type="number" [formField]="formData.items[i].quantity" />
               </td>
               <td class="px-4 py-2">
-                <ui-input
-                  type="number"
-                  [value]="item.price()"
-                  (valueChange)="item.price.set(+$event)"
-                />
+                <ui-input type="number" [formField]="formData.items[i].price" />
               </td>
               <!-- Dynamic Price Types Inputs -->
-              @for (price of item.newPrices; track price.priceTypeId) {
+              @for (price of item.newPrices; track price.priceTypeId; let j = $index) {
                 <td class="px-4 py-2">
-                  <ui-input
-                    type="number"
-                    [value]="price.value()"
-                    (valueChange)="price.value.set(+$event)"
-                  />
+                  <ui-input type="number" [formField]="formData.items[i].newPrices[j].value" />
                 </td>
               }
 
               <td class="px-4 py-2 text-right font-medium">
-                {{ item.quantity() * item.price() | number }}
+                {{ item.quantity * item.price | number }}
               </td>
               <td class="px-4 py-2">
                 <button
@@ -149,7 +136,7 @@
         </tbody>
       </table>
 
-      @if (itemsState().length === 0) {
+      @if (totalItemsCount() === 0) {
         <div class="flex flex-col items-center justify-center p-8 text-gray-400">
           <span class="text-lg">Нет товаров</span>
           <span class="text-sm">Добавьте товары в документ</span>
@@ -160,7 +147,7 @@
     <div class="flex justify-end gap-8 border-t border-gray-100 bg-gray-50 p-4">
       <div class="flex flex-col text-right">
         <span class="text-xs text-gray-500">Итого товаров</span>
-        <span class="font-bold">{{ itemsState().length }}</span>
+        <span class="font-bold">{{ totalItemsCount() }}</span>
       </div>
       <div class="flex flex-col text-right">
         <span class="text-xs text-gray-500">На сумму</span>

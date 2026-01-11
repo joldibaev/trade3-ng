@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { DisabledReason, ValidationError } from '@angular/forms/signals';
 import { generateId } from '../../../shared/utils/generate-id';
+import { UiLoading } from '../ui-loading/ui-loading';
 import { InputAutocomplete } from './input-autocomplete.type';
 import { InputMode } from './input-inputmode.type';
 import { InputType } from './input-type.type';
@@ -20,11 +21,10 @@ import { InputType } from './input-type.type';
   host: {
     class: 'flex flex-col gap-1 w-full empty:hidden',
   },
-  imports: [],
+  imports: [UiLoading],
 })
 export class UiInput {
-  // todo delete number
-  value = model<string | number>('');
+  value = model('');
 
   // Writable interaction state - control updates these
   touched = model<boolean>(false);
@@ -48,6 +48,7 @@ export class UiInput {
   autocomplete = input<InputAutocomplete>('on');
   inputMode = input<InputMode>();
   spellCheck = input(false, { transform: booleanAttribute });
+  loading = input(false, { transform: booleanAttribute });
 
   id = signal(`input-${generateId()}`);
 

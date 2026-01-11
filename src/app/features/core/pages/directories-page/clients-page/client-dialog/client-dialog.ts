@@ -53,7 +53,7 @@ export class ClientDialog {
   }
 
   save() {
-    if (!this.formData().valid()) return;
+    if (this.formData().invalid()) return;
 
     this.loading.set(true);
     const value = this.formData().value();

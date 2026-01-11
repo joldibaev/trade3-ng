@@ -87,7 +87,9 @@ export class PurchasesPage {
     }
 
     return purchases.filter(
-      (p) => p.id.toLowerCase().includes(query) || p.vendor?.name.toLowerCase().includes(query),
+      (schemaPath) =>
+        schemaPath.id.toLowerCase().includes(query) ||
+        schemaPath.vendor?.name.toLowerCase().includes(query),
     );
   });
 

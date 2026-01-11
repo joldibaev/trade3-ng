@@ -1,17 +1,20 @@
 <ui-dialog [title]="isEdit() ? 'Редактировать товар' : 'Создать товар'" (closeAction)="close()">
   <form id="product-form" class="flex flex-col gap-4" (ngSubmit)="save()">
-    <ui-input label="Наименование" placeholder="Введите название товара" [formField]="formData.name" />
+    <ui-input
+      label="Наименование"
+      placeholder="Введите название товара"
+      [formField]="formData.name"
+    />
     <ui-input label="Артикул" placeholder="Введите артикул" [formField]="formData.article" />
 
     <div class="flex flex-col gap-1.5">
       <ui-select
         label="Категория"
         [selectField]="'id'"
-        [selectedList]="selectedCategoryList()"
+        [formField]="formData.categoryId"
         [items]="categories.value()"
         [labelField]="'name'"
         [loading]="categories.isLoading()"
-        (selectedListChange)="handleCategoryChange($event)"
       ></ui-select>
     </div>
 

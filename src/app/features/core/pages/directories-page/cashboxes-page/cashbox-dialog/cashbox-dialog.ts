@@ -46,9 +46,8 @@ export class CashboxDialog {
   });
   formData = form(this.formState, (schemaPath) => {
     required(schemaPath.name, { message: 'Наименование обязательно' });
+    required(schemaPath.storeId, { message: 'Магазин обязательно' });
   });
-
-  selectedList = computed(() => [this.formData().value().storeId]);
 
   isEdit = computed(() => Boolean(this.data?.cashbox));
 
@@ -57,7 +56,7 @@ export class CashboxDialog {
   }
 
   save() {
-    if (!this.formData().valid()) return;
+    if (this.formData().invalid()) return;
 
     this.loading.set(true);
     const value = this.formData().value();

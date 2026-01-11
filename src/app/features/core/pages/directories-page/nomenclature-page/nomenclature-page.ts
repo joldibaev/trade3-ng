@@ -168,9 +168,9 @@ export class NomenclaturePage {
     }
 
     return products.filter(
-      (p) =>
-        p.name.toLowerCase().includes(query) ||
-        (p.article && p.article.toLowerCase().includes(query)),
+      (schemaPath) =>
+        schemaPath.name.toLowerCase().includes(query) ||
+        (schemaPath.article && schemaPath.article.toLowerCase().includes(query)),
     );
   });
 
