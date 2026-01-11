@@ -42,7 +42,7 @@
         @if (loading()) {
           <ui-loading height="18" width="18" />
         } @else {
-          <ui-icon name="chevron-down" />
+          <ui-icon name="outline-chevron-down" />
         }
       </div>
     </div>
@@ -78,7 +78,7 @@
                 <span>{{ item[labelField()] }}</span>
 
                 @if (ngOption.selected()) {
-                  <ui-icon name="check"></ui-icon>
+                  <ui-icon name="outline-check"></ui-icon>
                 }
               </div>
             }

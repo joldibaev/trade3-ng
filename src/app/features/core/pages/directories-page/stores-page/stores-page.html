@@ -4,7 +4,9 @@
   <div class="flex items-center gap-2">
     <button uiButton variant="ghost" (click)="reload()">Обновить</button>
 
-    <button uiButton variant="primary" icon="plus" (click)="onCreate()">Создать магазин</button>
+    <button uiButton variant="primary" icon="outline-plus" (click)="onCreate()">
+      Создать магазин
+    </button>
   </div>
 </div>
 
@@ -19,7 +21,7 @@
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       @for (store of stores.value(); track store.id) {
         <ui-directory-item-card
-          icon="store"
+          icon="outline-building-store"
           [title]="store.name"
           [subtitle]="'ID: ' + store.id"
           (edit)="onEdit(store)"
@@ -43,7 +45,7 @@
     <ui-empty-state
       title="Список магазинов пуст"
       description="Создайте первый магазин, чтобы добавить кассы и товары."
-      icon="store"
+      icon="outline-building-store"
       actionLabel="Создать магазин"
       (action)="onCreate()"
     />

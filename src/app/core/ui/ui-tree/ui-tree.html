@@ -25,7 +25,7 @@
             (click)="$event.stopPropagation(); treeItem.expanded.set(!treeItem.expanded())"
           >
             <ui-icon
-              name="chevron-right"
+              name="outline-chevron-right"
               size="16"
               class="transition-transform duration-200"
               [class.rotate-90]="treeItem.expanded()"
@@ -38,7 +38,7 @@
         <ui-icon
           size="18"
           class="ui-tree-item-icon"
-          [name]="node.children?.length ? 'folder' : 'file-text'"
+          [name]="node.children?.length ? 'outline-folder' : 'outline-file-text'"
         />
 
         <span class="ui-tree-item-label font-medium">{{ node.name }}</span>

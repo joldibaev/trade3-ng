@@ -30,7 +30,7 @@
               class="text-gray-500 hover:text-red-500"
               (click)="removeBarcode(i)"
             >
-              <ui-icon name="x" size="14" />
+              <ui-icon name="outline-x" size="14" />
               <span class="sr-only">Удалить штрихкод</span>
             </button>
           </div>
@@ -48,7 +48,7 @@
           type="button"
           uiButton
           variant="secondary"
-          icon="plus"
+          icon="outline-plus"
           size="icon"
           [disabled]="!newBarcodeState().value"
           (click)="addBarcode()"

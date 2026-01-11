@@ -13,13 +13,13 @@
       <div class="flex gap-3">
         <div aria-hidden="true" class="mt-0.5">
           @if (toast.type === 'success') {
-            <ui-icon name="success-circle" size="lg" class="text-green-700" />
+            <ui-icon name="outline-circle-check" size="lg" class="text-green-700" />
           }
           @if (toast.type === 'error') {
-            <ui-icon name="error-circle" size="lg" class="text-red-700" />
+            <ui-icon name="outline-alert-circle" size="lg" class="text-red-700" />
           }
           @if (toast.type === 'info') {
-            <ui-icon name="info-circle" size="lg" class="text-yellow-700" />
+            <ui-icon name="outline-info-circle" size="lg" class="text-yellow-700" />
           }
         </div>
         <div class="flex flex-col">
@@ -50,7 +50,7 @@
         class="text-gray-400 hover:text-gray-600"
         (click)="notyf.dismiss(toast.id)"
       >
-        <ui-icon name="x" size="sm" />
+        <ui-icon name="outline-x" size="sm" />
       </button>
     </div>
   }

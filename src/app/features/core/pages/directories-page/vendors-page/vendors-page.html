@@ -9,13 +9,13 @@
     <!-- Toolbar -->
     <div class="flex items-center justify-between border-b border-gray-100 p-2">
       <div class="flex items-center gap-2">
-        <button uiButton variant="ghost" icon="plus" size="sm" (click)="openVendorDialog()">
+        <button uiButton variant="ghost" icon="outline-plus" size="sm" (click)="openVendorDialog()">
           Создать
         </button>
         <button
           uiButton
           variant="ghost"
-          icon="edit"
+          icon="outline-edit"
           size="icon"
           [disabled]="!selectedVendor()"
           (click)="editCurrentVendor()"
@@ -25,7 +25,7 @@
         <button
           uiButton
           variant="danger"
-          icon="trash"
+          icon="outline-trash"
           size="icon"
           [disabled]="!selectedVendor()"
           (click)="deleteCurrentVendor()"
@@ -40,11 +40,16 @@
           <div
             class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300"
           >
-            <ui-input type="search" placeholder="Поиск..." class="w-64" [formField]="formData.query" />
+            <ui-input
+              type="search"
+              placeholder="Поиск..."
+              class="w-64"
+              [formField]="formData.query"
+            />
             <button
               uiButton
               variant="ghost"
-              icon="x"
+              icon="outline-x"
               size="icon"
               (click)="isSearchVisible.set(false); formData.query().reset('')"
             >
@@ -55,7 +60,7 @@
           <button
             uiButton
             variant="ghost"
-            icon="search"
+            icon="outline-search"
             size="sm"
             (click)="isSearchVisible.set(true)"
           >

@@ -21,24 +21,24 @@ interface MenuItem {
 })
 export class Aside {
   menuItems = signal<MenuItem[]>([
-    { label: 'Главное', route: '/core/dashboard', icon: 'home' },
+    { label: 'Главное', route: '/core/dashboard', icon: 'outline-home' },
     {
       label: 'Справочники',
-      icon: 'folder',
+      icon: 'outline-folder',
       children: [
-        { label: 'Магазины', route: '/core/directories/stores', icon: 'circle' },
-        { label: 'Номенклатура', route: '/core/directories/nomenclature', icon: 'circle' },
-        { label: 'Клиенты', route: '/core/directories/clients', icon: 'circle' },
-        { label: 'Поставщики', route: '/core/directories/vendors', icon: 'circle' },
-        { label: 'Типы цен', route: '/core/directories/price-types', icon: 'circle' },
+        { label: 'Магазины', route: '/core/directories/stores', icon: 'outline-circle' },
+        { label: 'Номенклатура', route: '/core/directories/nomenclature', icon: 'outline-circle' },
+        { label: 'Клиенты', route: '/core/directories/clients', icon: 'outline-circle' },
+        { label: 'Поставщики', route: '/core/directories/vendors', icon: 'outline-circle' },
+        { label: 'Типы цен', route: '/core/directories/price-types', icon: 'outline-circle' },
       ],
     },
     {
       label: 'Документы',
-      icon: 'file-text',
+      icon: 'outline-file-text',
       children: [
-        { label: 'Закупки', route: '/core/documents/purchases', icon: 'circle' },
-        { label: 'Продажи', route: '/core/documents/sales', icon: 'circle' },
+        { label: 'Закупки', route: '/core/documents/purchases', icon: 'outline-circle' },
+        { label: 'Продажи', route: '/core/documents/sales', icon: 'outline-circle' },
       ],
     },
   ]);

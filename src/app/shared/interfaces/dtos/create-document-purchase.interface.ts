@@ -1,4 +1,3 @@
-
 export interface UpdateProductPriceDto {
   priceTypeId: string;
   value: number;

@@ -10,4 +10,4 @@ import { Aside } from './components/aside/aside';
   styleUrl: './core.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Core { }
+export class Core {}

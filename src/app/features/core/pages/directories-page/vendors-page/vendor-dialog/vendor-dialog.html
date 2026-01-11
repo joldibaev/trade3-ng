@@ -3,7 +3,11 @@
   (closeAction)="close()"
 >
   <form id="vendor-form" class="flex flex-col gap-4" (ngSubmit)="save()">
-    <ui-input label="Наименование" placeholder="Введите имя поставщика" [formField]="formData.name" />
+    <ui-input
+      label="Наименование"
+      placeholder="Введите имя поставщика"
+      [formField]="formData.name"
+    />
     <ui-input label="Телефон" placeholder="Введите телефон" [formField]="formData.phone" />
     <ui-input label="Email" placeholder="Введите email" [formField]="formData.email" />
     <ui-input label="Адрес" placeholder="Введите адрес" [formField]="formData.address" />

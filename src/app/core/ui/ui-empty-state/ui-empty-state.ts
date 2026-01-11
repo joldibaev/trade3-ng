@@ -15,7 +15,7 @@ export class UiEmptyState {
   description = input.required<string>();
   icon = input.required<IconName>();
   actionLabel = input.required<string>();
-  actionIcon = input<IconName>('plus');
+  actionIcon = input<IconName>('outline-plus');
 
   action = output<void>();
 }

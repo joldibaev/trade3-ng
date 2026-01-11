@@ -1,6 +1,6 @@
 <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
   <div class="flex items-center gap-3">
-    <button uiButton variant="ghost" icon="arrow-left" size="icon" (click)="back()">
+    <button uiButton variant="ghost" icon="outline-arrow-left" size="icon" (click)="back()">
       <span class="sr-only">Назад</span>
     </button>
     <h1 class="typo-h1">Кассы</h1>
@@ -9,7 +9,9 @@
   <div class="flex items-center gap-2">
     <button uiButton variant="ghost" (click)="reload()">Обновить</button>
 
-    <button uiButton variant="primary" icon="plus" (click)="onCreate()">Создать кассу</button>
+    <button uiButton variant="primary" icon="outline-plus" (click)="onCreate()">
+      Создать кассу
+    </button>
   </div>
 </div>
 
@@ -42,7 +44,7 @@
     <ui-empty-state
       title="Список касс пуст"
       description="В данном магазине пока нет ни одной кассы. Создайте первую кассу, чтобы начать работу."
-      icon="box"
+      icon="outline-box"
       actionLabel="Создать кассу"
       (action)="onCreate()"
     />

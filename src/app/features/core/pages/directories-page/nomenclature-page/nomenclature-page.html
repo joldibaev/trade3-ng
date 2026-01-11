@@ -8,13 +8,19 @@
   <ui-card class="h-full w-80">
     <div class="border-b border-gray-100 p-2">
       <div class="flex items-center gap-1">
-        <button uiButton variant="ghost" icon="plus" size="sm" (click)="openCategoryDialog()">
+        <button
+          uiButton
+          variant="ghost"
+          icon="outline-plus"
+          size="sm"
+          (click)="openCategoryDialog()"
+        >
           Создать
         </button>
         <button
           uiButton
           variant="ghost"
-          icon="edit"
+          icon="outline-edit"
           size="icon"
           [disabled]="!selectedCategoryId()"
           (click)="editCurrentCategory()"
@@ -24,7 +30,7 @@
         <button
           uiButton
           variant="danger"
-          icon="trash"
+          icon="outline-trash"
           size="icon"
           [disabled]="!selectedCategoryId()"
           (click)="deleteCurrentCategory()"
@@ -62,13 +68,19 @@
     <!-- Toolbar -->
     <div class="flex items-center justify-between border-b border-gray-100 p-2">
       <div class="flex items-center gap-2">
-        <button uiButton variant="ghost" icon="plus" size="sm" (click)="openProductDialog()">
+        <button
+          uiButton
+          variant="ghost"
+          icon="outline-plus"
+          size="sm"
+          (click)="openProductDialog()"
+        >
           Создать
         </button>
         <button
           uiButton
           variant="ghost"
-          icon="edit"
+          icon="outline-edit"
           size="icon"
           [disabled]="!selectedProduct()"
           (click)="editCurrentProduct()"
@@ -78,7 +90,7 @@
         <button
           uiButton
           variant="danger"
-          icon="trash"
+          icon="outline-trash"
           size="icon"
           [disabled]="!selectedProduct()"
           (click)="deleteCurrentProduct()"
@@ -93,11 +105,16 @@
           <div
             class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300"
           >
-            <ui-input type="search" placeholder="Поиск..." class="w-64" [formField]="formData.query" />
+            <ui-input
+              type="search"
+              placeholder="Поиск..."
+              class="w-64"
+              [formField]="formData.query"
+            />
             <button
               uiButton
               variant="ghost"
-              icon="x"
+              icon="outline-x"
               size="icon"
               (click)="isSearchVisible.set(false); formData.query().reset('')"
             >
@@ -108,7 +125,7 @@
           <button
             uiButton
             variant="ghost"
-            icon="search"
+            icon="outline-search"
             size="sm"
             (click)="isSearchVisible.set(true)"
           >
@@ -124,14 +141,14 @@
         <div class="flex items-center gap-1">
           <span class="text-gray-500">Склад/Магазин:</span>
           <span class="border-b border-dashed border-gray-300 font-medium text-gray-900">Все</span>
-          <ui-icon name="x" class="h-3 w-3 cursor-pointer text-gray-400" />
+          <ui-icon name="outline-x" class="h-3 w-3 cursor-pointer text-gray-400" />
         </div>
         <div class="flex items-center gap-1">
           <span class="text-gray-500">Вид цены:</span>
           <span class="border-b border-dashed border-gray-300 font-medium text-gray-900"
             >Розничная</span
           >
-          <ui-icon name="x" class="h-3 w-3 cursor-pointer text-gray-400" />
+          <ui-icon name="outline-x" class="h-3 w-3 cursor-pointer text-gray-400" />
         </div>
       </div>
     </div>

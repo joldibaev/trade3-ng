@@ -28,12 +28,14 @@ function getAllFiles(dirPath, arrayOfFiles) {
   arrayOfFiles = arrayOfFiles || [];
 
   files.forEach(function (file) {
-    if (fs.statSync(dirPath + '/' + file).isDirectory()) {
-      arrayOfFiles = getAllFiles(dirPath + '/' + file, arrayOfFiles);
+    const fullPath = path.join(dirPath, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      arrayOfFiles = getAllFiles(fullPath, arrayOfFiles);
     } else {
-      // exclude data.ts from scan to avoid self-reference
-      if (path.join(dirPath, file) !== outputFile) {
-        arrayOfFiles.push(path.join(dirPath, file));
+      // exclude data.ts from scan to avoid self-reference if checking output dir
+      // logic specific for appDir scan, but harmless for svgDir if not present
+      if (fullPath !== outputFile) {
+        arrayOfFiles.push(fullPath);
       }
     }
   });
@@ -44,19 +46,36 @@ function getAllFiles(dirPath, arrayOfFiles) {
 try {
   logHeader('Icon System Generation');
 
-  // 1. Load SVGs
+  // 1. Load SVGs Recursively
   if (!fs.existsSync(svgDir)) {
     console.error(`${red}SVG directory not found: ${svgDir}${reset}`);
     process.exit(1);
   }
 
-  const svgFiles = fs.readdirSync(svgDir).filter((f) => path.extname(f) === '.svg');
+  const allSvgFiles = getAllFiles(svgDir);
+  const svgFiles = allSvgFiles.filter((f) => path.extname(f) === '.svg');
+
   const allIcons = {};
   let totalOriginalSize = 0;
 
-  svgFiles.forEach((file) => {
-    const iconName = path.basename(file, '.svg');
-    const filePath = path.join(svgDir, file);
+  console.log(`${bright}Found ${svgFiles.length} SVG files in source.${reset}`);
+
+  svgFiles.forEach((filePath) => {
+    // Calculate relative path to determine prefix
+    // e.g. "filled/alert.svg" or "outline/alert.svg"
+    const relativePath = path.relative(svgDir, filePath);
+    const dirName = path.dirname(relativePath); // "filled" or "outline" or "."
+    const fileName = path.basename(filePath, '.svg');
+
+    // Construct key: folder-filename (e.g. "filled-alert")
+    // If file is in root, just use filename
+    let iconName = fileName;
+    if (dirName !== '.' && dirName !== '') {
+      // Normalize separators for nested folders if any (e.g. "filled/social" -> "filled-social")
+      const prefix = dirName.split(path.sep).join('-');
+      iconName = `${prefix}-${fileName}`;
+    }
+
     let content = fs.readFileSync(filePath, 'utf8');
 
     totalOriginalSize += content.length;
@@ -70,8 +89,6 @@ try {
 
     allIcons[iconName] = content;
   });
-
-  console.log(`${bright}Found ${svgFiles.length} SVG files in source.${reset}`);
 
   // 2. Scan for Usage
   const sourceFiles = getAllFiles(appDir);
@@ -88,6 +105,7 @@ try {
         // This covers:
         // - HTML: name="icon"
         // - TS: icon: 'icon'
+        // Matches exact string 'iconName' or "iconName"
         if (content.includes(`'${icon}'`) || content.includes(`"${icon}"`)) {
           usedIcons.add(icon);
         }
@@ -144,10 +162,17 @@ try {
 
   if (unusedIcons.length > 0) {
     console.log(`\n${yellow}Unused Icons (Excluded):${reset}`);
-    unusedIcons.forEach((icon) => console.log(`  - ${icon}`));
+    // Limit output if too many
+    if (unusedIcons.length > 20) {
+      const shown = unusedIcons.slice(0, 20);
+      shown.forEach((icon) => console.log(`  - ${icon}`));
+      console.log(`  ... and ${unusedIcons.length - 20} more`);
+    } else {
+      unusedIcons.forEach((icon) => console.log(`  - ${icon}`));
+    }
 
     console.log(
-      `\n${yellow}Tip: Remove these files from src/assets/img/svg if they are truly obsolete.${reset}`,
+      `\n${yellow}Tip: Remove these files from src/assets/img/svg (or subfolders) if they are truly obsolete.${reset}`,
     );
   } else {
     console.log(`\n${green}All icons are being used! Good job.${reset}`);
