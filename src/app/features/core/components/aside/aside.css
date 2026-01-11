@@ -1,45 +1,5 @@
 @reference './../../../../../styles.css';
 
-.aside-nav {
-  @apply h-full overflow-y-auto border-r border-gray-200 bg-gray-50 pt-2 font-sans text-[13px];
-}
-
-.menu-list {
-  @apply flex flex-col gap-1 pb-4;
-}
-
-.menu-item-parent {
-  @apply hover:bg-primary-50 flex w-full items-center gap-3 border-l-4 border-transparent px-4 py-2 text-left transition-colors duration-100 select-none;
-}
-
-.menu-item-link {
-  @apply hover:bg-primary-100 flex items-center gap-3 border-l-4 border-transparent px-4 py-2 text-gray-600 transition-colors duration-100;
-}
-
-.menu-item-child {
-  @apply hover:bg-primary-100 flex items-center gap-3 border-l-4 border-transparent py-1.5 pr-4 pl-10 text-gray-600 transition-colors duration-100;
-}
-
-.active-link {
-  @apply bg-primary-400! border-primary-700! text-black!;
-}
-
-.menu-child-list {
-  @apply mt-0.5 mb-1 flex flex-col gap-0.5;
-}
-
-.menu-icon-wrapper {
-  @apply text-gray-500 group-hover:text-black;
-}
-
-.menu-label {
-  @apply flex-1 font-bold text-gray-800;
-}
-
-.arrow-icon {
-  @apply transform text-gray-400 transition-transform duration-200;
-}
-
-.child-dot {
-  @apply h-1.5 w-1.5 rounded-full bg-gray-400 transition-colors group-hover:bg-black;
+li[aria-expanded='false'] + [role='group'] {
+  @apply hidden;
 }

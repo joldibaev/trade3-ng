@@ -35,7 +35,7 @@
     />
 
     @if (loading()) {
-      <div class="absolute top-1/2 right-2 z-20 -translate-y-1/2 text-gray-400">
+      <div class="absolute top-1/2 right-2 z-20 -translate-y-1/2 text-neutral-400">
         <ui-loading height="18" width="18" />
       </div>
     }
@@ -49,7 +49,7 @@
 
   @if (disabled() && disabledReasons().length > 0) {
     @for (reason of disabledReasons(); track reason) {
-      <small class="text-xs text-gray-400">{{ reason.message }}</small>
+      <small class="text-xs text-neutral-400">{{ reason.message }}</small>
     }
   }
 }

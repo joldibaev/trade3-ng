@@ -2,6 +2,6 @@
 
 .ui-menu-item {
   &[data-active='true'] {
-    @apply bg-gray-50;
+    @apply bg-neutral-50;
   }
 }

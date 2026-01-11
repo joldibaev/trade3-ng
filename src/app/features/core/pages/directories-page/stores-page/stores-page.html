@@ -27,14 +27,14 @@
           (edit)="onEdit(store)"
           (delete)="onDelete(store)"
         >
-          <div class="flex items-center justify-between border-t border-gray-100 pt-3 text-xs">
+          <div class="flex items-center justify-between border-t default-border-color pt-3 text-xs">
             <a
-              class="hover:text-primary-600 flex items-center gap-1.5 rounded px-2 py-1 text-gray-600 hover:bg-gray-100"
+              class="hover:text-primary-600 flex items-center gap-1.5 rounded px-2 py-1 text-neutral-600 hover:bg-neutral-100"
               [routerLink]="['/core', 'directories', 'stores', store.id, 'cashboxes']"
             >
               <span>Кассы: {{ store.cashboxes.length }}</span>
             </a>
-            <span class="text-gray-400"
+            <span class="text-neutral-400"
               >Создан: <time>{{ store.createdAt | date: 'dd.MM.yyyy' }}</time></span
             >
           </div>

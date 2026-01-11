@@ -1,21 +1,21 @@
-<ui-card class="group relative gap-4 p-4 hover:shadow-xs">
+<ui-card class="group default-transition relative gap-4 p-4 hover:shadow">
   <div class="flex items-start justify-between">
     <div class="flex gap-3">
       @if (icon(); as icon) {
         <div
-          class="flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-100 text-yellow-600"
+          class="bg-primary-100 text-primary-600 flex h-10 w-10 items-center justify-center rounded-lg"
         >
           <ui-icon [name]="icon" />
         </div>
       }
       <div class="flex flex-col">
-        <h3 class="font-semibold text-gray-900">{{ title() }}</h3>
+        <h3 class="font-semibold text-neutral-900">{{ title() }}</h3>
         @if (subtitle()) {
-          <span class="text-xs text-gray-500">{{ subtitle() }}</span>
+          <span class="text-xs text-neutral-500">{{ subtitle() }}</span>
         }
       </div>
     </div>
-    <div class="flex gap-1 opacity-0 group-hover:opacity-100">
+    <div class="default-transition flex gap-1 opacity-0 group-hover:opacity-100">
       <button
         uiButton
         variant="ghost"

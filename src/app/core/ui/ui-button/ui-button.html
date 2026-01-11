@@ -2,10 +2,8 @@
   <ui-loading width="18" height="18" class="absolute" />
 }
 
-<span class="inline-flex items-center gap-2" [class.invisible]="loading()">
-  @if (icon(); as icon) {
-    <ui-icon [name]="icon" [width]="18" [height]="18" />
-  }
+@if (icon(); as icon) {
+  <ui-icon [name]="icon" [width]="18" [height]="18" />
+}
 
-  <ng-content></ng-content>
-</span>
+<ng-content></ng-content>

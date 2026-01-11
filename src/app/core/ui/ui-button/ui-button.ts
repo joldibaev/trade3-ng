@@ -28,12 +28,14 @@ export class UiButton {
   loading = input(false, { transform: booleanAttribute });
   disabled = input(false, { transform: booleanAttribute });
   icon = input<IconName>();
+  align = input<'start' | 'center' | 'end'>('center');
 
   classList = computed(() => {
     const classList: string[] = [];
 
     classList.push(`ui-button-variant-${this.variant()}`);
     classList.push(`ui-button-size-${this.size()}`);
+    classList.push(`justify-${this.align()}`);
 
     return classList;
   });

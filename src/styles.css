@@ -1,30 +1,42 @@
 @import 'tailwindcss';
-@import '@angular/cdk/overlay-prebuilt.css';
 
 @import './styles/components/_button.css';
 @import './styles/components/_form.css';
 @import './styles/components/_menu.css';
 
 @theme {
-  --color-primary-50: var(--color-yellow-50);
-  --color-primary-100: var(--color-yellow-100);
-  --color-primary-200: var(--color-yellow-200);
-  --color-primary-300: var(--color-yellow-300);
-  --color-primary-400: var(--color-yellow-400);
-  --color-primary-500: var(--color-yellow-500);
-  --color-primary-600: var(--color-yellow-600);
-  --color-primary-700: var(--color-yellow-700);
-  --color-primary-800: var(--color-yellow-800);
-  --color-primary-900: var(--color-yellow-900);
-  --color-primary-950: var(--color-yellow-950);
+  --font-sans: 'Inter', sans-serif;
+
+  --color-primary-50: var(--color-emerald-50);
+  --color-primary-100: var(--color-emerald-100);
+  --color-primary-200: var(--color-emerald-200);
+  --color-primary-300: var(--color-emerald-300);
+  --color-primary-400: var(--color-emerald-400);
+  --color-primary-500: var(--color-emerald-500);
+  --color-primary-600: var(--color-emerald-600);
+  --color-primary-700: var(--color-emerald-700);
+  --color-primary-800: var(--color-emerald-800);
+  --color-primary-900: var(--color-emerald-900);
+  --color-primary-950: var(--color-emerald-950);
 }
 
-@utility focus-ring {
-  @apply ring-primary-400 relative z-10 ring-2 ring-offset-2;
+@utility rounded-squircle {
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+    border-radius: 90px !important;
+  }
 }
 
-@utility typo-1 {
-  @apply font-bold tracking-wider text-gray-500 uppercase;
+@utility text-muted {
+  @apply text-neutral-400;
+}
+
+@utility default-transition {
+  @apply transition duration-200;
+}
+
+@utility default-border-color {
+  @apply border-neutral-200;
 }
 
 @utility typo-h1 {

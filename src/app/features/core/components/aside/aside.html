@@ -1,49 +1,84 @@
-<nav class="aside-nav">
-  <ul class="menu-list">
-    @for (item of menuItems(); track item.label) {
-      @if (item.children) {
-        <!-- Parent Item (Group) -->
-        <li>
-          <button class="menu-item-parent group" (click)="toggleGroup(item.label)">
-            <span class="menu-icon-wrapper">
-              <ui-icon [name]="item.icon" [width]="18" [height]="18"></ui-icon>
-            </span>
-            <span class="menu-label">{{ item.label }}</span>
-            <!-- Arrow Icon -->
-            <span class="arrow-icon" [class.rotate-90]="isExpanded(item.label)">
-              <ui-icon name="outline-chevron-right" [width]="14" [height]="14"></ui-icon>
-            </span>
-          </button>
+<!-- header -->
+<div class="default-border-color rounded-squircle flex items-center rounded-xl border-2 p-2">
+  <!-- logo -->
+  <div class="flex w-full items-center gap-2 rounded-lg p-2 text-left transition-colors">
+    <div class="rounded-squircle bg-primary-100 text-primary-600 flex h-8 w-8 items-center justify-center rounded">
+      <ui-icon name="outline-box" class="h-6 w-6" />
+    </div>
 
-          <!-- Children -->
-          @if (isExpanded(item.label)) {
-            <ul class="menu-child-list">
-              @for (child of item.children; track child.route) {
-                <li>
-                  <a
-                    routerLinkActive="active-link"
-                    class="menu-item-child group"
-                    [routerLink]="child.route"
-                  >
-                    <span routerLinkActive="!bg-black" class="child-dot"></span>
-                    <span class="group-hover:text-black">{{ child.label }}</span>
-                  </a>
-                </li>
-              }
-            </ul>
-          }
-        </li>
-      } @else {
-        <!-- Single Item (Leaf) -->
-        <li>
-          <a routerLinkActive="active-link" class="menu-item-link group" [routerLink]="item.route">
-            <span class="group-hover:text-black">
-              <ui-icon [name]="item.icon" [width]="18" [height]="18"></ui-icon>
-            </span>
-            <span class="font-medium group-hover:text-black">{{ item.label }}</span>
-          </a>
-        </li>
+    <div class="flex flex-1 flex-col leading-none">
+      <span class="text-sm font-semibold">Trade3-NG</span>
+      <span class="text-muted text-xs">Business</span>
+    </div>
+  </div>
+</div>
+
+<!-- Scrollable Nav -->
+<div class="flex-1 overflow-auto py-4">
+  <div #tree="ngTree" ngTree class="flex flex-col gap-1" [nav]="true">
+    <ng-template
+      [ngTemplateOutlet]="treeNodeTemplate"
+      [ngTemplateOutletContext]="{ nodes: menuItems(), parent: tree }"
+    />
+  </div>
+
+  <ng-template #treeNodeTemplate let-nodes="nodes" let-parent="parent">
+    @for (node of nodes; track node.label) {
+      <a
+        #treeItem="ngTreeItem"
+        uiButton
+        variant="ghost"
+        ngTreeItem
+        align="start"
+        routerLinkActive="active"
+        class="w-full outline-none"
+        [icon]="node.icon"
+        [routerLink]="node.route"
+        [value]="node.label"
+        [parent]="parent"
+        [label]="node.label"
+        [selectable]="!node.children"
+        [(expanded)]="node.expanded"
+      >
+        {{ node.label }}
+
+        @if (node.children) {
+          <ui-icon
+            name="outline-chevron-down"
+            class="ms-auto transition-transform duration-200"
+            [class.-rotate-90]="!node.expanded"
+          ></ui-icon>
+        }
+      </a>
+
+      @if (node.children) {
+        <ul role="group" class="default-border-color ms-7 border-s ps-2">
+          <ng-template #group="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="treeItem">
+            <ng-template
+              [ngTemplateOutlet]="treeNodeTemplate"
+              [ngTemplateOutletContext]="{ nodes: node.children, parent: group }"
+            />
+          </ng-template>
+        </ul>
       }
     }
-  </ul>
-</nav>
+  </ng-template>
+</div>
+
+<!-- Footer / Theme Toggle -->
+<div class="mt-auto py-2">
+  <button
+    uiButton
+    variant="secondary"
+    align="start"
+    class="w-full"
+    [icon]="isDark() === 'dark' ? 'outline-moon' : 'outline-sun'"
+    (click)="toggleTheme()"
+  >
+    @if (isDark() === 'dark') {
+      Dark Mode
+    } @else {
+      Light Mode
+    }
+  </button>
+</div>

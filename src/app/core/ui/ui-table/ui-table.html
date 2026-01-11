@@ -3,12 +3,12 @@
   class="w-full border-separate border-spacing-0 text-left text-sm"
   [enableSelection]="true"
 >
-  <thead class="sticky top-0 z-10 bg-gray-50 text-xs text-gray-500">
+  <thead class="sticky top-0 z-10 bg-neutral-50 text-xs text-neutral-500">
     <tr ngGridRow>
       @for (col of columns(); track col.key) {
         <th
           ngGridCell
-          class="border-b border-gray-100 bg-gray-50 px-4 py-2 font-medium whitespace-nowrap outline-none"
+          class="border-b default-border-color bg-neutral-50 px-4 py-2 font-medium whitespace-nowrap outline-none"
           [style.width]="col.width"
         >
           {{ col.header }}
@@ -16,7 +16,7 @@
       }
     </tr>
   </thead>
-  <tbody class="divide-y divide-gray-100">
+  <tbody class="divide-y divide-neutral-100">
     @if (loading()) {
       <tr>
         <td class="p-8 text-center" [attr.colspan]="columns().length">
@@ -29,7 +29,7 @@
           @for (col of columns(); track col.key; let j = $index) {
             <td
               ngGridCell
-              class="px-4 py-2 whitespace-nowrap text-gray-900"
+              class="px-4 py-2 whitespace-nowrap text-neutral-900"
               [rowIndex]="i"
               [colIndex]="j"
               (selectedChange)="onSelectedChange()"
@@ -52,7 +52,7 @@
     } @else {
       <tr>
         <td [attr.colspan]="columns().length">
-          <div class="flex h-32 w-full items-center justify-center text-gray-500">
+          <div class="flex h-32 w-full items-center justify-center text-neutral-500">
             <span>Нет данных</span>
           </div>
         </td>

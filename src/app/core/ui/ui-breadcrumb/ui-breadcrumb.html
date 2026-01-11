@@ -1,4 +1,4 @@
-<nav aria-label="Breadcrumb" class="flex items-center text-sm text-gray-500">
+<nav aria-label="Breadcrumb" class="flex items-center text-sm text-neutral-500">
   @for (item of items(); track $index; let last = $last) {
     <div class="flex items-center">
       @if (!last && item.url) {
@@ -6,13 +6,13 @@
           {{ item.label }}
         </a>
       } @else {
-        <span [class.font-medium]="last" [class.text-gray-900]="last">
+        <span [class.font-medium]="last" [class.text-neutral-900]="last">
           {{ item.label }}
         </span>
       }
 
       @if (!last) {
-        <ui-icon name="outline-chevron-right" class="mx-2 h-4 w-4 text-gray-400" />
+        <ui-icon name="outline-chevron-right" class="mx-2 h-4 w-4 text-neutral-400" />
       }
     </div>
   }

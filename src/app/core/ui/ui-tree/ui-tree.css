@@ -1,9 +1,5 @@
 @reference './../../../../styles.css';
 
-.rotate-90 {
-  transform: rotate(90deg);
-}
-
 .ui-tree {
   @apply m-0 flex list-none flex-col gap-0.5 p-0;
 }
@@ -14,7 +10,7 @@
 
 .ui-tree-item-content {
   @apply flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 transition-colors;
-  @apply hover:bg-gray-100;
+  @apply hover:bg-neutral-100;
 }
 
 .ui-tree-item[aria-selected='true'] > .ui-tree-item-content {
@@ -30,7 +26,7 @@
 }
 
 .ui-tree-item-toggle {
-  @apply -ml-1 flex h-5 w-5 cursor-pointer items-center justify-center rounded border-none bg-transparent p-0 text-gray-400 transition-colors hover:text-gray-600;
+  @apply -ml-1 flex h-5 w-5 cursor-pointer items-center justify-center rounded border-none bg-transparent p-0 text-neutral-400 transition-colors hover:text-neutral-600;
 }
 
 .ui-tree-item-spacer {
@@ -38,7 +34,7 @@
 }
 
 .ui-tree-item-icon {
-  @apply flex-shrink-0 text-gray-400;
+  @apply flex-shrink-0 text-neutral-400;
 }
 
 .ui-tree-item-label {
@@ -46,7 +42,7 @@
 }
 
 .ui-tree-group {
-  @apply m-0 ml-3 flex list-none flex-col gap-0.5 border-l border-gray-100 p-0 pl-4;
+  @apply m-0 ml-3 flex list-none flex-col gap-0.5 border-l default-border-color p-0 pl-4;
 }
 
 /* Official Angular Aria Tree hiding pattern */

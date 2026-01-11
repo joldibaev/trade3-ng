@@ -1,63 +1,108 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { Tree, TreeItem, TreeItemGroup } from '@angular/aria/tree';
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UiIcon } from '../../../../core/ui/ui-icon/ui-icon.component';
 
+import { ThemeService } from '../../../../core/services/theme.service';
+import { UiButton } from '../../../../core/ui/ui-button/ui-button';
 import { IconName } from '../../../../core/ui/ui-icon/data';
 
 interface MenuItem {
   label: string;
   icon: IconName;
+  expanded: boolean;
   route?: string;
   children?: MenuItem[];
 }
 
 @Component({
   selector: 'app-aside',
-  imports: [RouterLink, RouterLinkActive, UiIcon],
-
+  imports: [
+    RouterLink,
+    UiIcon,
+    Tree,
+    TreeItem,
+    NgTemplateOutlet,
+    UiButton,
+    TreeItemGroup,
+    RouterLinkActive,
+  ],
   templateUrl: './aside.html',
   styleUrl: './aside.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Aside {
+  private readonly themeService = inject(ThemeService);
+  readonly isDark = this.themeService.theme;
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
+  }
+
   menuItems = signal<MenuItem[]>([
-    { label: 'Главное', route: '/core/dashboard', icon: 'outline-home' },
+    {
+      label: 'Главная',
+      route: '/core/dashboard',
+      icon: 'outline-home',
+      expanded: false,
+    },
     {
       label: 'Справочники',
       icon: 'outline-folder',
+      expanded: true,
       children: [
-        { label: 'Магазины', route: '/core/directories/stores', icon: 'outline-circle' },
-        { label: 'Номенклатура', route: '/core/directories/nomenclature', icon: 'outline-circle' },
-        { label: 'Клиенты', route: '/core/directories/clients', icon: 'outline-circle' },
-        { label: 'Поставщики', route: '/core/directories/vendors', icon: 'outline-circle' },
-        { label: 'Типы цен', route: '/core/directories/price-types', icon: 'outline-circle' },
+        {
+          label: 'Магазины',
+          route: '/core/directories/stores',
+          icon: 'outline-building-store',
+          expanded: false,
+        },
+        {
+          label: 'Номенклатура',
+          route: '/core/directories/nomenclature',
+          icon: 'outline-box',
+          expanded: false,
+        },
+        {
+          label: 'Клиенты',
+          route: '/core/directories/clients',
+          icon: 'outline-users',
+          expanded: false,
+        },
+        {
+          label: 'Поставщики',
+          route: '/core/directories/vendors',
+          icon: 'outline-truck',
+          expanded: false,
+        },
+        {
+          label: 'Типы цен',
+          route: '/core/directories/price-types',
+          icon: 'outline-currency-dollar',
+          expanded: false,
+        },
+        {
+          label: 'Кассы',
+          route: '/core/directories/cashboxes',
+          icon: 'outline-device-desktop',
+          expanded: false,
+        },
       ],
     },
     {
       label: 'Документы',
       icon: 'outline-file-text',
+      expanded: true,
       children: [
-        { label: 'Закупки', route: '/core/documents/purchases', icon: 'outline-circle' },
-        { label: 'Продажи', route: '/core/documents/sales', icon: 'outline-circle' },
+        {
+          label: 'Приходные накладные',
+          route: '/core/documents/purchases',
+          icon: 'outline-file-import',
+          expanded: false,
+        },
+        // { label: 'Продажи', route: '/core/documents/sales', icon: 'outline-receipt' }
       ],
     },
   ]);
-
-  expandedGroups = signal<Set<string>>(new Set(['Справочники', 'Документы'])); // Default expanded for visibility
-
-  toggleGroup(label: string) {
-    this.expandedGroups.update((set) => {
-      const newSet = new Set(set);
-      if (newSet.has(label)) {
-        newSet.delete(label);
-      } else {
-        newSet.add(label);
-      }
-      return newSet;
-    });
-  }
-
-  isExpanded(label: string): boolean {
-    return this.expandedGroups().has(label);
-  }
 }

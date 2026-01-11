@@ -1,15 +1,15 @@
 @reference './../../../../styles.css';
 
 .accordion {
-  @apply flex flex-col border-t border-gray-300;
+  @apply flex flex-col border-t default-border-color;
 }
 
 .accordion-item {
-  @apply border-b border-gray-300 outline-none;
+  @apply border-b default-border-color outline-none;
 }
 
 .accordion-header {
-  @apply focus-visible:focus-ring flex cursor-pointer items-center gap-2 rounded-sm bg-gray-50 px-2 py-2 outline-none select-none;
+  @apply flex cursor-pointer items-center gap-2 rounded-sm bg-neutral-50 px-2 py-2 outline-none select-none;
 }
 
 .accordion-header:hover {
@@ -17,11 +17,11 @@
 }
 
 .accordion-title {
-  @apply text-sm font-semibold text-gray-800;
+  @apply text-sm font-semibold text-neutral-800;
 }
 
 .accordion-arrow {
-  @apply text-gray-500;
+  @apply text-neutral-500;
 }
 
 .accordion-arrow.expanded {
@@ -37,5 +37,5 @@
 }
 
 .accordion-content {
-  @apply p-4 text-sm leading-relaxed text-gray-800;
+  @apply p-4 text-sm leading-relaxed text-neutral-800;
 }
