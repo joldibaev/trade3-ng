@@ -8,9 +8,18 @@
   }
 
   .ui-form-control {
-    @apply default-border-color rounded-squircle w-full rounded-lg border bg-white text-neutral-800 outline-none;
-    @apply px-3 py-2;
+    @apply default-border-color rounded-squircle w-full rounded-lg border bg-white text-neutral-800;
     @apply text-sm;
+
+    > input {
+      @apply h-full w-full;
+      @apply px-3 py-2;
+      @apply outline-none;
+
+      &.ui-select {
+        @apply opacity-0 not-disabled:cursor-pointer;
+      }
+    }
 
     &:focus-visible {
       @apply ring-3 ring-primary-100 border-primary-300;
@@ -20,7 +29,7 @@
       @apply text-sm text-neutral-400 italic;
     }
 
-    &:disabled {
+    &:has(> input:disabled) {
       @apply cursor-not-allowed bg-neutral-100 text-neutral-400;
     }
 

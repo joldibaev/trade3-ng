@@ -13,9 +13,8 @@
     </label>
   }
 
-  <div class="relative">
+  <div class="ui-form-control relative">
     <input
-      class="ui-form-control"
       [attr.aria-label]="label()"
       [attr.enterkeyhint]="enterKeyHint()"
       [attr.inputmode]="inputMode()"
@@ -35,7 +34,9 @@
     />
 
     @if (loading()) {
-      <div class="absolute top-1/2 right-2 z-20 -translate-y-1/2 text-neutral-400">
+      <div
+        class="pointer-events-none absolute top-1/2 right-2 z-20 -translate-y-1/2 text-neutral-400"
+      >
         <ui-loading height="18" width="18" />
       </div>
     }

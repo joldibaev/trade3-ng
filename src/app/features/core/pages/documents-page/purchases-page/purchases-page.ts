@@ -99,14 +99,14 @@ export class PurchasesPage {
 
   // Actions can be added later
   createPurchase() {
-    this.router.navigate(['new'], { relativeTo: this.route });
+    void this.router.navigate(['new'], { relativeTo: this.route });
   }
 
   editCurrentPurchase() {
     const purchase = this.selectedPurchase();
     if (!purchase) return;
 
-    this.router.navigate([purchase.id], { relativeTo: this.route });
+    void this.router.navigate([purchase.id], { relativeTo: this.route });
   }
 
   deleteCurrentPurchase() {

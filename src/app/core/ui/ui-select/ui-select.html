@@ -1,7 +1,5 @@
 <div #ngCombobox="ngCombobox" ngCombobox readonly [disabled]="loading() || disabled()">
   <div #cdkOverlayOrigin cdkOverlayOrigin="cdkOverlayOrigin" class="flex flex-col gap-1">
-    <input type="hidden" [value]="value()" />
-
     @if (label()) {
       <label class="ui-form-label" [for]="id()">
         <span>{{ label() }} </span>
@@ -16,7 +14,7 @@
       </label>
     }
 
-    <div class="relative">
+    <div class="ui-form-control relative">
       @if (displayValue()) {
         <span class="pointer-events-none absolute top-1/2 left-0 z-20 -translate-y-1/2 px-3 py-2">
           {{ displayValue() }}
@@ -28,7 +26,7 @@
       <input
         ngComboboxInput
         readonly
-        class="ui-form-control text-transparent"
+        class="ui-select"
         [disabled]="ngCombobox.disabled()"
         [id]="id()"
         [value]="value()"
@@ -38,7 +36,9 @@
         [attr.aria-invalid]="invalid()"
       />
 
-      <div class="absolute top-1/2 right-2 z-20 -translate-y-1/2 text-neutral-400">
+      <div
+        class="pointer-events-none absolute top-1/2 right-2 z-20 -translate-y-1/2 text-neutral-400"
+      >
         @if (loading()) {
           <ui-loading height="18" width="18" />
         } @else {
