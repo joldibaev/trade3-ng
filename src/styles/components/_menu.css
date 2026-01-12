@@ -9,5 +9,23 @@
 
   .ui-menu-item {
     @apply flex cursor-pointer items-center justify-between gap-4 px-4 py-2 text-sm text-neutral-800 outline-none select-none;
+
+    &[data-active='true'] {
+      @apply inset-ring-primary-100 border-primary-300 inset-ring-2;
+    }
+  }
+
+  [ngCombobox]:has([ngComboboxInput][aria-expanded='false']) .ui-menu {
+    display: none;
+  }
+
+  [ngCombobox] .ui-menu-item {
+    &:hover {
+      @apply bg-neutral-100;
+    }
+
+    &[aria-selected='true'] {
+      @apply bg-primary-50 text-primary-600;
+    }
   }
 }

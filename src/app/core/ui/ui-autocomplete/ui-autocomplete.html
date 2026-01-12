@@ -1,4 +1,4 @@
-<div #ngCombobox="ngCombobox" ngCombobox readonly [disabled]="loading() || disabled()">
+<div #ngCombobox="ngCombobox" ngCombobox filterMode="auto-select" [disabled]="disabled()">
   <div #cdkOverlayOrigin cdkOverlayOrigin="cdkOverlayOrigin" class="flex flex-col gap-1">
     @if (label()) {
       <label class="ui-form-label" [for]="id()">
@@ -15,25 +15,23 @@
     }
 
     <div class="ui-form-control relative">
-      @if (displayValue()) {
-        <span class="pointer-events-none absolute top-1/2 left-0 z-20 -translate-y-1/2 px-3 py-2">
-          {{ displayValue() }}
-        </span>
-      }
-
-      <!--todo (blur)="touched.set(true)" -->
-      <!--todo make input custom full to disable select -->
       <input
         ngComboboxInput
-        readonly
-        class="ui-select"
-        [disabled]="ngCombobox.disabled()"
-        [id]="id()"
-        [value]="value()"
-        [placeholder]="placeholder()"
+        autocomplete="off"
         [attr.aria-label]="label()"
+        [attr.enterkeyhint]="enterKeyHint()"
+        [attr.inputmode]="inputMode()"
+        [id]="id()"
+        [name]="name()"
+        [placeholder]="placeholder()"
+        [spellcheck]="spellCheck()"
+        [type]="type()"
+        [disabled]="ngCombobox.disabled()"
+        [readonly]="readonly()"
         [class.invalid]="invalid()"
         [attr.aria-invalid]="invalid()"
+        [(value)]="value"
+        (blur)="touched.set(true)"
       />
 
       <div
@@ -71,21 +69,16 @@
       [cdkConnectedOverlayOpen]="true"
     >
       <div class="ui-menu">
-        @if (items()?.length) {
-          <div ngListbox [values]="selectedList()" (valuesChange)="valuesChange($event)">
-            @for (item of items(); track item[selectField()]) {
-              <div #ngOption="ngOption" ngOption class="ui-menu-item" [value]="item[selectField()]">
-                <span>{{ item[labelField()] }}</span>
-
-                @if (ngOption.selected()) {
-                  <ui-icon name="outline-check" width="18" height="18"></ui-icon>
-                }
-              </div>
-            }
-          </div>
-        } @else {
-          <div class="ui-menu-item pointer-events-none">Список пуст</div>
+        @if (result().length === 0) {
+          <div class="no-results">No results found</div>
         }
+        <div ngListbox>
+          @for (item of result(); track item[selectField()]) {
+            <div ngOption class="ui-menu-item" [value]="item[selectField()]">
+              <span>{{ item[labelField()] }}</span>
+            </div>
+          }
+        </div>
       </div>
     </ng-template>
   </ng-template>

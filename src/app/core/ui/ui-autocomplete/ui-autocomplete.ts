@@ -8,49 +8,46 @@ import {
   Component,
   computed,
   input,
-  linkedSignal,
   model,
   signal,
   viewChild,
   viewChildren,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { DisabledReason, ValidationError } from '@angular/forms/signals';
 import { generateId } from '../../../shared/utils/generate-id';
 import { UiIcon } from '../ui-icon/ui-icon.component';
+import { InputMode } from '../ui-input/input-inputmode.type';
+import { InputType } from '../ui-input/input-type.type';
 import { UiLoading } from '../ui-loading/ui-loading';
 
-// todo validation and required state
 @Component({
-  selector: 'ui-select',
-  templateUrl: './ui-select.html',
-  styleUrl: './ui-select.css',
+  selector: 'ui-autocomplete',
   imports: [
     Combobox,
+    ComboboxInput,
     ComboboxPopupContainer,
     Listbox,
     Option,
     OverlayModule,
-    ComboboxInput,
+    FormsModule,
     UiIcon,
     UiLoading,
   ],
+  templateUrl: './ui-autocomplete.html',
+  styleUrl: './ui-autocomplete.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UiSelect<T> {
+export class UiAutocomplete<T> {
   value = model('');
 
-  label = input<string>();
-  placeholder = input('Ничего не выбрано');
-  loading = input(false, { transform: booleanAttribute });
+  // Writable interaction state - control updates these
+  touched = model<boolean>(false);
 
   items = input.required<T[] | undefined>();
   labelField = input.required<keyof T>();
 
   selectField = input.required<keyof T>();
-  protected selectedList = linkedSignal<string[]>(() => {
-    const value = this.value();
-    return value.length ? value.split(',') : [];
-  });
 
   // Read-only state - form system manages these
   disabled = input<boolean>(false);
@@ -61,17 +58,18 @@ export class UiSelect<T> {
   errors = input<readonly ValidationError.WithField[]>([]);
   required = input<boolean>(false);
 
+  // component inputs
+  label = input<string>();
+
+  name = input<string>('');
+  type = input<InputType>('text');
+  enterKeyHint = input<string>();
+  placeholder = input<string>('');
+  inputMode = input<InputMode>();
+  spellCheck = input(false, { transform: booleanAttribute });
+  loading = input(false, { transform: booleanAttribute });
+
   id = signal(`input-${generateId()}`);
-
-  /** The string that is displayed in the combobox. */
-  displayValue = computed<string | undefined>(() => {
-    const items = this.items()?.filter((item) =>
-      this.selectedList().includes(String(item[this.selectField()])),
-    );
-
-    if (items?.length) return items.map((item) => item[this.labelField()]).join(', ');
-    return undefined;
-  });
 
   /** The combobox listbox popup. */
   listbox = viewChild<Listbox<string>>(Listbox);
@@ -81,6 +79,15 @@ export class UiSelect<T> {
 
   /** A reference to the ng aria combobox. */
   combobox = viewChild<Combobox<string>>(Combobox);
+
+  /** The query string used to filter the list of countries. */
+  /** The list of countries filtered by the query. */
+  result = computed(
+    () =>
+      this.items()?.filter((item) =>
+        String(item[this.selectField()]).toLowerCase().startsWith(this.value().toLowerCase()),
+      ) ?? [],
+  );
 
   constructor() {
     // Scrolls to the active item when the active option changes.
@@ -96,14 +103,5 @@ export class UiSelect<T> {
         setTimeout(() => this.listbox()?.element.scrollTo(0, 0), 150);
       }
     });
-  }
-
-  protected valuesChange(selectedList: string[]) {
-    const list = selectedList.join(',');
-    if (list.length) {
-      if (list !== this.value()) this.value.set(list);
-    } else {
-      this.value.set('');
-    }
   }
 }

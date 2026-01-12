@@ -21,7 +21,7 @@
       }
     }
 
-    &:focus-visible {
+    &:focus-within {
       @apply ring-3 ring-primary-100 border-primary-300;
     }
 
