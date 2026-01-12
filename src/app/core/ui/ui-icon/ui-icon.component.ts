@@ -30,8 +30,15 @@ export class UiIcon {
     const iconName = this.name();
     const svgString = ICONS[iconName];
 
+    // clean attributes
+    const cleaned = svgString.replace(
+      /<svg([^>]*?)>/,
+      (_, attrs: string) =>
+        `<svg${attrs.replace(/\swidth="[^"]*"/g, '').replace(/\sheight="[^"]*"/g, '')}>`,
+    );
+
     // inject width and height attributes
-    const replaced = svgString.replace(
+    const replaced = cleaned.replace(
       /<svg([^>]*?)>/,
       (_, attrs: string) => `<svg${attrs} width="${this.width()}" height="${this.height()}">`,
     );
