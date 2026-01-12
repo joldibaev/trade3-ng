@@ -1,55 +1,47 @@
-<ul #tree="ngTree" ngTree class="ui-tree" [(values)]="selectionValues">
+<div #tree="ngTree" ngTree class="flex flex-col gap-1" [nav]="true" [(values)]="selected">
   <ng-template
-    [ngTemplateOutlet]="treeNodes"
+    [ngTemplateOutlet]="treeNodeTemplate"
     [ngTemplateOutletContext]="{ nodes: items(), parent: tree }"
   />
-</ul>
+</div>
 
-<ng-template #treeNodes let-nodes="nodes" let-parent="parent">
-  @for (node of nodes; track node.id) {
-    <li
+<ng-template #treeNodeTemplate let-nodes="nodes" let-parent="parent">
+  @for (node of nodes; track node.label) {
+    <a
       #treeItem="ngTreeItem"
+      uiButton
+      variant="ghost"
       ngTreeItem
-      class="ui-tree-item"
-      [parent]="parent"
+      align="start"
+      routerLinkActive="active"
+      class="w-full outline-none"
+      [queryParams]="node.queryParams"
+      [queryParamsHandling]="node.queryParamsHandling"
+      [icon]="node.icon"
       [value]="node.id"
-      [label]="node.name"
+      [parent]="parent"
+      [routerLink]="node.routerLink"
+      [label]="node.label"
+      [routerLinkActiveOptions]="{ exact: true }"
+      [selectable]="!node.children.length"
+      [(expanded)]="node.expanded"
     >
-      <div class="ui-tree-item-content">
-        @if (node.children?.length) {
-          <!--todo fix btn style-->
-          <button
-            type="button"
-            class="ui-tree-item-toggle outline-none"
-            [attr.aria-label]="treeItem.expanded() ? 'Collapse' : 'Expand'"
-            (click)="$event.stopPropagation(); treeItem.expanded.set(!treeItem.expanded())"
-          >
-            <ui-icon
-              name="outline-chevron-right"
-              size="16"
-              class="transition-transform duration-200"
-              [class.rotate-90]="treeItem.expanded()"
-            />
-          </button>
-        } @else {
-          <div class="ui-tree-item-spacer"></div>
-        }
+      {{ node.label }}
 
+      @if (node.children.length) {
         <ui-icon
-          size="18"
-          class="ui-tree-item-icon"
-          [name]="node.children?.length ? 'outline-folder' : 'outline-file-text'"
-        />
+          name="outline-chevron-down"
+          class="ms-auto transition-transform duration-200"
+          [class.-rotate-90]="!node.expanded"
+        ></ui-icon>
+      }
+    </a>
 
-        <span class="ui-tree-item-label font-medium">{{ node.name }}</span>
-      </div>
-    </li>
-
-    @if (node.children?.length) {
-      <ul role="group" class="ui-tree-group">
+    @if (node.children.length) {
+      <ul role="group" class="default-border-color ms-7 border-s ps-2">
         <ng-template #group="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="treeItem">
           <ng-template
-            [ngTemplateOutlet]="treeNodes"
+            [ngTemplateOutlet]="treeNodeTemplate"
             [ngTemplateOutletContext]="{ nodes: node.children, parent: group }"
           />
         </ng-template>

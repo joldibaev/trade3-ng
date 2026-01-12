@@ -6,7 +6,7 @@
 <div class="flex flex-1 gap-4 overflow-hidden">
   <!-- Sidebar: Categories -->
   <ui-card class="h-full w-80">
-    <div class="border-b default-border-color p-2">
+    <div class="default-border-color border-b p-2">
       <div class="flex items-center gap-1">
         <button
           uiButton
@@ -41,24 +41,12 @@
     </div>
 
     <div class="flex-1 overflow-y-auto p-2">
-      <!-- Root node for "All categories" or similar -->
-      <!--todo fix button style-->
-      <button
-        type="button"
-        class="w-full cursor-pointer rounded px-2 py-1 text-left text-sm hover:bg-neutral-100"
-        [class.bg-primary-50]="!selectedCategoryId()"
-        [class.text-primary-600]="!selectedCategoryId()"
-        (click)="selectCategory()"
-      >
-        <span class="font-medium">Все товары</span>
-      </button>
-
       @if (categories.isLoading()) {
         <div class="flex justify-center p-4">
           <ui-loading [width]="20" [height]="20" />
         </div>
       } @else if (categories.hasValue()) {
-        <ui-tree [items]="rootCategories()" [(selectedId)]="selectedCategoryIdForTree" />
+        <ui-tree [items]="rootCategories()" />
       }
     </div>
   </ui-card>
@@ -66,7 +54,7 @@
   <!-- Main Content: Products Table -->
   <ui-card class="flex-1 overflow-hidden">
     <!-- Toolbar -->
-    <div class="flex items-center justify-between border-b default-border-color p-2">
+    <div class="default-border-color flex items-center justify-between border-b p-2">
       <div class="flex items-center gap-2">
         <button
           uiButton
@@ -136,18 +124,18 @@
     </div>
 
     <!-- Filters Row (Mockup based on screenshot) -->
-    <div class="border-b default-border-color bg-neutral-50 p-2 text-xs">
+    <div class="default-border-color border-b bg-neutral-50 p-2 text-xs">
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-1">
           <span class="text-neutral-500">Склад/Магазин:</span>
-          <span class="border-b border-dashed default-border-color font-medium text-neutral-900"
+          <span class="default-border-color border-b border-dashed font-medium text-neutral-900"
             >Все</span
           >
           <ui-icon name="outline-x" class="h-3 w-3 cursor-pointer text-neutral-400" />
         </div>
         <div class="flex items-center gap-1">
           <span class="text-neutral-500">Вид цены:</span>
-          <span class="border-b border-dashed default-border-color font-medium text-neutral-900"
+          <span class="default-border-color border-b border-dashed font-medium text-neutral-900"
             >Розничная</span
           >
           <ui-icon name="outline-x" class="h-3 w-3 cursor-pointer text-neutral-400" />
@@ -159,7 +147,7 @@
       [columns]="columns"
       [data]="filteredProducts()"
       [loading]="products.isLoading()"
-      (selectedChanged)="selectProduct($event)"
+      (selectedChanged)="selectedProduct.set($event)"
     />
   </ui-card>
 </div>

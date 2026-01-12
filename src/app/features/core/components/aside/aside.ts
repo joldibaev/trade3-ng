@@ -1,10 +1,9 @@
 import { Tree, TreeItem, TreeItemGroup } from '@angular/aria/tree';
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UiIcon } from '../../../../core/ui/ui-icon/ui-icon.component';
 
-import { ThemeService } from '../../../../core/services/theme.service';
 import { UiButton } from '../../../../core/ui/ui-button/ui-button';
 import { IconName } from '../../../../core/ui/ui-icon/data';
 
@@ -33,13 +32,6 @@ interface MenuItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Aside {
-  private readonly themeService = inject(ThemeService);
-  readonly isDark = this.themeService.theme;
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
-  }
-
   menuItems = signal<MenuItem[]>([
     {
       label: 'Главная',
@@ -80,12 +72,6 @@ export class Aside {
           label: 'Типы цен',
           route: '/core/directories/price-types',
           icon: 'outline-currency-dollar',
-          expanded: false,
-        },
-        {
-          label: 'Кассы',
-          route: '/core/directories/cashboxes',
-          icon: 'outline-device-desktop',
           expanded: false,
         },
       ],

@@ -6,6 +6,7 @@ import {
   DestroyRef,
   inject,
   signal,
+  untracked,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
@@ -22,6 +23,7 @@ import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { TreeNode } from '../../../../../core/ui/ui-tree/tree-item.interface';
 import { UiTree } from '../../../../../core/ui/ui-tree/ui-tree';
 import {
   CategoryDialogData,
@@ -56,10 +58,9 @@ export class NomenclaturePage {
 
   // State
   selectedCategoryId = toSignal(
-    this.activatedRoute.queryParams.pipe(
-      map((params) => params['categoryId'] as string | undefined),
-    ),
+    this.activatedRoute.queryParamMap.pipe(map((params) => params.get('categoryId') ?? undefined)),
   );
+
   selectedProduct = signal<Product | undefined>(undefined);
 
   formState = signal({ query: '' });
@@ -116,46 +117,80 @@ export class NomenclaturePage {
   ];
 
   // Derived state: build hierarchy from flat list
-  rootCategories = computed(() => {
+  rootCategories = computed<TreeNode[]>(() => {
     const all = this.categories.value() || [];
-    const rootNodes: (Category & { children: Category[] })[] = [];
-    const idMap = new Map<string, Category & { children: Category[] }>();
+    const selectedId = untracked(() => this.selectedCategoryId());
+    const rootNodes: TreeNode[] = [];
+    const idMap = new Map<string, TreeNode>();
 
-    // First pass: create nodes
+    // 1. Первый проход: создание всех узлов
     all.forEach((c) => {
-      idMap.set(c.id, { ...c, children: [] });
+      idMap.set(c.id, {
+        id: c.id,
+        label: c.name,
+        expanded: false, // По умолчанию закрыто
+        children: [],
+      });
     });
 
-    // Second pass: link parents/children
+    // 2. Второй проход: связывание родителей и детей
     all.forEach((c) => {
-      const node = idMap.get(c.id)!;
+      const node = idMap.get(c.id);
+      if (!node) return;
+
       if (c.parentId && idMap.has(c.parentId)) {
-        idMap.get(c.parentId)!.children.push(node);
+        const parent = idMap.get(c.parentId);
+        parent?.children.push(node);
       } else if (!c.parentId) {
         rootNodes.push(node);
       }
     });
 
-    // Recursive sorting function
-    const sortNodes = (nodes: (Category & { children: Category[] })[]) => {
+    /**
+     * Рекурсивная функция обработки:
+     * Возвращает true, если в поддереве этого узла есть выбранная категория
+     */
+    const processNodes = (nodes: TreeNode[]): boolean => {
+      let subtreeHasSelected = false;
+
+      nodes.forEach((node) => {
+        // Проверяем, выбран ли текущий узел
+        const isCurrentSelected = node.id === selectedId;
+
+        // Рекурсивно обрабатываем детей и узнаем, есть ли выбранный среди них
+        const childHasSelected = processNodes(node.children);
+
+        // Узел должен быть раскрыт, если выбран он сам или кто-то в его детях
+        node.expanded = isCurrentSelected || childHasSelected;
+
+        // Если в этой ветке нашли выбранный элемент, помечаем для родителя
+        if (node.expanded) {
+          subtreeHasSelected = true;
+        }
+
+        // Добавляем роутинг только листьям
+        if (node.children.length === 0) {
+          node.routerLink = [];
+          node.queryParams = { categoryId: node.id };
+          node.queryParamsHandling = 'merge';
+        }
+      });
+
+      // Сортировка (сначала папки, потом листки, затем по алфавиту)
       nodes.sort((a, b) => {
         const aHasChildren = a.children.length > 0;
         const bHasChildren = b.children.length > 0;
-
         if (aHasChildren && !bHasChildren) return -1;
         if (!aHasChildren && bHasChildren) return 1;
-
-        return a.name.localeCompare(b.name);
+        return a.label.localeCompare(b.label);
       });
 
-      nodes.forEach((node) => {
-        if (node.children.length > 0) {
-          sortNodes(node.children as (Category & { children: Category[] })[]);
-        }
-      });
+      return subtreeHasSelected;
     };
 
-    sortNodes(rootNodes);
+    // Запускаем рекурсию
+    processNodes(rootNodes);
+
     return rootNodes;
   });
 
@@ -173,31 +208,6 @@ export class NomenclaturePage {
         (schemaPath.article && schemaPath.article.toLowerCase().includes(query)),
     );
   });
-
-  // Proxy for tree selection to sync with query params
-  get selectedCategoryIdForTree() {
-    return this.selectedCategoryId();
-  }
-  set selectedCategoryIdForTree(id: string | undefined) {
-    if (id !== this.selectedCategoryId()) {
-      // Find category in the flat list
-      const category = this.categories.value()?.find((c) => c.id === id);
-      this.selectCategory(category);
-    }
-  }
-
-  selectCategory(category?: Category) {
-    this.selectedProduct.set(undefined); // Reset product selection when category changes
-    void this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: { categoryId: category?.id },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  selectProduct(product?: Product) {
-    this.selectedProduct.set(product);
-  }
 
   // Helper methods for template
   editCurrentCategory() {
@@ -260,7 +270,11 @@ export class NomenclaturePage {
         tap(() => {
           this.categories.reload();
           if (this.selectedCategoryId() === category.id) {
-            this.selectCategory(undefined);
+            void this.router.navigate([], {
+              queryParams: { categoryId: undefined },
+              relativeTo: this.activatedRoute,
+              queryParamsHandling: 'merge',
+            });
           }
         }),
         takeUntilDestroyed(this.destroyRef),

@@ -64,21 +64,3 @@
     }
   </ng-template>
 </div>
-
-<!-- Footer / Theme Toggle -->
-<div class="mt-auto py-2">
-  <button
-    uiButton
-    variant="secondary"
-    align="start"
-    class="w-full"
-    [icon]="isDark() === 'dark' ? 'outline-moon' : 'outline-sun'"
-    (click)="toggleTheme()"
-  >
-    @if (isDark() === 'dark') {
-      Dark Mode
-    } @else {
-      Light Mode
-    }
-  </button>
-</div>

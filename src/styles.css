@@ -33,6 +33,10 @@
 
 @utility default-transition {
   @apply transition duration-200;
+
+  &.cdk-drag-dragging {
+    @apply transition-none;
+  }
 }
 
 @utility default-border-color {
