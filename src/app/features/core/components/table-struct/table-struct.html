@@ -70,6 +70,7 @@
     <ui-table
       [columns]="columns()"
       [data]="data()"
+      [trackField]="trackField()"
       [loading]="isLoading()"
       (selectedChanged)="selectedItem.set($event)"
     />

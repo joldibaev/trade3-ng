@@ -1,3 +1,12 @@
-<app-table-struct title="Типы цен" [data]="filteredPriceTypes()" [columns]="columns"
-  [isLoading]="priceTypes.isLoading()" [(selectedItem)]="selectedPriceType" (created)="openPriceTypeDialog()"
-  (edited)="openPriceTypeDialog($event)" (deleted)="deletePriceType($event)" (searched)="searchQuery.set($event)" />
+<app-table-struct
+  title="Типы цен"
+  [trackField]="'id'"
+  [data]="filteredPriceTypes()"
+  [columns]="columns"
+  [isLoading]="priceTypes.isLoading()"
+  [(selectedItem)]="selectedPriceType"
+  (created)="openPriceTypeDialog()"
+  (edited)="openPriceTypeDialog($event)"
+  (deleted)="deletePriceType($event)"
+  (searched)="searchQuery.set($event)"
+/>

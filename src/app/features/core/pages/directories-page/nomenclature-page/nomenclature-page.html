@@ -145,6 +145,7 @@
 
     <ui-table
       [columns]="columns"
+      [trackField]="'id'"
       [data]="filteredProducts()"
       [loading]="products.isLoading()"
       (selectedChanged)="selectedProduct.set($event)"

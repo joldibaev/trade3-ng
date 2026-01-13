@@ -8,7 +8,7 @@
       @for (col of columns(); track col.key) {
         <th
           ngGridCell
-          class="border-b default-border-color bg-neutral-50 px-4 py-2 font-medium whitespace-nowrap outline-none"
+          class="default-border-color border-b bg-neutral-50 px-4 py-2 font-medium whitespace-nowrap outline-none"
           [style.width]="col.width"
         >
           {{ col.header }}
@@ -24,7 +24,7 @@
         </td>
       </tr>
     } @else if (data().length) {
-      @for (row of data(); track row; let i = $index) {
+      @for (row of data(); track row[trackField()]; let i = $index) {
         <tr ngGridRow class="cursor-pointer">
           @for (col of columns(); track col.key; let j = $index) {
             <td

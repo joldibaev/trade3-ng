@@ -39,12 +39,16 @@ export class UiTable<T extends object> {
   data = input.required<T[]>();
   loading = input(false, { transform: booleanAttribute });
 
+  trackField = input.required<keyof T>();
+
+  selectedItem = input<T>();
+
   td = viewChildren(GridCell);
   selectedChanged = output<T | undefined>();
 
   protected onSelectedChange() {
     const active = this.td().find(({ active }) => active());
-    const index = active?.rowIndex();
-    this.selectedChanged.emit(index !== undefined ? this.data()[index] : undefined);
+    const rowIndex = active?.rowIndex();
+    this.selectedChanged.emit(rowIndex !== undefined ? this.data()[rowIndex] : undefined);
   }
 }

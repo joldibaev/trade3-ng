@@ -32,6 +32,8 @@ export class TableStruct<T extends object> {
   columns = input.required<TableColumn<T>[]>();
   isLoading = input<boolean>(false);
 
+  trackField = input.required<keyof T>();
+
   // Model
   selectedItem = model<T | undefined>(undefined);
 

@@ -1,0 +1,30 @@
+<app-table-struct
+  title="Закупки"
+  [trackField]="'id'"
+  [data]="filteredPurchases()"
+  [columns]="columns"
+  [isLoading]="purchases.isLoading()"
+  [(selectedItem)]="selectedPurchase"
+  (created)="openCreateDialog()"
+  (deleted)="deletePurchase($event)"
+  (searched)="searchQuery.set($event)"
+>
+  <div toolbar-actions class="flex items-center gap-2">
+    @if (selectedPurchase(); as purchase) {
+      <button
+        uiButton
+        variant="ghost"
+        size="sm"
+        [icon]="purchase.status === DocumentStatus.COMPLETED ? 'outline-x' : 'outline-check'"
+        [disabled]="isLoading()"
+        (click)="toggleStatus()"
+      >
+        @if (purchase.status === DocumentStatus.COMPLETED) {
+          Отменить проведение
+        } @else {
+          Провести
+        }
+      </button>
+    }
+  </div>
+</app-table-struct>

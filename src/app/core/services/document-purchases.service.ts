@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DocumentStatus } from '../../shared/interfaces/constants';
 import { CreateDocumentPurchaseDto } from '../../shared/interfaces/dtos/create-document-purchase.interface';
 import { UpdateDocumentPurchaseDto } from '../../shared/interfaces/dtos/update-document-purchase.interface';
 import { DocumentPurchase } from '../../shared/interfaces/entities/document-purchase.interface';
@@ -14,5 +15,9 @@ export class DocumentPurchasesService extends BaseService<DocumentPurchase> {
 
   updateDocument(id: string, entity: UpdateDocumentPurchaseDto) {
     return this.http.patch<DocumentPurchase>(`${this.apiUrl}/${id}`, entity);
+  }
+
+  updateStatus(id: string, status: DocumentStatus) {
+    return this.http.patch<DocumentPurchase>(`${this.apiUrl}/${id}/status`, { status });
   }
 }
