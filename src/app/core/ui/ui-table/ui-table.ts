@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   input,
+  model,
   output,
   viewChildren,
 } from '@angular/core';
@@ -40,6 +41,9 @@ export class UiTable<T extends object> {
   loading = input(false, { transform: booleanAttribute });
 
   trackField = input.required<keyof T>();
+
+  selectedRow = model<number>();
+  selectedColumn = model<number>();
 
   selectedItem = input<T>();
 

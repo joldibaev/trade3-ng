@@ -81,9 +81,9 @@ export class NomenclaturePage {
   columns: TableColumn<Product>[] = [
     {
       key: 'id',
-      header: 'Код',
-      valueGetter: (_, index) => `000${index + 1}`,
-      width: '80px',
+      header: 'ID',
+      valueGetter: (row) => row.id,
+      width: '120px',
     },
     {
       key: 'name',

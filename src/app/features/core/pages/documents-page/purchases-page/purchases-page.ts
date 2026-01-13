@@ -46,10 +46,10 @@ export class PurchasesPage {
 
   columns: TableColumn<DocumentPurchase>[] = [
     {
-      key: 'id',
-      header: '№',
-      valueGetter: (_, index) => `${index + 1}`,
-      width: '50px',
+      key: 'code',
+      header: 'Код',
+      valueGetter: (row) => `${row.code || '-'}`,
+      width: '80px',
     },
     {
       key: 'date',
