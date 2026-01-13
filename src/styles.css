@@ -3,6 +3,7 @@
 @import './styles/components/_button.css';
 @import './styles/components/_form.css';
 @import './styles/components/_menu.css';
+@import './styles/components/_badge.css';
 
 @theme {
   --font-sans: 'Inter', sans-serif;

@@ -1,32 +1,22 @@
 import { Grid, GridCell, GridRow } from '@angular/aria/grid';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   input,
+  model,
   output,
   viewChildren,
 } from '@angular/core';
-import { ToNumberPipe } from '../../pipes/to-number-pipe';
-import { ToStringPipe } from '../../pipes/to-string-pipe';
+import { UiBadge, UiBadgeVariant } from '../ui-badge/ui-badge';
 import { UiLoading } from '../ui-loading/ui-loading';
-import { TableColumn } from './table-column.interface';
+import { TableColumn, TableColumnBadge } from './table-column.interface';
 import { TableValueGetterPipe } from './table-value-getter.pipe';
 
 @Component({
   selector: 'ui-table',
-  imports: [
-    Grid,
-    GridRow,
-    GridCell,
-    DatePipe,
-    DecimalPipe,
-    ToStringPipe,
-    ToNumberPipe,
-    UiLoading,
-    TableValueGetterPipe,
-  ],
+  imports: [Grid, GridRow, GridCell, DatePipe, UiLoading, TableValueGetterPipe, UiBadge],
   templateUrl: './ui-table.html',
   styleUrl: './ui-table.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,6 +31,9 @@ export class UiTable<T extends object> {
 
   trackField = input.required<keyof T>();
 
+  selectedRow = model<number>();
+  selectedColumn = model<number>();
+
   selectedItem = input<T>();
 
   td = viewChildren(GridCell);
@@ -50,5 +43,19 @@ export class UiTable<T extends object> {
     const active = this.td().find(({ active }) => active());
     const rowIndex = active?.rowIndex();
     this.selectedChanged.emit(rowIndex !== undefined ? this.data()[rowIndex] : undefined);
+  }
+
+  protected getBadgeVariant(
+    col: TableColumn<T>,
+    value: string | number | null | undefined,
+  ): UiBadgeVariant {
+    const badgeCol = col as TableColumnBadge<T>;
+    const variant = badgeCol.badgeVariants[String(value || '')];
+    return (variant as UiBadgeVariant) || 'primary';
+  }
+
+  protected getBadgeLabel(col: TableColumn<T>, value: string | number | null | undefined): string {
+    const badgeCol = col as TableColumnBadge<T>;
+    return badgeCol.badgeLabels[String(value || '')] || String(value || '');
   }
 }

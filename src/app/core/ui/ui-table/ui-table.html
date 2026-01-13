@@ -36,10 +36,13 @@
             >
               @switch (col.type) {
                 @case ('date') {
-                  {{ row | tableValueGetter: col : i | toString | date: 'dd.MM.yyyy HH:mm' }}
+                  {{ row | tableValueGetter: col : i | date: 'dd.MM.yyyy HH:mm' }}
                 }
-                @case ('number') {
-                  {{ row | tableValueGetter: col : i | toNumber | number }}
+                @case ('badge') {
+                  @let value = row | tableValueGetter: col : i;
+                  <ui-badge [variant]="getBadgeVariant(col, value)">
+                    {{ getBadgeLabel(col, value) }}
+                  </ui-badge>
                 }
                 @default {
                   {{ row | tableValueGetter: col : i }}

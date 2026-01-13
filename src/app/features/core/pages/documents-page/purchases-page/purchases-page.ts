@@ -9,6 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { filter, finalize, switchMap, tap } from 'rxjs';
 import { DocumentPurchasesService } from '../../../../../core/services/document-purchases.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
@@ -30,6 +31,7 @@ import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
 })
 export class PurchasesPage {
   private service = inject(DocumentPurchasesService);
+  private router = inject(Router);
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
   private datePipe = inject(DatePipe);
@@ -46,35 +48,51 @@ export class PurchasesPage {
 
   columns: TableColumn<DocumentPurchase>[] = [
     {
-      key: 'id',
-      header: '№',
-      valueGetter: (_, index) => `${index + 1}`,
-      width: '50px',
+      key: 'code',
+      header: 'Код',
+      type: 'text',
+      valueGetter: (row) => `${row.code || '-'}`,
+      width: '80px',
+    },
+    {
+      key: 'status',
+      header: 'Статус',
+      type: 'badge',
+      valueGetter: (row) => row.status,
+      badgeVariants: {
+        [DocumentStatus.COMPLETED]: 'success',
+        [DocumentStatus.DRAFT]: 'secondary',
+        [DocumentStatus.CANCELLED]: 'destructive',
+      },
+      badgeLabels: {
+        [DocumentStatus.COMPLETED]: 'Проведен',
+        [DocumentStatus.DRAFT]: 'Черновик',
+        [DocumentStatus.CANCELLED]: 'Отменен',
+      },
     },
     {
       key: 'date',
       header: 'Дата',
-      valueGetter: (row) => this.datePipe.transform(row.date, 'dd.MM.yyyy') || '-',
+      type: 'date',
+      valueGetter: (row) => row.date?.toString(),
     },
     {
       key: 'vendor',
       header: 'Поставщик',
+      type: 'text',
       valueGetter: (row) => row.vendor?.name || '-',
     },
     {
       key: 'store',
       header: 'Магазин',
+      type: 'text',
       valueGetter: (row) => row.store?.name || '-',
     },
     {
       key: 'totalAmount',
       header: 'Сумма',
-      valueGetter: (row) => `${row.totalAmount} ₸`,
-    },
-    {
-      key: 'status',
-      header: 'Статус',
-      valueGetter: (row) => row.status || 'Unknown',
+      type: 'text',
+      valueGetter: (row) => `${row.totalAmount} UZS`,
     },
   ];
 
@@ -92,6 +110,13 @@ export class PurchasesPage {
       return vendorName.includes(query) || storeName.includes(query);
     });
   });
+
+  openDetails() {
+    const purchase = this.selectedPurchase();
+    if (purchase) {
+      void this.router.navigate(['core', 'documents', 'purchases', purchase.id]);
+    }
+  }
 
   openCreateDialog() {
     this.dialog

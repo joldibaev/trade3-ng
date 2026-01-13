@@ -1,8 +1,8 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CashboxesService } from '../../../../../core/services/cashboxes.service';
 import { StoresService } from '../../../../../core/services/stores.service';
 import { UiBreadcrumb } from '../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
@@ -27,19 +27,21 @@ export class CashboxesPage {
   private cashboxesService = inject(CashboxesService);
   private storesService = inject(StoresService);
   private dialog = inject(Dialog);
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
 
-  storeId = this.route.snapshot.paramMap.get('storeId');
+  storeId = input<string>();
 
   // Fetch store details to show name
-  store = this.storeId ? this.storesService.getById(this.storeId) : undefined;
+  store = this.storesService.getById(() => this.storeId());
 
   // Filter cashboxes by storeId
   cashboxes = this.cashboxesService.getAll({
     includes: ['store'],
-    params: this.storeId ? { storeId: this.storeId } : {},
+    params: () => {
+      const id = this.storeId();
+      return id ? { storeId: id } : {};
+    },
   });
 
   breadcrumbItems = computed(() => {
@@ -49,8 +51,9 @@ export class CashboxesPage {
       { label: 'Магазины', url: '/core/directories/stores' },
     ];
 
-    if (this.storeId) {
-      const storeName = this.store?.value()?.name ?? '...';
+    const id = this.storeId();
+    if (id) {
+      const storeName = this.store.value()?.name ?? '...';
       return [...base, { label: storeName }, { label: 'Кассы' }];
     }
 
@@ -89,7 +92,7 @@ export class CashboxesPage {
 
   private openDialog(cashbox?: Cashbox) {
     const dialogRef = this.dialog.open<CashboxDialogResult>(CashboxDialog, {
-      data: { cashbox, storeId: this.storeId },
+      data: { cashbox, storeId: this.storeId() },
     });
 
     dialogRef.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
@@ -102,7 +105,7 @@ export class CashboxesPage {
   }
 
   back() {
-    if (this.storeId) {
+    if (this.storeId()) {
       void this.router.navigate(['/core/directories/stores']);
     } else {
       void this.router.navigate(['/core/directories']);

@@ -5,13 +5,14 @@ import {
   computed,
   DestroyRef,
   inject,
+  input,
   signal,
   untracked,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, switchMap, tap } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs';
 import { CategoriesService } from '../../../../../core/services/categories.service';
 import { ProductsService } from '../../../../../core/services/products.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
@@ -57,9 +58,8 @@ export class NomenclaturePage {
   private destroyRef = inject(DestroyRef);
 
   // State
-  selectedCategoryId = toSignal(
-    this.activatedRoute.queryParamMap.pipe(map((params) => params.get('categoryId') ?? undefined)),
-  );
+  categoryId = input<string>();
+  selectedCategoryId = computed(() => this.categoryId());
 
   selectedProduct = signal<Product | undefined>(undefined);
 
@@ -81,38 +81,45 @@ export class NomenclaturePage {
   columns: TableColumn<Product>[] = [
     {
       key: 'id',
-      header: 'Код',
-      valueGetter: (_, index) => `000${index + 1}`,
-      width: '80px',
+      header: 'ID',
+      type: 'text',
+      valueGetter: (row) => row.id,
+      width: '120px',
     },
     {
       key: 'name',
       header: 'Наименование',
+      type: 'text',
     },
     {
       key: 'article',
       header: 'Артикул',
+      type: 'text',
       valueGetter: (row) => row.article || '-',
     },
     {
       key: 'barcodes',
       header: 'Штрихкод',
+      type: 'text',
       valueGetter: (row) => row.barcodes?.map((b) => b.value).join(', ') || '-',
     },
     {
       key: 'stocks',
       header: 'Количество',
+      type: 'text',
       valueGetter: (row) => row.stocks?.[0]?.quantity || 0,
     },
     {
       key: 'categoryId',
       header: 'Ед. изм.',
+      type: 'text',
       valueGetter: () => 'шт',
     },
     {
       key: 'prices',
       header: 'Цена',
-      valueGetter: (row) => `${row.prices?.[0]?.value || 0} ₸`,
+      type: 'text',
+      valueGetter: (row) => `${row.prices?.[0]?.value || 0} UZS`,
     },
   ];
 

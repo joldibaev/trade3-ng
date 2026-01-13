@@ -43,13 +43,15 @@ export class PriceTypesPage {
   columns: TableColumn<PriceType>[] = [
     {
       key: 'id',
-      header: 'Код',
-      valueGetter: (_, index) => `000${index + 1}`,
-      width: '80px',
+      header: 'ID',
+      type: 'text',
+      valueGetter: (row) => row.id,
+      width: '120px',
     },
     {
       key: 'name',
       header: 'Наименование',
+      type: 'text',
     },
   ];
 

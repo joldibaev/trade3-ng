@@ -1,0 +1,98 @@
+<div class="flex items-center gap-3">
+  <button uiButton variant="ghost" icon="outline-arrow-left" size="icon" routerLink="..">
+    <span class="sr-only">Назад</span>
+  </button>
+  <h1 class="typo-h1">Детали закупки</h1>
+</div>
+
+<div class="flex-1 overflow-auto">
+  @if (purchase.isLoading()) {
+    <div class="flex h-32 items-center justify-center">
+      <ui-loading [width]="48" [height]="48" />
+    </div>
+  } @else if (purchase.value(); as p) {
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <!-- Main Info -->
+      <ui-card class="lg:col-span-2">
+        <div class="p-6">
+          <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
+          <div class="grid grid-cols-2 gap-y-4 text-sm">
+            <div class="text-neutral-500">Код:</div>
+            <div class="font-medium">{{ p.code || '-' }}</div>
+
+            <div class="text-neutral-500">Дата:</div>
+            <div class="font-medium">{{ p.date | date: 'dd.MM.yyyy HH:mm' }}</div>
+
+            <div class="text-neutral-500">Статус:</div>
+            <div>
+              <ui-badge [variant]="getBadgeVariant(p.status)">
+                {{ getBadgeLabel(p.status) }}
+              </ui-badge>
+            </div>
+
+            <div class="text-neutral-500">Поставщик:</div>
+            <div class="font-medium">{{ p.vendor?.name || '-' }}</div>
+
+            <div class="text-neutral-500">Магазин:</div>
+            <div class="font-medium">{{ p.store.name || '-' }}</div>
+
+            <div class="text-neutral-500">Итоговая сумма:</div>
+            <div class="text-lg font-bold">{{ p.totalAmount }} UZS</div>
+          </div>
+        </div>
+      </ui-card>
+
+      <!-- Stats / Actions -->
+      <ui-card>
+        <div class="p-6">
+          <h2 class="mb-4 text-lg font-semibold">Действия</h2>
+          <div class="flex flex-col gap-2">
+            <!-- Space for more actions -->
+            <p class="text-sm text-neutral-500 italic">
+              Дополнительные функции будут доступны позже
+            </p>
+          </div>
+        </div>
+      </ui-card>
+
+      <!-- Items Table -->
+      <ui-card class="lg:col-span-3">
+        <div class="p-6">
+          <h2 class="mb-4 text-lg font-semibold">Товары</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-neutral-50 text-xs text-neutral-500 uppercase">
+                <tr>
+                  <th class="px-4 py-2 font-medium">Товар</th>
+                  <th class="px-4 py-2 font-medium">Кол-во</th>
+                  <th class="px-4 py-2 font-medium">Цена</th>
+                  <th class="px-4 py-2 text-right font-medium">Сумма</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-neutral-100">
+                @for (item of p.items; track item.id) {
+                  <tr>
+                    <td class="px-4 py-2">{{ item.product.name }}</td>
+                    <td class="px-4 py-2">{{ item.quantity }}</td>
+                    <td class="px-4 py-2">{{ item.price }} UZS</td>
+                    <td class="px-4 py-2 text-right font-medium">
+                      {{ item.quantity * item.price }} UZS
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="4" class="px-4 py-8 text-center text-neutral-500">
+                      Нет товаров в закупке
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ui-card>
+    </div>
+  } @else {
+    <ui-card class="p-8 text-center text-neutral-500"> Закупка не найдена </ui-card>
+  }
+</div>

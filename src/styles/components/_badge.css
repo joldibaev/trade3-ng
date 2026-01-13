@@ -1,0 +1,28 @@
+@layer components {
+  .ui-badge {
+    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold;
+    @apply default-transition;
+    @apply select-none;
+
+    /* Variants */
+    &.ui-badge-variant-primary {
+      @apply bg-primary-500 border-transparent text-white;
+    }
+
+    &.ui-badge-variant-secondary {
+      @apply border-transparent bg-neutral-100 text-neutral-900;
+    }
+
+    &.ui-badge-variant-destructive {
+      @apply border-transparent bg-red-500 text-white;
+    }
+
+    &.ui-badge-variant-success {
+      @apply border-transparent bg-emerald-500 text-white;
+    }
+
+    &.ui-badge-variant-outline {
+      @apply border-neutral-200 text-neutral-950;
+    }
+  }
+}

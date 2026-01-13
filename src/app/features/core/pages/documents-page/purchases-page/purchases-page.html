@@ -11,6 +11,10 @@
 >
   <div toolbar-actions class="flex items-center gap-2">
     @if (selectedPurchase(); as purchase) {
+      <button uiButton variant="ghost" size="sm" icon="outline-info-circle" (click)="openDetails()">
+        Детали
+      </button>
+
       <button
         uiButton
         variant="ghost"

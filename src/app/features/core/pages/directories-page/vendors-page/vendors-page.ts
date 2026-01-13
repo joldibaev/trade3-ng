@@ -43,27 +43,32 @@ export class VendorsPage {
   columns: TableColumn<Vendor>[] = [
     {
       key: 'id',
-      header: 'Код',
-      valueGetter: (_, index) => `000${index + 1}`,
-      width: '80px',
+      header: 'ID',
+      type: 'text',
+      valueGetter: (row) => row.id,
+      width: '120px',
     },
     {
       key: 'name',
       header: 'Наименование',
+      type: 'text',
     },
     {
       key: 'phone',
       header: 'Телефон',
+      type: 'text',
       valueGetter: (row) => row.phone || '-',
     },
     {
       key: 'email',
       header: 'Email',
+      type: 'text',
       valueGetter: (row) => row.email || '-',
     },
     {
       key: 'address',
       header: 'Адрес',
+      type: 'text',
       valueGetter: (row) => row.address || '-',
     },
   ];
