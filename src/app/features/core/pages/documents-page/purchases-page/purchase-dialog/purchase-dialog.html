@@ -1,17 +1,36 @@
 <ui-dialog title="Создание закупки" (closeAction)="close()">
   <div class="flex flex-col gap-4">
-    <ui-select label="Магазин" placeholder="Выберите магазин" labelField="name" selectField="id" [items]="stores()"
-      [formField]="formData.storeId" />
+    <ui-select
+      label="Магазин"
+      placeholder="Выберите магазин"
+      labelField="name"
+      selectField="id"
+      [items]="stores()"
+      [formField]="formData.storeId"
+    />
 
-    <ui-select label="Поставщик" placeholder="Выберите поставщика" labelField="name" selectField="id"
-      [items]="vendors()" [formField]="formData.vendorId" />
+    <ui-select
+      label="Поставщик"
+      placeholder="Выберите поставщика"
+      labelField="name"
+      selectField="id"
+      [items]="vendors()"
+      [formField]="formData.vendorId"
+    />
 
     <ui-input label="Дата" type="datetime-local" [formField]="formData.date" />
   </div>
 
   <button footer type="button" uiButton variant="secondary" (click)="close()">Отмена</button>
-  <button footer type="submit" uiButton variant="primary" [disabled]="!formData().valid()" [loading]="isLoading()"
-    (click)="save()">
+  <button
+    footer
+    type="submit"
+    uiButton
+    variant="primary"
+    [disabled]="!formData().valid()"
+    [loading]="isLoading()"
+    (click)="save()"
+  >
     Создать
   </button>
 </ui-dialog>

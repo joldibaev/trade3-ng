@@ -1,4 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
+import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,16 +10,15 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, finalize, switchMap, tap } from 'rxjs';
-import { DocumentStatus } from '../../../../../shared/interfaces/constants';
 import { DocumentPurchasesService } from '../../../../../core/services/document-purchases.service';
+import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
+import { DocumentStatus } from '../../../../../shared/interfaces/constants';
 import { DocumentPurchase } from '../../../../../shared/interfaces/entities/document-purchase.interface';
 import { TableStruct } from '../../../components/table-struct/table-struct';
 import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
-import { DatePipe } from '@angular/common';
-import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 
 @Component({
   selector: 'app-purchases-page',

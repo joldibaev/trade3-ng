@@ -5,6 +5,7 @@ import { Store } from './store.interface';
 
 export interface DocumentTransfer {
   id: string;
+  code?: number;
   date?: Date;
   sourceStore: Store;
   sourceStoreId: string;

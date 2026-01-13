@@ -22,7 +22,7 @@
     }
 
     &:focus-within {
-      @apply ring-3 ring-primary-100 border-primary-300;
+      @apply ring-primary-100 border-primary-300 ring-3;
     }
 
     &::placeholder {

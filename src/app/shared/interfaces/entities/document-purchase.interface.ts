@@ -1,5 +1,5 @@
-import { DocumentPurchaseItem } from './document-purchase-item.interface';
 import { DocumentStatus } from '../constants';
+import { DocumentPurchaseItem } from './document-purchase-item.interface';
 import { Price } from './price.interface';
 import { StockMovement } from './stock-movement.interface';
 import { Store } from './store.interface';
@@ -7,6 +7,7 @@ import { Vendor } from './vendor.interface';
 
 export interface DocumentPurchase {
   id: string;
+  code?: number;
   date?: Date;
   vendor?: Vendor;
   vendorId?: string;

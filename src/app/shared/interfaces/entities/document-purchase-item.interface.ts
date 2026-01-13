@@ -1,5 +1,5 @@
-import { DocumentPurchase } from './document-purchase.interface';
 import { DocumentPurchaseItemPrice } from './document-purchase-item-price.interface';
+import { DocumentPurchase } from './document-purchase.interface';
 import { Product } from './product.interface';
 
 export interface DocumentPurchaseItem {

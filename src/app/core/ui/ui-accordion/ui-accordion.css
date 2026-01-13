@@ -1,11 +1,11 @@
 @reference './../../../../styles.css';
 
 .accordion {
-  @apply flex flex-col border-t default-border-color;
+  @apply default-border-color flex flex-col border-t;
 }
 
 .accordion-item {
-  @apply border-b default-border-color outline-none;
+  @apply default-border-color border-b outline-none;
 }
 
 .accordion-header {
