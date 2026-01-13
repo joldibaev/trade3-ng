@@ -1,10 +1,10 @@
-import { StockMovementType } from '../constants';
 import { DocumentAdjustment } from './document-adjustment.interface';
 import { DocumentPurchase } from './document-purchase.interface';
 import { DocumentReturn } from './document-return.interface';
 import { DocumentSale } from './document-sale.interface';
 import { DocumentTransfer } from './document-transfer.interface';
 import { Product } from './product.interface';
+import { StockMovementType } from '../constants';
 import { Store } from './store.interface';
 
 export interface StockMovement {

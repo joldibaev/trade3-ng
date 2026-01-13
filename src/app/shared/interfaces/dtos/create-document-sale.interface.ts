@@ -1,9 +1,11 @@
 import { DocumentStatus } from '../constants';
+
 export interface CreateDocumentSaleItemDto {
   productId: string;
   quantity: number;
   price?: number;
 }
+
 export interface CreateDocumentSaleDto {
   storeId: string;
   cashboxId: string;

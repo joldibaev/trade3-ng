@@ -6,8 +6,8 @@ import { DocumentReturnItem } from './document-return-item.interface';
 import { DocumentSaleItem } from './document-sale-item.interface';
 import { DocumentTransferItem } from './document-transfer-item.interface';
 import { Price } from './price.interface';
-import { StockMovement } from './stock-movement.interface';
 import { Stock } from './stock.interface';
+import { StockMovement } from './stock-movement.interface';
 
 export interface Product {
   id: string;

@@ -8,32 +8,25 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
 import { ClientsService } from '../../../../../core/services/clients.service';
-import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
-import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
-import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
-import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
 import {
   ClientDialogData,
   ClientDialogResult,
 } from '../../../../../shared/interfaces/dialogs/client-dialog.interface';
 import { Client } from '../../../../../shared/interfaces/entities/client.interface';
+import { TableStruct } from '../../../components/table-struct/table-struct';
 import { ClientDialog } from './client-dialog/client-dialog';
 
 @Component({
   selector: 'app-clients-page',
-  imports: [UiButton, UiInput, UiTable, FormField, UiCard],
+  imports: [TableStruct],
   templateUrl: './clients-page.html',
   styleUrl: './clients-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'flex flex-col gap-4 h-full',
-  },
 })
 export class ClientsPage {
   private clientsService = inject(ClientsService);
@@ -42,11 +35,7 @@ export class ClientsPage {
 
   // State
   selectedClient = signal<Client | undefined>(undefined);
-
-  formState = signal({ query: '' });
-  formData = form(this.formState);
-
-  isSearchVisible = signal(false);
+  searchQuery = signal('');
 
   // Resources
   clients = this.clientsService.getAll();
@@ -81,7 +70,7 @@ export class ClientsPage {
 
   filteredClients = computed(() => {
     const clients = this.clients.value() || [];
-    const query = this.formData().value().query.toLowerCase();
+    const query = this.searchQuery().toLowerCase();
 
     if (!query) {
       return clients;
@@ -89,23 +78,6 @@ export class ClientsPage {
 
     return clients.filter((c) => c.name.toLowerCase().includes(query));
   });
-
-  selectClient(client?: Client) {
-    this.selectedClient.set(client);
-  }
-
-  // Helper methods for template
-  editCurrentClient() {
-    const client = this.selectedClient();
-    if (!client) return;
-    this.openClientDialog(client);
-  }
-
-  deleteCurrentClient() {
-    const client = this.selectedClient();
-    if (!client) return;
-    this.deleteClient(client);
-  }
 
   // CRUD
   openClientDialog(client?: Client) {

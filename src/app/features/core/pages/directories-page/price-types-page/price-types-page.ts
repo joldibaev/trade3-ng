@@ -8,32 +8,25 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
 import { PriceTypesService } from '../../../../../core/services/price-types.service';
-import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
-import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
-import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
-import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
 import {
   PriceTypeDialogData,
   PriceTypeDialogResult,
 } from '../../../../../shared/interfaces/dialogs/price-type-dialog.interface';
 import { PriceType } from '../../../../../shared/interfaces/entities/price-type.interface';
+import { TableStruct } from '../../../components/table-struct/table-struct';
 import { PriceTypeDialog } from './price-type-dialog/price-type-dialog';
 
 @Component({
   selector: 'app-price-types-page',
-  imports: [UiButton, UiInput, UiTable, FormField, UiCard],
+  imports: [TableStruct],
   templateUrl: './price-types-page.html',
   styleUrl: './price-types-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'flex flex-col gap-4 h-full',
-  },
 })
 export class PriceTypesPage {
   private priceTypesService = inject(PriceTypesService);
@@ -42,11 +35,7 @@ export class PriceTypesPage {
 
   // State
   selectedPriceType = signal<PriceType | undefined>(undefined);
-
-  formState = signal({ query: '' });
-  formData = form(this.formState);
-
-  isSearchVisible = signal(false);
+  searchQuery = signal('');
 
   // Resources
   priceTypes = this.priceTypesService.getAll();
@@ -66,7 +55,7 @@ export class PriceTypesPage {
 
   filteredPriceTypes = computed(() => {
     const list = this.priceTypes.value() || [];
-    const query = this.formData().value().query.toLowerCase();
+    const query = this.searchQuery().toLowerCase();
 
     if (!query) {
       return list;
@@ -74,23 +63,6 @@ export class PriceTypesPage {
 
     return list.filter((v) => v.name.toLowerCase().includes(query));
   });
-
-  selectPriceType(priceType?: PriceType) {
-    this.selectedPriceType.set(priceType);
-  }
-
-  // Helper methods for template
-  editCurrentPriceType() {
-    const priceType = this.selectedPriceType();
-    if (!priceType) return;
-    this.openPriceTypeDialog(priceType);
-  }
-
-  deleteCurrentPriceType() {
-    const priceType = this.selectedPriceType();
-    if (!priceType) return;
-    this.deletePriceType(priceType);
-  }
 
   // CRUD
   openPriceTypeDialog(priceType?: PriceType) {

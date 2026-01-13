@@ -8,32 +8,25 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
 import { VendorsService } from '../../../../../core/services/vendors.service';
-import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
-import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
-import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
-import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
 import {
   VendorDialogData,
   VendorDialogResult,
 } from '../../../../../shared/interfaces/dialogs/vendor-dialog.interface';
 import { Vendor } from '../../../../../shared/interfaces/entities/vendor.interface';
+import { TableStruct } from '../../../components/table-struct/table-struct';
 import { VendorDialog } from './vendor-dialog/vendor-dialog';
 
 @Component({
   selector: 'app-vendors-page',
-  imports: [UiButton, UiInput, UiTable, FormField, UiCard],
+  imports: [TableStruct],
   templateUrl: './vendors-page.html',
   styleUrl: './vendors-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'flex flex-col gap-4 h-full',
-  },
 })
 export class VendorsPage {
   private vendorsService = inject(VendorsService);
@@ -42,11 +35,7 @@ export class VendorsPage {
 
   // State
   selectedVendor = signal<Vendor | undefined>(undefined);
-
-  formState = signal({ query: '' });
-  formData = form(this.formState);
-
-  isSearchVisible = signal(false);
+  searchQuery = signal('');
 
   // Resources
   vendors = this.vendorsService.getAll();
@@ -81,7 +70,7 @@ export class VendorsPage {
 
   filteredVendors = computed(() => {
     const vendors = this.vendors.value() || [];
-    const query = this.formData().value().query.toLowerCase();
+    const query = this.searchQuery().toLowerCase();
 
     if (!query) {
       return vendors;
@@ -89,23 +78,6 @@ export class VendorsPage {
 
     return vendors.filter((v) => v.name.toLowerCase().includes(query));
   });
-
-  selectVendor(vendor?: Vendor) {
-    this.selectedVendor.set(vendor);
-  }
-
-  // Helper methods for template
-  editCurrentVendor() {
-    const vendor = this.selectedVendor();
-    if (!vendor) return;
-    this.openVendorDialog(vendor);
-  }
-
-  deleteCurrentVendor() {
-    const vendor = this.selectedVendor();
-    if (!vendor) return;
-    this.deleteVendor(vendor);
-  }
 
   // CRUD
   openVendorDialog(vendor?: Vendor) {

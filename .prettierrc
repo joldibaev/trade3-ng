@@ -1,7 +1,7 @@
 {
   "printWidth": 100,
   "singleQuote": true,
-  "endOfLine": "lf",
+  "endOfLine": "auto",
   "plugins": [
     "prettier-plugin-organize-attributes",
     "prettier-plugin-organize-imports",
