@@ -6,7 +6,6 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
-  computed,
   input,
   model,
   signal,
@@ -79,15 +78,6 @@ export class UiAutocomplete<T> {
 
   /** A reference to the ng aria combobox. */
   combobox = viewChild<Combobox<string>>(Combobox);
-
-  /** The query string used to filter the list of countries. */
-  /** The list of countries filtered by the query. */
-  result = computed(
-    () =>
-      this.items()?.filter((item) =>
-        String(item[this.selectField()]).toLowerCase().startsWith(this.value().toLowerCase()),
-      ) ?? [],
-  );
 
   constructor() {
     // Scrolls to the active item when the active option changes.

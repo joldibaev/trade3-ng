@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DocumentPurchasesService } from '../../../../../../core/services/document-purchases.service';
 import { UiBadge } from '../../../../../../core/ui/ui-badge/ui-badge';
@@ -10,6 +10,7 @@ import { DocumentStatus } from '../../../../../../shared/interfaces/constants';
 
 @Component({
   selector: 'app-purchase-details-page',
+  standalone: true,
   imports: [UiCard, UiButton, UiLoading, UiBadge, RouterLink, DatePipe],
   templateUrl: './purchase-details-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,8 +24,10 @@ export class PurchaseDetailsPage {
   // Inputs from route
   id = input.required<string>();
 
+  isLoading = signal(false);
+
   // Resources
-  purchase = this.purchasesService.getById(() => this.id(), ['vendor', 'store', 'items']);
+  purchase = this.purchasesService.getById(() => this.id());
 
   protected readonly DocumentStatus = DocumentStatus;
 

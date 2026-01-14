@@ -68,18 +68,21 @@
       }"
       [cdkConnectedOverlayOpen]="true"
     >
-      <div class="ui-menu">
-        @if (result().length === 0) {
-          <div class="no-results">No results found</div>
-        }
-        <div ngListbox>
-          @for (item of result(); track item[selectField()]) {
-            <div ngOption class="ui-menu-item" [value]="item[selectField()]">
-              <span>{{ item[labelField()] }}</span>
-            </div>
+      @if (items(); as items) {
+        <div class="ui-menu">
+          @if (items.length === 0) {
+            <div class="ui-menu-item">No results found</div>
           }
+
+          <div ngListbox>
+            @for (item of items; track item[selectField()]) {
+              <div ngOption class="ui-menu-item" [value]="item[selectField()]">
+                <span>{{ item[labelField()] }}</span>
+              </div>
+            }
+          </div>
         </div>
-      </div>
+      }
     </ng-template>
   </ng-template>
 </div>
