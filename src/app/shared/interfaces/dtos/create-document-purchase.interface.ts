@@ -1,13 +1,13 @@
-export interface UpdateProductPriceDto {
+export interface UpdateProductPriceInput {
   priceTypeId: string;
   value: number;
 }
 
-export interface CreateDocumentPurchaseItemDto {
+export interface CreateDocumentPurchaseItemInput {
   productId: string;
   quantity: number;
   price: number; // Cost price is mandatory for Purchase
-  newPrices: UpdateProductPriceDto[];
+  newPrices: UpdateProductPriceInput[];
 }
 
 export interface CreateDocumentPurchaseDto {
