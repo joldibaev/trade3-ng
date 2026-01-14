@@ -1,4 +1,4 @@
-<div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+<div class="mb-2 flex flex-wrap items-center justify-between gap-4">
   <div class="flex items-center gap-3">
     <button uiButton variant="ghost" icon="outline-arrow-left" size="icon" (click)="back()">
       <span class="sr-only">Назад</span>
@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<ui-breadcrumb class="mb-4 block" [items]="breadcrumbItems()" />
+<ui-breadcrumb class="mb-2 block" [items]="breadcrumbItems()" />
 
 @if (cashboxes.isLoading()) {
   <div class="flex h-64 items-center justify-center">

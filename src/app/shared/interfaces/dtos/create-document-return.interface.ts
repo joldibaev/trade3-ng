@@ -1,6 +1,6 @@
 import { DocumentStatus } from '../constants';
 
-export interface CreateDocumentReturnItemDto {
+export interface CreateDocumentReturnItemInput {
   productId: string;
   quantity: number;
   price?: number;
@@ -11,5 +11,5 @@ export interface CreateDocumentReturnDto {
   clientId?: string;
   date?: string;
   status?: DocumentStatus;
-  items: CreateDocumentReturnItemDto[];
+  items: CreateDocumentReturnItemInput[];
 }

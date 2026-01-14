@@ -1,8 +1,8 @@
 import {
   CreateDocumentPurchaseDto,
-  CreateDocumentPurchaseItemDto,
+  CreateDocumentPurchaseItemInput,
 } from './create-document-purchase.interface';
 
 export interface UpdateDocumentPurchaseDto extends CreateDocumentPurchaseDto {
-  items: CreateDocumentPurchaseItemDto[];
+  items: CreateDocumentPurchaseItemInput[];
 }

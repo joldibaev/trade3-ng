@@ -1,8 +1,14 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input } from '@angular/core';
+import { DatePipe, Location } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  input,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
 import { CashboxesService } from '../../../../../core/services/cashboxes.service';
 import { StoresService } from '../../../../../core/services/stores.service';
 import { UiBreadcrumb } from '../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
@@ -22,12 +28,13 @@ import { CashboxDialog } from './cashbox-dialog/cashbox-dialog';
   templateUrl: './cashboxes-page.html',
   styleUrl: './cashboxes-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'flex flex-col gap-4' },
 })
 export class CashboxesPage {
   private cashboxesService = inject(CashboxesService);
   private storesService = inject(StoresService);
   private dialog = inject(Dialog);
-  private router = inject(Router);
+  private location = inject(Location);
   private destroyRef = inject(DestroyRef);
 
   storeId = input<string>();
@@ -105,10 +112,6 @@ export class CashboxesPage {
   }
 
   back() {
-    if (this.storeId()) {
-      void this.router.navigate(['/core/directories/stores']);
-    } else {
-      void this.router.navigate(['/core/directories']);
-    }
+    this.location.back();
   }
 }

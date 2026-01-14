@@ -1,56 +1,68 @@
-<div class="flex items-center justify-between border-b border-neutral-200 bg-white px-6 py-4">
-  <div class="flex items-center gap-4">
-    <button
-      uiButton
-      variant="ghost"
-      size="icon"
-      icon="outline-arrow-left"
-      routerLink="/documents/purchases"
-    ></button>
-    <h1 class="text-xl font-bold text-neutral-900">
-      Закупка №{{ purchase.value()?.code || '...' }}
+<div class="mb-2 flex flex-wrap items-center justify-between gap-4">
+  <div class="flex items-center gap-3">
+    <button uiButton variant="ghost" icon="outline-arrow-left" size="icon" (click)="back()">
+      <span class="sr-only">Назад</span>
+    </button>
+
+    <h1 class="typo-h1">
+      @if (purchase.value()?.code) {
+        Закупка №{{ purchase.value()?.code }}
+      } @else {
+        Закупка
+      }
     </h1>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <button uiButton variant="ghost">Обновить</button>
+
+    <button uiButton variant="primary">Сохранить</button>
   </div>
 </div>
 
-<div class="flex-1 overflow-auto p-6">
-  @if (purchase.isLoading()) {
-    <div class="flex h-32 items-center justify-center">
-      <ui-loading [width]="48" [height]="48" />
-    </div>
-  } @else if (purchase.value(); as p) {
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <!-- Main Info -->
-      <ui-card class="lg:col-span-2">
-        <div class="p-6">
-          <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
-          <div class="grid grid-cols-2 gap-y-4 text-sm">
-            <div class="text-neutral-500">Код:</div>
-            <div class="font-medium">{{ p.code || '-' }}</div>
+<ui-breadcrumb class="mb-2 block" [items]="breadcrumbItems()" />
 
-            <div class="text-neutral-500">Дата:</div>
-            <div class="font-medium">{{ p.date | date: 'dd.MM.yyyy HH:mm' }}</div>
+@if (purchase.isLoading()) {
+  <ui-loading [width]="48" [height]="48" />
+} @else if (purchase.value(); as p) {
+  <!-- Main Info -->
+  <ui-card>
+    <div class="p-6">
+      <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
+      <div class="grid grid-cols-2 gap-y-4 text-sm">
+        <div class="text-neutral-500">Код:</div>
+        <div class="font-medium">{{ p.code || '-' }}</div>
 
-            <div class="text-neutral-500">Статус:</div>
-            <div>
-              <ui-badge [variant]="getBadgeVariant(p.status)">
-                {{ getBadgeLabel(p.status) }}
-              </ui-badge>
-            </div>
+        <div class="text-neutral-500">Дата:</div>
+        <div class="font-medium">{{ p.date | date: 'dd.MM.yyyy HH:mm' }}</div>
 
-            <div class="text-neutral-500">Поставщик:</div>
-            <div class="font-medium">{{ p.vendor?.name || '-' }}</div>
+        <div class="text-neutral-500">Поставщик:</div>
+        <div class="font-medium">{{ p.vendor?.name || '-' }}</div>
 
-            <div class="text-neutral-500">Магазин:</div>
-            <div class="font-medium">{{ p.store.name || '-' }}</div>
+        <div class="text-neutral-500">Магазин:</div>
+        <div class="font-medium">{{ p.store.name || '-' }}</div>
 
-            <div class="text-neutral-500">Итоговая сумма:</div>
-<!--            <div class="text-lg font-bold">{{ totalAmount() }} UZS</div>-->
-          </div>
+        <div class="text-neutral-500">Итоговая сумма:</div>
+        <div class="text-lg font-bold">
+          {{ p.totalAmount | currency: 'UZS' : 'symbol-narrow' }}
         </div>
-      </ui-card>
+      </div>
     </div>
-  } @else {
-    <ui-card class="p-8 text-center text-neutral-500"> Закупка не найдена </ui-card>
-  }
-</div>
+  </ui-card>
+
+  <!-- Items Table -->
+  <ui-card>
+    <div class="default-border-color border-b p-4">
+      <h2 class="text-lg font-semibold">Товары</h2>
+    </div>
+
+    <ui-table trackField="id" [data]="p.items" [columns]="itemColumns" />
+
+    <div class="flex items-center justify-end gap-8 border-t border-neutral-200 p-4 font-semibold">
+      <div>Итого кол-во: {{ totalQuantity() }}</div>
+      <div>Итого сумма: {{ totalAmount() | currency: 'UZS' : 'symbol-narrow' }}</div>
+    </div>
+  </ui-card>
+} @else {
+  <ui-card class="p-8 text-center text-neutral-500"> Закупка не найдена</ui-card>
+}

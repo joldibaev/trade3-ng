@@ -1,6 +1,6 @@
 import { DocumentStatus } from '../constants';
 
-export interface CreateDocumentSaleItemDto {
+export interface CreateDocumentSaleItemInput {
   productId: string;
   quantity: number;
   price?: number;
@@ -13,5 +13,5 @@ export interface CreateDocumentSaleDto {
   priceTypeId?: string;
   date?: string;
   status?: DocumentStatus;
-  items: CreateDocumentSaleItemDto[];
+  items: CreateDocumentSaleItemInput[];
 }
