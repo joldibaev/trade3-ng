@@ -34,18 +34,22 @@
               [colIndex]="j"
               (selectedChange)="onSelectedChange()"
             >
+              @let value = row | tableValueGetter: col : i;
+
               @switch (col.type) {
                 @case ('date') {
-                  {{ row | tableValueGetter: col : i | date: 'dd.MM.yyyy HH:mm' }}
+                  {{ value | date: 'dd.MM.yyyy HH:mm' }}
+                }
+                @case ('number') {
+                  {{ value | number }}
                 }
                 @case ('badge') {
-                  @let value = row | tableValueGetter: col : i;
                   <ui-badge [variant]="getBadgeVariant(col, value)">
                     {{ getBadgeLabel(col, value) }}
                   </ui-badge>
                 }
                 @default {
-                  {{ row | tableValueGetter: col : i }}
+                  {{ value }}
                 }
               }
             </td>

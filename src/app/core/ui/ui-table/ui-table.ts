@@ -1,5 +1,5 @@
 import { Grid, GridCell, GridRow } from '@angular/aria/grid';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -16,7 +16,16 @@ import { TableValueGetterPipe } from './table-value-getter.pipe';
 
 @Component({
   selector: 'ui-table',
-  imports: [Grid, GridRow, GridCell, DatePipe, UiLoading, TableValueGetterPipe, UiBadge],
+  imports: [
+    Grid,
+    GridRow,
+    GridCell,
+    DatePipe,
+    UiLoading,
+    TableValueGetterPipe,
+    UiBadge,
+    DecimalPipe,
+  ],
   templateUrl: './ui-table.html',
   styleUrl: './ui-table.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
