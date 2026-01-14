@@ -10,9 +10,9 @@
       <ui-select
         label="Выберите магазин"
         [formField]="formData.storeId"
-        [selectField]="'id'"
+        [optionField]="'id'"
         [items]="stores.value()"
-        [labelField]="'name'"
+        [optionLabel]="'name'"
         [loading]="stores.isLoading()"
       ></ui-select>
     </div>

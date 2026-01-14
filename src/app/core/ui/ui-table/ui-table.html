@@ -2,6 +2,7 @@
   ngGrid
   class="w-full border-separate border-spacing-0 text-left text-sm"
   [enableSelection]="true"
+  [disabled]="gridDisabled()"
 >
   <thead class="sticky top-0 z-10 bg-neutral-50 text-xs text-neutral-500">
     <tr ngGridRow>
@@ -10,6 +11,7 @@
           ngGridCell
           class="default-border-color border-b bg-neutral-50 px-4 py-2 font-medium whitespace-nowrap outline-none"
           [style.width]="col.width"
+          [style.text-align]="col.align || 'left'"
         >
           {{ col.header }}
         </th>
@@ -25,11 +27,16 @@
       </tr>
     } @else if (data().length) {
       @for (row of data(); track row[trackField()]; let i = $index) {
-        <tr ngGridRow class="cursor-pointer">
+        <tr
+          ngGridRow
+          class="cursor-pointer transition-colors hover:bg-neutral-50/50"
+          [ngClass]="rowClass() ? rowClass()!(row) : ''"
+        >
           @for (col of columns(); track col.key; let j = $index) {
             <td
               ngGridCell
               class="px-4 py-2 whitespace-nowrap text-neutral-900"
+              [style.text-align]="col.align || 'left'"
               [rowIndex]="i"
               [colIndex]="j"
               (selectedChange)="onSelectedChange()"
@@ -47,6 +54,19 @@
                   <ui-badge [variant]="getBadgeVariant(col, value)">
                     {{ getBadgeLabel(col, value) }}
                   </ui-badge>
+                }
+                @case ('document-badge') {
+                  <app-document-status [status]="$any(value)" />
+                }
+                @case ('template') {
+                  @if (templates()?.[$any(col).templateName]) {
+                    <ng-container
+                      *ngTemplateOutlet="
+                        templates()![$any(col).templateName];
+                        context: { $implicit: row, index: i }
+                      "
+                    />
+                  }
                 }
                 @default {
                   {{ value }}

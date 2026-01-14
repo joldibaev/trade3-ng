@@ -1,19 +1,11 @@
-<div class="mb-2 flex flex-wrap items-center justify-between gap-4">
-  <div class="flex items-center gap-3">
-    <button uiButton variant="ghost" icon="outline-arrow-left" size="icon" (click)="back()">
-      <span class="sr-only">Назад</span>
-    </button>
-    <h1 class="typo-h1">Кассы</h1>
-  </div>
-
-  <div class="flex items-center gap-2">
+<ui-page-header title="Кассы" (back)="back()">
+  <div actions>
     <button uiButton variant="ghost" (click)="reload()">Обновить</button>
-
     <button uiButton variant="primary" icon="outline-plus" (click)="onCreate()">
       Создать кассу
     </button>
   </div>
-</div>
+</ui-page-header>
 
 <ui-breadcrumb class="mb-2 block" [items]="breadcrumbItems()" />
 

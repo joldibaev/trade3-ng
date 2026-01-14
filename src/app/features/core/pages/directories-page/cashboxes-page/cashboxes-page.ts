@@ -22,9 +22,19 @@ import { CashboxDialogResult } from '../../../../../shared/interfaces/dialogs/ca
 import { Cashbox } from '../../../../../shared/interfaces/entities/cashbox.interface';
 import { CashboxDialog } from './cashbox-dialog/cashbox-dialog';
 
+import { UiPageHeader } from '../../../../../core/ui/ui-page-header/ui-page-header';
+
 @Component({
   selector: 'app-cashboxes-page',
-  imports: [UiButton, UiDirectoryItemCard, DatePipe, UiBreadcrumb, UiEmptyState, UiLoading],
+  imports: [
+    UiButton,
+    UiDirectoryItemCard,
+    DatePipe,
+    UiBreadcrumb,
+    UiEmptyState,
+    UiLoading,
+    UiPageHeader,
+  ],
   templateUrl: './cashboxes-page.html',
   styleUrl: './cashboxes-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

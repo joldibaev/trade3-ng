@@ -18,6 +18,14 @@ export const routes: Routes = [
     title: 'Номенклатура',
   },
   {
+    path: 'nomenclature/:id',
+    loadComponent: () =>
+      import('./nomenclature-page/product-detail-page/product-detail-page').then(
+        (m) => m.ProductDetailPage,
+      ),
+    title: 'Продукт',
+  },
+  {
     path: 'clients',
     loadComponent: () => import('./clients-page/clients-page').then((m) => m.ClientsPage),
   },

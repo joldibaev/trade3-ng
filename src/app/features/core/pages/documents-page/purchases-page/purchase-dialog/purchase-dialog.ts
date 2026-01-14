@@ -61,7 +61,7 @@ export class PurchaseDialog {
     };
 
     this.service
-      .createDocument(dto)
+      .create(dto)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.isLoading.set(false)),

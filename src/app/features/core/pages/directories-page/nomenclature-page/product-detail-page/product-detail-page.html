@@ -1,0 +1,69 @@
+@if (product.isLoading()) {
+  <div class="flex h-64 items-center justify-center">
+    <ui-loading [width]="40" [height]="40" />
+  </div>
+} @else if (product.value(); as p) {
+  <ui-page-header [title]="p.name" (back)="back()">
+    <!-- Actions can be added later -->
+  </ui-page-header>
+
+  <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <!-- General Info -->
+    <ui-card class="p-6">
+      <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div class="text-neutral-500">ID:</div>
+        <div class="font-medium">{{ p.id }}</div>
+
+        <div class="text-neutral-500">Артикул:</div>
+        <div class="font-medium">{{ p.article || '-' }}</div>
+
+        <div class="text-neutral-500">Категория:</div>
+        <div class="font-medium">{{ p.category.name || 'Без категории' }}</div>
+      </div>
+    </ui-card>
+
+    <!-- Prices -->
+    <ui-card class="p-6">
+      <h2 class="mb-4 text-lg font-semibold">Цены</h2>
+      @if (p.prices.length) {
+        <ui-table gridDisabled trackField="id" [columns]="priceColumns" [data]="p.prices">
+        </ui-table>
+      } @else {
+        <div class="text-neutral-500">Цены не заданы</div>
+      }
+    </ui-card>
+
+    <!-- Stocks -->
+    <ui-card class="p-6">
+      <h2 class="mb-4 text-lg font-semibold">Остатки</h2>
+      @if (p.stocks.length) {
+        <ui-table gridDisabled trackField="id" [columns]="stockColumns" [data]="p.stocks">
+        </ui-table>
+      } @else {
+        <div class="text-neutral-500">Остатков нет</div>
+      }
+    </ui-card>
+
+    <!-- Barcodes -->
+    <ui-card class="p-6">
+      <h2 class="mb-4 text-lg font-semibold">Штрихкоды</h2>
+      @if (p.barcodes.length) {
+        <div class="flex flex-wrap gap-2">
+          @for (code of p.barcodes; track code.id) {
+            <div class="rounded-md border border-neutral-200 bg-neutral-50 px-3 py-1 text-sm">
+              {{ code.value }}
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="text-neutral-500">Штрихкоды не заданы</div>
+      }
+    </ui-card>
+  </div>
+} @else {
+  <ui-page-header title="Товар не найден" (back)="back()" />
+  <div class="flex h-64 items-center justify-center text-neutral-500">
+    Товар не найден или был удален
+  </div>
+}

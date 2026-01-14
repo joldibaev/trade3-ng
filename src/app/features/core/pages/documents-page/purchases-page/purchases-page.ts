@@ -30,7 +30,7 @@ import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
   providers: [DatePipe],
 })
 export class PurchasesPage {
-  private service = inject(DocumentPurchasesService);
+  private documentPurchasesService = inject(DocumentPurchasesService);
   private router = inject(Router);
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
@@ -44,7 +44,7 @@ export class PurchasesPage {
   isLoading = signal(false);
 
   // Resources
-  purchases = this.service.getAll({ includes: ['vendor', 'store'] });
+  purchases = this.documentPurchasesService.getAll();
 
   columns: TableColumn<DocumentPurchase>[] = [
     {
@@ -57,18 +57,8 @@ export class PurchasesPage {
     {
       key: 'status',
       header: 'Статус',
-      type: 'badge',
+      type: 'document-badge',
       valueGetter: (row) => row.status,
-      badgeVariants: {
-        [DocumentStatus.COMPLETED]: 'success',
-        [DocumentStatus.DRAFT]: 'secondary',
-        [DocumentStatus.CANCELLED]: 'destructive',
-      },
-      badgeLabels: {
-        [DocumentStatus.COMPLETED]: 'Проведен',
-        [DocumentStatus.DRAFT]: 'Черновик',
-        [DocumentStatus.CANCELLED]: 'Отменен',
-      },
     },
     {
       key: 'date',
@@ -141,7 +131,7 @@ export class PurchasesPage {
       })
       .closed.pipe(
         filter(Boolean),
-        switchMap(() => this.service.delete(item.id)),
+        switchMap(() => this.documentPurchasesService.delete(item.id)),
         tap(() => {
           this.purchases.reload();
           if (this.selectedPurchase()?.id === item.id) {
@@ -161,7 +151,7 @@ export class PurchasesPage {
       item.status === DocumentStatus.COMPLETED ? DocumentStatus.DRAFT : DocumentStatus.COMPLETED;
 
     this.isLoading.set(true);
-    this.service
+    this.documentPurchasesService
       .updateStatus(item.id, newStatus)
       .pipe(
         finalize(() => this.isLoading.set(false)),

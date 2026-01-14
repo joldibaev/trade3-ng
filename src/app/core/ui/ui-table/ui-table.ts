@@ -1,14 +1,15 @@
 import { Grid, GridCell, GridRow } from '@angular/aria/grid';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   input,
-  model,
   output,
+  TemplateRef,
   viewChildren,
 } from '@angular/core';
+import { DocumentStatusComponent } from '../../../shared/components/document-status/document-status.component';
 import { UiBadge, UiBadgeVariant } from '../ui-badge/ui-badge';
 import { UiLoading } from '../ui-loading/ui-loading';
 import { TableColumn, TableColumnBadge } from './table-column.interface';
@@ -24,7 +25,10 @@ import { TableValueGetterPipe } from './table-value-getter.pipe';
     UiLoading,
     TableValueGetterPipe,
     UiBadge,
+    DocumentStatusComponent,
     DecimalPipe,
+    NgClass,
+    NgTemplateOutlet,
   ],
   templateUrl: './ui-table.html',
   styleUrl: './ui-table.css',
@@ -38,12 +42,12 @@ export class UiTable<T extends object> {
   data = input.required<T[]>();
   loading = input(false, { transform: booleanAttribute });
 
+  gridDisabled = input(false, { transform: booleanAttribute });
+
   trackField = input.required<keyof T>();
 
-  selectedRow = model<number>();
-  selectedColumn = model<number>();
-
-  selectedItem = input<T>();
+  rowClass = input<(row: T) => string | string[] | Set<string> | { [klass: string]: any }>();
+  templates = input<Record<string, TemplateRef<any>>>();
 
   td = viewChildren(GridCell);
   selectedChanged = output<T | undefined>();

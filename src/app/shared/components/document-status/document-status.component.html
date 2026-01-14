@@ -1,0 +1,7 @@
+@if (status(); as s) {
+  <ui-badge [variant]="statusVariants[s]">
+    {{ statusLabels[s] }}
+  </ui-badge>
+} @else {
+  -
+}

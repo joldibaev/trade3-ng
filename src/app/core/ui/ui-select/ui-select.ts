@@ -44,9 +44,8 @@ export class UiSelect<T> {
   loading = input(false, { transform: booleanAttribute });
 
   items = input.required<T[] | undefined>();
-  labelField = input.required<keyof T>();
-
-  selectField = input.required<keyof T>();
+  optionLabel = input.required<keyof T>();
+  optionField = input.required<keyof T>();
   protected selectedList = linkedSignal<string[]>(() => {
     const value = this.value();
     return value.length ? value.split(',') : [];
@@ -66,10 +65,10 @@ export class UiSelect<T> {
   /** The string that is displayed in the combobox. */
   displayValue = computed<string | undefined>(() => {
     const items = this.items()?.filter((item) =>
-      this.selectedList().includes(String(item[this.selectField()])),
+      this.selectedList().includes(String(item[this.optionField()])),
     );
 
-    if (items?.length) return items.map((item) => item[this.labelField()]).join(', ');
+    if (items?.length) return items.map((item) => item[this.optionLabel()]).join(', ');
     return undefined;
   });
 

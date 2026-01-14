@@ -6,14 +6,20 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
+  inject,
   input,
   model,
+  numberAttribute,
+  OnInit,
   signal,
   viewChild,
   viewChildren,
 } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { DisabledReason, ValidationError } from '@angular/forms/signals';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { generateId } from '../../../shared/utils/generate-id';
 import { UiIcon } from '../ui-icon/ui-icon.component';
 import { InputMode } from '../ui-input/input-inputmode.type';
@@ -37,16 +43,26 @@ import { UiLoading } from '../ui-loading/ui-loading';
   styleUrl: './ui-autocomplete.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UiAutocomplete<T> {
+export class UiAutocomplete<T> implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
+  inputValue = model('');
   value = model('');
+
+  // search
+  query = model('');
+  minQueryLength = input(2, { transform: numberAttribute });
+  debounce = input(500, { transform: numberAttribute });
+
+  private query$ = toObservable(this.inputValue);
 
   // Writable interaction state - control updates these
   touched = model<boolean>(false);
 
   items = input.required<T[] | undefined>();
-  labelField = input.required<keyof T>();
+  optionLabel = input.required<keyof T>();
 
-  selectField = input.required<keyof T>();
+  optionField = input.required<keyof T>();
 
   // Read-only state - form system manages these
   disabled = input<boolean>(false);
@@ -70,13 +86,11 @@ export class UiAutocomplete<T> {
 
   id = signal(`input-${generateId()}`);
 
-  /** The combobox listbox popup. */
+  filterMode = input<'manual' | 'auto-select' | 'highlight'>('manual');
+
+  // views
   listbox = viewChild<Listbox<string>>(Listbox);
-
-  /** The options available in the listbox. */
   options = viewChildren<Option<string>>(Option);
-
-  /** A reference to the ng aria combobox. */
   combobox = viewChild<Combobox<string>>(Combobox);
 
   constructor() {
@@ -93,5 +107,23 @@ export class UiAutocomplete<T> {
         setTimeout(() => this.listbox()?.element.scrollTo(0, 0), 150);
       }
     });
+  }
+
+  ngOnInit() {
+    this.query$
+      .pipe(
+        debounceTime(this.debounce()),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((value) => {
+        if (value.length >= this.minQueryLength()) {
+          this.query.set(value);
+        }
+      });
+  }
+
+  protected valuesChanged(event: string[]) {
+    this.value.set(event.length ? event[0] : '');
   }
 }

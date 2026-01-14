@@ -1,4 +1,4 @@
-<div #ngCombobox="ngCombobox" ngCombobox readonly [disabled]="loading() || disabled()">
+<div #ngCombobox="ngCombobox" ngCombobox readonly [disabled]="disabled()">
   <div #cdkOverlayOrigin cdkOverlayOrigin="cdkOverlayOrigin" class="flex flex-col gap-1">
     @if (label()) {
       <label class="ui-form-label" [for]="id()">
@@ -26,7 +26,7 @@
       <input
         ngComboboxInput
         readonly
-        class="ui-select"
+        class="opacity-0 not-disabled:cursor-pointer"
         [disabled]="ngCombobox.disabled()"
         [id]="id()"
         [value]="value()"
@@ -70,12 +70,12 @@
       }"
       [cdkConnectedOverlayOpen]="true"
     >
-      <div class="ui-menu">
+      <div class="ui-menu" [class.invisible]="loading()">
         @if (items()?.length) {
           <div ngListbox [values]="selectedList()" (valuesChange)="valuesChange($event)">
-            @for (item of items(); track item[selectField()]) {
-              <div #ngOption="ngOption" ngOption class="ui-menu-item" [value]="item[selectField()]">
-                <span>{{ item[labelField()] }}</span>
+            @for (item of items(); track item[optionField()]) {
+              <div #ngOption="ngOption" ngOption class="ui-menu-item" [value]="item[optionField()]">
+                <span>{{ item[optionLabel()] }}</span>
 
                 @if (ngOption.selected()) {
                   <ui-icon name="outline-check" width="18" height="18"></ui-icon>

@@ -3,7 +3,11 @@
  * <input type="datetime-local"> (YYYY-MM-DDTHH:mm),
  * strictly forced to UTC+5 (Asia/Tashkent).
  */
-export function getCurrentDateAsString(date: Date = new Date()): string {
+export function getCurrentDateAsString(date: string | Date = new Date()): string {
+  if (typeof date === 'string') {
+    date = new Date(date);
+  }
+
   // 1. Get the timestamp in UTC
   const utcMillis = date.getTime() + date.getTimezoneOffset() * 60000;
 

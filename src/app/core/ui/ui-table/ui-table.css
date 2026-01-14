@@ -1,5 +1,10 @@
 @reference './../../../../styles.css';
 
+tr,
+td {
+  @apply outline-none;
+}
+
 tr {
   &:has(> td[data-active='true']) {
     @apply bg-primary-50;

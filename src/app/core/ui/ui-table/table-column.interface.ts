@@ -3,6 +3,7 @@ export interface TableColumnBase<T> {
   header: string;
   editable?: boolean;
   width?: string;
+  align?: 'left' | 'center' | 'right';
   valueGetter?: (row: T, index: number) => string | number | null | undefined;
 }
 
@@ -24,8 +25,19 @@ export interface TableColumnBadge<T> extends TableColumnBase<T> {
   badgeLabels: Record<string | number, string>;
 }
 
+export interface TableColumnTemplate<T> extends TableColumnBase<T> {
+  type: 'template';
+  templateName: string;
+}
+
+export interface TableColumnDocumentBadge<T> extends TableColumnBase<T> {
+  type: 'document-badge';
+}
+
 export type TableColumn<T> =
   | TableColumnText<T>
   | TableColumnNumber<T>
   | TableColumnDate<T>
-  | TableColumnBadge<T>;
+  | TableColumnBadge<T>
+  | TableColumnDocumentBadge<T>
+  | TableColumnTemplate<T>;

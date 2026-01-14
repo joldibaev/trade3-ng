@@ -1,4 +1,4 @@
-<div #ngCombobox="ngCombobox" ngCombobox filterMode="auto-select" [disabled]="disabled()">
+<div #ngCombobox="ngCombobox" ngCombobox [filterMode]="filterMode()" [disabled]="disabled()">
   <div #cdkOverlayOrigin cdkOverlayOrigin="cdkOverlayOrigin" class="flex flex-col gap-1">
     @if (label()) {
       <label class="ui-form-label" [for]="id()">
@@ -30,7 +30,7 @@
         [readonly]="readonly()"
         [class.invalid]="invalid()"
         [attr.aria-invalid]="invalid()"
-        [(value)]="value"
+        [(value)]="inputValue"
         (blur)="touched.set(true)"
       />
 
@@ -69,18 +69,21 @@
       [cdkConnectedOverlayOpen]="true"
     >
       @if (items(); as items) {
-        <div class="ui-menu">
+        <div
+          ngListbox
+          class="ui-menu"
+          [class.invisible]="loading()"
+          (valuesChange)="valuesChanged($event)"
+        >
           @if (items.length === 0) {
             <div class="ui-menu-item">No results found</div>
           }
 
-          <div ngListbox>
-            @for (item of items; track item[selectField()]) {
-              <div ngOption class="ui-menu-item" [value]="item[selectField()]">
-                <span>{{ item[labelField()] }}</span>
-              </div>
-            }
-          </div>
+          @for (item of items; track item[optionField()]) {
+            <div ngOption class="ui-menu-item" [value]="item[optionField()]">
+              <span>{{ item[optionLabel()] }}</span>
+            </div>
+          }
         </div>
       }
     </ng-template>

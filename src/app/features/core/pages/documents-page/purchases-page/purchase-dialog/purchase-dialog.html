@@ -3,8 +3,8 @@
     <ui-select
       label="Магазин"
       placeholder="Выберите магазин"
-      labelField="name"
-      selectField="id"
+      optionLabel="name"
+      optionField="id"
       [items]="stores()"
       [formField]="formData.storeId"
     />
@@ -12,8 +12,8 @@
     <ui-select
       label="Поставщик"
       placeholder="Выберите поставщика"
-      labelField="name"
-      selectField="id"
+      optionLabel="name"
+      optionField="id"
       [items]="vendors()"
       [formField]="formData.vendorId"
     />
