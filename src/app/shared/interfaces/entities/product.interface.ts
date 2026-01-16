@@ -26,6 +26,6 @@ export interface Product {
   transferItems: DocumentTransferItem[];
   barcodes: Barcode[];
   movements: StockMovement[];
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

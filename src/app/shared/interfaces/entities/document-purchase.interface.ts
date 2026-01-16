@@ -8,16 +8,16 @@ import { Vendor } from './vendor.interface';
 export interface DocumentPurchase {
   id: string;
   code?: number;
-  date?: Date;
+  date?: string;
   vendor?: Vendor;
   vendorId?: string;
   store: Store;
   storeId: string;
-  totalAmount: number;
+  total: number;
   items: DocumentPurchaseItem[];
   status?: DocumentStatus;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
   movements: StockMovement[];
   generatedPriceHistories: PriceHistory[];
 }

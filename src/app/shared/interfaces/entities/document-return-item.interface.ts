@@ -10,6 +10,6 @@ export interface DocumentReturnItem {
   quantity: number;
   price: number;
   total: number;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

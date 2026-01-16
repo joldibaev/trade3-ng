@@ -17,9 +17,9 @@ export interface StockMovement {
   quantity: number;
   quantityAfter?: number;
   averagePurchasePrice?: number;
-  date?: Date;
+  date?: string;
   createdAt?: string;
-  updatedAt: Date;
+  updatedAt: string;
   documentPurchase?: DocumentPurchase;
   documentPurchaseId?: string;
   documentSale?: DocumentSale;

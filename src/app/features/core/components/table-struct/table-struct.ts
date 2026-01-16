@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   effect,
@@ -32,15 +33,20 @@ export class TableStruct<T extends object> {
   columns = input.required<TableColumn<T>[]>();
   isLoading = input<boolean>(false);
 
+  showEdit = input(false, { transform: booleanAttribute });
+  showDelete = input(false, { transform: booleanAttribute });
+  showDetail = input(false, { transform: booleanAttribute });
+
   trackField = input.required<keyof T>();
 
   // Model
   selectedItem = model<T | undefined>(undefined);
 
   // Outputs
-  created = output<void>();
-  edited = output<T>();
-  deleted = output<T>();
+  createdClicked = output<void>();
+  detailClicked = output<T>();
+  editedClicked = output<T>();
+  deletedClicked = output<T>();
   searched = output<string>();
 
   // State
@@ -57,20 +63,27 @@ export class TableStruct<T extends object> {
 
   // Actions
   handleCreate() {
-    this.created.emit();
+    this.createdClicked.emit();
+  }
+
+  handleDetail() {
+    const item = this.selectedItem();
+    if (item) {
+      this.detailClicked.emit(item);
+    }
   }
 
   handleEdit() {
     const item = this.selectedItem();
     if (item) {
-      this.edited.emit(item);
+      this.editedClicked.emit(item);
     }
   }
 
   handleDelete() {
     const item = this.selectedItem();
     if (item) {
-      this.deleted.emit(item);
+      this.deletedClicked.emit(item);
     }
   }
 

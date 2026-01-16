@@ -32,7 +32,7 @@ export class ProductDetailPage {
 
   id = input.required<string>();
 
-  product = this.productsService.getById(this.id, ['category', 'prices', 'stocks', 'barcodes']);
+  product = this.productsService.getById(this.id);
 
   priceHistory = this.priceHistoriesService.getAll({
     params: () => ({ productId: this.id(), include: 'priceType,product' }),

@@ -10,6 +10,6 @@ export interface PriceType {
   prices: Price[];
   sales: DocumentSale[];
   documentPurchaseItemPrices: DocumentPurchaseItemPrice[];
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

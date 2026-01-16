@@ -18,7 +18,7 @@
   </div>
 } @else if (stores.hasValue()) {
   @if (stores.value().length) {
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       @for (store of stores.value(); track store.id) {
         <ui-directory-item-card
           icon="outline-building-store"

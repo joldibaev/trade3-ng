@@ -1,12 +1,14 @@
 <app-table-struct
   title="Поставщики"
+  showEdit
+  showDelete
   [trackField]="'id'"
   [data]="filteredVendors()"
   [columns]="columns"
   [isLoading]="vendors.isLoading()"
   [(selectedItem)]="selectedVendor"
-  (created)="openVendorDialog()"
-  (edited)="openVendorDialog($event)"
-  (deleted)="deleteVendor($event)"
+  (createdClicked)="openVendorDialog()"
+  (editedClicked)="openVendorDialog($event)"
+  (deletedClicked)="deleteVendor($event)"
   (searched)="searchQuery.set($event)"
 />

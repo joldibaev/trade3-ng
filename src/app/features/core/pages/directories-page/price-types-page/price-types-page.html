@@ -1,12 +1,14 @@
 <app-table-struct
   title="Типы цен"
+  showEdit
+  showDelete
   [trackField]="'id'"
   [data]="filteredPriceTypes()"
   [columns]="columns"
   [isLoading]="priceTypes.isLoading()"
   [(selectedItem)]="selectedPriceType"
-  (created)="openPriceTypeDialog()"
-  (edited)="openPriceTypeDialog($event)"
-  (deleted)="deletePriceType($event)"
+  (createdClicked)="openPriceTypeDialog()"
+  (editedClicked)="openPriceTypeDialog($event)"
+  (deletedClicked)="deletePriceType($event)"
   (searched)="searchQuery.set($event)"
 />

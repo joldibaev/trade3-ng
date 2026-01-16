@@ -12,6 +12,6 @@ export interface DocumentPurchaseItem {
   price: number;
   total: number;
   newPrices: DocumentPurchaseItemPrice[];
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

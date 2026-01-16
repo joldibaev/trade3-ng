@@ -12,5 +12,5 @@ export interface PriceHistory {
   documentPurchase?: DocumentPurchase;
   documentPurchaseId?: string;
   createdAt?: string;
-  updatedAt: Date;
+  updatedAt: string;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CreateDocumentPurchaseDto } from '../../shared/interfaces/dtos/create-document-purchase.interface';
-import { UpdateDocumentPurchaseDto } from '../../shared/interfaces/dtos/update-document-purchase.interface';
+import { CreateDocumentPurchaseDto } from '../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
+import { UpdateDocumentPurchaseDto } from '../../shared/interfaces/dtos/document-purchase/update-document-purchase.interface';
 import { DocumentPurchase } from '../../shared/interfaces/entities/document-purchase.interface';
 import { BaseDocumentService } from './base-document.service';
 

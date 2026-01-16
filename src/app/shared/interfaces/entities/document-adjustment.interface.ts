@@ -6,12 +6,12 @@ import { Store } from './store.interface';
 export interface DocumentAdjustment {
   id: string;
   code?: number;
-  date?: Date;
+  date?: string;
   store: Store;
   storeId: string;
   items: DocumentAdjustmentItem[];
   status?: DocumentStatus;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
   movements: StockMovement[];
 }

@@ -1,0 +1,46 @@
+@for (toast of notyf.toasts(); track toast.id) {
+  <div
+    role="alert"
+    class="ui-notyf-toast"
+    [class.ui-notyf-toast-error]="toast.type === 'error'"
+    [class.ui-notyf-toast-success]="toast.type === 'success'"
+    [class.ui-notyf-toast-info]="toast.type === 'info'"
+  >
+    <!-- Icon -->
+    <div aria-hidden="true" class="shrink-0">
+      @if (toast.type === 'success') {
+        <ui-icon name="outline-circle-check" class="h-5 w-5" />
+      }
+      @if (toast.type === 'error') {
+        <ui-icon name="outline-alert-circle" class="h-5 w-5" />
+      }
+      @if (toast.type === 'info') {
+        <ui-icon name="outline-info-circle" class="h-5 w-5" />
+      }
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-1 flex-col gap-1">
+      @if (toast.title) {
+        <div class="text-sm font-semibold">
+          {{ toast.title }}
+        </div>
+      }
+
+      <p class="text-sm leading-tight">
+        {{ toast.message }}
+      </p>
+    </div>
+
+    <!-- Close Button -->
+    <button
+      uiButton
+      variant="ghost"
+      size="icon"
+      aria-label="Закрыть уведомление"
+      (click)="notyf.dismiss(toast.id)"
+    >
+      <ui-icon name="outline-x" class="h-4 w-4" />
+    </button>
+  </div>
+}

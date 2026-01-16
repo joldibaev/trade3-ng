@@ -12,7 +12,7 @@ import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
-import { CreateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/create-document-purchase.interface';
+import { CreateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
 import { getCurrentDateAsString } from '../../../../../../shared/utils/get-current-date-as-string';
 
 @Component({

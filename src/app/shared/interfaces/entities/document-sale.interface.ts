@@ -9,7 +9,7 @@ import { Store } from './store.interface';
 export interface DocumentSale {
   id: string;
   code?: number;
-  date?: Date;
+  date?: string;
   store: Store;
   storeId: string;
   cashbox?: Cashbox;
@@ -21,7 +21,7 @@ export interface DocumentSale {
   status?: DocumentStatus;
   priceType?: PriceType;
   priceTypeId?: string;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
   movements: StockMovement[];
 }

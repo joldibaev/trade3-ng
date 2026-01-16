@@ -90,6 +90,11 @@ export class NomenclaturePage {
 
     const baseColumns: TableColumn<Product>[] = [
       {
+        key: 'id',
+        header: 'ID',
+        type: 'text',
+      },
+      {
         key: 'name',
         header: 'Наименование',
         type: 'text',

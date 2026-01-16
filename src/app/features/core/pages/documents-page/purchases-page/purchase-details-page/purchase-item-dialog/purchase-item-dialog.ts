@@ -1,19 +1,30 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { form, FormField, min, required, validate } from '@angular/forms/signals';
 import { ProductsService } from '../../../../../../../core/services/products.service';
+import { StoresService } from '../../../../../../../core/services/stores.service';
 import { UiAutocomplete } from '../../../../../../../core/ui/ui-autocomplete/ui-autocomplete';
 import { UiButton } from '../../../../../../../core/ui/ui-button/ui-button';
 import { UiInput } from '../../../../../../../core/ui/ui-input/ui-input';
 import { UiNotyfService } from '../../../../../../../core/ui/ui-notyf/ui-notyf.service';
+import { PriceType } from '../../../../../../../shared/interfaces/entities/price-type.interface';
+import { Product } from '../../../../../../../shared/interfaces/entities/product.interface';
+
+import { UiIcon } from '../../../../../../../core/ui/ui-icon/ui-icon.component';
 import {
   CreateDocumentPurchaseItemInput,
   UpdateProductPriceInput,
-} from '../../../../../../../shared/interfaces/dtos/create-document-purchase.interface';
-import { PriceType } from '../../../../../../../shared/interfaces/entities/price-type.interface';
-
-import { UiIcon } from '../../../../../../../core/ui/ui-icon/ui-icon.component';
+} from '../../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
 
 export interface PurchaseItemDialogData {
   item?: CreateDocumentPurchaseItemInput;
@@ -24,7 +35,7 @@ export interface PurchaseItemDialogData {
 @Component({
   selector: 'app-purchase-item-dialog',
   standalone: true,
-  imports: [UiButton, UiInput, UiAutocomplete, FormsModule, FormField, UiIcon],
+  imports: [UiButton, UiInput, UiAutocomplete, FormsModule, FormField, UiIcon, CurrencyPipe],
   templateUrl: './purchase-item-dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block w-[600px] rounded-lg bg-white p-6 shadow-xl' },
@@ -33,14 +44,24 @@ export class PurchaseItemDialog {
   private dialogRef = inject(DialogRef);
   public data = inject<PurchaseItemDialogData>(DIALOG_DATA);
   private productsService = inject(ProductsService);
+  private storesService = inject(StoresService);
   private notyf = inject(UiNotyfService);
+  private destroyRef = inject(DestroyRef);
 
   priceTypes = signal(this.data.priceTypes);
 
-  // Search
+  // Products search
   searchQuery = signal('');
   products = this.productsService.search(this.searchQuery);
-  selectedProductName = signal<string | undefined>(this.data.productName);
+
+  // Stores separate request
+  stores = this.storesService.getAll();
+
+  selectedProduct = signal<Product | undefined>(undefined);
+
+  totalStock = computed(
+    () => this.selectedProduct()?.stocks?.reduce((acc, s) => acc + Number(s.quantity || 0), 0) || 0,
+  );
 
   // Form
   formState = signal<CreateDocumentPurchaseItemInput>(
@@ -85,7 +106,7 @@ export class PurchaseItemDialog {
 
     this.dialogRef.close({
       item: formValue as CreateDocumentPurchaseItemInput,
-      productName: this.selectedProductName(),
+      productName: this.selectedProduct()?.name,
     });
   }
 
@@ -93,14 +114,20 @@ export class PurchaseItemDialog {
     if (!id) return;
     const product = this.products.value()?.find((p) => p.id === id);
     if (product) {
-      this.selectedProductName.set(product.name);
       // We also need to clear search query if we want to reset autocomplete state effectively
       this.searchQuery.set('');
+
+      this.productsService
+        .fetchById(id, ['prices', 'stocks', 'category'])
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((fullProduct) => {
+          this.selectedProduct.set(fullProduct);
+        });
     }
   }
 
   clearProduct() {
-    this.selectedProductName.set(undefined);
+    this.selectedProduct.set(undefined);
     this.formState.update((s) => ({ ...s, productId: '' }));
     this.searchQuery.set('');
   }
@@ -110,6 +137,10 @@ export class PurchaseItemDialog {
   }
 
   // Helpers for dynamic fields
+  getPriceTypeName(priceTypeId: string): string {
+    return this.priceTypes().find((pt) => pt.id === priceTypeId)?.name || 'Цена';
+  }
+
   getPriceValue(priceTypeId: string): number {
     return (
       this.formState().newPrices?.find(

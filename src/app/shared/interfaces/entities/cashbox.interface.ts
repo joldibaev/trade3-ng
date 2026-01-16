@@ -7,6 +7,6 @@ export interface Cashbox {
   store: Store;
   storeId: string;
   sales: DocumentSale[];
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

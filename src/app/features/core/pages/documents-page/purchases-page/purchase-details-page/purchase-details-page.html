@@ -1,7 +1,4 @@
-<ui-page-header
-  [title]="purchase.value()?.code ? 'Закупка №' + purchase.value()?.code : 'Закупка'"
-  (back)="back()"
->
+<ui-page-header [title]="purchase.value()?.code ? 'Закупка №' + purchase.value()?.code : 'Закупка'">
   <div actions>
     <button uiButton variant="primary" [disabled]="purchase.isLoading()" (click)="save()">
       Сохранить
@@ -43,7 +40,14 @@
   <ui-card class="mt-4 block overflow-hidden">
     <div class="default-border-color flex items-center justify-between border-b p-4">
       <h2 class="text-lg font-semibold">Товары</h2>
-      <button uiButton variant="secondary" size="sm" icon="outline-plus" (click)="openItemDialog()">
+      <button
+        uiButton
+        variant="secondary"
+        size="sm"
+        icon="outline-plus"
+        [disabled]="p.status !== 'DRAFT'"
+        (click)="openItemDialog()"
+      >
         Добавить товар
       </button>
     </div>

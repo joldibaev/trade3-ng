@@ -1,34 +1,29 @@
 <app-table-struct
   title="Закупки"
+  showDetail
   [trackField]="'id'"
   [data]="filteredPurchases()"
   [columns]="columns"
   [isLoading]="purchases.isLoading()"
   [(selectedItem)]="selectedPurchase"
-  (created)="openCreateDialog()"
-  (deleted)="deletePurchase($event)"
+  (createdClicked)="openCreateDialog()"
+  (detailClicked)="openDetails($event)"
+  (deletedClicked)="deletePurchase($event)"
   (searched)="searchQuery.set($event)"
 >
   <div toolbar-actions class="flex items-center gap-2">
-    @if (selectedPurchase(); as purchase) {
-      <button uiButton variant="ghost" size="sm" icon="outline-info-circle" (click)="openDetails()">
-        Детали
-      </button>
-
-      <button
-        uiButton
-        variant="ghost"
-        size="sm"
-        [icon]="purchase.status === DocumentStatus.COMPLETED ? 'outline-x' : 'outline-check'"
-        [disabled]="isLoading()"
-        (click)="toggleStatus()"
-      >
-        @if (purchase.status === DocumentStatus.COMPLETED) {
-          Отменить проведение
-        } @else {
-          Провести
-        }
-      </button>
-    }
+    <button
+      uiButton
+      variant="ghost"
+      size="sm"
+      [icon]="
+        selectedPurchase()?.status === DocumentStatus.COMPLETED ? 'outline-x' : 'outline-check'
+      "
+      [disabled]="!selectedPurchase()"
+      [loading]="isLoading()"
+      (click)="toggleStatus()"
+    >
+      Провести / Отменить проведение
+    </button>
   </div>
 </app-table-struct>

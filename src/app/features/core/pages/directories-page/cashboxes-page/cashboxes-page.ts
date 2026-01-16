@@ -1,5 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -44,7 +44,6 @@ export class CashboxesPage {
   private cashboxesService = inject(CashboxesService);
   private storesService = inject(StoresService);
   private dialog = inject(Dialog);
-  private location = inject(Location);
   private destroyRef = inject(DestroyRef);
 
   storeId = input<string>();
@@ -119,9 +118,5 @@ export class CashboxesPage {
 
   reload() {
     this.cashboxes.reload();
-  }
-
-  back() {
-    this.location.back();
   }
 }

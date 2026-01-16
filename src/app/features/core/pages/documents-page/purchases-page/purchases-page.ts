@@ -78,11 +78,12 @@ export class PurchasesPage {
       type: 'text',
       valueGetter: (row) => row.store?.name || '-',
     },
+    // todo currency
     {
-      key: 'totalAmount',
+      key: 'total',
       header: 'Сумма',
       type: 'text',
-      valueGetter: (row) => `${row.totalAmount} UZS`,
+      valueGetter: (row) => `${row.total} UZS`,
     },
   ];
 
@@ -101,11 +102,8 @@ export class PurchasesPage {
     });
   });
 
-  openDetails() {
-    const purchase = this.selectedPurchase();
-    if (purchase) {
-      void this.router.navigate(['core', 'documents', 'purchases', purchase.id]);
-    }
+  openDetails(item: DocumentPurchase) {
+    void this.router.navigate(['core', 'documents', 'purchases', item.id]);
   }
 
   openCreateDialog() {

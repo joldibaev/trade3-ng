@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { UiNotyfComponent } from './core/ui/ui-notyf/ui-notyf.component';
+import { UiNotyf } from './core/ui/ui-notyf/ui-notyf';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, UiNotyfComponent],
+  imports: [RouterOutlet, UiNotyf],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

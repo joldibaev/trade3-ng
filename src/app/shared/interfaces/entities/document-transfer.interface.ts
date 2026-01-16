@@ -6,14 +6,14 @@ import { Store } from './store.interface';
 export interface DocumentTransfer {
   id: string;
   code?: number;
-  date?: Date;
+  date?: string;
   sourceStore: Store;
   sourceStoreId: string;
   destinationStore: Store;
   destinationStoreId: string;
   items: DocumentTransferItem[];
   status?: DocumentStatus;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
   movements: StockMovement[];
 }

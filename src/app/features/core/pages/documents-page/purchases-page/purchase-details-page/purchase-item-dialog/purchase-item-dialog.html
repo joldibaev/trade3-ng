@@ -5,20 +5,40 @@
 <div class="flex flex-col gap-4">
   <!-- Product -->
   <div class="flex flex-col gap-2">
-    @if (selectedProductName(); as name) {
-      <div
-        class="flex items-center justify-between rounded-lg border border-neutral-200 bg-neutral-50 p-2 pl-3"
-      >
-        <span class="font-medium text-neutral-900">{{ name }}</span>
-        <button
-          uiButton
-          variant="ghost"
-          size="icon"
-          class="text-neutral-400 hover:text-neutral-600"
-          (click)="clearProduct()"
-        >
-          <ui-icon name="outline-x" class="size-4" />
-        </button>
+    @if (selectedProduct(); as product) {
+      <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+        <div class="flex items-start justify-between">
+          <div class="flex flex-col gap-2">
+            <div class="font-bold text-neutral-900">{{ product.name }}</div>
+            <div>
+              @if (product.article) {
+                <div class="text-xs text-neutral-500">Артикул: {{ product.article }}</div>
+              }
+
+              @if (product.category) {
+                <div class="text-xs text-neutral-500">Категория: {{ product.category.name }}</div>
+              }
+            </div>
+            <div class="text-xs text-neutral-500">Остаток: {{ totalStock() }}</div>
+
+            @if (product.prices.length > 0) {
+              <div class="mt-2 flex flex-col gap-1">
+                @for (price of product.prices; track price.id) {
+                  <div class="text-[11px] text-neutral-500">
+                    {{ getPriceTypeName(price.priceTypeId) }}:
+                    <span class="font-semibold text-neutral-700">
+                      {{ price.value | currency: 'UZS' : 'symbol-narrow' }}
+                    </span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <button uiButton variant="danger" size="icon" (click)="clearProduct()">
+            <ui-icon name="outline-x" />
+          </button>
+        </div>
       </div>
     } @else {
       <ui-autocomplete

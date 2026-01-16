@@ -7,6 +7,6 @@ export interface Barcode {
   type?: BarcodeType;
   product: Product;
   productId: string;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

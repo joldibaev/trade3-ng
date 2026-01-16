@@ -7,7 +7,7 @@ import { Store } from './store.interface';
 export interface DocumentReturn {
   id: string;
   code?: number;
-  date?: Date;
+  date?: string;
   store: Store;
   storeId: string;
   client?: Client;
@@ -15,7 +15,7 @@ export interface DocumentReturn {
   totalAmount: number;
   items: DocumentReturnItem[];
   status?: DocumentStatus;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
   movements: StockMovement[];
 }

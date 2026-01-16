@@ -7,6 +7,6 @@ export interface Vendor {
   email?: string;
   address?: string;
   purchases: DocumentPurchase[];
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

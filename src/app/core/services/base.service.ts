@@ -43,17 +43,11 @@ export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>>
     });
   }
 
-  getById(id: () => string | number | undefined | null, includes?: TIncludes[]) {
+  getById(id: () => string | number | undefined | null) {
     return httpResource<T>(() => {
       const actualId = typeof id === 'function' ? id() : id;
       if (!actualId) return undefined;
-
-      let url = `${this.apiUrl}/${actualId}`;
-      if (includes && includes.length > 0) {
-        const params = includes.map((inc) => `include=${inc}`).join('&');
-        url += `?${params}`;
-      }
-      return url;
+      return `${this.apiUrl}/${actualId}`;
     });
   }
 

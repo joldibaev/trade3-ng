@@ -9,6 +9,6 @@ export interface Client {
   address?: string;
   sales: DocumentSale[];
   returns: DocumentReturn[];
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

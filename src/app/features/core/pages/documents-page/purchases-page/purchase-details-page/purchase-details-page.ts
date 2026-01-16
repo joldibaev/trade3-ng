@@ -24,10 +24,10 @@ import { UiPageHeader } from '../../../../../../core/ui/ui-page-header/ui-page-h
 import { TableColumn } from '../../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../../core/ui/ui-table/ui-table';
 import { DocumentStatusComponent } from '../../../../../../shared/components/document-status/document-status.component';
-import { CreateDocumentPurchaseItemInput } from '../../../../../../shared/interfaces/dtos/create-document-purchase.interface';
-import { UpdateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/update-document-purchase.interface';
 import { PurchaseItemDialog } from './purchase-item-dialog/purchase-item-dialog';
 
+import { CreateDocumentPurchaseItemInput } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
+import { UpdateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/update-document-purchase.interface';
 import { getCurrentDateAsString } from '../../../../../../shared/utils/get-current-date-as-string';
 
 type PurchaseItemViewModel = CreateDocumentPurchaseItemInput & {

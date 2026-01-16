@@ -18,26 +18,45 @@
         <button uiButton variant="ghost" icon="outline-plus" size="sm" (click)="handleCreate()">
           Создать
         </button>
-        <button
-          uiButton
-          variant="ghost"
-          icon="outline-edit"
-          size="icon"
-          [disabled]="!selectedItem()"
-          (click)="handleEdit()"
-        >
-          <span class="sr-only">Редактировать</span>
-        </button>
-        <button
-          uiButton
-          variant="danger"
-          icon="outline-trash"
-          size="icon"
-          [disabled]="!selectedItem()"
-          (click)="handleDelete()"
-        >
-          <span class="sr-only">Удалить</span>
-        </button>
+
+        @if (showDetail()) {
+          <button
+            uiButton
+            variant="ghost"
+            icon="outline-eye"
+            size="icon"
+            [disabled]="!selectedItem()"
+            (click)="handleDetail()"
+          >
+            <span class="sr-only">Открыть карточку</span>
+          </button>
+        }
+
+        @if (showEdit()) {
+          <button
+            uiButton
+            variant="ghost"
+            icon="outline-edit"
+            size="icon"
+            [disabled]="!selectedItem()"
+            (click)="handleEdit()"
+          >
+            <span class="sr-only">Редактировать</span>
+          </button>
+        }
+
+        @if (showDelete()) {
+          <button
+            uiButton
+            variant="danger"
+            icon="outline-trash"
+            size="icon"
+            [disabled]="!selectedItem()"
+            (click)="handleDelete()"
+          >
+            <span class="sr-only">Удалить</span>
+          </button>
+        }
 
         <ng-content select="[toolbar-actions]" />
 

@@ -1,4 +1,4 @@
-import { DocumentStatus } from '../constants';
+import { DocumentStatus } from '../../constants';
 
 export interface CreateDocumentSaleItemInput {
   productId: string;

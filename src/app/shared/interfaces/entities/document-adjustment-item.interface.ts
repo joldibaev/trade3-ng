@@ -10,6 +10,6 @@ export interface DocumentAdjustmentItem {
   quantity: number;
   quantityBefore?: number;
   quantityAfter?: number;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

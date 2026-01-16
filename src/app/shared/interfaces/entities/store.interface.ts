@@ -11,8 +11,8 @@ export interface Store {
   id: string;
   name: string;
   cashboxes: Cashbox[];
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
   stocks: Stock[];
   sales: DocumentSale[];
   purchases: DocumentPurchase[];

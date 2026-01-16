@@ -1,5 +1,5 @@
-<ui-page-header title="Кассы" (back)="back()">
-  <div actions>
+<ui-page-header title="Кассы" showBack>
+  <div actions class="flex items-center gap-2">
     <button uiButton variant="ghost" (click)="reload()">Обновить</button>
     <button uiButton variant="primary" icon="outline-plus" (click)="onCreate()">
       Создать кассу
@@ -15,7 +15,7 @@
   </div>
 } @else if (cashboxes.hasValue()) {
   @if (cashboxes.value().length > 0) {
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       @for (cashbox of cashboxes.value(); track cashbox.id) {
         <ui-directory-item-card
           [title]="cashbox.name"

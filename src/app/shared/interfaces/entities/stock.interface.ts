@@ -9,6 +9,6 @@ export interface Stock {
   productId: string;
   store: Store;
   storeId: string;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

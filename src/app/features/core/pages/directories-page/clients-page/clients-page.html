@@ -1,12 +1,14 @@
 <app-table-struct
   title="Клиенты"
+  showEdit
+  showDelete
   [trackField]="'id'"
   [data]="filteredClients()"
   [columns]="columns"
   [isLoading]="clients.isLoading()"
   [(selectedItem)]="selectedClient"
-  (created)="openClientDialog()"
-  (edited)="openClientDialog($event)"
-  (deleted)="deleteClient($event)"
+  (createdClicked)="openClientDialog()"
+  (editedClicked)="openClientDialog($event)"
+  (deletedClicked)="deleteClient($event)"
   (searched)="searchQuery.set($event)"
 />

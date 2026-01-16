@@ -5,6 +5,7 @@
 @import './styles/components/_menu.css';
 @import './styles/components/_badge.css';
 @import './styles/components/_tab.css';
+@import './styles/components/_notyf.css';
 
 @theme {
   --font-sans: 'Inter', sans-serif;

@@ -34,7 +34,7 @@ import { TableValueGetterPipe } from './table-value-getter.pipe';
   styleUrl: './ui-table.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col flex-1 w-full h-full overflow-auto bg-white',
+    class: 'overflow-auto',
   },
 })
 export class UiTable<T extends object> {

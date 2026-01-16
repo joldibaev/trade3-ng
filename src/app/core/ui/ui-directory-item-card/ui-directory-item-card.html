@@ -3,7 +3,7 @@
     <div class="flex gap-3">
       @if (icon(); as icon) {
         <div
-          class="bg-primary-100 text-primary-600 flex h-10 w-10 items-center justify-center rounded-lg"
+          class="bg-primary-100 text-primary-600 rounded-squircle flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
         >
           <ui-icon [name]="icon" />
         </div>
@@ -15,6 +15,7 @@
         }
       </div>
     </div>
+
     <div class="default-transition flex gap-1 opacity-0 group-hover:opacity-100">
       <button
         uiButton

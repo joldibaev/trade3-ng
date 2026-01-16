@@ -1,4 +1,4 @@
-import { StockMovementType } from '../constants';
+import { StockMovementType } from '../../constants';
 
 export interface CreateStockMovementDto {
   type: StockMovementType;

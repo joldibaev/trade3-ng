@@ -11,6 +11,6 @@ export interface DocumentSaleItem {
   price: number;
   costPrice?: number;
   total: number;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }

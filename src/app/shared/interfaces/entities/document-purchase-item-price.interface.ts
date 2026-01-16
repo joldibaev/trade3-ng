@@ -8,6 +8,6 @@ export interface DocumentPurchaseItemPrice {
   priceType: PriceType;
   priceTypeId: string;
   value: number;
-  createdAt?: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt: string;
 }
