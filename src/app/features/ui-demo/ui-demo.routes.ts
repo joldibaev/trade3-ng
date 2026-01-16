@@ -79,4 +79,8 @@ export const routes: Routes = [
     path: 'tree',
     loadComponent: () => import('./pages/demo-tree/demo-tree').then((m) => m.DemoTreePage),
   },
+  {
+    path: 'tabs',
+    loadComponent: () => import('./pages/demo-tabs/demo-tabs').then((m) => m.DemoTabsPage),
+  },
 ];

@@ -14,10 +14,12 @@ import { finalize, forkJoin, map, of, switchMap } from 'rxjs';
 import { BarcodesService } from '../../../../../../core/services/barcodes.service';
 import { CategoriesService } from '../../../../../../core/services/categories.service';
 import { ProductsService } from '../../../../../../core/services/products.service';
+import { StoresService } from '../../../../../../core/services/stores.service'; // [NEW]
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
+import { UiLoading } from '../../../../../../core/ui/ui-loading/ui-loading';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
 import {
   ProductDialogData,
@@ -27,20 +29,22 @@ import { Product } from '../../../../../../shared/interfaces/entities/product.in
 
 @Component({
   selector: 'app-product-dialog',
-  imports: [UiInput, UiButton, UiDialog, UiSelect, FormField, UiIcon, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, UiSelect, FormField, UiIcon, FormsModule, UiLoading],
   templateUrl: './product-dialog.html',
   styleUrl: './product-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDialog {
   private dialogRef = inject<DialogRef<Product>>(DialogRef);
-  private data = inject<ProductDialogData>(DIALOG_DATA);
+  protected data = inject<ProductDialogData>(DIALOG_DATA);
+  private storesService = inject(StoresService); // [NEW]
   private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
   private barcodesService = inject(BarcodesService);
   private destroyRef = inject(DestroyRef);
 
   categories = this.categoriesService.getAll();
+  stores = this.storesService.getAll(); // [NEW]
   loading = signal(false);
 
   formState = signal<ProductDialogResult>({
@@ -131,5 +135,9 @@ export class ProductDialog {
 
   removeBarcode(index: number) {
     this.barcodes.update((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  protected getStock(storeId: string) {
+    return this.data.product?.stocks?.find((s) => s.storeId === storeId);
   }
 }

@@ -9,6 +9,9 @@ export class TableValueGetterPipe implements PipeTransform {
     if (col.valueGetter) {
       return col.valueGetter(row, index);
     }
-    return row[col.key] as string | number | null | undefined;
+    if (col.key in (row as object)) {
+      return (row as any)[col.key];
+    }
+    return undefined;
   }
 }

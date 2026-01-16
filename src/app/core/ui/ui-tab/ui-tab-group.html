@@ -1,0 +1,22 @@
+<div ngTabs class="ui-tab-group">
+  <div ngTabList class="ui-tab-list" [(selectedTab)]="selectedTabId">
+    @for (tab of tabs(); track tab.label()) {
+      <button ngTab class="ui-tab" [value]="tab.label()">
+        {{ tab.label() }}
+      </button>
+    }
+  </div>
+
+  <div class="mt-4">
+    @for (tab of tabs(); track tab.label()) {
+      <div
+        ngTabPanel
+        class="ui-tab-panel"
+        [value]="tab.label()"
+        [style.display]="selectedTabId() === tab.label() ? 'block' : 'none'"
+      >
+        <ng-container *ngTemplateOutlet="tab.content()" />
+      </div>
+    }
+  </div>
+</div>

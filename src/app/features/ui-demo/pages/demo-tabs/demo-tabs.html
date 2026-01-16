@@ -1,0 +1,49 @@
+<ui-page-header title="Tabs" />
+
+<div class="space-y-6">
+  <ui-card class="p-6">
+    <h2 class="mb-4 text-lg font-semibold">Basic Usage</h2>
+    <ui-tab-group>
+      <ui-tab label="First Tab">
+        <div class="p-4">
+          <p>Content for the first tab.</p>
+        </div>
+      </ui-tab>
+      <ui-tab label="Second Tab">
+        <div class="p-4">
+          <p>Content for the second tab.</p>
+        </div>
+      </ui-tab>
+      <ui-tab label="Third Tab">
+        <div class="p-4">
+          <p>Content for the third tab.</p>
+        </div>
+      </ui-tab>
+    </ui-tab-group>
+  </ui-card>
+
+  <ui-card class="p-6">
+    <h2 class="mb-4 text-lg font-semibold">With Complex Content</h2>
+    <ui-tab-group>
+      <ui-tab label="Profile">
+        <div class="space-y-4 p-4">
+          <div class="flex items-center gap-4">
+            <div class="h-12 w-12 rounded-full bg-neutral-200"></div>
+            <div>
+              <div class="font-medium">John Doe</div>
+              <div class="text-sm text-neutral-500">Administrator</div>
+            </div>
+          </div>
+        </div>
+      </ui-tab>
+      <ui-tab label="Settings">
+        <div class="p-4">
+          <div class="flex items-center gap-2">
+            <input id="notifications" type="checkbox" class="rounded border-gray-300" />
+            <label for="notifications">Enable notifications</label>
+          </div>
+        </div>
+      </ui-tab>
+    </ui-tab-group>
+  </ui-card>
+</div>

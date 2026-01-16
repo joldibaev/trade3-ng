@@ -1,5 +1,5 @@
 export interface TableColumnBase<T> {
-  key: keyof T;
+  key: keyof T | (string & {});
   header: string;
   editable?: boolean;
   width?: string;

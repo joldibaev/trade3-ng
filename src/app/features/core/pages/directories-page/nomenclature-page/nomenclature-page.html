@@ -68,6 +68,16 @@
         <button
           uiButton
           variant="ghost"
+          icon="outline-eye"
+          size="icon"
+          [disabled]="!selectedProduct()"
+          (click)="openProductPage()"
+        >
+          <span class="sr-only">Открыть карточку</span>
+        </button>
+        <button
+          uiButton
+          variant="ghost"
           icon="outline-edit"
           size="icon"
           [disabled]="!selectedProduct()"
@@ -144,7 +154,7 @@
     </div>
 
     <ui-table
-      [columns]="columns"
+      [columns]="columns()"
       [trackField]="'id'"
       [data]="filteredProducts()"
       [loading]="products.isLoading()"

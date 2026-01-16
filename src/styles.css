@@ -4,6 +4,7 @@
 @import './styles/components/_form.css';
 @import './styles/components/_menu.css';
 @import './styles/components/_badge.css';
+@import './styles/components/_tab.css';
 
 @theme {
   --font-sans: 'Inter', sans-serif;

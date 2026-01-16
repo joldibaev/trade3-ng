@@ -35,5 +35,6 @@ export class UiDemoLayout {
     { label: 'Select', path: '/ui/demo/select' },
     { label: 'Table', path: '/ui/demo/table' },
     { label: 'Tree', path: '/ui/demo/tree' },
+    { label: 'Tabs', path: '/ui/demo/tabs' },
   ];
 }

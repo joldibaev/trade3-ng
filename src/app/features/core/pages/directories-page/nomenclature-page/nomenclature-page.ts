@@ -14,7 +14,9 @@ import { form, FormField } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { CategoriesService } from '../../../../../core/services/categories.service';
+import { PriceTypesService } from '../../../../../core/services/price-types.service'; // [NEW]
 import { ProductsService } from '../../../../../core/services/products.service';
+import { StoresService } from '../../../../../core/services/stores.service'; // [NEW]
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
@@ -52,6 +54,8 @@ import { ProductDialog } from './product-dialog/product-dialog';
 export class NomenclaturePage {
   private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
+  private priceTypesService = inject(PriceTypesService);
+  private storesService = inject(StoresService); // [NEW]
   private dialog = inject(Dialog);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
@@ -70,6 +74,8 @@ export class NomenclaturePage {
 
   // Resources
   categories = this.categoriesService.getAll();
+  priceTypes = this.priceTypesService.getAll();
+  stores = this.storesService.getAll(); // [NEW]
   products = this.productsService.getAll({
     includes: ['category', 'prices', 'stocks', 'barcodes'],
     params: () => {
@@ -78,50 +84,56 @@ export class NomenclaturePage {
     },
   });
 
-  columns: TableColumn<Product>[] = [
-    {
-      key: 'id',
-      header: 'ID',
-      type: 'text',
-      valueGetter: (row) => row.id,
-      width: '120px',
-    },
-    {
-      key: 'name',
-      header: 'Наименование',
-      type: 'text',
-    },
-    {
-      key: 'article',
-      header: 'Артикул',
-      type: 'text',
-      valueGetter: (row) => row.article || '-',
-    },
-    {
-      key: 'barcodes',
-      header: 'Штрихкод',
-      type: 'text',
-      valueGetter: (row) => row.barcodes?.map((b) => b.value).join(', ') || '-',
-    },
-    {
-      key: 'stocks',
-      header: 'Количество',
-      type: 'text',
-      valueGetter: (row) => row.stocks?.[0]?.quantity || 0,
-    },
-    {
-      key: 'categoryId',
-      header: 'Ед. изм.',
-      type: 'text',
-      valueGetter: () => 'шт',
-    },
-    {
-      key: 'prices',
-      header: 'Цена',
-      type: 'text',
-      valueGetter: (row) => `${row.prices?.[0]?.value || 0} UZS`,
-    },
-  ];
+  columns = computed<TableColumn<Product>[]>(() => {
+    const priceTypes = this.priceTypes.value() || [];
+    const stores = this.stores.value() || []; // [NEW]
+
+    const baseColumns: TableColumn<Product>[] = [
+      {
+        key: 'name',
+        header: 'Наименование',
+        type: 'text',
+      },
+      {
+        key: 'article',
+        header: 'Артикул',
+        type: 'text',
+        valueGetter: (row) => row.article || '-',
+      },
+      {
+        key: 'barcodes',
+        header: 'Штрихкод',
+        type: 'text',
+        valueGetter: (row) => row.barcodes?.map((b) => b.value).join(', ') || '-',
+      },
+    ];
+
+    const storeColumns: TableColumn<Product>[] = stores.map(
+      (store): TableColumn<Product> => ({
+        key: store.id,
+        header: store.name,
+        type: 'text',
+        valueGetter: (row) => {
+          const stock = row.stocks?.find((s) => s.storeId === store.id);
+          return stock ? `${stock.quantity} шт` : '-';
+        },
+      }),
+    );
+
+    const priceColumns: TableColumn<Product>[] = priceTypes.map(
+      (pt): TableColumn<Product> => ({
+        key: pt.id, // Dynamic key (UUID)
+        header: pt.name,
+        type: 'text',
+        valueGetter: (row) => {
+          const price = row.prices?.find((p) => p.priceTypeId === pt.id);
+          return price ? `${price.value} UZS` : '-';
+        },
+      }),
+    );
+
+    return [...baseColumns, ...storeColumns, ...priceColumns];
+  });
 
   // Derived state: build hierarchy from flat list
   rootCategories = computed<TreeNode[]>(() => {
@@ -246,6 +258,12 @@ export class NomenclaturePage {
     const product = this.selectedProduct();
     if (!product) return;
     this.deleteProduct(product);
+  }
+
+  openProductPage() {
+    const product = this.selectedProduct();
+    if (!product) return;
+    void this.router.navigate([product.id], { relativeTo: this.activatedRoute });
   }
 
   // Categories CRUD

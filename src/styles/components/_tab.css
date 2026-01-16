@@ -1,0 +1,27 @@
+@layer components {
+  .ui-tab-group {
+    @apply flex flex-col;
+  }
+
+  .ui-tab-list {
+    @apply flex border-b border-neutral-200;
+  }
+
+  .ui-tab {
+    @apply border-b-2 px-4 py-2 text-sm font-medium transition-colors outline-none;
+    @apply border-transparent text-neutral-500;
+    @apply hover:text-neutral-700;
+
+    &:focus-visible {
+      @apply inset-ring-primary-100 border-primary-300 inset-ring-2;
+    }
+
+    &[aria-selected='true'] {
+      @apply border-primary-500 text-primary-600;
+    }
+  }
+
+  .ui-tab-panel {
+    @apply mt-4 outline-none;
+  }
+}
