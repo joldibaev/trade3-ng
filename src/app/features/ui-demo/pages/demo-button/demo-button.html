@@ -1,0 +1,40 @@
+<ui-page-header title="Button Demo" />
+
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">Variants</h3>
+  <div class="flex flex-wrap items-center gap-4">
+    <button uiButton variant="primary">Primary</button>
+    <button uiButton variant="secondary">Secondary</button>
+    <button uiButton variant="ghost">Ghost</button>
+    <button uiButton variant="danger">Danger</button>
+  </div>
+</ui-card>
+
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">Sizes</h3>
+  <div class="flex flex-wrap items-center gap-4">
+    <button uiButton size="sm">Small</button>
+    <button uiButton size="md">Medium</button>
+    <button uiButton size="lg">Large</button>
+    <button uiButton size="icon">
+      <ui-icon name="outline-home" />
+    </button>
+  </div>
+</ui-card>
+
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">States</h3>
+  <div class="flex flex-wrap items-center gap-4">
+    <button uiButton disabled>Disabled</button>
+    <button uiButton [loading]="loading()">Loading</button>
+    <button uiButton (click)="toggleLoading()">Click to toggle loading</button>
+  </div>
+</ui-card>
+
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">With Icons</h3>
+  <div class="flex flex-wrap items-center gap-4">
+    <button uiButton icon="outline-settings">Settings</button>
+    <button uiButton variant="secondary" icon="outline-trash">Delete</button>
+  </div>
+</ui-card>

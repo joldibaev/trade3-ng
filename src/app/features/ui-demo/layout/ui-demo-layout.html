@@ -1,0 +1,40 @@
+<div class="flex h-screen w-full bg-gray-50">
+  <!-- Demo Sidebar -->
+  <aside class="flex w-64 flex-col border-r bg-white">
+    <div class="flex h-16 items-center border-b px-6">
+      <a routerLink="/ui/demo" class="flex items-center gap-2 text-lg font-semibold">
+        <ui-icon name="outline-components" class="text-primary-600" />
+        <span>UI Kit Demo</span>
+      </a>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-4">
+      <nav class="flex flex-col gap-1">
+        <a
+          routerLink="/core"
+          class="mb-4 flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+        >
+          <ui-icon name="outline-arrow-left" class="h-5 w-5" />
+          Back to App
+        </a>
+
+        @for (item of menuItems; track item.path) {
+          <a
+            routerLinkActive="bg-primary-50 text-primary-700"
+            class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            [routerLink]="item.path"
+          >
+            {{ item.label }}
+          </a>
+        }
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Content Area -->
+  <main class="flex-1 overflow-auto p-8">
+    <div class="mx-auto max-w-5xl">
+      <router-outlet />
+    </div>
+  </main>
+</div>

@@ -1,0 +1,14 @@
+<ui-page-header title="Dialog Demo" />
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">Confirm Dialogs</h3>
+  <div class="flex flex-wrap gap-4">
+    <button uiButton variant="danger" (click)="openConfirmDelete()">Delete Item</button>
+    <button uiButton variant="primary" (click)="openConfirmSave()">Save Changes</button>
+  </div>
+  <div class="rounded bg-gray-50 p-2 text-sm">Last Action: {{ lastAction() }}</div>
+</ui-card>
+
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">Custom Dialog</h3>
+  <button uiButton variant="secondary" (click)="openCustom()">Open Custom Modal</button>
+</ui-card>

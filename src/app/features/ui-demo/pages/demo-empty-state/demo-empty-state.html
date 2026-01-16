@@ -1,0 +1,21 @@
+<ui-page-header title="Empty State Demo" />
+<ui-card class="p-8">
+  <ui-empty-state
+    title="No items found"
+    description="Get started by creating a new item."
+    icon="outline-box"
+    actionLabel="Create Item"
+    (action)="create()"
+  />
+</ui-card>
+
+<ui-card class="p-8">
+  <ui-empty-state
+    title="No search results"
+    description="Try adjusting your search filters."
+    icon="outline-search"
+    actionLabel="Clear Filters"
+    actionIcon="outline-refresh"
+    (action)="refresh()"
+  />
+</ui-card>

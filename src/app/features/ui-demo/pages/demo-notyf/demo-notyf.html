@@ -1,0 +1,16 @@
+<ui-page-header title="Notyf (Toast) Demo" />
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">Toast Types</h3>
+  <div class="flex flex-wrap gap-4">
+    <button uiButton variant="primary" (click)="showSuccess()">Success Toast</button>
+    <button uiButton variant="danger" (click)="showError()">Error Toast</button>
+    <button uiButton variant="secondary" (click)="showInfo()">Info Toast</button>
+  </div>
+</ui-card>
+
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">With Custom Titles</h3>
+  <div class="flex flex-wrap gap-4">
+    <button uiButton (click)="showSuccessWithTitle()">Success + Title</button>
+  </div>
+</ui-card>

@@ -1,0 +1,25 @@
+<ui-page-header title="Select Demo" />
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">Basic Select</h3>
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <ui-select
+      label="Select User"
+      optionLabel="name"
+      optionField="id"
+      [items]="users"
+      [(value)]="selectedUserId"
+    />
+    <div class="rounded bg-gray-50 p-4">Selected ID: {{ selectedUserId() }}</div>
+  </div>
+</ui-card>
+
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">Loading State</h3>
+  <ui-select
+    label="Loading Select"
+    optionLabel="name"
+    optionField="id"
+    [loading]="true"
+    [items]="[]"
+  />
+</ui-card>

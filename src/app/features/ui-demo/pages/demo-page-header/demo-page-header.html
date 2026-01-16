@@ -1,0 +1,22 @@
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">Default Header</h3>
+
+  <ui-page-header title="Simple Header" />
+</ui-card>
+
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">With Actions</h3>
+
+  <ui-page-header title="Header with Actions">
+    <div actions class="flex gap-2">
+      <button uiButton variant="secondary">Cancel</button>
+      <button uiButton variant="primary">Save</button>
+    </div>
+  </ui-page-header>
+</ui-card>
+
+<ui-card class="p-4">
+  <h3 class="text-lg font-semibold">No Back Button</h3>
+
+  <ui-page-header title="Root Page" [showBack]="false" />
+</ui-card>

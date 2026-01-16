@@ -1,0 +1,25 @@
+<ui-page-header title="Directory Item Card Demo" />
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+  <ui-directory-item-card
+    title="Store 1"
+    subtitle="Main Warehouse"
+    icon="outline-building-store"
+    (edit)="onEdit('Store 1')"
+    (delete)="onDelete('Store 1')"
+  />
+
+  <ui-directory-item-card
+    title="Product A"
+    subtitle="Electronics"
+    icon="outline-box"
+    (edit)="onEdit('Product A')"
+    (delete)="onDelete('Product A')"
+  />
+
+  <ui-directory-item-card
+    title="Client X"
+    icon="outline-users"
+    (edit)="onEdit('Client X')"
+    (delete)="onDelete('Client X')"
+  />
+</div>

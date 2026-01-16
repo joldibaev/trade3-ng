@@ -1,0 +1,16 @@
+<ui-page-header title="Menu Demo" />
+<ui-card class="h-[300px] p-4">
+  <h3 class="text-lg font-semibold">Dropdown Menu</h3>
+
+  <button
+    #trigger="cdkOverlayOrigin"
+    uiButton
+    variant="secondary"
+    cdkOverlayOrigin
+    (click)="isOpen.set(!isOpen())"
+  >
+    Open Menu
+  </button>
+
+  <ui-menu [visible]="isOpen()" [origin]="trigger" [items]="menuItems" />
+</ui-card>

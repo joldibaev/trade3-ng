@@ -1,0 +1,14 @@
+<ui-page-header title="Table Demo" />
+<div class="flex h-[calc(100vh-200px)] flex-col">
+  <ui-card class="flex flex-1 flex-col overflow-hidden">
+    <ui-table
+      trackField="id"
+      [columns]="columns"
+      [data]="users()"
+      [loading]="loading()"
+      (selectedChanged)="onSelect($event)"
+    />
+  </ui-card>
+
+  <div class="mt-4 rounded border bg-white p-4">Selected: {{ selectedUser()?.name || 'None' }}</div>
+</div>
