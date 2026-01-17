@@ -68,8 +68,8 @@
         <h2 class="mb-4 text-lg font-semibold">История цен</h2>
         <ui-table
           [columns]="priceHistoryColumns"
-          [data]="priceHistory.value() || []"
-          [loading]="priceHistory.isLoading()"
+          [data]="product.value()?.priceHistory || []"
+          [loading]="product.isLoading()"
           [trackField]="'id'"
         />
       </div>

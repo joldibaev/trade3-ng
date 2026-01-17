@@ -12,7 +12,7 @@ export interface DocumentReturn {
   storeId: string;
   client?: Client;
   clientId?: string;
-  totalAmount: number;
+  total?: number;
   items: DocumentReturnItem[];
   status?: DocumentStatus;
   createdAt?: string;

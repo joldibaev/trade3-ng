@@ -11,5 +11,5 @@ export interface CreateDocumentReturnDto {
   clientId?: string;
   date?: string;
   status?: DocumentStatus;
-  items: CreateDocumentReturnItemInput[];
+  items?: CreateDocumentReturnItemInput[];
 }

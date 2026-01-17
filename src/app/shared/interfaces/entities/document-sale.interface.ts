@@ -16,7 +16,7 @@ export interface DocumentSale {
   cashboxId?: string;
   client?: Client;
   clientId?: string;
-  totalAmount: number;
+  total?: number;
   items: DocumentSaleItem[];
   status?: DocumentStatus;
   priceType?: PriceType;

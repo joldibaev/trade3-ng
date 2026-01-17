@@ -10,5 +10,5 @@ export interface CreateDocumentTransferDto {
   destinationStoreId: string;
   date?: string;
   status?: DocumentStatus;
-  items: CreateDocumentTransferItemInput[];
+  items?: CreateDocumentTransferItemInput[];
 }

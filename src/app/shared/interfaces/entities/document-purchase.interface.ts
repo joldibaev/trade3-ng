@@ -13,7 +13,7 @@ export interface DocumentPurchase {
   vendorId?: string;
   store: Store;
   storeId: string;
-  total: number;
+  total?: number;
   items: DocumentPurchaseItem[];
   status?: DocumentStatus;
   createdAt?: string;

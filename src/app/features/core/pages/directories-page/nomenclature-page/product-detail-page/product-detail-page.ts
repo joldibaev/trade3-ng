@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { PriceHistoriesService } from '../../../../../../core/services/price-histories.service';
 import { PriceTypesService } from '../../../../../../core/services/price-types.service';
 import { ProductsService } from '../../../../../../core/services/products.service';
 import { StockMovementsService } from '../../../../../../core/services/stock-movements.service';
@@ -24,7 +23,6 @@ export class ProductDetailPage {
   private productsService = inject(ProductsService);
   private storesService = inject(StoresService);
   private priceTypesService = inject(PriceTypesService);
-  private priceHistoriesService = inject(PriceHistoriesService);
   private stockMovementsService = inject(StockMovementsService);
 
   stores = this.storesService.getAll();
@@ -33,10 +31,6 @@ export class ProductDetailPage {
   id = input.required<string>();
 
   product = this.productsService.getById(this.id);
-
-  priceHistory = this.priceHistoriesService.getAll({
-    params: () => ({ productId: this.id(), include: 'priceType,product' }),
-  });
 
   stockMovements = this.stockMovementsService.getAll({
     params: () => ({ productId: this.id(), include: 'store,product' }),
