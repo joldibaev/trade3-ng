@@ -25,6 +25,7 @@ export class UiDemoIndexPage {
     { label: 'Empty State', route: 'empty-state' },
     { label: 'Icon', route: 'icon' },
     { label: 'Input', route: 'input' },
+    { label: 'Listbox', route: 'listbox' },
     { label: 'Loading', route: 'loading' },
     { label: 'Menu', route: 'menu' },
     { label: 'Notyf', route: 'notyf' },

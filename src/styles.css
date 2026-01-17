@@ -3,6 +3,8 @@
 @import './styles/components/_button.css';
 @import './styles/components/_form.css';
 @import './styles/components/_menu.css';
+@import './styles/components/_list.css';
+@import './styles/components/_checkbox.css';
 @import './styles/components/_badge.css';
 @import './styles/components/_tab.css';
 @import './styles/components/_notyf.css';

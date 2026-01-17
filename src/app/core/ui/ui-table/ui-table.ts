@@ -1,5 +1,5 @@
 import { Grid, GridCell, GridRow } from '@angular/aria/grid';
-import { DatePipe, DecimalPipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { DatePipe, DecimalPipe, NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -27,7 +27,6 @@ import { TableValueGetterPipe } from './table-value-getter.pipe';
     UiBadge,
     DocumentStatusComponent,
     DecimalPipe,
-    NgClass,
     NgTemplateOutlet,
   ],
   templateUrl: './ui-table.html',
@@ -46,8 +45,8 @@ export class UiTable<T extends object> {
 
   trackField = input.required<keyof T>();
 
-  rowClass = input<(row: T) => string | string[] | Set<string> | { [klass: string]: any }>();
   templates = input<Record<string, TemplateRef<any>>>();
+  rowClass = input<(row: T, index: number) => string>();
 
   td = viewChildren(GridCell);
   selectedChanged = output<T | undefined>();

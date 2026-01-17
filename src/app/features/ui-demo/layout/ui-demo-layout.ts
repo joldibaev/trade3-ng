@@ -28,6 +28,7 @@ export class UiDemoLayout {
     { label: 'Directoy Card', path: '/ui/demo/directory-item-card' },
     { label: 'Empty State', path: '/ui/demo/empty-state' },
     { label: 'Input', path: '/ui/demo/input' },
+    { label: 'Listbox', path: '/ui/demo/listbox' },
     { label: 'Loading', path: '/ui/demo/loading' },
     { label: 'Menu', path: '/ui/demo/menu' },
     { label: 'Notyf', path: '/ui/demo/notyf' },

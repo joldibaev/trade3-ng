@@ -40,14 +40,7 @@
   <ui-card class="mt-4 block overflow-hidden">
     <div class="default-border-color flex items-center justify-between border-b p-4">
       <h2 class="text-lg font-semibold">Товары</h2>
-      <button
-        uiButton
-        variant="secondary"
-        size="sm"
-        icon="outline-plus"
-        [disabled]="p.status !== 'DRAFT'"
-        (click)="openItemDialog()"
-      >
+      <button uiButton variant="secondary" size="sm" icon="outline-plus" (click)="openItemDialog()">
         Добавить товар
       </button>
     </div>
@@ -57,22 +50,27 @@
       [columns]="columns()"
       [data]="formState().items"
       [trackField]="'productId'"
+      [templates]="{ actions: actions, status: status }"
       [rowClass]="rowClass"
-      [templates]="{ actions: actions }"
     />
+
+    <ng-template #status let-item let-index="index">
+      @if (newIndices().has(index)) {
+        <div title="Не сохранено в БД" class="flex items-center justify-center text-orange-500">
+          <ui-icon name="outline-cloud" />
+        </div>
+      } @else {
+        <div title="Сохранено в БД" class="flex items-center justify-center text-green-500">
+          <ui-icon name="outline-cloud" />
+        </div>
+      }
+    </ng-template>
 
     <ng-template #actions let-item let-index="index">
       <div class="flex items-center justify-end gap-2">
-        @if (item.isDeleted) {
-          <button
-            uiButton
-            variant="ghost"
-            size="icon"
-            icon="outline-refresh"
-            class="text-green-500 hover:bg-green-50 hover:text-green-600"
-            (click)="restoreProduct(index)"
-          >
-            <span class="sr-only">Восстановить</span>
+        @if (deletedIndices().has(index)) {
+          <button uiButton variant="ghost" size="sm" (click)="restoreProduct(index)">
+            Восстановить
           </button>
         } @else {
           <button
@@ -80,17 +78,15 @@
             variant="ghost"
             size="icon"
             icon="outline-pencil"
-            class="text-blue-500 hover:bg-blue-50 hover:text-blue-600"
             (click)="openItemDialog(item, index)"
           >
             <span class="sr-only">Редактировать</span>
           </button>
           <button
             uiButton
-            variant="ghost"
+            variant="danger"
             size="icon"
             icon="outline-trash"
-            class="text-red-500 hover:bg-red-50 hover:text-red-600"
             (click)="removeProduct(index)"
           >
             <span class="sr-only">Удалить</span>

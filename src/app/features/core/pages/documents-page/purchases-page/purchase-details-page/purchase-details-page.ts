@@ -13,6 +13,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { form } from '@angular/forms/signals';
+import { filter } from 'rxjs';
 import { DocumentPurchasesService } from '../../../../../../core/services/document-purchases.service';
 import { PriceTypesService } from '../../../../../../core/services/price-types.service';
 import { UiBreadcrumb } from '../../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
@@ -24,20 +25,16 @@ import { UiPageHeader } from '../../../../../../core/ui/ui-page-header/ui-page-h
 import { TableColumn } from '../../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../../core/ui/ui-table/ui-table';
 import { DocumentStatusComponent } from '../../../../../../shared/components/document-status/document-status.component';
+import { ProductSelectDialog } from './product-select-dialog/product-select-dialog';
 import { PurchaseItemDialog } from './purchase-item-dialog/purchase-item-dialog';
 
+import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { CreateDocumentPurchaseItemInput } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
 import { UpdateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/update-document-purchase.interface';
 import { getCurrentDateAsString } from '../../../../../../shared/utils/get-current-date-as-string';
 
-type PurchaseItemViewModel = CreateDocumentPurchaseItemInput & {
-  productName?: string;
-  isDeleted?: boolean;
-  isNew?: boolean;
-};
-
 interface PurchaseFormState extends Omit<UpdateDocumentPurchaseDto, 'items'> {
-  items: PurchaseItemViewModel[];
+  items: (CreateDocumentPurchaseItemInput & { productName?: string })[];
 }
 
 @Component({
@@ -55,6 +52,7 @@ interface PurchaseFormState extends Omit<UpdateDocumentPurchaseDto, 'items'> {
     UiTable,
     UiPageHeader,
     DocumentStatusComponent,
+    UiIcon,
   ],
   templateUrl: './purchase-details-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,19 +73,16 @@ export class PurchaseDetailsPage {
   purchase = this.purchasesService.getById(() => this.id());
   priceTypes = this.priceTypesService.getAll();
 
+  // State for tracking UI status
+  deletedIndices = signal<Set<number>>(new Set());
+  newIndices = signal<Set<number>>(new Set());
+
   // Main Form fields
   formState = signal<PurchaseFormState>({
     date: '',
     storeId: '',
     vendorId: '',
-    items: [
-      {
-        productId: '',
-        quantity: 0,
-        price: 0,
-        newPrices: [],
-      },
-    ],
+    items: [],
   });
 
   formData = form(this.formState);
@@ -98,6 +93,10 @@ export class PurchaseDetailsPage {
       const purchase = this.purchase.value();
       if (!purchase) return;
 
+      // Reset UI state on reload
+      this.deletedIndices.set(new Set());
+      this.newIndices.set(new Set());
+
       // todo delete getCurrentDateAsString this and fix dto script
       this.formState.set({
         date: getCurrentDateAsString(purchase.date),
@@ -105,7 +104,7 @@ export class PurchaseDetailsPage {
         vendorId: purchase.vendorId || '',
         items: purchase.items.map((item) => ({
           productId: item.productId,
-          productName: item.product.name, // Map name from entity
+          productName: item.product.name,
           quantity: item.quantity,
           price: item.price,
           newPrices:
@@ -129,13 +128,50 @@ export class PurchaseDetailsPage {
     ];
   });
 
-  openItemDialog(item?: PurchaseItemViewModel, index?: number) {
+  openItemDialog(
+    item?: CreateDocumentPurchaseItemInput & { productName?: string },
+    index?: number,
+  ) {
+    if (item) {
+      this.openItemDetailsDialog(item, index);
+      return;
+    }
+
+    const selectDialogRef = this.dialog.open<{ productId: string; productName: string }>(
+      ProductSelectDialog,
+      { width: '400px' },
+    );
+
+    selectDialogRef.closed
+      .pipe(filter(Boolean), takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        const newItem: Partial<CreateDocumentPurchaseItemInput> = {
+          productId: result.productId,
+          quantity: 1,
+          price: 0,
+        };
+        const viewModel = {
+          ...newItem,
+          productName: result.productName,
+        };
+
+        this.openItemDetailsDialog(
+          viewModel as CreateDocumentPurchaseItemInput & { productName?: string },
+          undefined,
+        );
+      });
+  }
+
+  private openItemDetailsDialog(
+    item: CreateDocumentPurchaseItemInput & { productName?: string },
+    index?: number,
+  ) {
     const dialogRef = this.dialog.open<{
       item: CreateDocumentPurchaseItemInput;
       productName?: string;
     }>(PurchaseItemDialog, {
       data: {
-        item, // This works because ViewModel extends DTO
+        item,
         productName: item?.productName,
         priceTypes: this.priceTypes.value() || [],
       },
@@ -146,16 +182,16 @@ export class PurchaseDetailsPage {
 
       this.formState.update((state) => {
         const newItems = [...state.items];
-        const newItem: PurchaseItemViewModel = {
+        const newItem = {
           ...result.item,
-          productName: result.productName || item?.productName, // Use returned name or keep existing
-          isNew: index === undefined, // Mark as new if adding
+          productName: result.productName || item?.productName,
         };
 
         if (index !== undefined) {
           newItems[index] = newItem;
         } else {
           newItems.push(newItem);
+          this.newIndices.update((set) => new Set(set).add(newItems.length - 1));
         }
         return { ...state, items: newItems };
       });
@@ -163,94 +199,101 @@ export class PurchaseDetailsPage {
   }
 
   removeProduct(index: number) {
-    this.formState.update((state) => {
-      const newItems = [...state.items];
-      newItems[index] = { ...newItems[index], isDeleted: true };
-      return { ...state, items: newItems };
-    });
+    this.deletedIndices.update((set) => new Set(set).add(index));
   }
 
   restoreProduct(index: number) {
-    this.formState.update((state) => {
-      const newItems = [...state.items];
-      newItems[index] = { ...newItems[index], isDeleted: false };
-      return { ...state, items: newItems };
+    this.deletedIndices.update((set) => {
+      const newSet = new Set(set);
+      newSet.delete(index);
+      return newSet;
     });
   }
 
-  columns = computed<TableColumn<PurchaseItemViewModel>[]>(() => {
-    const priceTypes = this.priceTypes.value() || [];
+  rowClass = (row: unknown, index: number) => {
+    return this.deletedIndices().has(index) ? 'bg-red-50 text-neutral-500' : '';
+  };
 
-    const baseColumns: TableColumn<PurchaseItemViewModel>[] = [
-      {
-        key: 'productName',
-        header: 'Товар',
-        type: 'text',
-        valueGetter: (row: PurchaseItemViewModel) => row.productName || '-',
-      },
-      {
-        key: 'quantity',
-        header: 'Кол-во',
+  columns = computed<TableColumn<CreateDocumentPurchaseItemInput & { productName?: string }>[]>(
+    () => {
+      const priceTypes = this.priceTypes.value() || [];
+
+      const baseColumns: TableColumn<CreateDocumentPurchaseItemInput & { productName?: string }>[] =
+        [
+          {
+            key: 'productId', // Dummy key for template
+            header: '',
+            type: 'template',
+            templateName: 'status',
+            width: '40px',
+            align: 'center',
+          },
+          {
+            key: 'productName',
+            header: 'Товар',
+            type: 'text',
+            valueGetter: (row) => row.productName || '-',
+          },
+          {
+            key: 'quantity',
+            header: 'Кол-во',
+            type: 'number',
+            align: 'center',
+            width: '100px',
+          },
+          {
+            key: 'price',
+            header: 'Цена (Закуп)',
+            align: 'center',
+            type: 'number',
+            width: '150px',
+          },
+        ];
+
+      const priceColumns: TableColumn<
+        CreateDocumentPurchaseItemInput & { productName?: string }
+      >[] = priceTypes.map((pt) => ({
+        key: 'newPrices',
+        header: pt.name,
         type: 'number',
         align: 'center',
-        width: '100px',
-      },
-      {
+        width: '150px',
+        valueGetter: (row) => row.newPrices?.find((np) => np.priceTypeId === pt.id)?.value || 0,
+      }));
+
+      const totalColumn: TableColumn<CreateDocumentPurchaseItemInput & { productName?: string }> = {
         key: 'price',
-        header: 'Цена (Закуп)',
+        header: 'Сумма',
         align: 'center',
         type: 'number',
         width: '150px',
-      },
-    ];
+        valueGetter: (row) => (row.quantity || 0) * (row.price || 0),
+      };
 
-    const priceColumns: TableColumn<PurchaseItemViewModel>[] = priceTypes.map((pt) => ({
-      key: 'newPrices', // Using a dummy key as we use valueGetter
-      header: pt.name,
-      type: 'number',
-      align: 'center',
-      width: '150px',
-      valueGetter: (row: PurchaseItemViewModel) =>
-        row.newPrices?.find((np) => np.priceTypeId === pt.id)?.value || 0,
-    }));
+      const actionColumn: TableColumn<CreateDocumentPurchaseItemInput & { productName?: string }> =
+        {
+          key: 'productId',
+          header: '',
+          type: 'template',
+          templateName: 'actions',
+          width: '100px',
+          align: 'right',
+        };
 
-    const totalColumn: TableColumn<PurchaseItemViewModel> = {
-      key: 'price', // Dummy key
-      header: 'Сумма',
-      align: 'center',
-      type: 'number',
-      width: '150px',
-      valueGetter: (row: PurchaseItemViewModel) => (row.quantity || 0) * (row.price || 0),
-    };
-
-    const actionColumn: TableColumn<PurchaseItemViewModel> = {
-      key: 'productId', // Dummy key
-      header: '',
-      type: 'template',
-      templateName: 'actions',
-      width: '100px',
-      align: 'right',
-    };
-
-    return [...baseColumns, ...priceColumns, totalColumn, actionColumn];
-  });
-
-  rowClass = (row: PurchaseItemViewModel) => {
-    if (row.isDeleted) return 'line-through opacity-50 bg-neutral-50';
-    if (row.isNew) return 'bg-blue-50';
-    return '';
-  };
+      return [...baseColumns, ...priceColumns, totalColumn, actionColumn];
+    },
+  );
 
   totalQuantity = computed(() => {
-    return this.formState().items.reduce((sum, item) => {
-      if (item.isDeleted) return sum;
+    return this.formState().items.reduce((sum, item, index) => {
+      if (this.deletedIndices().has(index)) return sum;
       return Number(sum) + Number(item.quantity || 0);
     }, 0);
   });
 
   totalAmount = computed(() => {
-    return this.formState().items.reduce((sum, item) => {
-      if (item.isDeleted) return sum;
+    return this.formState().items.reduce((sum, item, index) => {
+      if (this.deletedIndices().has(index)) return sum;
       return sum + (item.quantity || 0) * (item.price || 0);
     }, 0);
   });
@@ -267,8 +310,8 @@ export class PurchaseDetailsPage {
     const dto: UpdateDocumentPurchaseDto = {
       ...this.formState(),
       items: this.formState()
-        .items.filter((item) => !item.isDeleted)
-        .map(({ productName, isDeleted, isNew, ...rest }) => rest), // Strip ViewModel props
+        .items.filter((_, index) => !this.deletedIndices().has(index))
+        .map(({ productName, ...rest }) => rest),
     };
 
     this.purchasesService

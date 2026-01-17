@@ -1,0 +1,25 @@
+<ui-dialog title="Выберите товар" (closeAction)="cancel()">
+  <div class="flex flex-col gap-6">
+    <ui-input
+      label="Поиск товара"
+      placeholder="Начните вводить название..."
+      autocomplete="off"
+      type="search"
+      [formField]="formData.search"
+    />
+
+    <ui-listbox
+      optionLabel="name"
+      optionField="id"
+      [items]="products.value()"
+      [loading]="products.isLoading()"
+      [value]="selectedProduct()?.id ?? ''"
+      (valueChange)="onSelect($event)"
+    />
+  </div>
+
+  <button footer uiButton variant="ghost" (click)="cancel()">Отмена</button>
+  <button footer uiButton variant="primary" [disabled]="!selectedProduct()" (click)="next()">
+    Далее
+  </button>
+</ui-dialog>

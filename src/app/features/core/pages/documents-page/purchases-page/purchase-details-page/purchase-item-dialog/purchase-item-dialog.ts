@@ -6,6 +6,7 @@ import {
   computed,
   DestroyRef,
   inject,
+  model,
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -13,32 +14,29 @@ import { FormsModule } from '@angular/forms';
 import { form, FormField, min, required, validate } from '@angular/forms/signals';
 import { ProductsService } from '../../../../../../../core/services/products.service';
 import { StoresService } from '../../../../../../../core/services/stores.service';
-import { UiAutocomplete } from '../../../../../../../core/ui/ui-autocomplete/ui-autocomplete';
 import { UiButton } from '../../../../../../../core/ui/ui-button/ui-button';
+import { UiDialog } from '../../../../../../../core/ui/ui-dialog/ui-dialog';
+import { UiIcon } from '../../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../../core/ui/ui-input/ui-input';
 import { UiNotyfService } from '../../../../../../../core/ui/ui-notyf/ui-notyf.service';
-import { PriceType } from '../../../../../../../shared/interfaces/entities/price-type.interface';
-import { Product } from '../../../../../../../shared/interfaces/entities/product.interface';
-
-import { UiIcon } from '../../../../../../../core/ui/ui-icon/ui-icon.component';
 import {
   CreateDocumentPurchaseItemInput,
   UpdateProductPriceInput,
 } from '../../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
+import { PriceType } from '../../../../../../../shared/interfaces/entities/price-type.interface';
+import { Product } from '../../../../../../../shared/interfaces/entities/product.interface';
 
 export interface PurchaseItemDialogData {
   item?: CreateDocumentPurchaseItemInput;
   productName?: string;
   priceTypes: PriceType[];
 }
-
 @Component({
   selector: 'app-purchase-item-dialog',
   standalone: true,
-  imports: [UiButton, UiInput, UiAutocomplete, FormsModule, FormField, UiIcon, CurrencyPipe],
+  imports: [UiButton, UiInput, FormsModule, FormField, UiIcon, CurrencyPipe, UiDialog],
   templateUrl: './purchase-item-dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'block w-[600px] rounded-lg bg-white p-6 shadow-xl' },
 })
 export class PurchaseItemDialog {
   private dialogRef = inject(DialogRef);
@@ -49,10 +47,10 @@ export class PurchaseItemDialog {
   private destroyRef = inject(DestroyRef);
 
   priceTypes = signal(this.data.priceTypes);
+  isPriceUpdateEnabled = model(false);
 
-  // Products search
-  searchQuery = signal('');
-  products = this.productsService.search(this.searchQuery);
+  // Products search - REMOVED
+  // stored only for reference if needed, but we rely on data.item.productId
 
   // Stores separate request
   stores = this.storesService.getAll();
@@ -82,6 +80,8 @@ export class PurchaseItemDialog {
     min(schema.price, 0, { message: 'Не может быть отрицательной' });
 
     validate(schema.newPrices, ({ value, valueOf }) => {
+      if (!this.isPriceUpdateEnabled()) return null;
+
       const newPrices = value();
       const costPrice = valueOf(schema.price);
 
@@ -96,6 +96,14 @@ export class PurchaseItemDialog {
     });
   });
 
+  constructor() {
+    // Always load product. For new items, productId comes from the select dialog.
+    const productId = this.data.item?.productId;
+    if (productId) {
+      this.loadProduct(productId);
+    }
+  }
+
   save() {
     if (this.formData().invalid()) {
       this.notyf.error('Пожалуйста, исправьте ошибки');
@@ -104,32 +112,23 @@ export class PurchaseItemDialog {
 
     const formValue = this.formData().value();
 
+    if (!this.isPriceUpdateEnabled()) {
+      formValue.newPrices = [];
+    }
+
     this.dialogRef.close({
       item: formValue as CreateDocumentPurchaseItemInput,
       productName: this.selectedProduct()?.name,
     });
   }
 
-  onProductSelect(id: string) {
-    if (!id) return;
-    const product = this.products.value()?.find((p) => p.id === id);
-    if (product) {
-      // We also need to clear search query if we want to reset autocomplete state effectively
-      this.searchQuery.set('');
-
-      this.productsService
-        .fetchById(id, ['prices', 'stocks', 'category'])
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((fullProduct) => {
-          this.selectedProduct.set(fullProduct);
-        });
-    }
-  }
-
-  clearProduct() {
-    this.selectedProduct.set(undefined);
-    this.formState.update((s) => ({ ...s, productId: '' }));
-    this.searchQuery.set('');
+  loadProduct(id: string) {
+    this.productsService
+      .fetchById(id, ['prices', 'stocks', 'category'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((fullProduct) => {
+        this.selectedProduct.set(fullProduct);
+      });
   }
 
   cancel() {

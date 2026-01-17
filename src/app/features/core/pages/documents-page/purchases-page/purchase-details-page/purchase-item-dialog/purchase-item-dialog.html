@@ -1,88 +1,78 @@
-<h2 class="mb-6 text-xl font-bold">
-  {{ data.item ? 'Редактировать товар' : 'Добавить товар' }}
-</h2>
+<ui-dialog [title]="data.item ? 'Редактировать товар' : 'Добавить товар'" (closeAction)="cancel()">
+  <div class="flex flex-col gap-4">
+    <!-- Product -->
+    <div class="flex flex-col gap-2">
+      @if (selectedProduct(); as product) {
+        <!-- Product Card -->
+        <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+          <div class="flex items-start justify-between">
+            <div class="flex flex-col gap-2">
+              <div class="font-bold text-neutral-900">{{ product.name }}</div>
+              <div>
+                @if (product.article) {
+                  <div class="text-xs text-neutral-500">Артикул: {{ product.article }}</div>
+                }
 
-<div class="flex flex-col gap-4">
-  <!-- Product -->
-  <div class="flex flex-col gap-2">
-    @if (selectedProduct(); as product) {
-      <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
-        <div class="flex items-start justify-between">
-          <div class="flex flex-col gap-2">
-            <div class="font-bold text-neutral-900">{{ product.name }}</div>
-            <div>
-              @if (product.article) {
-                <div class="text-xs text-neutral-500">Артикул: {{ product.article }}</div>
-              }
-
-              @if (product.category) {
-                <div class="text-xs text-neutral-500">Категория: {{ product.category.name }}</div>
-              }
-            </div>
-            <div class="text-xs text-neutral-500">Остаток: {{ totalStock() }}</div>
-
-            @if (product.prices.length > 0) {
-              <div class="mt-2 flex flex-col gap-1">
-                @for (price of product.prices; track price.id) {
-                  <div class="text-[11px] text-neutral-500">
-                    {{ getPriceTypeName(price.priceTypeId) }}:
-                    <span class="font-semibold text-neutral-700">
-                      {{ price.value | currency: 'UZS' : 'symbol-narrow' }}
-                    </span>
-                  </div>
+                @if (product.category) {
+                  <div class="text-xs text-neutral-500">Категория: {{ product.category.name }}</div>
                 }
               </div>
-            }
-          </div>
+              <div class="text-xs text-neutral-500">Остаток: {{ totalStock() }}</div>
 
-          <button uiButton variant="danger" size="icon" (click)="clearProduct()">
-            <ui-icon name="outline-x" />
-          </button>
+              @if (product.prices.length > 0) {
+                <div class="mt-2 flex flex-col gap-1">
+                  @for (price of product.prices; track price.id) {
+                    <div class="text-[11px] text-neutral-500">
+                      {{ getPriceTypeName(price.priceTypeId) }}:
+                      <span class="font-semibold text-neutral-700">
+                        {{ price.value | currency: 'UZS' : 'symbol-narrow' }}
+                      </span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
         </div>
-      </div>
-    } @else {
-      <ui-autocomplete
-        label="Товар"
-        optionField="id"
-        optionLabel="name"
-        placeholder="Выберите товар"
-        filterMode="manual"
-        class="w-full"
-        [debounce]="500"
-        [loading]="products.isLoading()"
-        [formField]="formData.productId"
-        [items]="products.value()"
-        [(query)]="searchQuery"
-        (valueChange)="onProductSelect($event)"
-      />
-    }
-  </div>
+      } @else {
+        <!-- Skeleton or Loading state if needed, though usually fast -->
+        <div class="h-24 w-full animate-pulse rounded-lg bg-neutral-100"></div>
+      }
 
-  <div class="grid grid-cols-2 gap-4">
-    <ui-input label="Количество" type="number" [formField]="formData.quantity" />
-    <ui-input label="Цена закупа" type="number" [formField]="formData.price" />
-  </div>
-
-  <!-- Dynamic Prices -->
-  @if (priceTypes().length) {
-    <div class="default-border-color border-t pt-4">
+      <!-- Main Fields -->
       <div class="grid grid-cols-2 gap-4">
-        @for (pt of priceTypes(); track pt.id) {
-          <div class="flex flex-col gap-2">
-            <ui-input
-              type="number"
-              [label]="pt.name"
-              [value]="getPriceValue(pt.id).toString()"
-              (valueChange)="updatePrice(pt.id, +$event)"
-            />
-          </div>
-        }
+        <ui-input label="Количество" type="number" [formField]="formData.quantity" />
+        <ui-input label="Цена закупа" type="number" [formField]="formData.price" />
       </div>
-    </div>
-  }
 
-  <div class="mt-6 flex justify-end gap-3">
-    <button uiButton variant="ghost" (click)="cancel()">Отмена</button>
-    <button uiButton variant="primary" (click)="save()">Сохранить</button>
+      <!-- Dynamic Prices (Optional) -->
+      @if (priceTypes().length) {
+        <div class="flex flex-col gap-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+          <label class="flex cursor-pointer items-center gap-2">
+            <input type="checkbox" class="ui-checkbox" [(ngModel)]="isPriceUpdateEnabled" />
+            <ui-icon name="outline-tag" class="text-neutral-500" />
+            <h3 class="font-medium text-neutral-700">Установить новые цены продажи</h3>
+          </label>
+
+          @if (isPriceUpdateEnabled()) {
+            <div class="grid grid-cols-2 gap-4">
+              @for (pt of priceTypes(); track pt.id) {
+                <div class="flex flex-col gap-2">
+                  <ui-input
+                    type="number"
+                    [label]="pt.name"
+                    [value]="getPriceValue(pt.id).toString()"
+                    (valueChange)="updatePrice(pt.id, +$event)"
+                  />
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
   </div>
-</div>
+
+  <button footer uiButton variant="ghost" (click)="cancel()">Отмена</button>
+  <button footer uiButton variant="primary" (click)="save()">Сохранить</button>
+</ui-dialog>

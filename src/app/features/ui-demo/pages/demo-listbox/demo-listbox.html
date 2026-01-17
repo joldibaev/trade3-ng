@@ -1,0 +1,26 @@
+<ui-page-header title="Listbox" />
+
+<div class="grid grid-cols-2 gap-4">
+  <ui-card class="gap-4 p-4">
+    <h3 class="font-bold">Basic Usage</h3>
+    <ui-listbox
+      optionLabel="name"
+      optionField="id"
+      [items]="users"
+      [value]="selectedUserId()"
+      [loading]="loading()"
+      (valueChange)="selectedUserId.set($event)"
+    />
+    <div class="text-sm text-neutral-500">Selected ID: {{ selectedUserId() || 'None' }}</div>
+    <button class="text-sm text-blue-600 hover:underline" (click)="toggleLoading()">
+      Toggle Loading
+    </button>
+  </ui-card>
+
+  <ui-card class="gap-4 p-4">
+    <h3 class="font-bold">Empty State</h3>
+    <ui-listbox optionLabel="name" optionField="id" [items]="[]" [loading]="loading()">
+      <span empty-state>No users found (Custom Empty State)</span>
+    </ui-listbox>
+  </ui-card>
+</div>

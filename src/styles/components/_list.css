@@ -1,0 +1,22 @@
+@layer components {
+  .ui-list {
+    @apply flex flex-col overflow-y-auto p-1 outline-none;
+  }
+
+  .ui-list-item {
+    @apply flex cursor-pointer items-center justify-between gap-4 px-4 py-2 text-sm text-neutral-800 outline-none select-none;
+    @apply rounded-squircle;
+
+    &[aria-selected='true'] {
+      @apply bg-primary-50 text-primary-600;
+    }
+
+    &[data-active='true'] {
+      @apply inset-ring-primary-100 border-primary-300 inset-ring-2;
+    }
+  }
+
+  .ui-list-empty {
+    @apply flex h-full items-center justify-center p-4 text-sm text-neutral-500;
+  }
+}

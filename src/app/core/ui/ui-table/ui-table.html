@@ -27,11 +27,7 @@
       </tr>
     } @else if (data().length) {
       @for (row of data(); track row[trackField()]; let i = $index) {
-        <tr
-          ngGridRow
-          class="cursor-pointer transition-colors hover:bg-neutral-50/50"
-          [ngClass]="rowClass() ? rowClass()!(row) : ''"
-        >
+        <tr ngGridRow [class]="rowClass() ? rowClass()!(row, i) : ''">
           @for (col of columns(); track col.key; let j = $index) {
             <td
               ngGridCell

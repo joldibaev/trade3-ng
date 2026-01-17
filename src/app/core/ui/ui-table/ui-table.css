@@ -13,6 +13,6 @@ tr {
 
 td {
   &[data-active='true'] {
-    @apply outline-primary-400 outline-2 -outline-offset-2;
+    @apply inset-ring-primary-200 inset-ring-2;
   }
 }

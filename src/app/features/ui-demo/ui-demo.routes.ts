@@ -83,4 +83,8 @@ export const routes: Routes = [
     path: 'tabs',
     loadComponent: () => import('./pages/demo-tabs/demo-tabs').then((m) => m.DemoTabsPage),
   },
+  {
+    path: 'listbox',
+    loadComponent: () => import('./pages/demo-listbox/demo-listbox').then((m) => m.DemoListboxPage),
+  },
 ];
