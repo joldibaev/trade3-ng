@@ -16,21 +16,21 @@
     <div class="p-6">
       <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
       <div class="grid grid-cols-2 gap-y-4 text-sm">
-        <div class="text-neutral-500">Статус:</div>
+        <div class="text-slate-500">Статус:</div>
         <div>
           <app-document-status [status]="p.status" />
         </div>
 
-        <div class="text-neutral-500">Код:</div>
+        <div class="text-slate-500">Код:</div>
         <div class="font-medium">{{ p.code || '-' }}</div>
 
-        <div class="text-neutral-500">Дата:</div>
+        <div class="text-slate-500">Дата:</div>
         <div class="font-medium">{{ p.date | date: 'dd.MM.yyyy HH:mm' }}</div>
 
-        <div class="text-neutral-500">Поставщик:</div>
+        <div class="text-slate-500">Поставщик:</div>
         <div class="font-medium">{{ p.vendor?.name || '-' }}</div>
 
-        <div class="text-neutral-500">Магазин:</div>
+        <div class="text-slate-500">Магазин:</div>
         <div class="font-medium">{{ p.store.name || '-' }}</div>
       </div>
     </div>
@@ -95,11 +95,11 @@
       </div>
     </ng-template>
 
-    <div class="flex items-center justify-end gap-8 border-t border-neutral-200 p-4 font-semibold">
+    <div class="flex items-center justify-end gap-8 border-t border-slate-200 p-4 font-semibold">
       <div>Итого кол-во: {{ totalQuantity() }}</div>
       <div>Итого сумма: {{ totalAmount() | currency: 'UZS' : 'symbol-narrow' }}</div>
     </div>
   </ui-card>
 } @else {
-  <ui-card class="p-8 text-center text-neutral-500"> Закупка не найдена</ui-card>
+  <ui-card class="p-8 text-center text-slate-500"> Закупка не найдена</ui-card>
 }

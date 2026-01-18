@@ -4,27 +4,27 @@
     <div class="flex flex-col gap-2">
       @if (selectedProduct(); as product) {
         <!-- Product Card -->
-        <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
           <div class="flex items-start justify-between">
             <div class="flex flex-col gap-2">
-              <div class="font-bold text-neutral-900">{{ product.name }}</div>
+              <div class="font-bold text-slate-900">{{ product.name }}</div>
               <div>
                 @if (product.article) {
-                  <div class="text-xs text-neutral-500">Артикул: {{ product.article }}</div>
+                  <div class="text-xs text-slate-500">Артикул: {{ product.article }}</div>
                 }
 
                 @if (product.category) {
-                  <div class="text-xs text-neutral-500">Категория: {{ product.category.name }}</div>
+                  <div class="text-xs text-slate-500">Категория: {{ product.category.name }}</div>
                 }
               </div>
-              <div class="text-xs text-neutral-500">Остаток: {{ totalStock() }}</div>
+              <div class="text-xs text-slate-500">Остаток: {{ totalStock() }}</div>
 
               @if (product.prices.length > 0) {
                 <div class="mt-2 flex flex-col gap-1">
                   @for (price of product.prices; track price.id) {
-                    <div class="text-[11px] text-neutral-500">
+                    <div class="text-[11px] text-slate-500">
                       {{ getPriceTypeName(price.priceTypeId) }}:
-                      <span class="font-semibold text-neutral-700">
+                      <span class="font-semibold text-slate-700">
                         {{ price.value | currency: 'UZS' : 'symbol-narrow' }}
                       </span>
                     </div>
@@ -36,7 +36,7 @@
         </div>
       } @else {
         <!-- Skeleton or Loading state if needed, though usually fast -->
-        <div class="h-24 w-full animate-pulse rounded-lg bg-neutral-100"></div>
+        <div class="h-24 w-full animate-pulse rounded-lg bg-slate-100"></div>
       }
 
       <!-- Main Fields -->
@@ -47,11 +47,11 @@
 
       <!-- Dynamic Prices (Optional) -->
       @if (priceTypes().length) {
-        <div class="flex flex-col gap-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+        <div class="flex flex-col gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
           <label class="flex cursor-pointer items-center gap-2">
             <input type="checkbox" class="ui-checkbox" [(ngModel)]="isPriceUpdateEnabled" />
-            <ui-icon name="outline-tag" class="text-neutral-500" />
-            <h3 class="font-medium text-neutral-700">Установить новые цены продажи</h3>
+            <ui-icon name="outline-tag" class="text-slate-500" />
+            <h3 class="font-medium text-slate-700">Установить новые цены продажи</h3>
           </label>
 
           @if (isPriceUpdateEnabled()) {

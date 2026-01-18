@@ -10,7 +10,7 @@
     }
 
     &.ui-badge-variant-secondary {
-      @apply border-transparent bg-neutral-100 text-neutral-900;
+      @apply border-transparent bg-slate-100 text-slate-900;
     }
 
     &.ui-badge-variant-destructive {
@@ -22,7 +22,7 @@
     }
 
     &.ui-badge-variant-outline {
-      @apply border-neutral-200 text-neutral-950;
+      @apply border-slate-200 text-slate-950;
     }
   }
 }

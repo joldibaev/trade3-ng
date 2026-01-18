@@ -8,7 +8,7 @@
   }
 
   .ui-form-control {
-    @apply default-border-color rounded-squircle w-full rounded-lg border bg-white text-neutral-800;
+    @apply default-border-color rounded-squircle w-full rounded-lg border bg-white text-slate-800;
     @apply text-sm;
 
     > input {
@@ -22,11 +22,11 @@
     }
 
     &::placeholder {
-      @apply text-sm text-neutral-400 italic;
+      @apply text-sm text-slate-400 italic;
     }
 
     &:has(> input:disabled) {
-      @apply cursor-not-allowed bg-neutral-100 text-neutral-400;
+      @apply cursor-not-allowed bg-slate-100 text-slate-400;
     }
 
     &:has(input:user-invalid),

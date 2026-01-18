@@ -19,15 +19,15 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <div class="text-xs font-medium text-neutral-700">Остатки по складам</div>
+      <div class="text-xs font-medium text-slate-700">Остатки по складам</div>
       @if (stores.isLoading()) {
         <ui-loading [width]="20" [height]="20" />
       } @else {
-        <div class="flex flex-col gap-1 rounded bg-neutral-50 p-2 text-sm">
+        <div class="flex flex-col gap-1 rounded bg-slate-50 p-2 text-sm">
           @for (store of stores.value(); track store.id) {
             @let stock = getStock(store.id);
             <div class="flex justify-between">
-              <span class="text-neutral-600">{{ store.name }}:</span>
+              <span class="text-slate-600">{{ store.name }}:</span>
               <span class="font-medium">{{ stock?.quantity || 0 }} шт</span>
             </div>
           }
@@ -36,17 +36,17 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <div class="text-xs font-medium text-neutral-700">Штрихкоды</div>
+      <div class="text-xs font-medium text-slate-700">Штрихкоды</div>
 
       <div class="flex flex-wrap gap-2">
         @for (barcode of barcodes(); track barcode.value; let i = $index) {
           <div
-            class="flex items-center gap-1 rounded bg-neutral-100 px-2 py-1 text-sm text-neutral-800"
+            class="flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-sm text-slate-800"
           >
             <span>{{ barcode.value }}</span>
             <button
               type="button"
-              class="text-neutral-500 hover:text-red-500"
+              class="text-slate-500 hover:text-red-500"
               (click)="removeBarcode(i)"
             >
               <ui-icon name="outline-x" size="14" />

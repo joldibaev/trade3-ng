@@ -211,7 +211,7 @@ export class PurchaseDetailsPage {
   }
 
   rowClass = (row: unknown, index: number) => {
-    return this.deletedIndices().has(index) ? 'bg-red-50 text-neutral-500' : '';
+    return this.deletedIndices().has(index) ? 'bg-red-50 text-slate-500' : '';
   };
 
   columns = computed<TableColumn<CreateDocumentPurchaseItemInput & { productName?: string }>[]>(

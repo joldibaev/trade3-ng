@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 
+@import './styles/core/_colors.css';
 @import './styles/components/_button.css';
 @import './styles/components/_form.css';
 @import './styles/components/_menu.css';
@@ -33,7 +34,7 @@
 }
 
 @utility text-muted {
-  @apply text-neutral-400;
+  @apply text-slate-400;
 }
 
 @utility default-transition {
@@ -45,7 +46,7 @@
 }
 
 @utility default-border-color {
-  @apply border-neutral-200;
+  @apply border-slate-200;
 }
 
 @utility typo-h1 {

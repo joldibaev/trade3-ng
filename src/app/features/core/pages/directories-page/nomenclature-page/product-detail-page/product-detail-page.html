@@ -15,25 +15,25 @@
         <div>
           <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
           <div class="grid grid-cols-2 gap-4 text-sm">
-            <div class="text-neutral-500">ID:</div>
+            <div class="text-slate-500">ID:</div>
             <div class="font-medium">{{ p.id }}</div>
 
-            <div class="text-neutral-500">Артикул:</div>
+            <div class="text-slate-500">Артикул:</div>
             <div class="font-medium">{{ p.article || '-' }}</div>
 
-            <div class="text-neutral-500">Категория:</div>
+            <div class="text-slate-500">Категория:</div>
             <div class="font-medium">{{ p.category.name || 'Без категории' }}</div>
 
             @if (p.prices.length) {
               @for (price of p.prices; track price.id) {
-                <div class="text-neutral-500">{{ getPriceTypeName(price.priceTypeId) }}:</div>
+                <div class="text-slate-500">{{ getPriceTypeName(price.priceTypeId) }}:</div>
                 <div class="font-medium">{{ price.value | number }} UZS</div>
               }
             }
 
             @if (p.stocks.length) {
               @for (stock of p.stocks; track stock.id) {
-                <div class="text-neutral-500">{{ getStoreName(stock.storeId) }}:</div>
+                <div class="text-slate-500">{{ getStoreName(stock.storeId) }}:</div>
                 <div class="font-medium">{{ stock.quantity }} шт</div>
               }
             }
@@ -50,14 +50,14 @@
           <div class="flex flex-wrap gap-2">
             @for (code of p.barcodes; track code.id) {
               <div
-                class="rounded-md border border-neutral-200 bg-neutral-50 px-3 py-1 text-sm font-medium"
+                class="rounded-md border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-medium"
               >
                 {{ code.value }}
               </div>
             }
           </div>
         } @else {
-          <div class="text-neutral-500">Штрихкоды не заданы</div>
+          <div class="text-slate-500">Штрихкоды не заданы</div>
         }
       </div>
     </ui-tab>
@@ -90,7 +90,7 @@
   </ui-tab-group>
 } @else {
   <ui-page-header title="Товар не найден" [showBack]="true" />
-  <div class="flex h-64 items-center justify-center text-neutral-500">
+  <div class="flex h-64 items-center justify-center text-slate-500">
     Товар не найден или был удален
   </div>
 }

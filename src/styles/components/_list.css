@@ -4,7 +4,7 @@
   }
 
   .ui-list-item {
-    @apply flex cursor-pointer items-center justify-between gap-4 px-4 py-2 text-sm text-neutral-800 outline-none select-none;
+    @apply flex cursor-pointer items-center justify-between gap-4 px-4 py-2 text-sm text-slate-800 outline-none select-none;
     @apply rounded-squircle;
 
     &[aria-selected='true'] {
@@ -17,6 +17,6 @@
   }
 
   .ui-list-empty {
-    @apply flex h-full items-center justify-center p-4 text-sm text-neutral-500;
+    @apply flex h-full items-center justify-center p-4 text-sm text-slate-500;
   }
 }

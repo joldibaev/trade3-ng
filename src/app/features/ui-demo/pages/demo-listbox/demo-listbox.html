@@ -11,7 +11,7 @@
       [loading]="loading()"
       (valueChange)="selectedUserId.set($event)"
     />
-    <div class="text-sm text-neutral-500">Selected ID: {{ selectedUserId() || 'None' }}</div>
+    <div class="text-sm text-slate-500">Selected ID: {{ selectedUserId() || 'None' }}</div>
     <button class="text-sm text-blue-600 hover:underline" (click)="toggleLoading()">
       Toggle Loading
     </button>

@@ -35,7 +35,7 @@
       />
 
       <div
-        class="pointer-events-none absolute top-1/2 right-2 z-20 -translate-y-1/2 text-neutral-400"
+        class="pointer-events-none absolute top-1/2 right-2 z-20 -translate-y-1/2 text-slate-400"
       >
         @if (loading()) {
           <ui-loading height="18" width="18" />
@@ -54,7 +54,7 @@
 
   @if (disabled() && disabledReasons().length > 0) {
     @for (reason of disabledReasons(); track reason) {
-      <small class="text-xs text-neutral-400">{{ reason.message }}</small>
+      <small class="text-xs text-slate-400">{{ reason.message }}</small>
     }
   }
 

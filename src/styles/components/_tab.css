@@ -4,13 +4,13 @@
   }
 
   .ui-tab-list {
-    @apply flex border-b border-neutral-200;
+    @apply flex border-b border-slate-200;
   }
 
   .ui-tab {
     @apply border-b-2 px-4 py-2 text-sm font-medium transition-colors outline-none;
-    @apply border-transparent text-neutral-500;
-    @apply hover:text-neutral-700;
+    @apply border-transparent text-slate-500;
+    @apply hover:text-slate-700;
 
     &:focus-visible {
       @apply inset-ring-primary-100 border-primary-300 inset-ring-2;

@@ -4,12 +4,12 @@
   [enableSelection]="true"
   [disabled]="gridDisabled()"
 >
-  <thead class="sticky top-0 z-10 bg-neutral-50 text-xs text-neutral-500">
+  <thead class="sticky top-0 z-10 bg-slate-50 text-xs text-slate-500">
     <tr ngGridRow>
       @for (col of columns(); track col.key) {
         <th
           ngGridCell
-          class="default-border-color border-b bg-neutral-50 px-4 py-2 font-medium whitespace-nowrap outline-none"
+          class="default-border-color border-b bg-slate-50 px-4 py-2 font-medium whitespace-nowrap outline-none"
           [style.width]="col.width"
           [style.text-align]="col.align || 'left'"
         >
@@ -18,7 +18,7 @@
       }
     </tr>
   </thead>
-  <tbody class="divide-y divide-neutral-100">
+  <tbody class="divide-y divide-slate-100">
     @if (loading()) {
       <tr>
         <td class="p-8 text-center" [attr.colspan]="columns().length">
@@ -31,7 +31,7 @@
           @for (col of columns(); track col.key; let j = $index) {
             <td
               ngGridCell
-              class="px-4 py-2 whitespace-nowrap text-neutral-900"
+              class="px-4 py-2 whitespace-nowrap text-slate-900"
               [style.text-align]="col.align || 'left'"
               [rowIndex]="i"
               [colIndex]="j"
@@ -75,7 +75,7 @@
     } @else {
       <tr>
         <td [attr.colspan]="columns().length">
-          <div class="flex h-32 w-full items-center justify-center text-neutral-500">
+          <div class="flex h-32 w-full items-center justify-center text-slate-500">
             <span>Нет данных</span>
           </div>
         </td>

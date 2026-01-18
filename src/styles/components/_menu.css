@@ -8,7 +8,7 @@
   }
 
   .ui-menu-item {
-    @apply flex cursor-pointer items-center justify-between gap-4 px-4 py-2 text-sm text-neutral-800 outline-none select-none;
+    @apply flex cursor-pointer items-center justify-between gap-4 px-4 py-2 text-sm text-slate-800 outline-none select-none;
 
     &[data-active='true'] {
       @apply inset-ring-primary-100 border-primary-300 inset-ring-2;
@@ -21,7 +21,7 @@
 
   [ngCombobox] .ui-menu-item {
     &:hover {
-      @apply bg-neutral-100;
+      @apply bg-slate-100;
     }
 
     &[aria-selected='true'] {

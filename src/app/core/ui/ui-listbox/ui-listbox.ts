@@ -10,7 +10,7 @@ import { UiLoading } from '../ui-loading/ui-loading';
   styleUrl: './ui-listbox.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'block overflow-hidden rounded-lg border border-neutral-200 bg-white',
+    class: 'block overflow-hidden rounded-lg border border-slate-200 bg-white',
   },
 })
 export class UiListbox<T> {
