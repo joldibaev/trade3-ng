@@ -55,13 +55,6 @@ export const routes: Routes = [
       import('./pages/demo-breadcrumb/demo-breadcrumb').then((m) => m.DemoBreadcrumbPage),
   },
   {
-    path: 'directory-item-card',
-    loadComponent: () =>
-      import('./pages/demo-directory-item-card/demo-directory-item-card').then(
-        (m) => m.DemoDirectoryItemCardPage,
-      ),
-  },
-  {
     path: 'empty-state',
     loadComponent: () =>
       import('./pages/demo-empty-state/demo-empty-state').then((m) => m.DemoEmptyStatePage),
@@ -69,6 +62,10 @@ export const routes: Routes = [
   {
     path: 'menu',
     loadComponent: () => import('./pages/demo-menu/demo-menu').then((m) => m.DemoMenuPage),
+  },
+  {
+    path: 'icon',
+    loadComponent: () => import('./pages/demo-icon/demo-icon').then((m) => m.DemoIconPage),
   },
   {
     path: 'page-header',
@@ -86,5 +83,14 @@ export const routes: Routes = [
   {
     path: 'listbox',
     loadComponent: () => import('./pages/demo-listbox/demo-listbox').then((m) => m.DemoListboxPage),
+  },
+  {
+    path: 'switch',
+    loadComponent: () => import('./pages/demo-switch/demo-switch').then((m) => m.DemoSwitchPage),
+  },
+  {
+    path: 'checkbox',
+    loadComponent: () =>
+      import('./pages/demo-checkbox/demo-checkbox').then((m) => m.DemoCheckboxPage),
   },
 ];

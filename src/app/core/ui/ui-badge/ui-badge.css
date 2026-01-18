@@ -1,0 +1,86 @@
+@reference './../../../../styles.css';
+
+.ui-badge {
+  @apply inline-flex items-center justify-center gap-1.5 leading-none;
+  @apply default-transition;
+  @apply rounded-full;
+
+  /* Sizes */
+  &.ui-badge-size-xs {
+    @apply px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase;
+  }
+
+  &.ui-badge-size-sm {
+    @apply px-2 py-0.5 text-[11px] font-medium;
+  }
+
+  &.ui-badge-size-md {
+    @apply px-3 py-1 text-xs font-medium;
+  }
+
+  /* success (Active) */
+  &.ui-badge-variant-success {
+    &.ui-badge-mode-subtle {
+      @apply border-transparent bg-emerald-50 text-emerald-700;
+    }
+
+    &.ui-badge-mode-solid {
+      @apply border-transparent bg-emerald-600 text-white;
+    }
+  }
+
+  /* warning (Pending) */
+  &.ui-badge-variant-warning {
+    &.ui-badge-mode-subtle {
+      @apply border-transparent bg-amber-50 text-amber-700;
+    }
+
+    &.ui-badge-mode-solid {
+      @apply border-transparent bg-amber-500 text-white;
+    }
+  }
+
+  /* error / destructive (Inactive) */
+  &.ui-badge-variant-destructive {
+    &.ui-badge-mode-subtle {
+      @apply border-transparent bg-red-50 text-red-700;
+    }
+
+    &.ui-badge-mode-solid {
+      @apply border-transparent bg-red-600 text-white;
+    }
+  }
+
+  /* processing (Processing) */
+  &.ui-badge-variant-processing {
+    &.ui-badge-mode-subtle {
+      @apply border-transparent bg-blue-50 text-blue-700;
+    }
+
+    &.ui-badge-mode-solid {
+      @apply border-transparent bg-blue-600 text-white;
+    }
+  }
+
+  /* neutral */
+  &.ui-badge-variant-neutral {
+    &.ui-badge-mode-subtle {
+      @apply border-transparent bg-slate-100 text-slate-700;
+    }
+
+    &.ui-badge-mode-solid {
+      @apply border-transparent bg-slate-600 text-white;
+    }
+  }
+
+  /* primary */
+  &.ui-badge-variant-primary {
+    &.ui-badge-mode-subtle {
+      @apply bg-primary-50 text-primary-700 border-transparent;
+    }
+
+    &.ui-badge-mode-solid {
+      @apply bg-primary-600 border-transparent text-white;
+    }
+  }
+}

@@ -10,6 +10,10 @@ import { Stock } from './stock.interface';
 export interface Store {
   id: string;
   name: string;
+  address?: string;
+  phone?: string;
+  workingHours?: string;
+  isActive?: boolean;
   cashboxes: Cashbox[];
   createdAt?: string;
   updatedAt: string;

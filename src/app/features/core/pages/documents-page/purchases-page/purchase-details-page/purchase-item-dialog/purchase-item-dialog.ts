@@ -15,6 +15,7 @@ import { form, FormField, min, required, validate } from '@angular/forms/signals
 import { ProductsService } from '../../../../../../../core/services/products.service';
 import { StoresService } from '../../../../../../../core/services/stores.service';
 import { UiButton } from '../../../../../../../core/ui/ui-button/ui-button';
+import { UiCheckbox } from '../../../../../../../core/ui/ui-checkbox/ui-checkbox';
 import { UiDialog } from '../../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiIcon } from '../../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../../core/ui/ui-input/ui-input';
@@ -34,7 +35,7 @@ export interface PurchaseItemDialogData {
 @Component({
   selector: 'app-purchase-item-dialog',
   standalone: true,
-  imports: [UiButton, UiInput, FormsModule, FormField, UiIcon, CurrencyPipe, UiDialog],
+  imports: [UiButton, UiInput, UiCheckbox, FormsModule, FormField, UiIcon, CurrencyPipe, UiDialog],
   templateUrl: './purchase-item-dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

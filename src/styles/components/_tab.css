@@ -12,9 +12,7 @@
     @apply border-transparent text-slate-500;
     @apply hover:text-slate-700;
 
-    &:focus-visible {
-      @apply inset-ring-primary-100 border-primary-300 inset-ring-2;
-    }
+    @apply focus-ring;
 
     &[aria-selected='true'] {
       @apply border-primary-500 text-primary-600;

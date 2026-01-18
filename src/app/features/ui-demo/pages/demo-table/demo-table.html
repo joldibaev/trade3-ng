@@ -1,14 +1,50 @@
-<ui-page-header title="Table Demo" />
-<div class="flex h-[calc(100vh-200px)] flex-col">
-  <ui-card class="flex flex-1 flex-col overflow-hidden">
-    <ui-table
-      trackField="id"
-      [columns]="columns"
-      [data]="users()"
-      [loading]="loading()"
-      (selectedChanged)="onSelect($event)"
-    />
+<ui-page-header title="Data Table" />
+
+<div class="space-y-6">
+  <ui-card class="overflow-hidden p-0">
+    <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 p-6">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900">User Directory</h3>
+        <p class="text-sm text-slate-500">Manage all registered system users and their roles.</p>
+      </div>
+      <div class="flex gap-2">
+        <label class="flex cursor-pointer items-center gap-2 rounded border bg-white px-3 py-1 text-xs">
+          <input type="checkbox" [checked]="configLoading()"
+            (change)="configLoading.set($any($event.target).checked)" />
+          Loading
+        </label>
+        <label class="flex cursor-pointer items-center gap-2 rounded border bg-white px-3 py-1 text-xs">
+          <input type="checkbox" [checked]="configEmpty()" (change)="configEmpty.set($any($event.target).checked)" />
+          Empty
+        </label>
+        <button uiButton size="sm" variant="secondary" icon="outline-download">Export</button>
+        <button uiButton size="sm" variant="primary" icon="outline-plus">New User</button>
+      </div>
+    </div>
+
+    <ui-table trackField="id" [data]="tableData()" [columns]="columns" [loading]="configLoading()"
+      (selectedChanged)="onSelect($event)" />
   </ui-card>
 
-  <div class="mt-4 rounded border bg-white p-4">Selected: {{ selectedUser()?.name || 'None' }}</div>
+  @if (selectedUser(); as user) {
+  <ui-card class="border-primary-100 bg-primary-50/20 p-6">
+    <h3 class="text-primary-700 mb-4 text-sm font-bold tracking-wider uppercase">
+      Quick Details: {{ user.name }}
+    </h3>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div class="flex flex-col gap-1">
+        <span class="text-[10px] font-bold text-slate-400 uppercase">Unique Identifier</span>
+        <span class="font-mono text-sm">#USR-{{ user.id | number: '3.0' }}</span>
+      </div>
+      <div class="flex flex-col gap-1">
+        <span class="text-[10px] font-bold text-slate-400 uppercase">Current Role</span>
+        <span class="text-sm font-medium">{{ user.role }}</span>
+      </div>
+      <div class="flex flex-col gap-1">
+        <span class="text-[10px] font-bold text-slate-400 uppercase">Last Activity</span>
+        <span class="text-sm">{{ user.lastLogin }}</span>
+      </div>
+    </div>
+  </ui-card>
+  }
 </div>

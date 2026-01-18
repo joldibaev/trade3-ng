@@ -28,8 +28,8 @@
         [type]="type()"
         [disabled]="ngCombobox.disabled()"
         [readonly]="readonly()"
-        [class.invalid]="invalid()"
-        [attr.aria-invalid]="invalid()"
+        [class.invalid]="shouldShowError()"
+        [attr.aria-invalid]="shouldShowError()"
         [(value)]="inputValue"
         (blur)="touched.set(true)"
       />
@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  @if (invalid()) {
+  @if (shouldShowError()) {
     @for (error of errors(); track error) {
       <small class="text-xs text-red-400">{{ error.message }}</small>
     }
@@ -73,7 +73,7 @@
           ngListbox
           class="ui-menu"
           [class.invisible]="loading()"
-          (valuesChange)="valuesChanged($event)"
+          (valuesChange)="valuesChange($event)"
         >
           @if (items.length === 0) {
             <div class="ui-menu-item">No results found</div>

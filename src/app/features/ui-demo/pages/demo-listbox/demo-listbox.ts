@@ -33,4 +33,9 @@ export class DemoListboxPage {
   toggleLoading() {
     this.loading.update((v) => !v);
   }
+
+  // Playground Config
+  configLabel = signal('Listbox Label');
+  configLoading = signal(false);
+  configDisabled = signal(false);
 }

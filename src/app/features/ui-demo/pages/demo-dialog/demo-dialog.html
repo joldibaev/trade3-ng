@@ -12,3 +12,58 @@
   <h3 class="text-lg font-semibold">Custom Dialog</h3>
   <button uiButton variant="secondary" (click)="openCustom()">Open Custom Modal</button>
 </ui-card>
+
+<ui-card class="mt-6 p-6">
+  <h3 class="mb-4 text-xl font-bold">Dialog Playground (Confirm)</h3>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <div class="space-y-6">
+      <div class="grid grid-cols-1 gap-4">
+        <div>
+          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Title</label>
+          <input class="w-full rounded border p-2" [value]="configTitle()"
+            (input)="configTitle.set($any($event.target).value)" />
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Message</label>
+          <textarea class="w-full rounded border p-2" [value]="configMessage()"
+            (input)="configMessage.set($any($event.target).value)"></textarea>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Confirm Label</label>
+          <input class="w-full rounded border p-2" [value]="configConfirmLabel()"
+            (input)="configConfirmLabel.set($any($event.target).value)" />
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Variant</label>
+          <select class="w-full rounded border p-2" [value]="configVariant()"
+            (change)="configVariant.set($any($event.target).value)">
+            <option value="primary">primary</option>
+            <option value="danger">danger</option>
+            <option value="warning">warning</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
+      <button uiButton variant="primary" (click)="openPlaygroundConfirm()">
+        Open Configured Dialog
+      </button>
+
+      <div class="mt-8 w-full font-mono text-[10px] text-slate-400">
+        this.dialog.open(UiDialogConfirm, {{ '{' }} <br />
+        &nbsp;&nbsp;data: {{ '{' }} <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;title: '{{ configTitle() }}', <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;message: '{{ configMessage() }}', <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;confirmLabel: '{{ configConfirmLabel() }}', <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;variant: '{{ configVariant() }}' <br />
+        &nbsp;&nbsp;{{ '}' }} <br />
+        {{ '}' }});
+      </div>
+    </div>
+  </div>
+</ui-card>

@@ -1,17 +1,10 @@
 @reference './../../../../styles.css';
 
 .ui-button {
-  @apply inline-flex items-center justify-center gap-2;
-  @apply border border-transparent;
-  @apply active:scale-[0.98];
-  @apply relative;
+  @apply relative inline-flex cursor-pointer items-center justify-center gap-2 border border-transparent antialiased outline-none select-none;
+  @apply default-transition rounded-squircle focus-ring rounded-lg leading-none active:scale-[0.98];
 
-  @apply outline-none;
-  @apply rounded-squircle rounded-lg;
-  @apply default-transition;
-  @apply cursor-pointer;
-
-  /* variant */
+  /* variants */
   &.ui-button-variant-primary {
     @apply bg-primary-600 hover:bg-primary-700 text-white;
   }
@@ -28,32 +21,50 @@
     @apply bg-red-50 text-red-700 hover:bg-red-100;
   }
 
-  /* size */
+  &.ui-button-variant-link {
+    @apply text-primary-600 h-auto border-transparent bg-transparent p-0 hover:underline;
+  }
+
+  &.ui-button-variant-dashed {
+    @apply border-2 border-dashed border-slate-200 bg-transparent text-slate-500;
+    @apply hover:border-emerald-300 hover:bg-emerald-50/50 hover:text-emerald-600;
+  }
+
+  /* sizes */
   &.ui-button-size-sm {
-    /*px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium text-sm*/
-    @apply font-medium;
-    @apply px-3 py-2;
-    @apply text-sm;
+    @apply px-3 py-1.5 text-sm font-medium;
   }
 
   &.ui-button-size-md {
-    /*px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium text-sm*/
-    @apply font-medium;
-    @apply px-4 py-2.5;
-    @apply text-sm;
+    @apply px-4 py-2.5 text-sm font-medium;
   }
 
   &.ui-button-size-lg {
-    /*px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium*/
-    @apply font-medium;
-    @apply px-6 py-3;
+    @apply px-6 py-3.5 text-base font-medium;
   }
 
-  &.ui-button-size-icon {
-    @apply px-2 py-1.5;
+  /* Square icon state */
+  &.ui-button-icon-only {
+    @apply aspect-square gap-0 p-0;
+
+    &.ui-button-size-sm {
+      @apply h-8 w-8;
+    }
+
+    &.ui-button-size-md {
+      @apply h-10 w-10;
+    }
+
+    &.ui-button-size-lg {
+      @apply h-12 w-12;
+    }
+
+    ui-icon,
+    ui-loading {
+      @apply m-0 p-0;
+    }
   }
 
-  /* disable */
   &.ui-button-disabled {
     @apply pointer-events-none opacity-50;
   }

@@ -7,18 +7,27 @@
   <!-- Header -->
   <div class="default-border-color flex items-center justify-between border-b p-4">
     <div class="flex items-center gap-2">
-      <button tabindex="-1" cdkDragHandle uiButton variant="ghost" size="icon" class="cursor-move">
-        <ui-icon name="outline-hand-move"></ui-icon>
-      </button>
-      <!--            <ui-icon  name="move" class="cursor-move text-slate-400" />-->
+      <button
+        tabindex="-1"
+        cdkDragHandle
+        uiButton
+        variant="ghost"
+        iconOnly
+        icon="outline-hand-move"
+        class="cursor-move"
+      ></button>
       <h2 class="text-lg leading-6 font-bold text-slate-900">
         {{ title() }}
       </h2>
     </div>
 
-    <button uiButton variant="ghost" size="icon" (click)="closeAction.emit()">
-      <ui-icon name="outline-x"></ui-icon>
-    </button>
+    <button
+      uiButton
+      variant="ghost"
+      iconOnly
+      icon="outline-x"
+      (click)="closeAction.emit()"
+    ></button>
   </div>
 
   <!-- Content -->

@@ -1,6 +1,6 @@
 @layer components {
   .ui-form-label {
-    @apply text-muted flex items-center gap-1 text-xs font-medium select-none;
+    @apply flex items-center gap-1 text-xs font-medium text-slate-600 select-none;
 
     &:has(+ div .invalid) {
       @apply text-red-400;
@@ -18,7 +18,7 @@
     }
 
     &:focus-within {
-      @apply ring-primary-100 border-primary-300 ring-3;
+      @apply border-primary-400 ring-primary-500/20 ring-4;
     }
 
     &::placeholder {

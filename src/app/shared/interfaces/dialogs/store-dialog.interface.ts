@@ -6,4 +6,8 @@ export interface StoreDialogData {
 
 export interface StoreDialogResult {
   name: string;
+  address: string;
+  phone: string;
+  workingHours: string;
+  isActive: boolean;
 }

@@ -1,13 +1,5 @@
-import {
-  booleanAttribute,
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  model,
-  signal,
-} from '@angular/core';
-import { DisabledReason, ValidationError } from '@angular/forms/signals';
-import { generateId } from '../../../shared/utils/generate-id';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input, model } from '@angular/core';
+import { UiFormControl } from '../ui-form-control';
 import { UiLoading } from '../ui-loading/ui-loading';
 import { InputAutocomplete } from './input-autocomplete.type';
 import { InputMode } from './input-inputmode.type';
@@ -23,34 +15,22 @@ import { InputType } from './input-type.type';
   },
   imports: [UiLoading],
 })
-export class UiInput {
+export class UiInput extends UiFormControl {
   value = model('');
 
-  // Writable interaction state - control updates these
-  touched = model<boolean>(false);
-
-  // Read-only state - form system manages these
-  disabled = input<boolean>(false);
-  disabledReasons = input<readonly DisabledReason[]>([]);
-  readonly = input<boolean>(false);
-  hidden = input<boolean>(false);
-  invalid = input<boolean>(false);
-  errors = input<readonly ValidationError.WithField[]>([]);
-  required = input<boolean>(false);
-
-  // component inputs
-  label = input<string>();
-
+  // component specific inputs
   name = input<string>('');
   type = input<InputType>('text');
   enterKeyHint = input<string>();
-  placeholder = input<string>('');
+  override placeholder = input<string>('');
   autocomplete = input<InputAutocomplete>('on');
   inputMode = input<InputMode>();
   spellCheck = input(false, { transform: booleanAttribute });
-  loading = input(false, { transform: booleanAttribute });
+  override loading = input(false, { transform: booleanAttribute });
 
-  id = signal(`input-${generateId()}`);
+  protected override getIdPrefix(): string {
+    return 'input';
+  }
 
   protected onInput(target: EventTarget | null) {
     if (!(target && target instanceof HTMLInputElement)) return;

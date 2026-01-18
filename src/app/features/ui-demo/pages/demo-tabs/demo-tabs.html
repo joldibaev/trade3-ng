@@ -2,48 +2,75 @@
 
 <div class="space-y-6">
   <ui-card class="p-6">
-    <h2 class="mb-4 text-lg font-semibold">Basic Usage</h2>
+    <h2 class="mb-4 border-b pb-2 text-lg font-semibold">Basic Usage</h2>
     <ui-tab-group>
-      <ui-tab label="First Tab">
-        <div class="p-4">
-          <p>Content for the first tab.</p>
+      <ui-tab label="General">
+        <div class="prose prose-slate p-4">
+          <p>This is the general configuration tab. You can place any content here.</p>
         </div>
       </ui-tab>
-      <ui-tab label="Second Tab">
-        <div class="p-4">
-          <p>Content for the second tab.</p>
+      <ui-tab label="Security">
+        <div class="prose prose-slate p-4">
+          <p>Security settings and access control lists go here.</p>
         </div>
       </ui-tab>
-      <ui-tab label="Third Tab">
-        <div class="p-4">
-          <p>Content for the third tab.</p>
+      <ui-tab label="Metadata">
+        <div class="prose prose-slate p-4">
+          <p>Technical technical metadata and system logs.</p>
         </div>
       </ui-tab>
     </ui-tab-group>
   </ui-card>
 
   <ui-card class="p-6">
-    <h2 class="mb-4 text-lg font-semibold">With Complex Content</h2>
+    <h2 class="mb-4 border-b pb-2 text-lg font-semibold">With UI Components</h2>
     <ui-tab-group>
-      <ui-tab label="Profile">
+      <ui-tab label="Profile Details">
         <div class="space-y-4 p-4">
-          <div class="flex items-center gap-4">
-            <div class="h-12 w-12 rounded-full bg-slate-200"></div>
+          <div class="flex items-center gap-4 rounded-xl bg-slate-50 p-4">
+            <div
+              class="bg-primary-100 text-primary-700 flex h-16 w-16 items-center justify-center rounded-full text-xl font-bold">
+              JD
+            </div>
             <div>
-              <div class="font-medium">John Doe</div>
-              <div class="text-sm text-slate-500">Administrator</div>
+              <div class="text-lg font-bold text-slate-900">John Doe</div>
+              <div class="text-sm text-slate-500">Administrator • active-member</div>
             </div>
           </div>
         </div>
       </ui-tab>
-      <ui-tab label="Settings">
-        <div class="p-4">
-          <div class="flex items-center gap-2">
-            <input id="notifications" type="checkbox" class="rounded" />
-            <label for="notifications">Enable notifications</label>
+      <ui-tab label="System Preferences">
+        <div class="space-y-4 p-4">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <ui-checkbox label="Enable real-time notifications" [checked]="true" />
+            <ui-checkbox label="Automatic cloud synchronization" [checked]="false" />
+            <ui-switch label="Dark Mode" />
+            <ui-switch label="Developer Mode" [checked]="true" />
           </div>
         </div>
       </ui-tab>
+    </ui-tab-group>
+  </ui-card>
+
+  <ui-card class="p-6">
+    <div class="mb-4 flex items-center justify-between border-b pb-2">
+      <h2 class="text-lg font-semibold">Dynamic Tabs</h2>
+      <div class="flex gap-2">
+        <button uiButton size="sm" variant="secondary" (click)="addTab()">Add Tab</button>
+        <button uiButton size="sm" variant="danger" [disabled]="tabs().length === 0" (click)="removeTab()">
+          Remove Last
+        </button>
+      </div>
+    </div>
+
+    <ui-tab-group>
+      @for (tab of tabs(); track tab) {
+      <ui-tab [label]="tab">
+        <div class="p-4">
+          Content for {{ tab }}
+        </div>
+      </ui-tab>
+      }
     </ui-tab-group>
   </ui-card>
 </div>

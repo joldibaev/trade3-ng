@@ -19,7 +19,7 @@ export class DocumentStatusComponent {
   };
 
   statusVariants: Record<DocumentStatus, UiBadgeVariant> = {
-    [DocumentStatus.DRAFT]: 'secondary',
+    [DocumentStatus.DRAFT]: 'neutral',
     [DocumentStatus.COMPLETED]: 'success',
     [DocumentStatus.CANCELLED]: 'destructive',
   };

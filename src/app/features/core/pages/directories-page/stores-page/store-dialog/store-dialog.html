@@ -5,6 +5,22 @@
       placeholder="Введите название магазина"
       [formField]="formData.name"
     />
+    <ui-input label="Адрес" placeholder="Введите адрес магазина" [formField]="formData.address" />
+    <div class="grid grid-cols-2 gap-4">
+      <ui-input label="Телефон" placeholder="+998 ..." [formField]="formData.phone" />
+      <ui-input
+        label="Режим работы"
+        placeholder="09:00 - 21:00"
+        [formField]="formData.workingHours"
+      />
+    </div>
+    <div class="flex items-center justify-between rounded-lg border border-slate-200 p-3">
+      <div>
+        <p class="text-sm font-medium">Статус магазина</p>
+        <p class="text-xs text-slate-500">Разрешить продажи в этом магазине</p>
+      </div>
+      <ui-switch [formField]="formData.isActive" />
+    </div>
   </form>
 
   <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>

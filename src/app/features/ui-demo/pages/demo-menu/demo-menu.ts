@@ -18,9 +18,43 @@ export class DemoMenuPage {
   isOpen = signal(false);
 
   menuItems: MenuItemCollection = [
-    { id: 'profile', label: 'Profile' },
-    { id: 'settings', label: 'Settings' },
+    {
+      id: 'file',
+      label: 'File',
+      items: [
+        { id: 'new', label: 'New Project' },
+        { id: 'open', label: 'Open...' },
+        { divider: true },
+        { id: 'save', label: 'Save' },
+      ],
+    },
+    {
+      id: 'edit',
+      label: 'Edit',
+      items: [
+        { id: 'undo', label: 'Undo' },
+        { id: 'redo', label: 'Redo' },
+        { divider: true },
+        {
+          id: 'find',
+          label: 'Find & Replace',
+          items: [
+            { id: 'find-next', label: 'Find Next' },
+            { id: 'find-prev', label: 'Find Previous' },
+          ],
+        },
+      ],
+    },
     { divider: true },
+    { id: 'settings', label: 'Settings' },
     { id: 'logout', label: 'Logout' },
   ];
+
+  simpleMenuItems: MenuItemCollection = [
+    { id: 'view', label: 'View Details' },
+    { id: 'edit', label: 'Edit' },
+    { id: 'delete', label: 'Delete' },
+  ];
+
+  isSimpleOpen = signal(false);
 }

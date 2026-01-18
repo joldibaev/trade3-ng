@@ -1,31 +1,245 @@
-<ui-page-header title="Input Demo" />
-<ui-card class="p-4">
-  <h3 class="text-lg font-semibold">Basic Inputs</h3>
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-    <ui-input label="Text Input" placeholder="Enter text..." />
-    <ui-input label="Number Input" type="number" placeholder="0.00" />
-    <ui-input label="Password" type="password" placeholder="******" />
-    <ui-input label="Date" type="date" />
+<ui-page-header title="Input Demo (Signal Forms)" />
+
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+  <!-- Interactive Form -->
+  <ui-card class="col-span-2 p-6">
+    <h3 class="mb-4 text-xl font-bold text-slate-800">Registration Form</h3>
+    <div class="flex flex-col gap-6">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <ui-input
+          label="Username"
+          name="user_login"
+          placeholder="Type 'hide' to hide field below, 'lock' to freeze other"
+          [formField]="demoForm.username"
+        />
+
+        <ui-input
+          label="Email"
+          name="user_email"
+          type="email"
+          placeholder="your@email.com"
+          [formField]="demoForm.email"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <ui-input
+          label="Password"
+          name="user_password"
+          type="password"
+          placeholder="Required field"
+          [formField]="demoForm.password"
+        />
+
+        <ui-input
+          label="Secret Code (Async Demo)"
+          name="secret_code"
+          placeholder="Type 'pending' for 2s delay"
+          [formField]="demoForm.secretCode"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <ui-input
+          label="Pension (Disabled Logic)"
+          name="pension_status"
+          placeholder="Enabled only when username is set"
+          [formField]="demoForm.pension"
+        />
+
+        <ui-input
+          label="Readonly Logic"
+          name="editable_check"
+          placeholder="Locked when username is 'lock'"
+          [formField]="demoForm.notEditable"
+        />
+      </div>
+
+      <ui-input
+        label="Hidden Logic"
+        name="hiding_field"
+        placeholder="Hidden when username is 'hide'"
+        [formField]="demoForm.hiddenField"
+      />
+
+      <div class="flex flex-wrap gap-3 border-t border-slate-100 pt-4">
+        <button
+          uiButton
+          variant="primary"
+          [disabled]="demoForm().invalid()"
+          [loading]="demoForm().submitting()"
+        >
+          Submit Form
+        </button>
+        <button uiButton variant="secondary" (click)="resetForm()">Reset Basic</button>
+        <button uiButton variant="ghost" (click)="markAllTouched()">Mark All Touched</button>
+      </div>
+    </div>
+  </ui-card>
+
+  <!-- Form Debug State -->
+  <ui-card class="bg-slate-900 p-6 text-slate-300">
+    <h3 class="mb-4 text-sm font-bold tracking-wider text-slate-500 uppercase">Form Internals</h3>
+
+    <div class="space-y-4 font-mono text-xs">
+      <section>
+        <p class="mb-1 text-emerald-400">Status Summary:</p>
+        <div class="grid grid-cols-2 gap-2 border-b border-slate-800 pb-3">
+          <span>Valid:</span>
+          <span [class.text-emerald-500]="demoForm().valid()">{{ demoForm().valid() }}</span>
+          <span>Invalid:</span>
+          <span [class.text-red-500]="demoForm().invalid()">{{ demoForm().invalid() }}</span>
+          <span>Pending:</span>
+          <span [class.text-blue-400]="demoForm().pending()">{{ demoForm().pending() }}</span>
+          <span>Touched:</span> <span>{{ demoForm().touched() }}</span> <span>Dirty:</span>
+          <span>{{ demoForm().dirty() }}</span>
+        </div>
+      </section>
+
+      <section>
+        <p class="mb-1 text-emerald-400">Value Model:</p>
+        <pre class="max-h-40 overflow-auto rounded bg-slate-950 p-2 text-blue-300">{{
+          formState() | json
+        }}</pre>
+      </section>
+
+      <section>
+        <p class="mb-1 text-amber-400">Field Specifics (Username):</p>
+        <div class="grid grid-cols-2 gap-x-2">
+          <span>Name:</span> <span>{{ demoForm.username().name() }}</span> <span>Touched:</span>
+          <span>{{ demoForm.username().touched() }}</span> <span>Invalid:</span>
+          <span>{{ demoForm.username().invalid() }}</span> <span>Required:</span>
+          <span>{{ demoForm.username().required() }}</span>
+        </div>
+      </section>
+    </div>
+  </ui-card>
+</div>
+
+<!-- Attribute Configuration Explorer -->
+<ui-card class="mt-6 p-6">
+  <h3 class="mb-4 text-xl font-bold">Attribute Explorer</h3>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <div class="space-y-6">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Type</label>
+          <select
+            class="w-full rounded border p-2"
+            [value]="configType()"
+            (change)="configType.set($any($event.target).value)"
+          >
+            <option value="text">text</option>
+            <option value="password">password</option>
+            <option value="email">email</option>
+            <option value="number">number</option>
+            <option value="tel">tel</option>
+            <option value="url">url</option>
+            <option value="date">date</option>
+          </select>
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Input Mode</label>
+          <select
+            class="w-full rounded border p-2"
+            [value]="configInputMode()"
+            (change)="configInputMode.set($any($event.target).value)"
+          >
+            <option value="text">text</option>
+            <option value="decimal">decimal</option>
+            <option value="numeric">numeric</option>
+            <option value="tel">tel</option>
+            <option value="search">search</option>
+            <option value="email">email</option>
+            <option value="url">url</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Placeholder</label>
+          <input
+            class="w-full rounded border p-2"
+            [value]="configPlaceholder()"
+            (input)="configPlaceholder.set($any($event.target).value)"
+          />
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Enter Key Hint</label
+          >
+          <select
+            class="w-full rounded border p-2"
+            [value]="configEnterKeyHint()"
+            (change)="configEnterKeyHint.set($any($event.target).value)"
+          >
+            <option value="enter">enter</option>
+            <option value="done">done</option>
+            <option value="go">go</option>
+            <option value="next">next</option>
+            <option value="previous">previous</option>
+            <option value="search">search</option>
+            <option value="send">send</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex gap-6">
+        <label class="flex cursor-pointer items-center gap-2">
+          <input
+            type="checkbox"
+            [checked]="configLoading()"
+            (change)="configLoading.set($any($event.target).checked)"
+          />
+          <span class="text-sm font-medium">Loading Spinner</span>
+        </label>
+        <label class="flex cursor-pointer items-center gap-2">
+          <input
+            type="checkbox"
+            [checked]="configSpellcheck()"
+            (change)="configSpellcheck.set($any($event.target).checked)"
+          />
+          <span class="text-sm font-medium">Spellcheck</span>
+        </label>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6"
+    >
+      <ui-input
+        label="Configuration Test Field"
+        autocomplete="off"
+        name="config_explorer"
+        [type]="configType()"
+        [placeholder]="configPlaceholder()"
+        [loading]="configLoading()"
+        [spellCheck]="configSpellcheck()"
+        [inputMode]="$any(configInputMode())"
+        [enterKeyHint]="configEnterKeyHint()"
+        [formField]="demoForm.configTest"
+      />
+      <div class="mt-4 font-mono text-[10px] text-slate-400">
+        &lt;ui-input <br />
+        &nbsp;&nbsp;type="{{ configType() }}" <br />
+        &nbsp;&nbsp;placeholder="{{ configPlaceholder() }}" <br />
+        &nbsp;&nbsp;loading="{{ configLoading() }}" <br />
+        &nbsp;&nbsp;spellCheck="{{ configSpellcheck() }}" <br />
+        &nbsp;&nbsp;inputMode="{{ configInputMode() }}" <br />
+        &nbsp;&nbsp;enterKeyHint="{{ configEnterKeyHint() }}" <br />
+        &nbsp;&nbsp;name="config_explorer" /&gt;
+      </div>
+    </div>
   </div>
 </ui-card>
 
-<ui-card class="p-4">
-  <h3 class="text-lg font-semibold">States</h3>
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-    <ui-input label="Disabled (Toggle)" value="Toggle my state" [disabled]="isDisabled()" />
-    <ui-input label="Readonly" value="Read only value" [readonly]="true" />
-    <ui-input label="With Error" value="Invalid value" [invalid]="true" />
-    <ui-input label="Loading" placeholder="Searching..." [loading]="true" />
-  </div>
-  <div class="mt-4">
-    <button uiButton (click)="toggleDisabled()">Toggle Disabled</button>
-  </div>
-</ui-card>
-
-<ui-card class="p-4">
-  <h3 class="text-lg font-semibold">Binding</h3>
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-    <ui-input label="Two-way binding" [(value)]="inputValue" />
-    <div class="rounded bg-gray-50 p-4">Value: {{ inputValue() }}</div>
+<ui-card class="mt-6 p-6">
+  <h3 class="mb-4 text-lg font-bold text-slate-800">Direct Native States (Reference)</h3>
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <ui-input label="Required Indicator" placeholder="Native required asterisk" [required]="true" />
+    <ui-input label="Forced Invalid" placeholder="Red border state" [invalid]="true" />
+    <ui-input label="Disabled Input" value="Cannot be focused" [disabled]="true" />
+    <ui-input label="Hidden Input" [hidden]="true" />
   </div>
 </ui-card>

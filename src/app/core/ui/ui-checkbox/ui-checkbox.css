@@ -1,0 +1,14 @@
+@reference "../../../../styles.css";
+
+.ui-checkbox {
+  @apply relative inline-flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border-2 border-slate-300 transition-all duration-200 ease-in-out;
+  @apply focus-ring bg-white;
+
+  &.ui-checkbox-checked {
+    @apply border-emerald-600 bg-emerald-600 text-white;
+  }
+
+  &.ui-checkbox-disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+}

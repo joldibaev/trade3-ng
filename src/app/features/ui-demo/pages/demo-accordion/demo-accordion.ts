@@ -13,8 +13,20 @@ import { UiPageHeader } from '../../../../core/ui/ui-page-header/ui-page-header'
 })
 export class DemoAccordionPage {
   items = [
-    { title: 'Section 1', content: 'Content for section 1. This can be any text description.' },
-    { title: 'Section 2', content: 'Content for section 2. More details here.' },
-    { title: 'Section 3', content: 'Content for section 3. Final bits of information.' },
+    {
+      title: 'Common Questions',
+      content:
+        'Find answers to frequently asked questions about our services, pricing, and support policies.',
+    },
+    {
+      title: 'Account Management',
+      content:
+        'Learn how to manage your profile, update security settings, and configure notification preferences.',
+    },
+    {
+      title: 'Billing & Invoicing',
+      content:
+        'Access your billing history, download invoices, and manage payment methods securely.',
+    },
   ];
 }

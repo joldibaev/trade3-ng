@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './ui-card.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col rounded-xl border default-border-color bg-white',
+    class: 'block bg-white rounded-xl border default-border-color overflow-hidden',
   },
 })
 export class UiCard {}

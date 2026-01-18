@@ -3,7 +3,7 @@
   @for (item of items; track item.route) {
     <ui-card class="flex flex-col gap-2 p-4">
       <h3 class="text-lg font-semibold">{{ item.label }}</h3>
-      <p class="text-muted text-sm">Demo for {{ item.label }} component</p>
+      <p class="text-sm text-slate-600">Demo for {{ item.label }} component</p>
       <a uiButton variant="secondary" class="mt-2 w-full" [routerLink]="item.route"> View Demo </a>
     </ui-card>
   }

@@ -1,5 +1,15 @@
 @if (loading()) {
-  <ui-loading width="18" height="18" />
+  <ui-loading class="shrink-0" [width]="iconSize()" [height]="iconSize()" />
+} @else if (icon(); as name) {
+  @if (iconPosition() === 'left') {
+    <ui-icon class="shrink-0" [name]="name" [width]="iconSize()" [height]="iconSize()" />
+  }
 }
 
-<ng-content></ng-content>
+<ng-content />
+
+@if (icon(); as name) {
+  @if (iconPosition() === 'right' && !loading()) {
+    <ui-icon class="shrink-0" [name]="name" [width]="iconSize()" [height]="iconSize()" />
+  }
+}

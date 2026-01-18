@@ -18,14 +18,12 @@
       size="sm"
       [disabled]="!selectedPurchase()"
       [loading]="isLoading()"
+      [icon]="
+        selectedPurchase()?.status === DocumentStatus.COMPLETED ? 'outline-x' : 'outline-check'
+      "
       (click)="toggleStatus()"
     >
-      <ui-icon
-        [name]="
-          selectedPurchase()?.status === DocumentStatus.COMPLETED ? 'outline-x' : 'outline-check'
-        "
-      ></ui-icon>
-      <span>Провести / Отменить проведение</span>
+      Провести / Отменить проведение
     </button>
   </div>
 </app-table-struct>

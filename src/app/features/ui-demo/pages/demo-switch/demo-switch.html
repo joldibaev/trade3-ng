@@ -1,0 +1,85 @@
+<ui-page-header title="Switch Demo" />
+
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+  <ui-card class="col-span-2 p-6">
+    <h3 class="mb-4 text-xl font-bold">Preferences</h3>
+    <div class="flex flex-col gap-6">
+      <div class="flex items-center justify-between rounded-xl border bg-slate-50/50 p-4">
+        <div>
+          <p class="font-medium">Dark Mode</p>
+          <p class="text-sm text-slate-500">Enable high-contrast dark theme</p>
+        </div>
+        <ui-switch [formField]="settingsForm.darkMode" />
+      </div>
+
+      <div class="flex items-center justify-between rounded-xl border bg-slate-50/50 p-4">
+        <div>
+          <p class="font-medium">Public Profile</p>
+          <p class="text-sm text-slate-500">Allow others to see your trade history</p>
+        </div>
+        <ui-switch [formField]="settingsForm.publicProfile" />
+      </div>
+
+      <div class="flex items-center justify-between rounded-xl border bg-slate-50/50 p-4">
+        <div>
+          <p class="font-medium">Email Alerts</p>
+          <p class="text-sm text-slate-500">Daily summaries of your activity</p>
+        </div>
+        <ui-switch [formField]="settingsForm.emailAlerts" />
+      </div>
+
+      <div class="flex gap-2 border-t pt-4">
+        <button uiButton (click)="resetForm()">Reset Settings</button>
+      </div>
+    </div>
+  </ui-card>
+
+  <ui-card class="bg-slate-900 p-6 text-slate-300">
+    <h3 class="mb-4 text-sm font-bold tracking-wider text-slate-500 uppercase">Settings Logic</h3>
+    <div class="space-y-4 font-mono text-xs">
+      <pre class="rounded bg-slate-950 p-2 text-blue-300">{{ formState() | json }}</pre>
+      <div class="border-t border-slate-800 pt-2">
+        <p>Invalid: {{ settingsForm().invalid() }}</p>
+        <p>Touched: {{ settingsForm().touched() }}</p>
+      </div>
+    </div>
+  </ui-card>
+</div>
+
+
+
+<ui-card class="mt-6 p-6">
+  <h3 class="mb-4 text-xl font-bold">Attribute Explorer</h3>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <div class="space-y-6">
+      <div class="flex gap-6">
+        <label class="flex cursor-pointer items-center gap-2">
+          <input type="checkbox" [checked]="configDisabled()"
+            (change)="configDisabled.set($any($event.target).checked)" />
+          <span class="text-sm font-medium">Disabled</span>
+        </label>
+        <label class="flex cursor-pointer items-center gap-2">
+          <input type="checkbox" [checked]="configChecked()"
+            (change)="configChecked.set($any($event.target).checked)" />
+          <span class="text-sm font-medium">Checked (Manual)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="flex flex-col justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
+      <div class="flex items-center gap-4">
+        <ui-switch [disabled]="configDisabled()" [checked]="configChecked()"
+          (checkedChange)="configChecked.set($event)" />
+        <span class="text-sm text-slate-500">
+          Result: <span class="font-bold text-slate-800">{{ configChecked() }}</span>
+        </span>
+      </div>
+
+      <div class="mt-4 font-mono text-[10px] text-slate-400">
+        &lt;ui-switch <br />
+        &nbsp;&nbsp;disabled="{{ configDisabled() }}" <br />
+        &nbsp;&nbsp;[(checked)]="configChecked" /&gt;
+      </div>
+    </div>
+  </div>
+</ui-card>

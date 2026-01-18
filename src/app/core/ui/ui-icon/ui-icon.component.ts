@@ -23,8 +23,8 @@ export class UiIcon {
   private sanitizer = inject(DomSanitizer);
 
   name = input.required<IconName>();
-  width = input(18, { transform: numberAttribute });
-  height = input(18, { transform: numberAttribute });
+  width = input(16, { transform: numberAttribute });
+  height = input(16, { transform: numberAttribute });
 
   svgContent = computed<SafeHtml | string>(() => {
     const iconName = this.name();

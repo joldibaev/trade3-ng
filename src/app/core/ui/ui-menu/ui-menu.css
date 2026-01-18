@@ -1,7 +1,1 @@
 @reference './../../../../styles.css';
-
-.ui-menu-item {
-  &[data-active='true'] {
-    @apply bg-slate-50;
-  }
-}

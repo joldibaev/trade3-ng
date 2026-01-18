@@ -60,6 +60,24 @@ export class DemoDialogPage {
       width: '500px',
     });
   }
+
+  // Playground Config
+  configTitle = signal('Confirm Action');
+  configMessage = signal('Are you sure you want to proceed?');
+  configConfirmLabel = signal('Confirm');
+  configVariant = signal<'primary' | 'danger' | 'warning'>('primary');
+
+  openPlaygroundConfirm() {
+    this.dialog.open(UiDialogConfirm, {
+      data: {
+        title: this.configTitle(),
+        message: this.configMessage(),
+        confirmLabel: this.configConfirmLabel(),
+        variant: this.configVariant(),
+      } as UiDialogConfirmData,
+      width: '400px',
+    });
+  }
 }
 
 @Component({

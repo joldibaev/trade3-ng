@@ -18,11 +18,10 @@ export class DemoBreadcrumbPage {
     { label: 'Current Page' },
   ];
 
-  deepItems = [
-    { label: 'Root', url: '/' },
-    { label: 'Level 1', url: '/l1' },
-    { label: 'Level 2', url: '/l2' },
-    { label: 'Level 3', url: '/l3' },
-    { label: 'Current' },
+  configItems = [
+    { label: 'Home', url: '/' },
+    { label: 'Products', url: '/products' },
+    { label: 'Electronics', url: '/products/electronics' },
+    { label: 'Laptops' },
   ];
 }

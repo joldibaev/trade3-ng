@@ -1,0 +1,26 @@
+<div class="flex items-center gap-2">
+  <button
+    type="button"
+    role="checkbox"
+    class="ui-checkbox"
+    [attr.aria-checked]="checked()"
+    [attr.aria-label]="label()"
+    [disabled]="disabled()"
+    [class.ui-checkbox-checked]="checked()"
+    [class.ui-checkbox-disabled]="disabled()"
+    (click)="toggle()"
+  >
+    @if (checked()) {
+      <ui-icon name="outline-check" class="h-3.5 w-3.5" />
+    }
+  </button>
+  @if (label()) {
+    <span
+      class="cursor-pointer text-sm font-medium select-none"
+      [class.opacity-50]="disabled()"
+      (click)="toggle()"
+    >
+      {{ label() }}
+    </span>
+  }
+</div>

@@ -27,8 +27,8 @@
       [value]="value()"
       [disabled]="disabled()"
       [readonly]="readonly()"
-      [class.invalid]="invalid()"
-      [attr.aria-invalid]="invalid()"
+      [class.invalid]="shouldShowError()"
+      [attr.aria-invalid]="shouldShowError()"
       (input)="onInput($event.target)"
       (blur)="touched.set(true)"
     />
@@ -42,7 +42,7 @@
     }
   </div>
 
-  @if (invalid()) {
+  @if (shouldShowError()) {
     @for (error of errors(); track error) {
       <small class="text-xs text-red-400">{{ error.message }}</small>
     }

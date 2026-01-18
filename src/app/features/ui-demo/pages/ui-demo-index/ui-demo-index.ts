@@ -20,10 +20,9 @@ export class UiDemoIndexPage {
     { label: 'Breadcrumb', route: 'breadcrumb' },
     { label: 'Button', route: 'button' },
     { label: 'Card', route: 'card' },
+    { label: 'Checkbox', route: 'checkbox' },
     { label: 'Dialog', route: 'dialog' },
-    { label: 'Directory Item Card', route: 'directory-item-card' },
     { label: 'Empty State', route: 'empty-state' },
-    { label: 'Icon', route: 'icon' },
     { label: 'Input', route: 'input' },
     { label: 'Listbox', route: 'listbox' },
     { label: 'Loading', route: 'loading' },
@@ -31,7 +30,9 @@ export class UiDemoIndexPage {
     { label: 'Notyf', route: 'notyf' },
     { label: 'Page Header', route: 'page-header' },
     { label: 'Select', route: 'select' },
+    { label: 'Switch', route: 'switch' },
     { label: 'Table', route: 'table' },
+    { label: 'Tabs', route: 'tabs' },
     { label: 'Tree', route: 'tree' },
-  ];
+  ].sort((a, b) => a.label.localeCompare(b.label));
 }

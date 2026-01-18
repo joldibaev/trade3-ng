@@ -1,26 +1,43 @@
 <ui-page-header title="Listbox" />
 
-<div class="grid grid-cols-2 gap-4">
-  <ui-card class="gap-4 p-4">
-    <h3 class="font-bold">Basic Usage</h3>
-    <ui-listbox
-      optionLabel="name"
-      optionField="id"
-      [items]="users"
-      [value]="selectedUserId()"
-      [loading]="loading()"
-      (valueChange)="selectedUserId.set($event)"
-    />
-    <div class="text-sm text-slate-500">Selected ID: {{ selectedUserId() || 'None' }}</div>
-    <button class="text-sm text-blue-600 hover:underline" (click)="toggleLoading()">
-      Toggle Loading
-    </button>
-  </ui-card>
 
-  <ui-card class="gap-4 p-4">
-    <h3 class="font-bold">Empty State</h3>
-    <ui-listbox optionLabel="name" optionField="id" [items]="[]" [loading]="loading()">
-      <span empty-state>No users found (Custom Empty State)</span>
-    </ui-listbox>
-  </ui-card>
-</div>
+
+<ui-card class="mt-6 p-6">
+  <h3 class="mb-4 text-xl font-bold">Attribute Explorer</h3>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <div class="space-y-6">
+      <div class="grid grid-cols-1 gap-4">
+        <div>
+          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Label</label>
+          <input class="w-full rounded border p-2" [value]="configLabel()"
+            (input)="configLabel.set($any($event.target).value)" />
+        </div>
+      </div>
+
+      <div class="flex gap-6">
+        <label class="flex cursor-pointer items-center gap-2">
+          <input type="checkbox" [checked]="configLoading()"
+            (change)="configLoading.set($any($event.target).checked)" />
+          <span class="text-sm font-medium">Loading Spinner</span>
+        </label>
+        <label class="flex cursor-pointer items-center gap-2">
+          <input type="checkbox" [checked]="configDisabled()"
+            (change)="configDisabled.set($any($event.target).checked)" />
+          <span class="text-sm font-medium">Disabled</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="flex flex-col justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
+      <ui-listbox [label]="configLabel()" [loading]="configLoading()" [disabled]="configDisabled()" optionLabel="name"
+        optionField="id" [items]="users" />
+      <div class="mt-4 font-mono text-[10px] text-slate-400">
+        &lt;ui-listbox <br />
+        &nbsp;&nbsp;label="{{ configLabel() }}" <br />
+        &nbsp;&nbsp;loading="{{ configLoading() }}" <br />
+        &nbsp;&nbsp;disabled="{{ configDisabled() }}" <br />
+        &nbsp;&nbsp;[items]="users" /&gt;
+      </div>
+    </div>
+  </div>
+</ui-card>

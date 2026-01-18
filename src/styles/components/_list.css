@@ -12,7 +12,7 @@
     }
 
     &[data-active='true'] {
-      @apply inset-ring-primary-100 border-primary-300 inset-ring-2;
+      @apply focus-ring;
     }
   }
 

@@ -21,8 +21,6 @@
         </span>
       }
 
-      <!--todo (blur)="touched.set(true)" -->
-      <!--todo make input custom full to disable select -->
       <input
         ngComboboxInput
         readonly
@@ -32,8 +30,9 @@
         [value]="value()"
         [placeholder]="placeholder()"
         [attr.aria-label]="label()"
-        [class.invalid]="invalid()"
-        [attr.aria-invalid]="invalid()"
+        [class.invalid]="shouldShowError()"
+        [attr.aria-invalid]="shouldShowError()"
+        (blur)="touched.set(true)"
       />
 
       <div
@@ -48,7 +47,7 @@
     </div>
   </div>
 
-  @if (invalid()) {
+  @if (shouldShowError()) {
     @for (error of errors(); track error) {
       <small class="text-xs text-red-400">{{ error.message }}</small>
     }

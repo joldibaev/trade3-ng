@@ -2,15 +2,17 @@
 <ui-card class="h-[300px] p-4">
   <h3 class="text-lg font-semibold">Dropdown Menu</h3>
 
-  <button
-    #trigger="cdkOverlayOrigin"
-    uiButton
-    variant="secondary"
-    cdkOverlayOrigin
-    (click)="isOpen.set(!isOpen())"
-  >
+  <button #trigger="cdkOverlayOrigin" uiButton variant="secondary" cdkOverlayOrigin (click)="isOpen.set(!isOpen())">
     Open Menu
   </button>
 
   <ui-menu [visible]="isOpen()" [origin]="trigger" [items]="menuItems" />
+</ui-card>
+
+<ui-card class="h-[300px] p-4">
+  <h3 class="text-lg font-semibold">Simple Menu (Icon Trigger)</h3>
+  <button #simpleTrigger="cdkOverlayOrigin" uiButton iconOnly variant="ghost" icon="outline-dots-vertical"
+    cdkOverlayOrigin (click)="isSimpleOpen.set(!isSimpleOpen())"></button>
+
+  <ui-menu [visible]="isSimpleOpen()" [origin]="simpleTrigger" [items]="simpleMenuItems" />
 </ui-card>

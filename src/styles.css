@@ -1,18 +1,13 @@
 @import 'tailwindcss';
 
-@import './styles/core/_colors.css';
-@import './styles/core/_typography.css';
-
 @import './styles/components/_form.css';
 @import './styles/components/_menu.css';
 @import './styles/components/_list.css';
-@import './styles/components/_checkbox.css';
-@import './styles/components/_badge.css';
 @import './styles/components/_tab.css';
 @import './styles/components/_notyf.css';
 
 @theme {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --color-primary-50: var(--color-emerald-50);
   --color-primary-100: var(--color-emerald-100);
@@ -25,12 +20,16 @@
   --color-primary-800: var(--color-emerald-800);
   --color-primary-900: var(--color-emerald-900);
   --color-primary-950: var(--color-emerald-950);
+
+  --shadow-soft-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-soft-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 @layer base {
-  html,
   body {
-    @apply selection:bg-primary-100;
+    @apply selection:bg-primary-100 bg-slate-50 text-shadow-slate-900;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -45,10 +44,6 @@
   }
 }
 
-@utility text-muted {
-  @apply text-slate-400;
-}
-
 @utility default-transition {
   @apply transition duration-200;
 
@@ -57,6 +52,25 @@
   }
 }
 
+@utility focus-ring {
+  @apply focus-visible:ring-primary-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none;
+}
+
 @utility default-border-color {
   @apply border-slate-200;
+}
+
+@utility custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-200/50 hover:bg-slate-300;
+  }
 }

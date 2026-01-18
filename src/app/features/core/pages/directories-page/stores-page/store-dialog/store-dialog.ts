@@ -20,9 +20,11 @@ import {
   StoreDialogResult,
 } from '../../../../../../shared/interfaces/dialogs/store-dialog.interface';
 
+import { UiSwitch } from '../../../../../../core/ui/ui-switch/ui-switch';
+
 @Component({
   selector: 'app-store-dialog',
-  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule, UiSwitch],
   templateUrl: './store-dialog.html',
   styleUrl: './store-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +39,10 @@ export class StoreDialog {
 
   formState = signal<StoreDialogResult>({
     name: this.data.store?.name ?? '',
+    address: this.data.store?.address ?? '',
+    phone: this.data.store?.phone ?? '',
+    workingHours: this.data.store?.workingHours ?? '',
+    isActive: this.data.store?.isActive ?? true,
   });
   formData = form(this.formState, (schemaPath) => {
     required(schemaPath.name, { message: 'Наименование обязательно' });
@@ -63,8 +69,11 @@ export class StoreDialog {
         finalize(() => this.loading.set(false)),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe((result) => {
-        this.dialogRef.close(result);
+      .subscribe(() => {
+        this.dialogRef.close({
+          ...value,
+          isActive: value.isActive as boolean,
+        } as any);
       });
   }
 }
