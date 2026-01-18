@@ -6,6 +6,7 @@ import {
   DestroyRef,
   inject,
   input,
+  linkedSignal,
   signal,
   untracked,
 } from '@angular/core';
@@ -71,6 +72,11 @@ export class NomenclaturePage {
   formData = form(this.formState);
 
   isSearchVisible = signal(false);
+
+  selectedTree = linkedSignal<string[]>(() => {
+    const categoryId = this.categoryId();
+    return categoryId ? [categoryId] : [];
+  });
 
   // Resources
   categories = this.categoriesService.getAll();

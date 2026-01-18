@@ -1,11 +1,12 @@
 import { Location } from '@angular/common';
 import { booleanAttribute, ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { UiButton } from '../ui-button/ui-button';
+import { UiIcon } from '../ui-icon/ui-icon.component';
 
 @Component({
   selector: 'ui-page-header',
   standalone: true,
-  imports: [UiButton],
+  imports: [UiButton, UiIcon],
   templateUrl: './ui-page-header.html',
   styleUrl: './ui-page-header.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -12,13 +12,14 @@ import {
 import { form, FormField } from '@angular/forms/signals';
 import { UiButton } from '../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../core/ui/ui-card/ui-card';
+import { UiIcon } from '../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../core/ui/ui-input/ui-input';
 import { TableColumn } from '../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../core/ui/ui-table/ui-table';
 
 @Component({
   selector: 'app-table-struct',
-  imports: [UiCard, UiButton, UiInput, FormField, UiTable],
+  imports: [UiCard, UiButton, UiInput, FormField, UiTable, UiIcon],
   templateUrl: './table-struct.html',
   styleUrl: './table-struct.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -9,97 +9,80 @@
 <ui-breadcrumb class="mb-2 block" [items]="breadcrumbItems()" />
 
 @if (purchase.isLoading()) {
-  <ui-loading [width]="48" [height]="48" />
+<ui-loading [width]="48" [height]="48" />
 } @else if (purchase.value(); as p) {
-  <!-- Main Info -->
-  <ui-card>
-    <div class="p-6">
-      <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
-      <div class="grid grid-cols-2 gap-y-4 text-sm">
-        <div class="text-slate-500">Статус:</div>
-        <div>
-          <app-document-status [status]="p.status" />
-        </div>
-
-        <div class="text-slate-500">Код:</div>
-        <div class="font-medium">{{ p.code || '-' }}</div>
-
-        <div class="text-slate-500">Дата:</div>
-        <div class="font-medium">{{ p.date | date: 'dd.MM.yyyy HH:mm' }}</div>
-
-        <div class="text-slate-500">Поставщик:</div>
-        <div class="font-medium">{{ p.vendor?.name || '-' }}</div>
-
-        <div class="text-slate-500">Магазин:</div>
-        <div class="font-medium">{{ p.store.name || '-' }}</div>
+<!-- Main Info -->
+<ui-card>
+  <div class="p-6">
+    <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
+    <div class="grid grid-cols-2 gap-y-4 text-sm">
+      <div class="text-slate-500">Статус:</div>
+      <div>
+        <app-document-status [status]="p.status" />
       </div>
-    </div>
-  </ui-card>
 
-  <!-- Items Table -->
-  <ui-card class="mt-4 block overflow-hidden">
-    <div class="default-border-color flex items-center justify-between border-b p-4">
-      <h2 class="text-lg font-semibold">Товары</h2>
-      <button uiButton variant="secondary" size="sm" icon="outline-plus" (click)="openItemDialog()">
-        Добавить товар
+      <div class="text-slate-500">Код:</div>
+      <div class="font-medium">{{ p.code || '-' }}</div>
+
+      <div class="text-slate-500">Дата:</div>
+      <div class="font-medium">{{ p.date | date: 'dd.MM.yyyy HH:mm' }}</div>
+
+      <div class="text-slate-500">Поставщик:</div>
+      <div class="font-medium">{{ p.vendor?.name || '-' }}</div>
+
+      <div class="text-slate-500">Магазин:</div>
+      <div class="font-medium">{{ p.store.name || '-' }}</div>
+    </div>
+  </div>
+</ui-card>
+
+<!-- Items Table -->
+<ui-card class="mt-4 block overflow-hidden">
+  <div class="default-border-color flex items-center justify-between border-b p-4">
+    <h2 class="text-lg font-semibold">Товары</h2>
+    <button uiButton variant="secondary" size="sm" (click)="openItemDialog()">
+      <ui-icon name="outline-plus"></ui-icon>
+      <span>Добавить товар</span>
+    </button>
+  </div>
+
+  <ui-table gridDisabled [columns]="columns()" [data]="formState().items" [trackField]="'productId'"
+    [templates]="{ actions: actions, status: status }" [rowClass]="rowClass" />
+
+  <ng-template #status let-item let-index="index">
+    @if (newIndices().has(index)) {
+    <div title="Не сохранено в БД" class="flex items-center justify-center text-orange-500">
+      <ui-icon name="outline-cloud" />
+    </div>
+    } @else {
+    <div title="Сохранено в БД" class="flex items-center justify-center text-green-500">
+      <ui-icon name="outline-cloud" />
+    </div>
+    }
+  </ng-template>
+
+  <ng-template #actions let-item let-index="index">
+    <div class="flex items-center justify-end gap-2">
+      @if (deletedIndices().has(index)) {
+      <button uiButton variant="ghost" size="sm" (click)="restoreProduct(index)">
+        Восстановить
       </button>
-    </div>
-
-    <ui-table
-      gridDisabled
-      [columns]="columns()"
-      [data]="formState().items"
-      [trackField]="'productId'"
-      [templates]="{ actions: actions, status: status }"
-      [rowClass]="rowClass"
-    />
-
-    <ng-template #status let-item let-index="index">
-      @if (newIndices().has(index)) {
-        <div title="Не сохранено в БД" class="flex items-center justify-center text-orange-500">
-          <ui-icon name="outline-cloud" />
-        </div>
       } @else {
-        <div title="Сохранено в БД" class="flex items-center justify-center text-green-500">
-          <ui-icon name="outline-cloud" />
-        </div>
+      <button uiButton variant="ghost" size="icon" (click)="openItemDialog(item, index)">
+        <ui-icon name="outline-pencil"></ui-icon>
+      </button>
+      <button uiButton variant="danger" size="icon" (click)="removeProduct(index)">
+        <ui-icon name="outline-trash"></ui-icon>
+      </button>
       }
-    </ng-template>
-
-    <ng-template #actions let-item let-index="index">
-      <div class="flex items-center justify-end gap-2">
-        @if (deletedIndices().has(index)) {
-          <button uiButton variant="ghost" size="sm" (click)="restoreProduct(index)">
-            Восстановить
-          </button>
-        } @else {
-          <button
-            uiButton
-            variant="ghost"
-            size="icon"
-            icon="outline-pencil"
-            (click)="openItemDialog(item, index)"
-          >
-            <span class="sr-only">Редактировать</span>
-          </button>
-          <button
-            uiButton
-            variant="danger"
-            size="icon"
-            icon="outline-trash"
-            (click)="removeProduct(index)"
-          >
-            <span class="sr-only">Удалить</span>
-          </button>
-        }
-      </div>
-    </ng-template>
-
-    <div class="flex items-center justify-end gap-8 border-t border-slate-200 p-4 font-semibold">
-      <div>Итого кол-во: {{ totalQuantity() }}</div>
-      <div>Итого сумма: {{ totalAmount() | currency: 'UZS' : 'symbol-narrow' }}</div>
     </div>
-  </ui-card>
+  </ng-template>
+
+  <div class="flex items-center justify-end gap-8 border-t border-slate-200 p-4 font-semibold">
+    <div>Итого кол-во: {{ totalQuantity() }}</div>
+    <div>Итого сумма: {{ totalAmount() | currency: 'UZS' : 'symbol-narrow' }}</div>
+  </div>
+</ui-card>
 } @else {
-  <ui-card class="p-8 text-center text-slate-500"> Закупка не найдена</ui-card>
+<ui-card class="p-8 text-center text-slate-500"> Закупка не найдена</ui-card>
 }

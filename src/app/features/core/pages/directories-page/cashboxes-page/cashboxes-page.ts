@@ -22,6 +22,7 @@ import { CashboxDialogResult } from '../../../../../shared/interfaces/dialogs/ca
 import { Cashbox } from '../../../../../shared/interfaces/entities/cashbox.interface';
 import { CashboxDialog } from './cashbox-dialog/cashbox-dialog';
 
+import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiPageHeader } from '../../../../../core/ui/ui-page-header/ui-page-header';
 
 @Component({
@@ -34,6 +35,7 @@ import { UiPageHeader } from '../../../../../core/ui/ui-page-header/ui-page-head
     UiEmptyState,
     UiLoading,
     UiPageHeader,
+    UiIcon,
   ],
   templateUrl: './cashboxes-page.html',
   styleUrl: './cashboxes-page.css',

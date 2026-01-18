@@ -67,12 +67,11 @@
           type="button"
           uiButton
           variant="secondary"
-          icon="outline-plus"
           size="icon"
           [disabled]="!newBarcodeState().value"
           (click)="addBarcode()"
         >
-          <span class="sr-only">Добавить штрихкод</span>
+          <ui-icon name="outline-plus"></ui-icon>
         </button>
       </div>
     </div>

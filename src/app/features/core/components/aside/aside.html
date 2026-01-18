@@ -17,52 +17,5 @@
 
 <!-- Scrollable Nav -->
 <div class="flex-1 overflow-auto py-4">
-  <div #tree="ngTree" ngTree class="flex flex-col gap-1" [nav]="true">
-    <ng-template
-      [ngTemplateOutlet]="treeNodeTemplate"
-      [ngTemplateOutletContext]="{ nodes: menuItems(), parent: tree }"
-    />
-  </div>
-
-  <ng-template #treeNodeTemplate let-nodes="nodes" let-parent="parent">
-    @for (node of nodes; track node.label) {
-      <a
-        #treeItem="ngTreeItem"
-        uiButton
-        variant="ghost"
-        ngTreeItem
-        routerLinkActive="active"
-        class="w-full outline-none"
-        [routerLink]="node.route"
-        [value]="node.label"
-        [parent]="parent"
-        [label]="node.label"
-        [selectable]="!node.children"
-        [(expanded)]="node.expanded"
-      >
-        <ui-icon [name]="node.icon"></ui-icon>
-
-        <span>{{ node.label }}</span>
-
-        @if (node.children) {
-          <ui-icon
-            name="outline-chevron-down"
-            class="ms-auto transition-transform duration-200"
-            [class.-rotate-90]="!node.expanded"
-          ></ui-icon>
-        }
-      </a>
-
-      @if (node.children) {
-        <ul role="group" class="default-border-color ms-7 border-s ps-2">
-          <ng-template #group="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="treeItem">
-            <ng-template
-              [ngTemplateOutlet]="treeNodeTemplate"
-              [ngTemplateOutletContext]="{ nodes: node.children, parent: group }"
-            />
-          </ng-template>
-        </ul>
-      }
-    }
-  </ng-template>
+  <ui-tree [items]="menuItems()" />
 </div>

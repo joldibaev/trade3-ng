@@ -1,5 +1,29 @@
 @reference './../../../../styles.css';
 
+.ui-tree {
+  @apply flex flex-col gap-1;
+}
+
+.ui-tree-item {
+  @apply outline-none;
+
+  @apply flex items-center gap-2 px-3 py-2;
+  @apply border border-transparent;
+  @apply active:scale-[0.98];
+  @apply relative;
+
+  @apply outline-none;
+  @apply rounded-squircle rounded-lg;
+  @apply default-transition;
+  @apply cursor-pointer;
+
+  @apply text-sm text-slate-700 hover:bg-slate-100;
+
+  &.active {
+    @apply bg-primary-50 text-primary-700;
+  }
+}
+
 li[aria-expanded='false'] + [role='group'] {
   @apply hidden;
 }

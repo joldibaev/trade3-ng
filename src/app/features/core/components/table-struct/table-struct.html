@@ -15,47 +15,27 @@
     <!-- Toolbar -->
     <div class="default-border-color flex items-center justify-between border-b p-2">
       <div class="flex items-center gap-2">
-        <button uiButton variant="ghost" icon="outline-plus" size="sm" (click)="handleCreate()">
-          Создать
+        <button uiButton variant="ghost" size="sm" (click)="handleCreate()">
+          <ui-icon name="outline-plus"></ui-icon>
+          <span>Создать</span>
         </button>
 
         @if (showDetail()) {
-          <button
-            uiButton
-            variant="ghost"
-            icon="outline-eye"
-            size="icon"
-            [disabled]="!selectedItem()"
-            (click)="handleDetail()"
-          >
-            <span class="sr-only">Открыть карточку</span>
-          </button>
+        <button uiButton variant="ghost" size="icon" [disabled]="!selectedItem()" (click)="handleDetail()">
+          <ui-icon name="outline-eye"></ui-icon>
+        </button>
         }
 
         @if (showEdit()) {
-          <button
-            uiButton
-            variant="ghost"
-            icon="outline-edit"
-            size="icon"
-            [disabled]="!selectedItem()"
-            (click)="handleEdit()"
-          >
-            <span class="sr-only">Редактировать</span>
-          </button>
+        <button uiButton variant="ghost" size="icon" [disabled]="!selectedItem()" (click)="handleEdit()">
+          <ui-icon name="outline-edit"></ui-icon>
+        </button>
         }
 
         @if (showDelete()) {
-          <button
-            uiButton
-            variant="danger"
-            icon="outline-trash"
-            size="icon"
-            [disabled]="!selectedItem()"
-            (click)="handleDelete()"
-          >
-            <span class="sr-only">Удалить</span>
-          </button>
+        <button uiButton variant="danger" size="icon" [disabled]="!selectedItem()" (click)="handleDelete()">
+          <ui-icon name="outline-trash"></ui-icon>
+        </button>
         }
 
         <ng-content select="[toolbar-actions]" />
@@ -64,34 +44,23 @@
         <div class="mx-1 h-4 w-px bg-slate-300"></div>
 
         @if (isSearchVisible()) {
-          <div
-            class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300"
-          >
-            <ui-input
-              type="search"
-              placeholder="Поиск..."
-              class="w-64"
-              [formField]="formData.query"
-            />
-            <button uiButton variant="ghost" icon="outline-x" size="icon" (click)="toggleSearch()">
-              <span class="sr-only">Очистить поиск</span>
-            </button>
-          </div>
-        } @else {
-          <button uiButton variant="ghost" icon="outline-search" size="sm" (click)="toggleSearch()">
-            Найти
+        <div class="animate-in fade-in slide-in-from-right-4 flex items-center gap-1 duration-300">
+          <ui-input type="search" placeholder="Поиск..." class="w-64" [formField]="formData.query" />
+          <button uiButton variant="ghost" size="icon" (click)="toggleSearch()">
+            <ui-icon name="outline-x"></ui-icon>
           </button>
+        </div>
+        } @else {
+        <button uiButton variant="ghost" size="sm" (click)="toggleSearch()">
+          <ui-icon name="outline-search"></ui-icon>
+          <span>Найти</span>
+        </button>
         }
       </div>
     </div>
 
     <!-- Table -->
-    <ui-table
-      [columns]="columns()"
-      [data]="data()"
-      [trackField]="trackField()"
-      [loading]="isLoading()"
-      (selectedChanged)="selectedItem.set($event)"
-    />
+    <ui-table [columns]="columns()" [data]="data()" [trackField]="trackField()" [loading]="isLoading()"
+      (selectedChanged)="selectedItem.set($event)" />
   </ui-card>
 </div>

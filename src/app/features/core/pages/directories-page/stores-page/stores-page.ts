@@ -10,6 +10,7 @@ import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dia
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiDirectoryItemCard } from '../../../../../core/ui/ui-directory-item-card/ui-directory-item-card';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
+import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { StoreDialogResult } from '../../../../../shared/interfaces/dialogs/store-dialog.interface';
 import { Store } from '../../../../../shared/interfaces/entities/store.interface';
@@ -25,6 +26,7 @@ import { StoreDialog } from './store-dialog/store-dialog';
     DatePipe,
     UiBreadcrumb,
     UiLoading,
+    UiIcon,
   ],
   templateUrl: './stores-page.html',
   styleUrl: './stores-page.css',

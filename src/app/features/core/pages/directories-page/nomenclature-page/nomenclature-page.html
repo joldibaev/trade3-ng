@@ -8,34 +8,27 @@
   <ui-card class="h-full w-80">
     <div class="default-border-color border-b p-2">
       <div class="flex items-center gap-1">
-        <button
-          uiButton
-          variant="ghost"
-          icon="outline-plus"
-          size="sm"
-          (click)="openCategoryDialog()"
-        >
-          Создать
+        <button uiButton variant="ghost" size="sm" (click)="openCategoryDialog()">
+          <ui-icon name="outline-plus"></ui-icon>
+          <span>Создать</span>
         </button>
         <button
           uiButton
           variant="ghost"
-          icon="outline-edit"
           size="icon"
           [disabled]="!selectedCategoryId()"
           (click)="editCurrentCategory()"
         >
-          <span class="sr-only">Редактировать категорию</span>
+          <ui-icon name="outline-edit"></ui-icon>
         </button>
         <button
           uiButton
           variant="danger"
-          icon="outline-trash"
           size="icon"
           [disabled]="!selectedCategoryId()"
           (click)="deleteCurrentCategory()"
         >
-          <span class="sr-only">Удалить категорию</span>
+          <ui-icon name="outline-trash"></ui-icon>
         </button>
       </div>
     </div>
@@ -46,7 +39,7 @@
           <ui-loading [width]="20" [height]="20" />
         </div>
       } @else if (categories.hasValue()) {
-        <ui-tree [items]="rootCategories()" />
+        <ui-tree [items]="rootCategories()" [(selected)]="selectedTree" />
       }
     </div>
   </ui-card>
@@ -56,44 +49,36 @@
     <!-- Toolbar -->
     <div class="default-border-color flex items-center justify-between border-b p-2">
       <div class="flex items-center gap-2">
-        <button
-          uiButton
-          variant="ghost"
-          icon="outline-plus"
-          size="sm"
-          (click)="openProductDialog()"
-        >
-          Создать
+        <button uiButton variant="ghost" size="sm" (click)="openProductDialog()">
+          <ui-icon name="outline-plus"></ui-icon>
+          <span>Создать</span>
         </button>
         <button
           uiButton
           variant="ghost"
-          icon="outline-eye"
           size="icon"
           [disabled]="!selectedProduct()"
           (click)="openProductPage()"
         >
-          <span class="sr-only">Открыть карточку</span>
+          <ui-icon name="outline-eye"></ui-icon>
         </button>
         <button
           uiButton
           variant="ghost"
-          icon="outline-edit"
           size="icon"
           [disabled]="!selectedProduct()"
           (click)="editCurrentProduct()"
         >
-          <span class="sr-only">Редактировать товар</span>
+          <ui-icon name="outline-edit"></ui-icon>
         </button>
         <button
           uiButton
           variant="danger"
-          icon="outline-trash"
           size="icon"
           [disabled]="!selectedProduct()"
           (click)="deleteCurrentProduct()"
         >
-          <span class="sr-only">Удалить товар</span>
+          <ui-icon name="outline-trash"></ui-icon>
         </button>
 
         <!-- v-line -->
@@ -112,22 +97,16 @@
             <button
               uiButton
               variant="ghost"
-              icon="outline-x"
               size="icon"
               (click)="isSearchVisible.set(false); formData.query().reset('')"
             >
-              <span class="sr-only">Очистить поиск</span>
+              <ui-icon name="outline-x"></ui-icon>
             </button>
           </div>
         } @else {
-          <button
-            uiButton
-            variant="ghost"
-            icon="outline-search"
-            size="sm"
-            (click)="isSearchVisible.set(true)"
-          >
-            Найти
+          <button uiButton variant="ghost" size="sm" (click)="isSearchVisible.set(true)">
+            <ui-icon name="outline-search"></ui-icon>
+            <span>Найти</span>
           </button>
         }
       </div>

@@ -1,8 +1,9 @@
 <ui-page-header title="Кассы" showBack>
   <div actions class="flex items-center gap-2">
     <button uiButton variant="ghost" (click)="reload()">Обновить</button>
-    <button uiButton variant="primary" icon="outline-plus" (click)="onCreate()">
-      Создать кассу
+    <button uiButton variant="primary" (click)="onCreate()">
+      <ui-icon name="outline-plus"></ui-icon>
+      <span>Создать кассу</span>
     </button>
   </div>
 </ui-page-header>

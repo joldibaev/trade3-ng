@@ -34,7 +34,13 @@
 <ui-card class="p-4">
   <h3 class="text-lg font-semibold">With Icons</h3>
   <div class="flex flex-wrap items-center gap-4">
-    <button uiButton icon="outline-settings">Settings</button>
-    <button uiButton variant="secondary" icon="outline-trash">Delete</button>
+    <button uiButton>
+      <ui-icon name="outline-settings"></ui-icon>
+      <span>Settings</span>
+    </button>
+    <button uiButton variant="secondary">
+      <ui-icon name="outline-trash"></ui-icon>
+      <span>Delete</span>
+    </button>
   </div>
 </ui-card>

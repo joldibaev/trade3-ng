@@ -1,4 +1,4 @@
-<div #tree="ngTree" ngTree class="flex flex-col gap-1" [nav]="true" [(values)]="selected">
+<div #tree="ngTree" ngTree class="ui-tree" [nav]="true" [(values)]="selected">
   <ng-template
     [ngTemplateOutlet]="treeNodeTemplate"
     [ngTemplateOutletContext]="{ nodes: items(), parent: tree }"
@@ -9,22 +9,20 @@
   @for (node of nodes; track node.label) {
     <a
       #treeItem="ngTreeItem"
-      uiButton
-      variant="ghost"
       ngTreeItem
       routerLinkActive="active"
-      class="w-full outline-none"
+      class="ui-tree-item"
       [queryParams]="node.queryParams"
       [queryParamsHandling]="node.queryParamsHandling"
       [value]="node.id"
       [parent]="parent"
       [routerLink]="node.routerLink"
       [label]="node.label"
-      [routerLinkActiveOptions]="{ exact: true }"
-      [selectable]="!node.children.length"
       [(expanded)]="node.expanded"
     >
-      <ui-icon [name]="node.icon"></ui-icon>
+      @if (node.icon) {
+        <ui-icon [name]="node.icon"></ui-icon>
+      }
 
       <span>{{ node.label }}</span>
 

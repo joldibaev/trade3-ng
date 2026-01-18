@@ -1,93 +1,87 @@
-import { Tree, TreeItem, TreeItemGroup } from '@angular/aria/tree';
-import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UiIcon } from '../../../../core/ui/ui-icon/ui-icon.component';
-
-import { UiButton } from '../../../../core/ui/ui-button/ui-button';
-import { IconName } from '../../../../core/ui/ui-icon/data';
-
-interface MenuItem {
-  label: string;
-  icon: IconName;
-  expanded: boolean;
-  route?: string;
-  children?: MenuItem[];
-}
+import { TreeNode } from '../../../../core/ui/ui-tree/tree-item.interface';
+import { UiTree } from '../../../../core/ui/ui-tree/ui-tree';
 
 @Component({
   selector: 'app-aside',
-  imports: [
-    RouterLink,
-    UiIcon,
-    Tree,
-    TreeItem,
-    NgTemplateOutlet,
-    UiButton,
-    TreeItemGroup,
-    RouterLinkActive,
-  ],
+  imports: [UiIcon, UiTree],
   templateUrl: './aside.html',
   styleUrl: './aside.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Aside {
-  menuItems = signal<MenuItem[]>([
+  menuItems = signal<TreeNode[]>([
     {
+      id: 'dashboard',
       label: 'Главная',
-      route: '/core/dashboard',
+      routerLink: ['/core', 'dashboard'],
       icon: 'outline-home',
       expanded: false,
+      children: [],
     },
     {
+      id: 'directories',
       label: 'Справочники',
       icon: 'outline-folder',
       expanded: true,
       children: [
         {
+          id: 'stores',
           label: 'Магазины',
-          route: '/core/directories/stores',
+          routerLink: ['/core', 'directories', 'stores'],
           icon: 'outline-building-store',
           expanded: false,
+          children: [],
         },
         {
+          id: 'nomenclature',
           label: 'Номенклатура',
-          route: '/core/directories/nomenclature',
+          routerLink: ['/core', 'directories', 'nomenclature'],
           icon: 'outline-box',
           expanded: false,
+          children: [],
         },
         {
+          id: 'clients',
           label: 'Клиенты',
-          route: '/core/directories/clients',
+          routerLink: ['/core', 'directories', 'clients'],
           icon: 'outline-users',
           expanded: false,
+          children: [],
         },
         {
+          id: 'vendors',
           label: 'Поставщики',
-          route: '/core/directories/vendors',
+          routerLink: ['/core', 'directories', 'vendors'],
           icon: 'outline-truck',
           expanded: false,
+          children: [],
         },
         {
+          id: 'price-types',
           label: 'Типы цен',
-          route: '/core/directories/price-types',
+          routerLink: ['/core', 'directories', 'price-types'],
           icon: 'outline-currency-dollar',
           expanded: false,
+          children: [],
         },
       ],
     },
     {
+      id: 'documents',
       label: 'Документы',
       icon: 'outline-file-text',
       expanded: true,
       children: [
         {
+          id: 'purchases',
           label: 'Приходные накладные',
-          route: '/core/documents/purchases',
+          routerLink: ['/core', 'documents', 'purchases'],
           icon: 'outline-file-import',
           expanded: false,
+          children: [],
         },
-        // { label: 'Продажи', route: '/core/documents/sales', icon: 'outline-receipt' }
       ],
     },
   ]);
