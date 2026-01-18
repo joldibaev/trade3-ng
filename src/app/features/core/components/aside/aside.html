@@ -31,10 +31,8 @@
         uiButton
         variant="ghost"
         ngTreeItem
-        align="start"
         routerLinkActive="active"
         class="w-full outline-none"
-        [icon]="node.icon"
         [routerLink]="node.route"
         [value]="node.label"
         [parent]="parent"
@@ -42,7 +40,9 @@
         [selectable]="!node.children"
         [(expanded)]="node.expanded"
       >
-        {{ node.label }}
+        <ui-icon [name]="node.icon"></ui-icon>
+
+        <span>{{ node.label }}</span>
 
         @if (node.children) {
           <ui-icon

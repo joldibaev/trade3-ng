@@ -15,6 +15,7 @@ import { DocumentPurchasesService } from '../../../../../core/services/document-
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
+import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { DocumentStatus } from '../../../../../shared/interfaces/constants';
 import { DocumentPurchase } from '../../../../../shared/interfaces/entities/document-purchase.interface';
@@ -23,7 +24,7 @@ import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
 
 @Component({
   selector: 'app-purchases-page',
-  imports: [TableStruct, UiButton],
+  imports: [TableStruct, UiButton, UiIcon],
   templateUrl: './purchases-page.html',
   styleUrl: './purchases-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

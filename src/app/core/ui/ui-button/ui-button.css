@@ -1,0 +1,56 @@
+@reference './../../../../styles.css';
+
+.ui-button {
+  @apply inline-flex items-center gap-2 whitespace-nowrap;
+  @apply border border-transparent;
+  @apply active:scale-[0.98];
+
+  @apply outline-none;
+  @apply rounded-squircle rounded-lg;
+  @apply default-transition;
+  @apply cursor-pointer;
+
+  /* variant */
+
+  &.ui-button-variant-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white;
+  }
+
+  &.ui-button-variant-secondary {
+    @apply border-slate-200 text-slate-700 hover:bg-slate-50;
+  }
+
+  &.ui-button-variant-ghost {
+    @apply text-slate-700 hover:bg-slate-100;
+  }
+
+  &.ui-button-variant-danger {
+    @apply bg-red-600 text-white hover:bg-red-700;
+  }
+
+  /* size */
+
+  &.ui-button-size-sm {
+    /*px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium text-sm*/
+    @apply font-medium;
+    @apply px-3 py-2;
+    @apply text-sm;
+  }
+
+  &.ui-button-size-md {
+    /*px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium text-sm*/
+    @apply font-medium;
+    @apply px-4 py-2.5;
+    @apply text-sm;
+  }
+
+  &.ui-button-size-lg {
+    /*px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium*/
+    @apply font-medium;
+    @apply px-6 py-3;
+  }
+
+  &.ui-button-size-icon {
+    @apply px-2 py-1.5;
+  }
+}

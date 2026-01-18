@@ -16,14 +16,16 @@
       uiButton
       variant="ghost"
       size="sm"
-      [icon]="
-        selectedPurchase()?.status === DocumentStatus.COMPLETED ? 'outline-x' : 'outline-check'
-      "
       [disabled]="!selectedPurchase()"
       [loading]="isLoading()"
       (click)="toggleStatus()"
     >
-      Провести / Отменить проведение
+      <ui-icon
+        [name]="
+          selectedPurchase()?.status === DocumentStatus.COMPLETED ? 'outline-x' : 'outline-check'
+        "
+      ></ui-icon>
+      <span>Провести / Отменить проведение</span>
     </button>
   </div>
 </app-table-struct>

@@ -8,7 +8,9 @@
   <p class="mb-6 max-w-sm text-sm text-balance text-slate-500">
     {{ description() }}
   </p>
-  <button uiButton variant="primary" [icon]="actionIcon()" (click)="action.emit()">
-    {{ actionLabel() }}
+  <button uiButton variant="primary" (click)="action.emit()">
+    <ui-icon [name]="actionIcon()" />
+
+    <span>{{ actionLabel() }}</span>
   </button>
 </div>
