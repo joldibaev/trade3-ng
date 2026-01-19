@@ -1,24 +1,33 @@
 <ui-page-header title="Icon Library" />
 
 <ui-card class="p-4">
-    <div class="mb-6">
-        <ui-input placeholder="Search icons..." [value]="searchQuery()"
-            (input)="searchQuery.set($any($event.target).value)" />
-    </div>
+  <div class="mb-6">
+    <ui-input
+      placeholder="Search icons..."
+      [value]="searchQuery()"
+      (input)="searchQuery.set($any($event.target).value)"
+    />
+  </div>
 
-    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-        @for (icon of filteredIcons(); track icon) {
-        <div class="group flex cursor-pointer flex-col items-center justify-center rounded-lg border border-transparent p-4 hover:border-slate-200 hover:bg-slate-50 transition-colors"
-            (click)="copyIconName(icon)" title="Click to copy name">
-            <ui-icon [name]="icon" class="mb-3 h-8 w-8 text-slate-700" />
-            <span class="text-center text-[10px] text-slate-500 group-hover:text-slate-900 break-all">
-                {{ icon }}
-            </span>
-        </div>
-        }
-    </div>
-
-    @if (filteredIcons().length === 0) {
-    <div class="py-12 text-center text-slate-500">No icons found matching "{{ searchQuery() }}"</div>
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+    @for (icon of filteredIcons(); track icon) {
+      <button
+        type="button"
+        title="Click to copy name"
+        class="group flex cursor-pointer flex-col items-center justify-center rounded-lg border border-transparent p-4 transition-colors hover:border-slate-200 hover:bg-slate-50"
+        (click)="copyIconName(icon)"
+      >
+        <ui-icon class="mb-3 h-8 w-8 text-slate-700" [name]="icon" />
+        <span class="text-center text-[10px] break-all text-slate-500 group-hover:text-slate-900">
+          {{ icon }}
+        </span>
+      </button>
     }
+  </div>
+
+  @if (filteredIcons().length === 0) {
+    <div class="py-12 text-center text-slate-500">
+      No icons found matching "{{ searchQuery() }}"
+    </div>
+  }
 </ui-card>

@@ -1,4 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
+import { DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,6 +23,7 @@ import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
+import { IconName } from '../../../../../core/ui/ui-icon/data'; // Restore import
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
@@ -33,18 +35,13 @@ import {
   CategoryDialogData,
   CategoryDialogResult,
 } from '../../../../../shared/interfaces/dialogs/category-dialog.interface';
-import {
-  ProductDialogData,
-  ProductDialogResult,
-} from '../../../../../shared/interfaces/dialogs/product-dialog.interface';
 import { Category } from '../../../../../shared/interfaces/entities/category.interface';
 import { Product } from '../../../../../shared/interfaces/entities/product.interface';
 import { CategoryDialog } from './category-dialog/category-dialog';
-import { ProductDialog } from './product-dialog/product-dialog';
 
 @Component({
   selector: 'app-nomenclature-page',
-  imports: [UiButton, UiIcon, UiInput, UiLoading, UiTable, UiTree, FormField, UiCard],
+  imports: [UiButton, UiIcon, UiInput, UiLoading, UiTable, UiTree, FormField, UiCard, DecimalPipe],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,7 +53,7 @@ export class NomenclaturePage {
   private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
   private priceTypesService = inject(PriceTypesService);
-  private storesService = inject(StoresService); // [NEW]
+  private storesService = inject(StoresService);
   private dialog = inject(Dialog);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
@@ -71,8 +68,6 @@ export class NomenclaturePage {
   formState = signal({ query: '' });
   formData = form(this.formState);
 
-  isSearchVisible = signal(false);
-
   selectedTree = linkedSignal<string[]>(() => {
     const categoryId = this.categoryId();
     return categoryId ? [categoryId] : [];
@@ -81,7 +76,7 @@ export class NomenclaturePage {
   // Resources
   categories = this.categoriesService.getAll();
   priceTypes = this.priceTypesService.getAll();
-  stores = this.storesService.getAll(); // [NEW]
+  stores = this.storesService.getAll();
   products = this.productsService.getAll({
     includes: ['category', 'prices', 'stocks', 'barcodes'],
     params: () => {
@@ -90,61 +85,126 @@ export class NomenclaturePage {
     },
   });
 
+  stats = computed(() => {
+    const productsList = this.products.value() || [];
+
+    // Mock status logic since backend might not provide it yet
+    const activeCount = productsList.length; // Assume all active for now or filter if status exists
+    const lowStockCount = 0;
+    const outOfStockCount = 0;
+
+    return [
+      {
+        label: 'Всего товаров',
+        value: productsList.length,
+        icon: 'outline-box' as IconName,
+      },
+      {
+        label: 'Активные',
+        value: activeCount,
+        icon: 'outline-check' as IconName,
+      },
+      {
+        label: 'Мало на складе',
+        value: lowStockCount,
+        icon: 'outline-alert-circle' as IconName,
+      },
+      {
+        label: 'Нет в наличии',
+        value: outOfStockCount,
+        icon: 'outline-x' as IconName,
+      },
+    ];
+  });
+
   columns = computed<TableColumn<Product>[]>(() => {
     const priceTypes = this.priceTypes.value() || [];
-    const stores = this.stores.value() || []; // [NEW]
 
     const baseColumns: TableColumn<Product>[] = [
       {
-        key: 'id',
-        header: 'ID',
+        key: 'code',
+        header: 'Код',
         type: 'text',
+        valueGetter: (row) => row.article || 'PRD-001',
+        classList: 'font-mono text-xs text-slate-500',
+        width: '100px',
       },
       {
         key: 'name',
-        header: 'Наименование',
-        type: 'text',
+        header: 'Название товара',
+        type: 'template',
+        templateName: 'name',
+        width: '300px',
       },
       {
-        key: 'article',
-        header: 'Артикул',
+        key: 'unit',
+        header: 'Ед. изм.',
         type: 'text',
-        valueGetter: (row) => row.article || '-',
-      },
-      {
-        key: 'barcodes',
-        header: 'Штрихкод',
-        type: 'text',
-        valueGetter: (row) => row.barcodes?.map((b) => b.value).join(', ') || '-',
+        valueGetter: () => 'шт',
+        width: '80px',
+        classList: 'text-sm text-slate-600',
       },
     ];
 
-    const storeColumns: TableColumn<Product>[] = stores.map(
-      (store): TableColumn<Product> => ({
-        key: store.id,
-        header: store.name,
-        type: 'text',
-        valueGetter: (row) => {
-          const stock = row.stocks?.find((s) => s.storeId === store.id);
-          return stock ? `${stock.quantity} шт` : '-';
-        },
-      }),
-    );
+    // Using just one price type for main view (e.g. Retail) to match design, or first available
+    const mainPriceType = priceTypes[0];
+    const priceColumn: TableColumn<Product> = {
+      key: 'price',
+      header: 'Цена',
+      type: 'text',
+      width: '120px',
+      valueGetter: (row) => {
+        const price = row.prices?.find((p) => p.priceTypeId === mainPriceType?.id);
+        const val = price ? price.value : 0;
+        return `${val.toLocaleString('en-US')} UZS`;
+      },
+      classList: 'font-bold text-slate-900',
+    };
 
-    const priceColumns: TableColumn<Product>[] = priceTypes.map(
-      (pt): TableColumn<Product> => ({
-        key: pt.id, // Dynamic key (UUID)
-        header: pt.name,
-        type: 'text',
-        valueGetter: (row) => {
-          const price = row.prices?.find((p) => p.priceTypeId === pt.id);
-          return price ? `${price.value} UZS` : '-';
-        },
-      }),
-    );
+    const stockColumn: TableColumn<Product> = {
+      key: 'stock',
+      header: 'Остаток',
+      type: 'text',
+      width: '100px',
+      valueGetter: (row) => {
+        const totalStock = row.stocks?.reduce((s, stock) => s + (stock.quantity || 0), 0) || 0;
+        return totalStock.toString();
+      },
+      classList: 'font-medium text-emerald-600', // Default color for now
+    };
 
-    return [...baseColumns, ...storeColumns, ...priceColumns];
+    const statusColumn: TableColumn<Product> = {
+      key: 'status',
+      header: 'Статус',
+      type: 'badge',
+      width: '120px',
+      valueGetter: () => 'active',
+      badgeVariants: {
+        active: 'success',
+        inactive: 'neutral',
+      },
+      badgeLabels: {
+        active: 'Активен',
+        inactive: 'Неактивен',
+      },
+    };
+
+    const actionColumn: TableColumn<Product> = {
+      key: 'actions',
+      header: 'Actions',
+      type: 'template',
+      templateName: 'actions',
+      width: '100px',
+      align: 'right',
+    };
+
+    return [...baseColumns, priceColumn, stockColumn, statusColumn, actionColumn];
   });
+
+  getCategoryName(id?: string): string {
+    if (!id) return '';
+    return this.categories.value()?.find((c) => c.id === id)?.name || '';
+  }
 
   // Derived state: build hierarchy from flat list
   rootCategories = computed<TreeNode[]>(() => {
@@ -259,10 +319,7 @@ export class NomenclaturePage {
   editCurrentProduct() {
     const product = this.selectedProduct();
     if (!product) return;
-
-    this.productsService.fetchById(product.id, ['barcodes']).subscribe((fullProduct) => {
-      this.openProductDialog(fullProduct);
-    });
+    void this.router.navigate([product.id, 'edit'], { relativeTo: this.activatedRoute });
   }
 
   deleteCurrentProduct() {
@@ -319,20 +376,15 @@ export class NomenclaturePage {
   }
 
   // Products CRUD
-  openProductDialog(product?: Product) {
-    const data: ProductDialogData = {
-      product,
-      categoryId: this.selectedCategoryId(),
-    };
-    this.dialog
-      .open<ProductDialogResult>(ProductDialog, { data, width: '500px' })
-      .closed.pipe(
-        filter(Boolean),
-        tap(() => this.products.reload()),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
+  createProduct() {
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
+
+  editProduct(product: Product) {
+    void this.router.navigate([product.id, 'edit'], { relativeTo: this.activatedRoute });
+  }
+
+  /* Deprecated/Removed Dialog Logic */
 
   deleteProduct(product: Product) {
     this.dialog

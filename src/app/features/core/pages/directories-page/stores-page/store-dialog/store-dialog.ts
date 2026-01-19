@@ -73,7 +73,7 @@ export class StoreDialog {
         this.dialogRef.close({
           ...value,
           isActive: value.isActive as boolean,
-        } as any);
+        } as StoreDialogResult);
       });
   }
 }

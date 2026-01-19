@@ -15,6 +15,7 @@ import { VendorsService } from '../../../../../../core/services/vendors.service'
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
+import { UiSwitch } from '../../../../../../core/ui/ui-switch/ui-switch';
 import {
   VendorDialogData,
   VendorDialogResult,
@@ -23,7 +24,7 @@ import { Vendor } from '../../../../../../shared/interfaces/entities/vendor.inte
 
 @Component({
   selector: 'app-vendor-dialog',
-  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule, UiSwitch],
   templateUrl: './vendor-dialog.html',
   styleUrl: './vendor-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +38,7 @@ export class VendorDialog {
     phone: this.data.vendor?.phone ?? '',
     email: this.data.vendor?.email ?? '',
     address: this.data.vendor?.address ?? '',
+    isActive: this.data.vendor?.isActive ?? true,
   });
   formData = form(this.formState, (schemaPath) => {
     required(schemaPath.name, { message: 'Наименование обязательно' });

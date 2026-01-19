@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { IconName } from '../../../../core/ui/ui-icon/data';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UiCard } from '../../../../core/ui/ui-card/ui-card';
 import { UiEmptyState } from '../../../../core/ui/ui-empty-state/ui-empty-state';
+import { IconName } from '../../../../core/ui/ui-icon/data';
 import { UiNotyfService } from '../../../../core/ui/ui-notyf/ui-notyf.service';
 import { UiPageHeader } from '../../../../core/ui/ui-page-header/ui-page-header';
 
@@ -15,8 +15,7 @@ import { UiPageHeader } from '../../../../core/ui/ui-page-header/ui-page-header'
   host: { class: 'flex flex-col gap-4' },
 })
 export class DemoEmptyStatePage {
-  constructor(privatenotyf: UiNotyfService) { }
-  private notyf = new UiNotyfService(); // Mock or inject properly
+  private notyf = inject(UiNotyfService);
 
   create() {
     this.notyf.success('Create action triggered');

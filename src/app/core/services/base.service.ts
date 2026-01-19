@@ -14,8 +14,8 @@ export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>>
   getAll(options?: {
     includes?: TIncludes[];
     params?:
-      | Record<string, string | number | boolean>
-      | (() => Record<string, string | number | boolean | undefined | null>);
+    | Record<string, string | number | boolean>
+    | (() => Record<string, string | number | boolean | undefined | null>);
   }) {
     return httpResource<T[]>(() => {
       let url = this.apiUrl;
@@ -41,6 +41,19 @@ export abstract class BaseService<T, TIncludes extends string = RelationKeys<T>>
 
       return url;
     });
+  }
+
+  list(params?: Record<string, string | number | boolean>) {
+    let url = this.apiUrl;
+    if (params) {
+      const queryParams = Object.entries(params)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value.toString())}`)
+        .join('&');
+      if (queryParams) {
+        url += `?${queryParams}`;
+      }
+    }
+    return this.http.get<T[]>(url);
   }
 
   getById(id: () => string | number | undefined | null) {

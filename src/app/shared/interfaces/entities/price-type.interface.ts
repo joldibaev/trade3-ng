@@ -10,6 +10,7 @@ export interface PriceType {
   prices: Price[];
   sales: DocumentSale[];
   documentPurchaseItemPrices: DocumentPurchaseItemPrice[];
+  isActive?: boolean;
   createdAt?: string;
   updatedAt: string;
 }

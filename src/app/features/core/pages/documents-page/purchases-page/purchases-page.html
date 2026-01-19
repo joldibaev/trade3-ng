@@ -1,29 +1,83 @@
-<app-table-struct
-  title="Закупки"
-  showDetail
-  [trackField]="'id'"
-  [data]="filteredPurchases()"
-  [columns]="columns"
-  [isLoading]="purchases.isLoading()"
-  [(selectedItem)]="selectedPurchase"
-  (createdClicked)="openCreateDialog()"
-  (detailClicked)="openDetails($event)"
-  (deletedClicked)="deletePurchase($event)"
-  (searched)="searchQuery.set($event)"
->
-  <div toolbar-actions class="flex items-center gap-2">
+<div class="flex flex-col gap-6">
+  <!-- Header -->
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Закупки</h1>
+      <p class="text-sm text-slate-500">Управляйте поступлениями товаров от поставщиков</p>
+    </div>
+    <button uiButton variant="primary" icon="outline-plus" (click)="openCreateDialog()">
+      Создать закупку
+    </button>
+  </div>
+
+  @if (purchases.isLoading()) {
+    <div class="flex h-64 items-center justify-center">
+      <ui-loading [width]="40" [height]="40" />
+    </div>
+  } @else {
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      @for (stat of stats(); track stat.label) {
+        <ui-card class="flex items-center gap-4 p-6">
+          <div
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-colors duration-200"
+            [class]="stat.color"
+          >
+            <ui-icon width="24" height="24" [name]="stat.icon" />
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
+            @if (stat.isCurrency) {
+              <p class="text-2xl font-bold text-slate-900">
+                {{ stat.value | number: '1.0-0' }} UZS
+              </p>
+            } @else {
+              <p class="text-2xl font-bold text-slate-900">{{ stat.value }}</p>
+            }
+          </div>
+        </ui-card>
+      }
+    </div>
+
+    <!-- Search Area -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+      <ui-input
+        placeholder="Поиск по коду, поставщику или магазину..."
+        class="lg:col-span-1"
+        [formField]="searchForm.query"
+      ></ui-input>
+    </div>
+
+    <!-- Data Table -->
+    <ui-card>
+      <ui-table
+        trackField="id"
+        [columns]="columns"
+        [data]="filteredPurchases()"
+        [loading]="purchases.isLoading()"
+        [templates]="{
+          actions: actionsTpl,
+        }"
+      />
+    </ui-card>
+  }
+</div>
+
+<ng-template #actionsTpl let-row>
+  <div class="flex items-center justify-end gap-1">
+    <button uiButton variant="ghost" size="sm" iconOnly (click)="openDetails(row)">
+      <ui-icon name="outline-eye" width="18" height="18" />
+    </button>
     <button
       uiButton
       variant="ghost"
       size="sm"
-      [disabled]="!selectedPurchase()"
-      [loading]="isLoading()"
-      [icon]="
-        selectedPurchase()?.status === DocumentStatus.COMPLETED ? 'outline-x' : 'outline-check'
-      "
-      (click)="toggleStatus()"
+      iconOnly
+      variant="danger"
+      (click)="deletePurchase(row)"
     >
-      Провести / Отменить проведение
+      <ui-icon name="outline-trash" width="18" height="18" />
     </button>
   </div>
-</app-table-struct>
+</ng-template>

@@ -7,6 +7,7 @@ export interface Category {
   parent?: Category;
   parentId?: string;
   children: Category[];
+  isActive?: boolean;
   createdAt?: string;
   updatedAt: string;
 }

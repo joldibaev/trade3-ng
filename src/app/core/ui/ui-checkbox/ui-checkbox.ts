@@ -1,10 +1,18 @@
-import { ChangeDetectionStrategy, Component, input, model, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  model,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import {
   DisabledReason,
   FormCheckboxControl,
   ValidationError,
   WithOptionalField,
 } from '@angular/forms/signals';
+import { generateId } from '../../../shared/utils/generate-id';
 import { UiIcon } from '../ui-icon/ui-icon.component';
 
 @Component({
@@ -32,6 +40,7 @@ export class UiCheckbox implements FormCheckboxControl {
 
   // Component specific inputs
   label = input<string>('');
+  id = signal(`checkbox-${generateId()}`);
 
   toggle() {
     if (this.disabled() || this.readonly()) return;

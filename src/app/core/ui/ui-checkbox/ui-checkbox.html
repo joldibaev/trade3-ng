@@ -3,6 +3,7 @@
     type="button"
     role="checkbox"
     class="ui-checkbox"
+    [id]="id()"
     [attr.aria-checked]="checked()"
     [attr.aria-label]="label()"
     [disabled]="disabled()"
@@ -15,12 +16,12 @@
     }
   </button>
   @if (label()) {
-    <span
+    <label
       class="cursor-pointer text-sm font-medium select-none"
+      [for]="id()"
       [class.opacity-50]="disabled()"
-      (click)="toggle()"
     >
       {{ label() }}
-    </span>
+    </label>
   }
 </div>

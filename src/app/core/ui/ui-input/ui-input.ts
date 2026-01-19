@@ -15,8 +15,8 @@ import { InputType } from './input-type.type';
   },
   imports: [UiLoading],
 })
-export class UiInput extends UiFormControl {
-  value = model('');
+export class UiInput<T = string> extends UiFormControl<T> {
+  value = model<T>(undefined as unknown as T);
 
   // component specific inputs
   name = input<string>('');
@@ -34,6 +34,13 @@ export class UiInput extends UiFormControl {
 
   protected onInput(target: EventTarget | null) {
     if (!(target && target instanceof HTMLInputElement)) return;
-    this.value.set(target.value);
+
+    let val: unknown = target.value;
+    if (this.type() === 'number') {
+      val = target.valueAsNumber;
+      if (isNaN(val as number)) val = undefined;
+    }
+
+    this.value.set(val as T);
   }
 }

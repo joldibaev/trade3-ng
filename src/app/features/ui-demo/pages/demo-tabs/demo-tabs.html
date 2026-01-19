@@ -29,7 +29,8 @@
         <div class="space-y-4 p-4">
           <div class="flex items-center gap-4 rounded-xl bg-slate-50 p-4">
             <div
-              class="bg-primary-100 text-primary-700 flex h-16 w-16 items-center justify-center rounded-full text-xl font-bold">
+              class="bg-primary-100 text-primary-700 flex h-16 w-16 items-center justify-center rounded-full text-xl font-bold"
+            >
               JD
             </div>
             <div>
@@ -57,7 +58,13 @@
       <h2 class="text-lg font-semibold">Dynamic Tabs</h2>
       <div class="flex gap-2">
         <button uiButton size="sm" variant="secondary" (click)="addTab()">Add Tab</button>
-        <button uiButton size="sm" variant="danger" [disabled]="tabs().length === 0" (click)="removeTab()">
+        <button
+          uiButton
+          size="sm"
+          variant="danger"
+          [disabled]="tabs().length === 0"
+          (click)="removeTab()"
+        >
           Remove Last
         </button>
       </div>
@@ -65,11 +72,9 @@
 
     <ui-tab-group>
       @for (tab of tabs(); track tab) {
-      <ui-tab [label]="tab">
-        <div class="p-4">
-          Content for {{ tab }}
-        </div>
-      </ui-tab>
+        <ui-tab [label]="tab">
+          <div class="p-4">Content for {{ tab }}</div>
+        </ui-tab>
       }
     </ui-tab-group>
   </ui-card>

@@ -49,21 +49,27 @@
     <h3 class="text-lg leading-none font-bold text-slate-900">Sizes</h3>
     <div class="flex flex-wrap items-center gap-6">
       <div class="flex flex-col gap-2">
-        <span class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Extra Small (xs)</span>
+        <span class="text-[10px] font-bold tracking-widest text-slate-400 uppercase"
+          >Extra Small (xs)</span
+        >
         <div class="flex items-center gap-2">
           <ui-badge variant="success" size="xs">Active</ui-badge>
           <ui-badge variant="neutral" size="xs">Draft</ui-badge>
         </div>
       </div>
       <div class="flex flex-col gap-2">
-        <span class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Small (sm)</span>
+        <span class="text-[10px] font-bold tracking-widest text-slate-400 uppercase"
+          >Small (sm)</span
+        >
         <div class="flex items-center gap-2">
           <ui-badge variant="success" size="sm">Active</ui-badge>
           <ui-badge variant="neutral" size="sm">Draft</ui-badge>
         </div>
       </div>
       <div class="flex flex-col gap-2">
-        <span class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Medium (md)</span>
+        <span class="text-[10px] font-bold tracking-widest text-slate-400 uppercase"
+          >Medium (md)</span
+        >
         <div class="flex items-center gap-2">
           <ui-badge variant="success" size="md">Active</ui-badge>
           <ui-badge variant="neutral" size="md">Draft</ui-badge>
@@ -80,14 +86,30 @@
       <div class="space-y-6">
         <div class="grid grid-cols-1 gap-4">
           <div>
-            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Label</label>
-            <input class="w-full rounded border p-2" [(ngModel)]="configLabel" />
+            <label
+              for="badge-label-config"
+              class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+              >Label</label
+            >
+            <input
+              id="badge-label-config"
+              class="w-full rounded border p-2"
+              [(ngModel)]="configLabel"
+            />
           </div>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Variant</label>
-            <select class="w-full rounded border p-2" [(ngModel)]="configVariant">
+            <label
+              for="badge-variant-config"
+              class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+              >Variant</label
+            >
+            <select
+              id="badge-variant-config"
+              class="w-full rounded border p-2"
+              [(ngModel)]="configVariant"
+            >
               <option value="primary">primary</option>
               <option value="secondary">secondary</option>
               <option value="success">success</option>
@@ -98,16 +120,32 @@
             </select>
           </div>
           <div>
-            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Mode</label>
-            <select class="w-full rounded border p-2" [(ngModel)]="configMode">
+            <label
+              for="badge-mode-config"
+              class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+              >Mode</label
+            >
+            <select
+              id="badge-mode-config"
+              class="w-full rounded border p-2"
+              [(ngModel)]="configMode"
+            >
               <option value="solid">solid</option>
               <option value="subtle">subtle</option>
               <option value="outline">outline</option>
             </select>
           </div>
           <div>
-            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Size</label>
-            <select class="w-full rounded border p-2" [(ngModel)]="configSize">
+            <label
+              for="badge-size-config"
+              class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+              >Size</label
+            >
+            <select
+              id="badge-size-config"
+              class="w-full rounded border p-2"
+              [(ngModel)]="configSize"
+            >
               <option value="xs">xs</option>
               <option value="sm">sm</option>
               <option value="md">md</option>
@@ -117,7 +155,8 @@
       </div>
 
       <div
-        class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
+        class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6"
+      >
         <ui-badge [variant]="configVariant" [mode]="configMode" [size]="configSize">
           {{ configLabel }}
         </ui-badge>

@@ -8,7 +8,7 @@ import {
 import { generateId } from '../../shared/utils/generate-id';
 
 @Directive()
-export abstract class UiFormControl<T = string> implements FormValueControl<T> {
+export abstract class UiFormControl<T> implements FormValueControl<T> {
   // Model
   abstract value: ReturnType<typeof model<T>>;
   touched = model<boolean>(false);

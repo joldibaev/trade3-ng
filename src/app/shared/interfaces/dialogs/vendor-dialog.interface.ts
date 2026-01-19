@@ -9,4 +9,5 @@ export interface VendorDialogResult {
   phone: string;
   email: string;
   address: string;
+  isActive: boolean;
 }

@@ -65,9 +65,17 @@
     <div class="space-y-6">
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Variant</label>
-          <select class="w-full rounded border p-2" [value]="configVariant()"
-            (change)="configVariant.set($any($event.target).value)">
+          <label
+            for="btn-variant-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Variant</label
+          >
+          <select
+            id="btn-variant-config"
+            class="w-full rounded border p-2"
+            [value]="configVariant()"
+            (change)="configVariant.set($any($event.target).value)"
+          >
             <option value="primary">primary</option>
             <option value="secondary">secondary</option>
             <option value="ghost">ghost</option>
@@ -77,9 +85,15 @@
           </select>
         </div>
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Size</label>
-          <select class="w-full rounded border p-2" [value]="configSize()"
-            (change)="configSize.set($any($event.target).value)">
+          <label for="btn-size-config" class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Size</label
+          >
+          <select
+            id="btn-size-config"
+            class="w-full rounded border p-2"
+            [value]="configSize()"
+            (change)="configSize.set($any($event.target).value)"
+          >
             <option value="sm">sm</option>
             <option value="md">md</option>
             <option value="lg">lg</option>
@@ -89,42 +103,71 @@
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Label</label>
-          <input class="w-full rounded border p-2" [value]="configLabel()"
-            (input)="configLabel.set($any($event.target).value)" />
+          <label
+            for="btn-label-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Label</label
+          >
+          <input
+            id="btn-label-config"
+            class="w-full rounded border p-2"
+            [value]="configLabel()"
+            (input)="configLabel.set($any($event.target).value)"
+          />
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configLoading()"
-            (change)="configLoading.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configLoading()"
+            (change)="configLoading.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Loading</span>
         </label>
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configDisabled()"
-            (change)="configDisabled.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configDisabled()"
+            (change)="configDisabled.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Disabled</span>
         </label>
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configFluid()" (change)="configFluid.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configFluid()"
+            (change)="configFluid.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Fluid (Full Width)</span>
         </label>
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configIconOnly()"
-            (change)="configIconOnly.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configIconOnly()"
+            (change)="configIconOnly.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Icon Only (Square)</span>
         </label>
       </div>
     </div>
 
     <div
-      class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
-      <button uiButton [variant]="configVariant()" [size]="configSize()" [loading]="configLoading()"
-        [disabled]="configDisabled()" [fluid]="configFluid()" [iconOnly]="configIconOnly()"
-        [icon]="configIconOnly() ? 'outline-star' : undefined">
+      class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6"
+    >
+      <button
+        uiButton
+        [variant]="configVariant()"
+        [size]="configSize()"
+        [loading]="configLoading()"
+        [disabled]="configDisabled()"
+        [fluid]="configFluid()"
+        [iconOnly]="configIconOnly()"
+        [icon]="configIconOnly() ? 'outline-star' : undefined"
+      >
         @if (!configIconOnly()) {
-        {{ configLabel() }}
+          {{ configLabel() }}
         }
       </button>
 

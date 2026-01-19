@@ -4,6 +4,13 @@
 >
   <form id="price-type-form" class="flex flex-col gap-4" (ngSubmit)="save()">
     <ui-input label="Наименование" placeholder="Введите название" [formField]="formData.name" />
+    <div class="flex items-center justify-between rounded-lg border border-slate-200 p-3">
+      <div>
+        <p class="text-sm font-medium">Статус</p>
+        <p class="text-xs text-slate-500">Разрешить использование этого типа цены</p>
+      </div>
+      <ui-switch [formField]="formData.isActive" />
+    </div>
   </form>
 
   <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>

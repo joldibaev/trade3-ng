@@ -19,7 +19,9 @@ export class DemoButtonPage {
   }
 
   // Playground Config
-  configVariant = signal<'primary' | 'secondary' | 'ghost' | 'danger' | 'dashed' | 'link'>('primary');
+  configVariant = signal<'primary' | 'secondary' | 'ghost' | 'danger' | 'dashed' | 'link'>(
+    'primary',
+  );
   configSize = signal<'sm' | 'md' | 'lg'>('md');
   configLoading = signal(false);
   configDisabled = signal(false);

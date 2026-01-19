@@ -13,7 +13,6 @@
   <div class="flex flex-wrap gap-4">
     <button uiButton (click)="showSuccessWithTitle()">Success + Title</button>
   </div>
-
 </ui-card>
 
 <ui-card class="mt-6 p-6">
@@ -22,13 +21,26 @@
     <div class="space-y-6">
       <div class="grid grid-cols-1 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Message</label>
-          <input class="w-full rounded border p-2" [value]="configMessage()"
-            (input)="configMessage.set($any($event.target).value)" />
+          <label for="notyf-message" class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Message</label
+          >
+          <input
+            id="notyf-message"
+            class="w-full rounded border p-2"
+            [value]="configMessage()"
+            (input)="configMessage.set($any($event.target).value)"
+          />
         </div>
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Type</label>
-          <select class="w-full rounded border p-2" [ngModel]="configType()" (ngModelChange)="configType.set($event)">
+          <label for="notyf-type" class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Type</label
+          >
+          <select
+            id="notyf-type"
+            class="w-full rounded border p-2"
+            [ngModel]="configType()"
+            (ngModelChange)="configType.set($event)"
+          >
             <option value="success">success</option>
             <option value="error">error</option>
             <option value="info">info</option>
@@ -38,7 +50,8 @@
     </div>
 
     <div
-      class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
+      class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6"
+    >
       <button uiButton variant="primary" (click)="triggerCustom()">Trigger Custom Toast</button>
 
       <div class="mt-8 font-mono text-[10px] text-slate-400">

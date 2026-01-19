@@ -4,6 +4,13 @@
     <ui-input label="Телефон" placeholder="Введите телефон" [formField]="formData.phone" />
     <ui-input label="Email" placeholder="Введите email" [formField]="formData.email" />
     <ui-input label="Адрес" placeholder="Введите адрес" [formField]="formData.address" />
+    <div class="flex items-center justify-between rounded-lg border border-slate-200 p-3">
+      <div>
+        <p class="text-sm font-medium">Статус клиента</p>
+        <p class="text-xs text-slate-500">Разрешить операции с этим клиентом</p>
+      </div>
+      <ui-switch [formField]="formData.isActive" />
+    </div>
   </form>
 
   <button footer type="button" uiButton variant="ghost" (click)="close()">Отмена</button>

@@ -1,14 +1,76 @@
-<app-table-struct
-  title="Типы цен"
-  showEdit
-  showDelete
-  [trackField]="'id'"
-  [data]="filteredPriceTypes()"
-  [columns]="columns"
-  [isLoading]="priceTypes.isLoading()"
-  [(selectedItem)]="selectedPriceType"
-  (createdClicked)="openPriceTypeDialog()"
-  (editedClicked)="openPriceTypeDialog($event)"
-  (deletedClicked)="deletePriceType($event)"
-  (searched)="searchQuery.set($event)"
-/>
+<div class="flex flex-col gap-6">
+  <!-- Header -->
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Типы цен</h1>
+      <p class="text-sm text-slate-500">Управляйте типами цен для товаров</p>
+    </div>
+    <button uiButton variant="primary" icon="outline-plus" (click)="openPriceTypeDialog()">
+      Добавить тип цены
+    </button>
+  </div>
+
+  @if (priceTypes.isLoading()) {
+    <div class="flex h-64 items-center justify-center">
+      <ui-loading [width]="40" [height]="40" />
+    </div>
+  } @else {
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+      @for (stat of stats(); track stat.label) {
+        <ui-card class="flex items-center gap-4 p-6">
+          <div
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"
+          >
+            <ui-icon width="24" height="24" [name]="stat.icon" />
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
+            <p class="text-2xl font-bold text-slate-900">{{ stat.value }}</p>
+          </div>
+        </ui-card>
+      }
+    </div>
+
+    <!-- Search Area -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+      <ui-input
+        placeholder="Поиск по названию..."
+        class="lg:col-span-1"
+        [formField]="searchForm.query"
+      ></ui-input>
+    </div>
+
+    <!-- Data Table -->
+    <ui-card>
+      <ui-table
+        trackField="id"
+        [columns]="columns"
+        [data]="filteredPriceTypes()"
+        [loading]="priceTypes.isLoading()"
+        [templates]="{
+          actions: actionsTpl,
+        }"
+      />
+    </ui-card>
+  }
+</div>
+
+<ng-template #actionsTpl let-row>
+  <div class="flex items-center justify-end gap-1">
+    <button uiButton variant="ghost" size="sm" iconOnly (click)="openPriceTypeDialog(row)">
+      <ui-icon name="outline-edit" width="18" height="18" />
+    </button>
+    <button
+      uiButton
+      variant="ghost"
+      size="sm"
+      iconOnly
+      variant="danger"
+      (click)="deletePriceType(row)"
+    >
+      <ui-icon name="outline-trash" width="18" height="18" />
+    </button>
+  </div>
+</ng-template>

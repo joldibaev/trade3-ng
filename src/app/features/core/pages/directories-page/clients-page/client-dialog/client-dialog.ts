@@ -21,9 +21,11 @@ import {
 } from '../../../../../../shared/interfaces/dialogs/client-dialog.interface';
 import { Client } from '../../../../../../shared/interfaces/entities/client.interface';
 
+import { UiSwitch } from '../../../../../../core/ui/ui-switch/ui-switch';
+
 @Component({
   selector: 'app-client-dialog',
-  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule, UiSwitch],
   templateUrl: './client-dialog.html',
   styleUrl: './client-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +39,7 @@ export class ClientDialog {
     phone: this.data.client?.phone ?? '',
     email: this.data.client?.email ?? '',
     address: this.data.client?.address ?? '',
+    isActive: this.data.client?.isActive ?? true,
   });
   formData = form(this.formState, (schemaPath) => {
     required(schemaPath.name, { message: 'Наименование обязательно' });

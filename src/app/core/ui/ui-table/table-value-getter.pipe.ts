@@ -10,7 +10,11 @@ export class TableValueGetterPipe implements PipeTransform {
       return col.valueGetter(row, index);
     }
     if (col.key in (row as object)) {
-      return (row as any)[col.key];
+      return (row as Record<string, unknown>)[col.key as string] as
+        | string
+        | number
+        | null
+        | undefined;
     }
     return undefined;
   }

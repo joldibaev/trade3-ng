@@ -1,3 +1,5 @@
+import { IconName } from '../ui-icon/data';
+
 export interface TableColumnBase<T> {
   key: keyof T | (string & {});
   header: string;
@@ -5,6 +7,12 @@ export interface TableColumnBase<T> {
   width?: string;
   align?: 'left' | 'center' | 'right';
   valueGetter?: (row: T, index: number) => string | number | null | undefined;
+  icon?: IconName;
+  classList?: string;
+}
+
+export interface TableColumnID<T> extends TableColumnBase<T> {
+  type: 'id';
 }
 
 export interface TableColumnText<T> extends TableColumnBase<T> {
@@ -35,6 +43,7 @@ export interface TableColumnDocumentBadge<T> extends TableColumnBase<T> {
 }
 
 export type TableColumn<T> =
+  | TableColumnID<T>
   | TableColumnText<T>
   | TableColumnNumber<T>
   | TableColumnDate<T>

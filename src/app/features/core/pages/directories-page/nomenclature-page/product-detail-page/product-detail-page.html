@@ -1,96 +1,373 @@
-@if (product.isLoading()) {
-  <div class="flex h-64 items-center justify-center">
-    <ui-loading [width]="40" [height]="40" />
+<div class="space-y-6 p-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <button
+        uiButton
+        variant="secondary"
+        class="h-10 w-10 justify-center !p-0"
+        (click)="navigateBack()"
+      >
+        <ui-icon name="outline-arrow-left" class="h-5 w-5" />
+      </button>
+      <div>
+        <div class="flex items-center gap-3">
+          <h1 class="text-2xl font-semibold text-slate-900">
+            {{ product().name }}
+          </h1>
+          <span class="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+            {{ product().code }}
+          </span>
+        </div>
+        <p class="mt-1 text-slate-600">{{ product().category }}</p>
+      </div>
+    </div>
+    <button
+      uiButton
+      variant="primary"
+      class="gap-2 bg-emerald-600 text-white hover:bg-emerald-700"
+      (click)="editProduct()"
+    >
+      <ui-icon name="outline-edit" class="h-5 w-5" />
+      Редактировать
+    </button>
   </div>
-} @else if (product.value(); as p) {
-  <ui-page-header [title]="product.value()?.name || '...'" [showBack]="true">
-    <!-- Actions can be added later -->
-  </ui-page-header>
 
-  <ui-tab-group class="mt-4">
-    <!-- General Info -->
-    <ui-tab label="Общее">
-      <div class="mt-6 space-y-8">
-        <!-- General Info Section -->
-        <div>
-          <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
-          <div class="grid grid-cols-2 gap-4 text-sm">
-            <div class="text-slate-500">ID:</div>
-            <div class="font-medium">{{ p.id }}</div>
+  <!-- Tabs -->
+  <div class="border-b border-slate-200">
+    <div class="flex gap-1">
+      @for (tab of tabs; track tab.id) {
+        <button
+          class="flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors"
+          [class.border-emerald-600]="activeTab() === tab.id"
+          [class.text-emerald-700]="activeTab() === tab.id"
+          [class.border-transparent]="activeTab() !== tab.id"
+          [class.text-slate-600]="activeTab() !== tab.id"
+          (click)="setActiveTab(tab.id)"
+        >
+          <ui-icon class="h-4 w-4" [name]="tab.icon" />
+          {{ tab.label }}
+        </button>
+      }
+    </div>
+  </div>
 
-            <div class="text-slate-500">Артикул:</div>
-            <div class="font-medium">{{ p.article || '-' }}</div>
-
-            <div class="text-slate-500">Категория:</div>
-            <div class="font-medium">{{ p.category.name || 'Без категории' }}</div>
-
-            @if (p.prices.length) {
-              @for (price of p.prices; track price.id) {
-                <div class="text-slate-500">{{ getPriceTypeName(price.priceTypeId) }}:</div>
-                <div class="font-medium">{{ price.value | number }} UZS</div>
-              }
-            }
-
-            @if (p.stocks.length) {
-              @for (stock of p.stocks; track stock.id) {
-                <div class="text-slate-500">{{ getStoreName(stock.storeId) }}:</div>
-                <div class="font-medium">{{ stock.quantity }} шт</div>
-              }
-            }
+  <!-- Tab Content -->
+  @if (activeTab() === 'overview') {
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <!-- General Information -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 lg:col-span-2">
+        <h3 class="mb-4 text-lg font-semibold text-slate-900">Общая информация</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <div class="text-sm text-slate-500">Код товара</div>
+            <p class="mt-1 text-sm font-medium text-slate-900">
+              {{ product().code }}
+            </p>
+          </div>
+          <div>
+            <div class="text-sm text-slate-500">Основной штрихкод</div>
+            <p class="mt-1 text-sm font-medium text-slate-900">
+              {{ product().barcode }}
+            </p>
+          </div>
+          <div class="col-span-2">
+            <div class="text-sm text-slate-500">Категория</div>
+            <p class="mt-1 text-sm font-medium text-slate-900">
+              {{ product().category }}
+            </p>
+          </div>
+          <div class="col-span-2">
+            <div class="text-sm text-slate-500">Описание</div>
+            <p class="mt-1 text-sm text-slate-600">
+              {{ product().description }}
+            </p>
+          </div>
+          <div>
+            <div class="text-sm text-slate-500">Единица измерения</div>
+            <p class="mt-1 text-sm font-medium text-slate-900">
+              {{ product().unit }}
+            </p>
+          </div>
+          <div>
+            <div class="text-sm text-slate-500">Дата создания</div>
+            <p class="mt-1 text-sm font-medium text-slate-900">
+              {{ product().createdDate | date: 'mediumDate' }}
+            </p>
           </div>
         </div>
       </div>
-    </ui-tab>
 
-    <!-- Barcodes -->
-    <ui-tab label="Штрихкоды">
-      <div class="mt-6">
-        <h2 class="mb-4 text-lg font-semibold">Штрихкоды</h2>
-        @if (p.barcodes.length) {
-          <div class="flex flex-wrap gap-2">
-            @for (code of p.barcodes; track code.id) {
-              <div
-                class="rounded-md border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-medium"
-              >
-                {{ code.value }}
-              </div>
-            }
+      <!-- Price & Stock Info -->
+      <div class="space-y-6">
+        <div class="rounded-xl border border-slate-200 bg-white p-6">
+          <div class="mb-4 flex items-center gap-2">
+            <ui-icon name="outline-currency-dollar" class="h-5 w-5 text-emerald-600" />
+            <h3 class="text-lg font-semibold text-slate-900">Цены</h3>
           </div>
-        } @else {
-          <div class="text-slate-500">Штрихкоды не заданы</div>
-        }
-      </div>
-    </ui-tab>
+          <div class="space-y-3">
+            <div>
+              <div class="text-sm text-slate-500">Текущая цена</div>
+              <p class="mt-1 text-2xl font-bold text-emerald-600">
+                {{ product().currentPrice | number }} UZS
+              </p>
+            </div>
+            <div>
+              <div class="text-sm text-slate-500">Цена закупки</div>
+              <p class="mt-1 text-lg font-semibold text-slate-900">
+                {{ product().costPrice | number }} UZS
+              </p>
+            </div>
+            <div class="border-t border-slate-200 pt-3">
+              <div class="text-sm text-slate-500">Наценка</div>
+              <p class="mt-1 text-lg font-semibold text-blue-600">
+                {{
+                  ((product().currentPrice - product().costPrice) / product().costPrice) * 100
+                    | number: '1.1-1'
+                }}%
+              </p>
+            </div>
+          </div>
+        </div>
 
-    <!-- Prices (History) -->
-    <ui-tab label="История цен">
-      <div class="mt-6">
-        <h2 class="mb-4 text-lg font-semibold">История цен</h2>
-        <ui-table
-          [columns]="priceHistoryColumns"
-          [data]="product.value()?.priceHistory || []"
-          [loading]="product.isLoading()"
-          [trackField]="'id'"
-        />
+        <div class="rounded-xl border border-slate-200 bg-white p-6">
+          <div class="mb-4 flex items-center gap-2">
+            <ui-icon name="outline-box" class="h-5 w-5 text-blue-600" />
+            <h3 class="text-lg font-semibold text-slate-900">Остатки</h3>
+          </div>
+          <div class="space-y-3">
+            <div>
+              <div class="text-sm text-slate-500">Общий остаток</div>
+              <p class="mt-1 text-2xl font-bold text-slate-900">
+                {{ product().totalStock }}
+              </p>
+            </div>
+            <div>
+              <div class="text-sm text-slate-500">Зарезервировано</div>
+              <p class="mt-1 text-lg font-semibold text-amber-600">
+                {{ product().reservedStock }}
+              </p>
+            </div>
+            <div>
+              <div class="text-sm text-slate-500">Доступно</div>
+              <p class="mt-1 text-lg font-semibold text-emerald-600">
+                {{ product().availableStock }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-    </ui-tab>
+    </div>
+  }
 
-    <!-- Stock Movements -->
-    <ui-tab label="Движение товара">
-      <div class="mt-6">
-        <h2 class="mb-4 text-lg font-semibold">Движение товара</h2>
-        <ui-table
-          [columns]="stockMovementColumns"
-          [data]="stockMovements.value() || []"
-          [loading]="stockMovements.isLoading()"
-          [trackField]="'id'"
-        />
+  @if (activeTab() === 'movements') {
+    <div class="rounded-xl border border-slate-200 bg-white p-6">
+      <div class="mb-4 flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-slate-900">Движения товара</h3>
+        <div class="flex items-center gap-2 text-sm text-slate-600">
+          <ui-icon name="outline-file-text" class="h-4 w-4" />
+          <span>{{ movements().length }} записей</span>
+        </div>
       </div>
-    </ui-tab>
-  </ui-tab-group>
-} @else {
-  <ui-page-header title="Товар не найден" [showBack]="true" />
-  <div class="flex h-64 items-center justify-center text-slate-500">
-    Товар не найден или был удален
+      <ui-table
+        [trackField]="'id'"
+        [columns]="movementColumns"
+        [data]="movements()"
+        [templates]="{
+          date: dateTpl,
+          documentNumber: docNumTpl,
+          type: typeTpl,
+          quantity: qtyTpl,
+          user: userTpl,
+        }"
+      />
+    </div>
+  }
+
+  @if (activeTab() === 'barcodes') {
+    <div class="rounded-xl border border-slate-200 bg-white p-6">
+      <div class="mb-4 flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-slate-900">Штрихкоды</h3>
+        <button
+          uiButton
+          variant="primary"
+          class="gap-2 bg-emerald-600 text-sm text-white hover:bg-emerald-700"
+        >
+          <ui-icon name="outline-barcode" class="h-4 w-4" />
+          Добавить штрихкод
+        </button>
+      </div>
+      <ui-table
+        [trackField]="'id'"
+        [columns]="barcodeColumns"
+        [data]="barcodes()"
+        [templates]="{
+          barcode: barcodeTpl,
+          type: barcodeTypeTpl,
+          createdDate: dateTpl,
+        }"
+      />
+    </div>
+  }
+
+  @if (activeTab() === 'stores') {
+    <div class="rounded-xl border border-slate-200 bg-white p-6">
+      <div class="mb-4 flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-slate-900">Остатки по складам</h3>
+        <div class="flex items-center gap-2 text-sm text-slate-600">
+          <ui-icon name="outline-building-store" class="h-4 w-4" />
+          <span>{{ storeQuantities().length }} складов</span>
+        </div>
+      </div>
+      <ui-table
+        [trackField]="'id'"
+        [columns]="storeColumns"
+        [data]="storeQuantities()"
+        [templates]="{
+          store: storeTpl,
+          quantity: storeQtyTpl,
+          reservedQuantity: reservedTpl,
+          availableQuantity: availableTpl,
+        }"
+      />
+    </div>
+  }
+
+  @if (activeTab() === 'price-history') {
+    <div class="rounded-xl border border-slate-200 bg-white p-6">
+      <div class="mb-4 flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-slate-900">История изменения цен</h3>
+        <div class="flex items-center gap-2 text-sm text-slate-600">
+          <ui-icon name="outline-clock" class="h-4 w-4" />
+          <span>{{ priceHistory().length }} изменений</span>
+        </div>
+      </div>
+      <ui-table
+        [trackField]="'id'"
+        [columns]="priceHistoryColumns"
+        [data]="priceHistory()"
+        [templates]="{
+          date: dateTpl,
+          oldPrice: oldPriceTpl,
+          newPrice: newPriceTpl,
+          changePercent: changePercentTpl,
+          user: userTpl,
+        }"
+      />
+    </div>
+  }
+</div>
+
+<!-- Templates -->
+<ng-template #dateTpl let-value>
+  <div class="flex items-center gap-1.5 text-sm text-slate-600">
+    <ui-icon name="outline-calendar" class="h-3.5 w-3.5" />
+    {{ value | date: 'mediumDate' }}
   </div>
-}
+</ng-template>
+
+<ng-template #docNumTpl let-value>
+  <span class="font-mono text-xs font-medium text-slate-900">{{ value }}</span>
+</ng-template>
+
+<ng-template #typeTpl let-value>
+  <span
+    class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
+    [class.bg-emerald-50]="value === 'in'"
+    [class.text-emerald-700]="value === 'in'"
+    [class.bg-red-50]="value === 'out'"
+    [class.text-red-700]="value === 'out'"
+  >
+    <ui-icon
+      class="h-3 w-3"
+      [name]="value === 'in' ? 'outline-trending-up' : 'outline-trending-down'"
+    />
+    {{ value === 'in' ? 'Приход' : 'Расход' }}
+  </span>
+</ng-template>
+
+<ng-template #qtyTpl let-value let-row="row">
+  <span
+    class="font-semibold"
+    [class.text-emerald-600]="row.type === 'in'"
+    [class.text-red-600]="row.type === 'out'"
+  >
+    {{ row.type === 'in' ? '+' : '-' }}{{ value }}
+  </span>
+</ng-template>
+
+<ng-template #userTpl let-value>
+  <div class="flex items-center gap-1.5 text-sm text-slate-600">
+    <ui-icon name="outline-users" class="h-3.5 w-3.5" />
+    {{ value }}
+  </div>
+</ng-template>
+
+<ng-template #barcodeTpl let-value let-row="row">
+  <div class="flex items-center gap-3">
+    <ui-icon name="outline-barcode" class="h-5 w-5 text-slate-400" />
+    <div>
+      <p class="font-mono text-sm font-medium text-slate-900">{{ value }}</p>
+      @if (row.isPrimary) {
+        <span class="text-xs font-medium text-emerald-600">Основной</span>
+      }
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #barcodeTypeTpl let-value>
+  <span
+    class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700"
+  >
+    {{ value }}
+  </span>
+</ng-template>
+
+<ng-template #storeTpl let-value>
+  <div class="flex items-center gap-3">
+    <div
+      class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600"
+    >
+      <ui-icon name="outline-building-store" class="h-4 w-4 text-white" />
+    </div>
+    <span class="font-medium text-slate-900">{{ value }}</span>
+  </div>
+</ng-template>
+
+<ng-template #storeQtyTpl let-value>
+  <span class="text-lg font-semibold text-slate-900">{{ value }}</span>
+</ng-template>
+
+<ng-template #reservedTpl let-value>
+  <span class="text-sm font-medium text-amber-600">{{ value }}</span>
+</ng-template>
+
+<ng-template #availableTpl let-value>
+  <span class="text-sm font-semibold text-emerald-600">{{ value }}</span>
+</ng-template>
+
+<ng-template #oldPriceTpl let-value>
+  <span class="text-sm text-slate-600">{{ value | number }} UZS</span>
+</ng-template>
+
+<ng-template #newPriceTpl let-value>
+  <span class="text-sm font-semibold text-slate-900">{{ value | number }} UZS</span>
+</ng-template>
+
+<ng-template #changePercentTpl let-value>
+  <div class="flex items-center gap-1.5">
+    <ui-icon
+      class="h-4 w-4"
+      [name]="value > 0 ? 'outline-trending-up' : 'outline-trending-down'"
+      [class.text-emerald-600]="value > 0"
+      [class.text-red-600]="value <= 0"
+    />
+    <span
+      class="text-sm font-semibold"
+      [class.text-emerald-600]="value > 0"
+      [class.text-red-600]="value <= 0"
+    >
+      {{ value > 0 ? '+' : '' }}{{ value | number: '1.2-2' }}%
+    </span>
+  </div>
+</ng-template>

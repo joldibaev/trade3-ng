@@ -15,24 +15,27 @@ import { PriceTypesService } from '../../../../../../core/services/price-types.s
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
+import { UiSwitch } from '../../../../../../core/ui/ui-switch/ui-switch';
 import {
   PriceTypeDialogData,
   PriceTypeDialogResult,
 } from '../../../../../../shared/interfaces/dialogs/price-type-dialog.interface';
+import { PriceType } from '../../../../../../shared/interfaces/entities/price-type.interface';
 
 @Component({
   selector: 'app-price-type-dialog',
-  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, FormField, FormsModule, UiSwitch],
   templateUrl: './price-type-dialog.html',
   styleUrl: './price-type-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PriceTypeDialog {
-  private dialogRef = inject<DialogRef<PriceTypeDialogResult>>(DialogRef);
+  private dialogRef = inject<DialogRef<PriceType>>(DialogRef);
   private data = inject<PriceTypeDialogData>(DIALOG_DATA);
 
   formState = signal<PriceTypeDialogResult>({
     name: this.data.priceType?.name ?? '',
+    isActive: this.data.priceType?.isActive ?? true,
   });
   formData = form(this.formState, (schemaPath) => {
     required(schemaPath.name, { message: 'Наименование обязательно' });

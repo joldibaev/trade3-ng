@@ -9,4 +9,5 @@ export interface ClientDialogResult {
   phone: string;
   email: string;
   address: string;
+  isActive: boolean;
 }

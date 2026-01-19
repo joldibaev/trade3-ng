@@ -40,7 +40,7 @@ export class DemoNotyfPage {
   triggerCustom() {
     const type = this.configType();
     const message = this.configMessage();
-    const duration = this.configDuration(); // Duration not supported in public API yet, ignoring for now
+    // Duration not supported in public API yet, ignoring for now
 
     switch (type) {
       case 'success':

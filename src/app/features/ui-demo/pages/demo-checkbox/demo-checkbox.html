@@ -6,7 +6,10 @@
     <div class="flex flex-col gap-4">
       <ui-checkbox label="Subscribe to newsletter" [formField]="preferencesForm.newsletter" />
 
-      <ui-checkbox label="I accept Privacy Policy (Required)" [formField]="preferencesForm.privacyPolicy" />
+      <ui-checkbox
+        label="I accept Privacy Policy (Required)"
+        [formField]="preferencesForm.privacyPolicy"
+      />
 
       <ui-checkbox label="Enable anonymous analytics" [formField]="preferencesForm.analytics" />
 
@@ -31,36 +34,54 @@
   </ui-card>
 </div>
 
-
-
 <ui-card class="mt-6 p-6">
   <h3 class="mb-4 text-xl font-bold">Attribute Explorer</h3>
   <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
     <div class="space-y-6">
       <div class="grid grid-cols-1 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Label</label>
-          <input class="w-full rounded border p-2" [value]="configLabel()"
-            (input)="configLabel.set($any($event.target).value)" />
+          <label
+            for="chkb-label-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Label</label
+          >
+          <input
+            id="chkb-label-config"
+            class="w-full rounded border p-2"
+            [value]="configLabel()"
+            (input)="configLabel.set($any($event.target).value)"
+          />
         </div>
       </div>
 
       <div class="flex gap-6">
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configDisabled()"
-            (change)="configDisabled.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configDisabled()"
+            (change)="configDisabled.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Disabled</span>
         </label>
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configInvalid()"
-            (change)="configInvalid.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configInvalid()"
+            (change)="configInvalid.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Invalid</span>
         </label>
       </div>
     </div>
 
-    <div class="flex flex-col justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
-      <ui-checkbox [label]="configLabel()" [disabled]="configDisabled()" [invalid]="configInvalid()" />
+    <div
+      class="flex flex-col justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6"
+    >
+      <ui-checkbox
+        [label]="configLabel()"
+        [disabled]="configDisabled()"
+        [invalid]="configInvalid()"
+      />
       <div class="mt-4 font-mono text-[10px] text-slate-400">
         &lt;ui-checkbox <br />
         &nbsp;&nbsp;label="{{ configLabel() }}" <br />

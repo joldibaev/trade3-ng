@@ -1,14 +1,96 @@
-<app-table-struct
-  title="Клиенты"
-  showEdit
-  showDelete
-  [trackField]="'id'"
-  [data]="filteredClients()"
-  [columns]="columns"
-  [isLoading]="clients.isLoading()"
-  [(selectedItem)]="selectedClient"
-  (createdClicked)="openClientDialog()"
-  (editedClicked)="openClientDialog($event)"
-  (deletedClicked)="deleteClient($event)"
-  (searched)="searchQuery.set($event)"
-/>
+<div class="flex flex-col gap-6 p-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-slate-900">Клиенты</h1>
+      <p class="mt-1 text-sm text-slate-600">Управление базой клиентов</p>
+    </div>
+    <button uiButton variant="primary" icon="outline-plus" (click)="openClientDialog()">
+      Добавить клиента
+    </button>
+  </div>
+
+  @if (clients.isLoading()) {
+    <div class="flex h-64 items-center justify-center">
+      <ui-loading [width]="40" [height]="40" />
+    </div>
+  } @else {
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+      @for (stat of stats(); track stat.label) {
+        <ui-card class="flex items-center gap-4 p-6">
+          <div
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"
+          >
+            <ui-icon width="24" height="24" [name]="stat.icon" />
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
+            @if (stat.label === 'Общая выручка') {
+              <p class="text-2xl font-bold text-slate-900">
+                {{ stat.value | number: '1.0-0' }} UZS
+              </p>
+            } @else {
+              <p class="text-2xl font-bold text-slate-900">{{ stat.value }}</p>
+            }
+          </div>
+        </ui-card>
+      }
+    </div>
+
+    <!-- Search Area -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+      <ui-input
+        placeholder="Поиск по имени, email или местоположению..."
+        class="lg:col-span-1"
+        [formField]="searchForm.query"
+      ></ui-input>
+    </div>
+
+    <!-- Data Table -->
+    <ui-card>
+      <ui-table
+        trackField="id"
+        [columns]="columns"
+        [data]="filteredClients()"
+        [loading]="clients.isLoading()"
+        [templates]="{
+          name: nameTpl,
+          actions: actionsTpl,
+        }"
+      />
+    </ui-card>
+  }
+</div>
+
+<!-- Templates -->
+<ng-template #nameTpl let-row>
+  <div class="flex items-center gap-3 py-2">
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-emerald-500 to-emerald-600 text-white shadow-sm"
+    >
+      <ui-icon name="outline-users" width="20" height="20" />
+    </div>
+    <div class="flex flex-col">
+      <span class="font-semibold text-slate-900">{{ row.name }}</span>
+      @if (row.email) {
+        <div class="flex items-center gap-1 text-xs text-slate-500">
+          <ui-icon name="outline-mail" width="12" height="12" />
+          <span>{{ row.email }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #actionsTpl let-row>
+  <div class="flex items-center justify-end gap-1">
+    <button uiButton variant="ghost" size="sm" iconOnly (click)="openClientDialog(row)">
+      <ui-icon name="outline-edit" width="18" height="18" />
+    </button>
+    <button uiButton variant="danger" size="sm" iconOnly (click)="deleteClient(row)">
+      <ui-icon name="outline-trash" width="18" height="18" />
+    </button>
+  </div>
+</ng-template>

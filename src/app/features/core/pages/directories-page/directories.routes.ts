@@ -13,12 +13,28 @@ export const routes: Routes = [
     title: 'Номенклатура',
   },
   {
+    path: 'nomenclature/new',
+    loadComponent: () =>
+      import('./nomenclature-page/product-edit-page/product-edit-page').then(
+        (m) => m.ProductEditPage,
+      ),
+    title: 'Создание товара',
+  },
+  {
     path: 'nomenclature/:id',
     loadComponent: () =>
       import('./nomenclature-page/product-detail-page/product-detail-page').then(
         (m) => m.ProductDetailPage,
       ),
     title: 'Продукт',
+  },
+  {
+    path: 'nomenclature/:id/edit',
+    loadComponent: () =>
+      import('./nomenclature-page/product-edit-page/product-edit-page').then(
+        (m) => m.ProductEditPage,
+      ),
+    title: 'Редактировать товар',
   },
   {
     path: 'clients',

@@ -19,27 +19,57 @@
     <div class="space-y-6">
       <div class="grid grid-cols-1 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Title</label>
-          <input class="w-full rounded border p-2" [value]="configTitle()"
-            (input)="configTitle.set($any($event.target).value)" />
+          <label
+            for="dlg-title-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Title</label
+          >
+          <input
+            id="dlg-title-config"
+            class="w-full rounded border p-2"
+            [value]="configTitle()"
+            (input)="configTitle.set($any($event.target).value)"
+          />
         </div>
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Message</label>
-          <textarea class="w-full rounded border p-2" [value]="configMessage()"
-            (input)="configMessage.set($any($event.target).value)"></textarea>
+          <label for="dlg-msg-config" class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Message</label
+          >
+          <textarea
+            id="dlg-msg-config"
+            class="w-full rounded border p-2"
+            [value]="configMessage()"
+            (input)="configMessage.set($any($event.target).value)"
+          ></textarea>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Confirm Label</label>
-          <input class="w-full rounded border p-2" [value]="configConfirmLabel()"
-            (input)="configConfirmLabel.set($any($event.target).value)" />
+          <label
+            for="dlg-confirm-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Confirm Label</label
+          >
+          <input
+            id="dlg-confirm-config"
+            class="w-full rounded border p-2"
+            [value]="configConfirmLabel()"
+            (input)="configConfirmLabel.set($any($event.target).value)"
+          />
         </div>
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Variant</label>
-          <select class="w-full rounded border p-2" [value]="configVariant()"
-            (change)="configVariant.set($any($event.target).value)">
+          <label
+            for="dlg-variant-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Variant</label
+          >
+          <select
+            id="dlg-variant-config"
+            class="w-full rounded border p-2"
+            [value]="configVariant()"
+            (change)="configVariant.set($any($event.target).value)"
+          >
             <option value="primary">primary</option>
             <option value="danger">danger</option>
             <option value="warning">warning</option>
@@ -49,7 +79,8 @@
     </div>
 
     <div
-      class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
+      class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6"
+    >
       <button uiButton variant="primary" (click)="openPlaygroundConfirm()">
         Open Configured Dialog
       </button>

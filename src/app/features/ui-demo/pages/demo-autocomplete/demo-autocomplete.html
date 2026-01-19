@@ -4,9 +4,16 @@
   <ui-card class="col-span-2 p-6">
     <h3 class="mb-4 text-xl font-bold">Product Search</h3>
     <div class="flex flex-col gap-6">
-      <ui-autocomplete label="Select Product" placeholder="Type to search (e.g. 'Apple')" optionLabel="name"
-        optionField="id" [items]="filteredProducts()" [loading]="loading()" [formField]="demoForm.productId"
-        [(query)]="searchQuery" />
+      <ui-autocomplete
+        label="Select Product"
+        placeholder="Type to search (e.g. 'Apple')"
+        optionLabel="name"
+        optionField="id"
+        [items]="filteredProducts()"
+        [loading]="loading()"
+        [formField]="demoForm.productId"
+        [(query)]="searchQuery"
+      />
 
       <div class="flex gap-2 border-t pt-4">
         <button uiButton variant="primary" [disabled]="demoForm().invalid()">Submit</button>
@@ -28,43 +35,72 @@
   </ui-card>
 </div>
 
-
-
 <ui-card class="mt-6 p-6">
   <h3 class="mb-4 text-xl font-bold">Attribute Explorer</h3>
   <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
     <div class="space-y-6">
       <div class="grid grid-cols-1 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Label</label>
-          <input class="w-full rounded border p-2" [value]="configLabel()"
-            (input)="configLabel.set($any($event.target).value)" />
+          <label
+            for="auto-label-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Label</label
+          >
+          <input
+            id="auto-label-config"
+            class="w-full rounded border p-2"
+            [value]="configLabel()"
+            (input)="configLabel.set($any($event.target).value)"
+          />
         </div>
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Placeholder</label>
-          <input class="w-full rounded border p-2" [value]="configPlaceholder()"
-            (input)="configPlaceholder.set($any($event.target).value)" />
+          <label
+            for="auto-placeholder-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Placeholder</label
+          >
+          <input
+            id="auto-placeholder-config"
+            class="w-full rounded border p-2"
+            [value]="configPlaceholder()"
+            (input)="configPlaceholder.set($any($event.target).value)"
+          />
         </div>
       </div>
 
       <div class="flex gap-6">
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configLoading()"
-            (change)="configLoading.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configLoading()"
+            (change)="configLoading.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Loading Spinner</span>
         </label>
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configDisabled()"
-            (change)="configDisabled.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configDisabled()"
+            (change)="configDisabled.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Disabled</span>
         </label>
       </div>
     </div>
 
-    <div class="flex flex-col justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
-      <ui-autocomplete [label]="configLabel()" [placeholder]="configPlaceholder()" [loading]="configLoading()"
-        [disabled]="configDisabled()" optionLabel="name" optionField="id" [items]="filteredProducts()"
-        [(query)]="searchQuery" />
+    <div
+      class="flex flex-col justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6"
+    >
+      <ui-autocomplete
+        optionLabel="name"
+        optionField="id"
+        [label]="configLabel()"
+        [placeholder]="configPlaceholder()"
+        [loading]="configLoading()"
+        [disabled]="configDisabled()"
+        [items]="filteredProducts()"
+        [(query)]="searchQuery"
+      />
       <div class="mt-4 font-mono text-[10px] text-slate-400">
         &lt;ui-autocomplete <br />
         &nbsp;&nbsp;label="{{ configLabel() }}" <br />

@@ -1,14 +1,95 @@
-<app-table-struct
-  title="Поставщики"
-  showEdit
-  showDelete
-  [trackField]="'id'"
-  [data]="filteredVendors()"
-  [columns]="columns"
-  [isLoading]="vendors.isLoading()"
-  [(selectedItem)]="selectedVendor"
-  (createdClicked)="openVendorDialog()"
-  (editedClicked)="openVendorDialog($event)"
-  (deletedClicked)="deleteVendor($event)"
-  (searched)="searchQuery.set($event)"
-/>
+<div class="flex flex-col gap-6">
+  <!-- Header -->
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Поставщики</h1>
+      <p class="text-sm text-slate-500">Управляйте списком поставщиков и их данными</p>
+    </div>
+    <button uiButton variant="primary" icon="outline-plus" (click)="openVendorDialog()">
+      Добавить поставщика
+    </button>
+  </div>
+
+  @if (vendors.isLoading()) {
+    <div class="flex h-64 items-center justify-center">
+      <ui-loading [width]="40" [height]="40" />
+    </div>
+  } @else {
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+      @for (stat of stats(); track stat.label) {
+        <ui-card class="flex items-center gap-4 p-6">
+          <div
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"
+          >
+            <ui-icon width="24" height="24" [name]="stat.icon" />
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
+            @if (stat.label === 'Общие закупки') {
+              <p class="text-2xl font-bold text-slate-900">
+                {{ stat.value | number: '1.0-0' }} UZS
+              </p>
+            } @else {
+              <p class="text-2xl font-bold text-slate-900">{{ stat.value }}</p>
+            }
+          </div>
+        </ui-card>
+      }
+    </div>
+
+    <!-- Search Area -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+      <ui-input
+        placeholder="Поиск по имени, email или местоположению..."
+        class="lg:col-span-1"
+        [formField]="searchForm.query"
+      ></ui-input>
+    </div>
+
+    <!-- Data Table -->
+    <ui-card>
+      <ui-table
+        trackField="id"
+        [columns]="columns"
+        [data]="filteredVendors()"
+        [loading]="vendors.isLoading()"
+        [templates]="{
+          name: nameTpl,
+          actions: actionsTpl,
+        }"
+      />
+    </ui-card>
+  }
+</div>
+
+<ng-template #nameTpl let-row>
+  <div class="flex items-center gap-3 py-2">
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-purple-500 to-purple-600 text-white shadow-sm"
+    >
+      <ui-icon name="outline-users" width="20" height="20" />
+    </div>
+    <div class="flex flex-col">
+      <span class="font-medium text-slate-900">{{ row.name }}</span>
+      @if (row.email) {
+        <div class="flex items-center gap-1 text-xs text-slate-500">
+          <ui-icon name="outline-mail" width="12" height="12" />
+          <span>{{ row.email }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #actionsTpl let-row>
+  <div class="flex items-center justify-end gap-1">
+    <button uiButton variant="ghost" size="sm" iconOnly (click)="openVendorDialog(row)">
+      <ui-icon name="outline-edit" width="18" height="18" />
+    </button>
+    <button uiButton size="sm" iconOnly variant="danger" (click)="deleteVendor(row)">
+      <ui-icon name="outline-trash" width="18" height="18" />
+    </button>
+  </div>
+</ng-template>

@@ -6,4 +6,5 @@ export interface PriceTypeDialogData {
 
 export interface PriceTypeDialogResult {
   name: string;
+  isActive: boolean;
 }

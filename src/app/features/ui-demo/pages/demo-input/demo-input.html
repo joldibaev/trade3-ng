@@ -8,14 +8,12 @@
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <ui-input
           label="Username"
-          name="user_login"
           placeholder="Type 'hide' to hide field below, 'lock' to freeze other"
           [formField]="demoForm.username"
         />
 
         <ui-input
           label="Email"
-          name="user_email"
           type="email"
           placeholder="your@email.com"
           [formField]="demoForm.email"
@@ -25,7 +23,6 @@
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <ui-input
           label="Password"
-          name="user_password"
           type="password"
           placeholder="Required field"
           [formField]="demoForm.password"
@@ -33,7 +30,6 @@
 
         <ui-input
           label="Secret Code (Async Demo)"
-          name="secret_code"
           placeholder="Type 'pending' for 2s delay"
           [formField]="demoForm.secretCode"
         />
@@ -42,14 +38,12 @@
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <ui-input
           label="Pension (Disabled Logic)"
-          name="pension_status"
           placeholder="Enabled only when username is set"
           [formField]="demoForm.pension"
         />
 
         <ui-input
           label="Readonly Logic"
-          name="editable_check"
           placeholder="Locked when username is 'lock'"
           [formField]="demoForm.notEditable"
         />
@@ -57,7 +51,6 @@
 
       <ui-input
         label="Hidden Logic"
-        name="hiding_field"
         placeholder="Hidden when username is 'hide'"
         [formField]="demoForm.hiddenField"
       />
@@ -123,8 +116,13 @@
     <div class="space-y-6">
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Type</label>
+          <label
+            for="input-type-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Type</label
+          >
           <select
+            id="input-type-config"
             class="w-full rounded border p-2"
             [value]="configType()"
             (change)="configType.set($any($event.target).value)"
@@ -139,8 +137,13 @@
           </select>
         </div>
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Input Mode</label>
+          <label
+            for="input-mode-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Input Mode</label
+          >
           <select
+            id="input-mode-config"
             class="w-full rounded border p-2"
             [value]="configInputMode()"
             (change)="configInputMode.set($any($event.target).value)"
@@ -158,18 +161,26 @@
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Placeholder</label>
+          <label
+            for="input-placeholder-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Placeholder</label
+          >
           <input
+            id="input-placeholder-config"
             class="w-full rounded border p-2"
             [value]="configPlaceholder()"
             (input)="configPlaceholder.set($any($event.target).value)"
           />
         </div>
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+          <label
+            for="input-hint-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
             >Enter Key Hint</label
           >
           <select
+            id="input-hint-config"
             class="w-full rounded border p-2"
             [value]="configEnterKeyHint()"
             (change)="configEnterKeyHint.set($any($event.target).value)"
@@ -211,7 +222,6 @@
       <ui-input
         label="Configuration Test Field"
         autocomplete="off"
-        name="config_explorer"
         [type]="configType()"
         [placeholder]="configPlaceholder()"
         [loading]="configLoading()"
@@ -227,8 +237,7 @@
         &nbsp;&nbsp;loading="{{ configLoading() }}" <br />
         &nbsp;&nbsp;spellCheck="{{ configSpellcheck() }}" <br />
         &nbsp;&nbsp;inputMode="{{ configInputMode() }}" <br />
-        &nbsp;&nbsp;enterKeyHint="{{ configEnterKeyHint() }}" <br />
-        &nbsp;&nbsp;name="config_explorer" /&gt;
+        &nbsp;&nbsp;enterKeyHint="{{ configEnterKeyHint() }}" /&gt;
       </div>
     </div>
   </div>

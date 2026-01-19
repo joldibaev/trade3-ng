@@ -311,7 +311,10 @@ export class PurchaseDetailsPage {
       ...this.formState(),
       items: this.formState()
         .items.filter((_, index) => !this.deletedIndices().has(index))
-        .map(({ productName, ...rest }) => rest),
+        .map((item) => {
+          const { productId, quantity, price, newPrices } = item;
+          return { productId, quantity, price, newPrices };
+        }),
     };
 
     this.purchasesService
@@ -322,7 +325,10 @@ export class PurchaseDetailsPage {
           this.notyf.success('Закупка успешно обновлена');
           this.purchase.reload();
         },
-        error: () => {},
+        error: (err) => {
+          this.notyf.error('Ошибка при сохранении закупки');
+          console.error(err);
+        },
       });
   }
 

@@ -3,4 +3,5 @@ export interface CreateClientDto {
   phone?: string;
   email?: string;
   address?: string;
+  isActive?: boolean;
 }

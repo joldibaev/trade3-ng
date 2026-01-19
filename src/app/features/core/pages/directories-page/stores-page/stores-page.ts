@@ -58,10 +58,7 @@ export class StoresPage {
 
   stats = computed<StoreStat[]>(() => {
     const list = this.stores.value() || [];
-    const activeCashboxes = list.reduce(
-      (sum, store) => sum + (store.cashboxes?.filter((c) => true).length || 0),
-      0,
-    );
+    const activeCashboxes = list.reduce((sum, store) => sum + (store.cashboxes?.length || 0), 0);
     const activeStores = list.filter((s) => s.isActive).length;
 
     return [

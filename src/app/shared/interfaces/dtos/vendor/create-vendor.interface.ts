@@ -3,4 +3,5 @@ export interface CreateVendorDto {
   phone?: string;
   email?: string;
   address?: string;
+  isActive?: boolean;
 }

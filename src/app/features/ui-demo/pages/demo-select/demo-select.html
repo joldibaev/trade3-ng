@@ -4,14 +4,29 @@
   <ui-card class="col-span-2 p-6">
     <h3 class="mb-4 text-xl font-bold">Organizational Form</h3>
     <div class="flex flex-col gap-6">
-      <ui-select label="Manager (Required)" optionLabel="name" optionField="id" [items]="users"
-        [formField]="demoForm.managerId" />
+      <ui-select
+        label="Manager (Required)"
+        optionLabel="name"
+        optionField="id"
+        [items]="users"
+        [formField]="demoForm.managerId"
+      />
 
-      <ui-select label="Department (Dependent)" optionLabel="name" optionField="id" [items]="departments"
-        [formField]="demoForm.departmentId" />
+      <ui-select
+        label="Department (Dependent)"
+        optionLabel="name"
+        optionField="id"
+        [items]="departments"
+        [formField]="demoForm.departmentId"
+      />
 
-      <ui-select label="Team Lead (Optional)" optionLabel="name" optionField="id" [items]="users"
-        [formField]="demoForm.teamLeadId" />
+      <ui-select
+        label="Team Lead (Optional)"
+        optionLabel="name"
+        optionField="id"
+        [items]="users"
+        [formField]="demoForm.teamLeadId"
+      />
 
       <div class="flex gap-2 border-t pt-4">
         <button uiButton variant="primary" [disabled]="demoForm().invalid()">Submit</button>
@@ -36,9 +51,27 @@
   <h3 class="mb-4 text-lg font-bold">Standalone UI States</h3>
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
     <ui-select label="Loading" optionLabel="name" optionField="id" [loading]="true" [items]="[]" />
-    <ui-select label="Disabled" optionLabel="name" optionField="id" [disabled]="true" [items]="users" />
-    <ui-select label="Invalid" optionLabel="name" optionField="id" [invalid]="true" [items]="users" />
-    <ui-select label="Readonly (todo)" value="1" optionLabel="name" optionField="id" [items]="users" />
+    <ui-select
+      label="Disabled"
+      optionLabel="name"
+      optionField="id"
+      [disabled]="true"
+      [items]="users"
+    />
+    <ui-select
+      label="Invalid"
+      optionLabel="name"
+      optionField="id"
+      [invalid]="true"
+      [items]="users"
+    />
+    <ui-select
+      label="Readonly (todo)"
+      value="1"
+      optionLabel="name"
+      optionField="id"
+      [items]="users"
+    />
   </div>
 </ui-card>
 
@@ -48,34 +81,65 @@
     <div class="space-y-6">
       <div class="grid grid-cols-1 gap-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Label</label>
-          <input class="w-full rounded border p-2" [value]="configLabel()"
-            (input)="configLabel.set($any($event.target).value)" />
+          <label
+            for="select-label-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Label</label
+          >
+          <input
+            id="select-label-config"
+            class="w-full rounded border p-2"
+            [value]="configLabel()"
+            (input)="configLabel.set($any($event.target).value)"
+          />
         </div>
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Placeholder</label>
-          <input class="w-full rounded border p-2" [value]="configPlaceholder()"
-            (input)="configPlaceholder.set($any($event.target).value)" />
+          <label
+            for="select-placeholder-config"
+            class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+            >Placeholder</label
+          >
+          <input
+            id="select-placeholder-config"
+            class="w-full rounded border p-2"
+            [value]="configPlaceholder()"
+            (input)="configPlaceholder.set($any($event.target).value)"
+          />
         </div>
       </div>
 
       <div class="flex gap-6">
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configLoading()"
-            (change)="configLoading.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configLoading()"
+            (change)="configLoading.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Loading Spinner</span>
         </label>
         <label class="flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [checked]="configDisabled()"
-            (change)="configDisabled.set($any($event.target).checked)" />
+          <input
+            type="checkbox"
+            [checked]="configDisabled()"
+            (change)="configDisabled.set($any($event.target).checked)"
+          />
           <span class="text-sm font-medium">Disabled</span>
         </label>
       </div>
     </div>
 
-    <div class="flex flex-col justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6">
-      <ui-select [label]="configLabel()" [placeholder]="configPlaceholder()" [loading]="configLoading()"
-        [disabled]="configDisabled()" optionLabel="name" optionField="id" [items]="users" />
+    <div
+      class="flex flex-col justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6"
+    >
+      <ui-select
+        optionLabel="name"
+        optionField="id"
+        [label]="configLabel()"
+        [placeholder]="configPlaceholder()"
+        [loading]="configLoading()"
+        [disabled]="configDisabled()"
+        [items]="users"
+      />
       <div class="mt-4 font-mono text-[10px] text-slate-400">
         &lt;ui-select <br />
         &nbsp;&nbsp;label="{{ configLabel() }}" <br />
