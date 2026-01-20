@@ -1,5 +1,5 @@
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CurrencyPipe, DatePipe, Location } from '@angular/common';
+import { CurrencyPipe, DatePipe, Location } from '@angular/common'; // keep imports
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,19 +19,18 @@ import { PriceTypesService } from '../../../../../../core/services/price-types.s
 import { UiBreadcrumb } from '../../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../../core/ui/ui-card/ui-card';
+import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiLoading } from '../../../../../../core/ui/ui-loading/ui-loading';
 import { UiNotyfService } from '../../../../../../core/ui/ui-notyf/ui-notyf.service';
 import { UiPageHeader } from '../../../../../../core/ui/ui-page-header/ui-page-header';
-import { TableColumn } from '../../../../../../core/ui/ui-table/table-column.interface';
-import { UiTable } from '../../../../../../core/ui/ui-table/ui-table';
+import { UiTable } from '../../../../../../core/ui/ui-table/ui-table'; // Removed TableColumn
 import { DocumentStatusComponent } from '../../../../../../shared/components/document-status/document-status.component';
-import { ProductSelectDialog } from './product-select-dialog/product-select-dialog';
-import { PurchaseItemDialog } from './purchase-item-dialog/purchase-item-dialog';
-
-import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { CreateDocumentPurchaseItemInput } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
 import { UpdateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/update-document-purchase.interface';
+import { FindPricePipe } from '../../../../../../shared/pipes/find-price.pipe';
 import { getCurrentDateAsString } from '../../../../../../shared/utils/get-current-date-as-string';
+import { ProductSelectDialog } from './product-select-dialog/product-select-dialog';
+import { PurchaseItemDialog } from './purchase-item-dialog/purchase-item-dialog';
 
 interface PurchaseFormState extends Omit<UpdateDocumentPurchaseDto, 'items'> {
   items: (CreateDocumentPurchaseItemInput & { productName?: string })[];
@@ -53,6 +52,7 @@ interface PurchaseFormState extends Omit<UpdateDocumentPurchaseDto, 'items'> {
     UiPageHeader,
     DocumentStatusComponent,
     UiIcon,
+    FindPricePipe,
   ],
   templateUrl: './purchase-details-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -210,79 +210,8 @@ export class PurchaseDetailsPage {
     });
   }
 
-  rowClass = (row: unknown, index: number) => {
-    return this.deletedIndices().has(index) ? 'bg-red-50 text-slate-500' : '';
-  };
-
-  columns = computed<TableColumn<CreateDocumentPurchaseItemInput & { productName?: string }>[]>(
-    () => {
-      const priceTypes = this.priceTypes.value() || [];
-
-      const baseColumns: TableColumn<CreateDocumentPurchaseItemInput & { productName?: string }>[] =
-        [
-          {
-            key: 'productId', // Dummy key for template
-            header: '',
-            type: 'template',
-            templateName: 'status',
-            width: '40px',
-            align: 'center',
-          },
-          {
-            key: 'productName',
-            header: 'Товар',
-            type: 'text',
-            valueGetter: (row) => row.productName || '-',
-          },
-          {
-            key: 'quantity',
-            header: 'Кол-во',
-            type: 'number',
-            align: 'center',
-            width: '100px',
-          },
-          {
-            key: 'price',
-            header: 'Цена (Закуп)',
-            align: 'center',
-            type: 'number',
-            width: '150px',
-          },
-        ];
-
-      const priceColumns: TableColumn<
-        CreateDocumentPurchaseItemInput & { productName?: string }
-      >[] = priceTypes.map((pt) => ({
-        key: 'newPrices',
-        header: pt.name,
-        type: 'number',
-        align: 'center',
-        width: '150px',
-        valueGetter: (row) => row.newPrices?.find((np) => np.priceTypeId === pt.id)?.value || 0,
-      }));
-
-      const totalColumn: TableColumn<CreateDocumentPurchaseItemInput & { productName?: string }> = {
-        key: 'price',
-        header: 'Сумма',
-        align: 'center',
-        type: 'number',
-        width: '150px',
-        valueGetter: (row) => (row.quantity || 0) * (row.price || 0),
-      };
-
-      const actionColumn: TableColumn<CreateDocumentPurchaseItemInput & { productName?: string }> =
-        {
-          key: 'productId',
-          header: '',
-          type: 'template',
-          templateName: 'actions',
-          width: '100px',
-          align: 'right',
-        };
-
-      return [...baseColumns, ...priceColumns, totalColumn, actionColumn];
-    },
-  );
+  // Removed rowClass helper (handled in template)
+  // Removed columns computed
 
   totalQuantity = computed(() => {
     return this.formState().items.reduce((sum, item, index) => {

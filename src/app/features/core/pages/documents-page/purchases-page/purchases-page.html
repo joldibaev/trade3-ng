@@ -51,36 +51,87 @@
 
     <!-- Data Table -->
     <ui-card>
-      <ui-table
-        trackField="id"
-        [columns]="columns"
-        [data]="filteredPurchases()"
-        [loading]="purchases.isLoading()"
-        [templates]="{
-          actions: actionsTpl,
-        }"
-      />
+      <ui-table [loading]="purchases.isLoading()" [isEmpty]="!filteredPurchases().length">
+        <tr header>
+          <th style="width: 80px">Код</th>
+          <th style="width: 120px">Статус</th>
+          <th style="width: 140px">Дата</th>
+          <th>Поставщик</th>
+          <th>Магазин</th>
+          <th style="width: 160px">Сумма</th>
+          <th style="width: 120px" class="text-right">Действия</th>
+        </tr>
+
+        @for (row of filteredPurchases(); track row.id) {
+          <tr class="hover:bg-slate-50/50">
+            <!-- Code -->
+            <td>
+              <span class="font-mono text-slate-500">#{{ row.code || '-' }}</span>
+            </td>
+
+            <!-- Status -->
+            <td>
+              <app-document-status [status]="row.status" />
+            </td>
+
+            <!-- Date -->
+            <td>
+              <div class="flex items-center gap-2">
+                <ui-icon width="16" height="16" name="outline-calendar" class="text-slate-400" />
+                <span>{{ row.date ? (row.date | date: 'dd.MM.yyyy') : '-' }}</span>
+              </div>
+            </td>
+
+            <!-- Vendor -->
+            <td>
+              <div class="flex items-center gap-2">
+                <ui-icon width="16" height="16" name="outline-truck" class="text-slate-400" />
+                <span class="truncate">{{ row.vendor?.name || '-' }}</span>
+              </div>
+            </td>
+
+            <!-- Store -->
+            <td>
+              <div class="flex items-center gap-2">
+                <ui-icon
+                  width="16"
+                  height="16"
+                  name="outline-building-store"
+                  class="text-slate-400"
+                />
+                <span class="truncate">{{ row.store.name || '-' }}</span>
+              </div>
+            </td>
+
+            <!-- Total -->
+            <td>
+              <span class="font-bold text-slate-900"> {{ row.total | number: '1.0-0' }} UZS </span>
+            </td>
+
+            <!-- Actions -->
+            <td class="text-right">
+              <div class="flex items-center justify-end gap-1">
+                <button
+                  uiButton
+                  variant="ghost"
+                  size="sm"
+                  iconOnly
+                  icon="outline-eye"
+                  (click)="openDetails(row)"
+                ></button>
+                <button
+                  uiButton
+                  variant="danger"
+                  size="sm"
+                  iconOnly
+                  icon="outline-trash"
+                  (click)="deletePurchase(row)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        }
+      </ui-table>
     </ui-card>
   }
 </div>
-
-<ng-template #actionsTpl let-row>
-  <div class="flex items-center justify-end gap-1">
-    <button
-      uiButton
-      variant="ghost"
-      size="sm"
-      iconOnly
-      icon="outline-eye"
-      (click)="openDetails(row)"
-    ></button>
-    <button
-      uiButton
-      variant="danger"
-      size="sm"
-      iconOnly
-      icon="outline-trash"
-      (click)="deletePurchase(row)"
-    ></button>
-  </div>
-</ng-template>

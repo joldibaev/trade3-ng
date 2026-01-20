@@ -1,5 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common'; // Added DatePipe for manual formatting if needed, though usually better injected or used in template
 import {
   ChangeDetectionStrategy,
   Component,
@@ -21,15 +21,26 @@ import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
-import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { DocumentStatusComponent } from '../../../../../shared/components/document-status/document-status.component'; // Added DocumentStatusComponent
 import { DocumentStatus } from '../../../../../shared/interfaces/constants';
 import { DocumentPurchase } from '../../../../../shared/interfaces/entities/document-purchase.interface';
 import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
 
 @Component({
   selector: 'app-purchases-page',
-  imports: [UiButton, UiCard, UiIcon, UiLoading, UiTable, UiInput, FormField, DecimalPipe],
+  imports: [
+    UiButton,
+    UiCard,
+    UiIcon,
+    UiLoading,
+    UiTable,
+    UiInput,
+    FormField,
+    DecimalPipe,
+    DocumentStatusComponent,
+    DatePipe,
+  ],
   templateUrl: './purchases-page.html',
   styleUrl: './purchases-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -80,64 +91,6 @@ export class PurchasesPage {
       },
     ];
   });
-
-  columns: TableColumn<DocumentPurchase>[] = [
-    {
-      key: 'code',
-      header: 'Код',
-      type: 'text',
-      valueGetter: (row) => `#${row.code || '-'}`,
-      classList: 'font-mono text-slate-500',
-      width: '80px',
-    },
-    {
-      key: 'status',
-      header: 'Статус',
-      type: 'document-badge',
-      valueGetter: (row) => row.status,
-      width: '120px',
-    },
-    {
-      key: 'date',
-      header: 'Дата',
-      type: 'text',
-      icon: 'outline-calendar',
-      valueGetter: (row) => (row.date ? this.datePipe.transform(row.date, 'dd.MM.yyyy') : '-'),
-      width: '140px',
-    },
-    {
-      key: 'vendor',
-      header: 'Поставщик',
-      type: 'text',
-      icon: 'outline-truck',
-      valueGetter: (row) => row.vendor?.name || '-',
-    },
-    {
-      key: 'store',
-      header: 'Магазин',
-      type: 'text',
-      icon: 'outline-building-store',
-      valueGetter: (row) => row.store?.name || '-',
-    },
-    {
-      key: 'total',
-      header: 'Сумма',
-      type: 'text',
-      valueGetter: (row) => {
-        return `${(row.total || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} UZS`;
-      },
-      classList: 'font-bold text-slate-900',
-      width: '160px',
-    },
-    {
-      key: 'actions',
-      header: 'Действия',
-      type: 'template',
-      templateName: 'actions',
-      width: '120px',
-      align: 'right',
-    },
-  ];
 
   filteredPurchases = computed(() => {
     const list = this.purchases.value() || [];

@@ -174,18 +174,65 @@
           <span>{{ movements().length }} записей</span>
         </div>
       </div>
-      <ui-table
-        [trackField]="'id'"
-        [columns]="movementColumns"
-        [data]="movements()"
-        [templates]="{
-          date: dateTpl,
-          documentNumber: docNumTpl,
-          type: typeTpl,
-          quantity: qtyTpl,
-          user: userTpl,
-        }"
-      />
+      <ui-table>
+        <tr header>
+          <th>Дата</th>
+          <th>Тип документа</th>
+          <th>Номер документа</th>
+          <th>Тип</th>
+          <th>Количество</th>
+          <th>Склад</th>
+          <th>Пользователь</th>
+        </tr>
+        @for (row of movements(); track row.id) {
+          <tr>
+            <td>
+              <div class="flex items-center gap-1.5 text-sm text-slate-600">
+                <ui-icon name="outline-calendar" width="14" height="14" />
+                {{ row.date | date: 'mediumDate' }}
+              </div>
+            </td>
+            <td>{{ row.documentType }}</td>
+            <td>
+              <span class="font-mono text-xs font-medium text-slate-900">{{
+                row.documentNumber
+              }}</span>
+            </td>
+            <td>
+              <span
+                class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
+                [class.bg-emerald-50]="row.type === 'in'"
+                [class.text-emerald-700]="row.type === 'in'"
+                [class.bg-red-50]="row.type === 'out'"
+                [class.text-red-700]="row.type === 'out'"
+              >
+                <ui-icon
+                  width="12"
+                  height="12"
+                  [name]="row.type === 'in' ? 'outline-trending-up' : 'outline-trending-down'"
+                />
+                {{ row.type === 'in' ? 'Приход' : 'Расход' }}
+              </span>
+            </td>
+            <td>
+              <span
+                class="font-semibold"
+                [class.text-emerald-600]="row.type === 'in'"
+                [class.text-red-600]="row.type === 'out'"
+              >
+                {{ row.type === 'in' ? '+' : '-' }}{{ row.quantity }}
+              </span>
+            </td>
+            <td>{{ row.store }}</td>
+            <td>
+              <div class="flex items-center gap-1.5 text-sm text-slate-600">
+                <ui-icon name="outline-users" width="14" height="14" />
+                {{ row.user }}
+              </div>
+            </td>
+          </tr>
+        }
+      </ui-table>
     </div>
   }
 
@@ -202,16 +249,41 @@
           Добавить штрихкод
         </button>
       </div>
-      <ui-table
-        [trackField]="'id'"
-        [columns]="barcodeColumns"
-        [data]="barcodes()"
-        [templates]="{
-          barcode: barcodeTpl,
-          type: barcodeTypeTpl,
-          createdDate: dateTpl,
-        }"
-      />
+      <ui-table>
+        <tr header>
+          <th>Штрихкод</th>
+          <th>Тип</th>
+          <th>Дата создания</th>
+        </tr>
+        @for (row of barcodes(); track row.id) {
+          <tr>
+            <td>
+              <div class="flex items-center gap-3">
+                <ui-icon name="outline-barcode" width="20" height="20" class="text-slate-400" />
+                <div>
+                  <p class="font-mono text-sm font-medium text-slate-900">{{ row.barcode }}</p>
+                  @if (row.isPrimary) {
+                    <span class="text-xs font-medium text-emerald-600">Основной</span>
+                  }
+                </div>
+              </div>
+            </td>
+            <td>
+              <span
+                class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700"
+              >
+                {{ row.type }}
+              </span>
+            </td>
+            <td>
+              <div class="flex items-center gap-1.5 text-sm text-slate-600">
+                <ui-icon name="outline-calendar" width="14" height="14" />
+                {{ row.createdDate | date: 'mediumDate' }}
+              </div>
+            </td>
+          </tr>
+        }
+      </ui-table>
     </div>
   }
 
@@ -224,17 +296,46 @@
           <span>{{ storeQuantities().length }} складов</span>
         </div>
       </div>
-      <ui-table
-        [trackField]="'id'"
-        [columns]="storeColumns"
-        [data]="storeQuantities()"
-        [templates]="{
-          store: storeTpl,
-          quantity: storeQtyTpl,
-          reservedQuantity: reservedTpl,
-          availableQuantity: availableTpl,
-        }"
-      />
+      <ui-table>
+        <tr header>
+          <th>Склад</th>
+          <th>Общее количество</th>
+          <th>Зарезервировано</th>
+          <th>Доступно</th>
+          <th>Последнее обновление</th>
+        </tr>
+        @for (row of storeQuantities(); track row.id) {
+          <tr>
+            <td>
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600"
+                >
+                  <ui-icon
+                    name="outline-building-store"
+                    width="16"
+                    height="16"
+                    class="text-white"
+                  />
+                </div>
+                <span class="font-medium text-slate-900">{{ row.store }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="text-lg font-semibold text-slate-900">{{ row.quantity }}</span>
+            </td>
+            <td>
+              <span class="text-sm font-medium text-amber-600">{{ row.reservedQuantity }}</span>
+            </td>
+            <td>
+              <span class="text-sm font-semibold text-emerald-600">{{
+                row.availableQuantity
+              }}</span>
+            </td>
+            <td>{{ row.lastUpdated }}</td>
+          </tr>
+        }
+      </ui-table>
     </div>
   }
 
@@ -247,134 +348,59 @@
           <span>{{ priceHistory().length }} изменений</span>
         </div>
       </div>
-      <ui-table
-        [trackField]="'id'"
-        [columns]="priceHistoryColumns"
-        [data]="priceHistory()"
-        [templates]="{
-          date: dateTpl,
-          oldPrice: oldPriceTpl,
-          newPrice: newPriceTpl,
-          changePercent: changePercentTpl,
-          user: userTpl,
-        }"
-      />
+      <ui-table>
+        <tr header>
+          <th>Дата</th>
+          <th>Старая цена</th>
+          <th>Новая цена</th>
+          <th>Изменение</th>
+          <th>Пользователь</th>
+          <th>Причина</th>
+        </tr>
+        @for (row of priceHistory(); track row.id) {
+          <tr>
+            <td>
+              <div class="flex items-center gap-1.5 text-sm text-slate-600">
+                <ui-icon name="outline-calendar" width="14" height="14" />
+                {{ row.date | date: 'mediumDate' }}
+              </div>
+            </td>
+            <td>
+              <span class="text-sm text-slate-600">{{ row.oldPrice | number }} UZS</span>
+            </td>
+            <td>
+              <span class="text-sm font-semibold text-slate-900"
+                >{{ row.newPrice | number }} UZS</span
+              >
+            </td>
+            <td>
+              <div class="flex items-center gap-1.5">
+                <ui-icon
+                  width="16"
+                  height="16"
+                  [name]="row.changePercent > 0 ? 'outline-trending-up' : 'outline-trending-down'"
+                  [class.text-emerald-600]="row.changePercent > 0"
+                  [class.text-red-600]="row.changePercent <= 0"
+                />
+                <span
+                  class="text-sm font-semibold"
+                  [class.text-emerald-600]="row.changePercent > 0"
+                  [class.text-red-600]="row.changePercent <= 0"
+                >
+                  {{ row.changePercent > 0 ? '+' : '' }}{{ row.changePercent | number: '1.2-2' }}%
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="flex items-center gap-1.5 text-sm text-slate-600">
+                <ui-icon name="outline-users" width="14" height="14" />
+                {{ row.user }}
+              </div>
+            </td>
+            <td>{{ row.reason }}</td>
+          </tr>
+        }
+      </ui-table>
     </div>
   }
 </div>
-
-<!-- Templates -->
-<ng-template #dateTpl let-value>
-  <div class="flex items-center gap-1.5 text-sm text-slate-600">
-    <ui-icon name="outline-calendar" width="14" height="14" />
-    {{ value | date: 'mediumDate' }}
-  </div>
-</ng-template>
-
-<ng-template #docNumTpl let-value>
-  <span class="font-mono text-xs font-medium text-slate-900">{{ value }}</span>
-</ng-template>
-
-<ng-template #typeTpl let-value>
-  <span
-    class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
-    [class.bg-emerald-50]="value === 'in'"
-    [class.text-emerald-700]="value === 'in'"
-    [class.bg-red-50]="value === 'out'"
-    [class.text-red-700]="value === 'out'"
-  >
-    <ui-icon
-      width="12"
-      height="12"
-      [name]="value === 'in' ? 'outline-trending-up' : 'outline-trending-down'"
-    />
-    {{ value === 'in' ? 'Приход' : 'Расход' }}
-  </span>
-</ng-template>
-
-<ng-template #qtyTpl let-value let-row="row">
-  <span
-    class="font-semibold"
-    [class.text-emerald-600]="row.type === 'in'"
-    [class.text-red-600]="row.type === 'out'"
-  >
-    {{ row.type === 'in' ? '+' : '-' }}{{ value }}
-  </span>
-</ng-template>
-
-<ng-template #userTpl let-value>
-  <div class="flex items-center gap-1.5 text-sm text-slate-600">
-    <ui-icon name="outline-users" width="14" height="14" />
-    {{ value }}
-  </div>
-</ng-template>
-
-<ng-template #barcodeTpl let-value let-row="row">
-  <div class="flex items-center gap-3">
-    <ui-icon name="outline-barcode" width="20" height="20" class="text-slate-400" />
-    <div>
-      <p class="font-mono text-sm font-medium text-slate-900">{{ value }}</p>
-      @if (row.isPrimary) {
-        <span class="text-xs font-medium text-emerald-600">Основной</span>
-      }
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #barcodeTypeTpl let-value>
-  <span
-    class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700"
-  >
-    {{ value }}
-  </span>
-</ng-template>
-
-<ng-template #storeTpl let-value>
-  <div class="flex items-center gap-3">
-    <div
-      class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600"
-    >
-      <ui-icon name="outline-building-store" width="16" height="16" class="text-white" />
-    </div>
-    <span class="font-medium text-slate-900">{{ value }}</span>
-  </div>
-</ng-template>
-
-<ng-template #storeQtyTpl let-value>
-  <span class="text-lg font-semibold text-slate-900">{{ value }}</span>
-</ng-template>
-
-<ng-template #reservedTpl let-value>
-  <span class="text-sm font-medium text-amber-600">{{ value }}</span>
-</ng-template>
-
-<ng-template #availableTpl let-value>
-  <span class="text-sm font-semibold text-emerald-600">{{ value }}</span>
-</ng-template>
-
-<ng-template #oldPriceTpl let-value>
-  <span class="text-sm text-slate-600">{{ value | number }} UZS</span>
-</ng-template>
-
-<ng-template #newPriceTpl let-value>
-  <span class="text-sm font-semibold text-slate-900">{{ value | number }} UZS</span>
-</ng-template>
-
-<ng-template #changePercentTpl let-value>
-  <div class="flex items-center gap-1.5">
-    <ui-icon
-      width="16"
-      height="16"
-      [name]="value > 0 ? 'outline-trending-up' : 'outline-trending-down'"
-      [class.text-emerald-600]="value > 0"
-      [class.text-red-600]="value <= 0"
-    />
-    <span
-      class="text-sm font-semibold"
-      [class.text-emerald-600]="value > 0"
-      [class.text-red-600]="value <= 0"
-    >
-      {{ value > 0 ? '+' : '' }}{{ value | number: '1.2-2' }}%
-    </span>
-  </div>
-</ng-template>

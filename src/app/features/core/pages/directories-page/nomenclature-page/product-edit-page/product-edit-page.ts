@@ -11,12 +11,10 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { finalize, forkJoin, map, of, switchMap } from 'rxjs';
 import { BarcodesService } from '../../../../../../core/services/barcodes.service';
 import { CategoriesService } from '../../../../../../core/services/categories.service';
 import { ProductsService } from '../../../../../../core/services/products.service';
-import { StoresService } from '../../../../../../core/services/stores.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../../core/ui/ui-card/ui-card';
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
@@ -47,9 +45,7 @@ interface PriceItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductEditPage implements OnInit {
-  private router = inject(Router);
   private location = inject(Location);
-  private storesService = inject(StoresService);
   private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
   private barcodesService = inject(BarcodesService);
@@ -60,7 +56,7 @@ export class ProductEditPage implements OnInit {
   isEdit = computed(() => !!this.id());
   categories = signal<Category[]>([]);
   priceTypes = signal<PriceType[]>([]);
-  stores = signal<any[]>([]);
+  stores = signal<unknown[]>([]);
   loading = signal(false);
   initialLoading = signal(false);
 
@@ -246,7 +242,7 @@ export class ProductEditPage implements OnInit {
     const { name, article, categoryId, description, unit, costPrice } = this.formState();
 
     // Preparing payload with new fields
-    const payload: any = {
+    const payload = {
       name,
       article,
       categoryId,
@@ -266,7 +262,7 @@ export class ProductEditPage implements OnInit {
           // Note: Price saving might need a dedicated endpoint or bulk update
           return forkJoin({
             barcodes: this.saveBarcodes(savedProduct),
-            prices: this.savePrices(savedProduct),
+            prices: this.savePrices(),
           });
         }),
         finalize(() => this.loading.set(false)),
@@ -277,7 +273,7 @@ export class ProductEditPage implements OnInit {
       });
   }
 
-  private savePrices(product: Product) {
+  private savePrices() {
     // This is a placeholder for actual price saving logic.
     // Usually involves updating the prices relation.
     // For now, returning observable of true.
@@ -288,18 +284,10 @@ export class ProductEditPage implements OnInit {
     const currentBarcodes = this.barcodes();
     const originalBarcodes = this.product()?.barcodes || [];
 
-    const added = currentBarcodes.filter(
-      (b) => !b.id.includes('-') && !originalBarcodes.find((ob) => ob.id === b.id),
-    ); // Simple check, better to check if ID exists in original
-    // Actually, in handleAddBarcode I should use temporary IDs.
-    // Let's assume new barcodes have numeric timestamp IDs which won't match UUIDs.
-    // Or better: check if ID is not in original list.
-
     // Valid IDs are from DB (UUIDs). Temp IDs are from Date.now()
-    const isNew = (id: string) => !id.includes('-'); // Rough check for UUID vs timestamp
 
-    const toConnect: any[] = [];
-    const toDelete: any[] = [];
+    const toConnect: unknown[] = [];
+    const toDelete: unknown[] = [];
 
     // Identify removals
     originalBarcodes.forEach((ob) => {
@@ -331,7 +319,7 @@ export class ProductEditPage implements OnInit {
     return forkJoin(tasks).pipe(map(() => product));
   }
 
-  updateState(field: string, value: any) {
+  updateState(field: string, value: unknown) {
     this.formState.update((state) => ({ ...state, [field]: value }));
   }
 
@@ -385,7 +373,7 @@ export class ProductEditPage implements OnInit {
     });
   }
 
-  updateBarcode(id: string, field: keyof BarcodeItem, value: any) {
+  updateBarcode(id: string, field: keyof BarcodeItem, value: string | boolean) {
     this.barcodes.update((prev) =>
       prev.map((b) => {
         if (b.id === id) {

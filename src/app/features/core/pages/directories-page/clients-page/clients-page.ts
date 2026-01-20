@@ -1,5 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, SlicePipe } from '@angular/common'; // Added SlicePipe
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +11,9 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
+import { ToStringPipe } from '../../../../../core/pipes/to-string-pipe';
 import { ClientsService } from '../../../../../core/services/clients.service';
+import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge'; // Added UiBadge
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
@@ -20,7 +22,6 @@ import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
-import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
 import {
   ClientDialogData,
@@ -31,7 +32,19 @@ import { ClientDialog } from './client-dialog/client-dialog';
 
 @Component({
   selector: 'app-clients-page',
-  imports: [UiButton, UiCard, UiIcon, UiLoading, UiTable, DecimalPipe, UiInput, FormField],
+  imports: [
+    UiButton,
+    UiCard,
+    UiIcon,
+    UiLoading,
+    UiTable,
+    DecimalPipe,
+    UiInput,
+    FormField,
+    UiBadge,
+    ToStringPipe,
+    SlicePipe,
+  ],
   templateUrl: './clients-page.html',
   styleUrl: './clients-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,64 +88,11 @@ export class ClientsPage {
       {
         label: 'Общая выручка',
         value: totalPurchases,
-        icon: 'outline-users' as IconName, // Using users as placeholder if currency icon is missing
+        icon: 'outline-users' as IconName,
         color: 'bg-emerald-50 text-emerald-600',
       },
     ];
   });
-
-  columns: TableColumn<Client>[] = [
-    {
-      key: 'id',
-      header: 'Код',
-      type: 'id',
-      width: '120px',
-    },
-    {
-      key: 'name',
-      header: 'Имя клиента',
-      type: 'template',
-      templateName: 'name',
-    },
-    {
-      key: 'phone',
-      header: 'Телефон',
-      type: 'text',
-      icon: 'outline-phone',
-      valueGetter: (row) => row.phone || '-',
-      width: '160px',
-    },
-    {
-      key: 'address',
-      header: 'Местоположение',
-      type: 'text',
-      icon: 'outline-map-pin',
-      valueGetter: (row) => row.address || '-',
-      width: '200px',
-    },
-    {
-      key: 'isActive',
-      header: 'Статус',
-      type: 'badge',
-      badgeVariants: {
-        true: 'success',
-        false: 'neutral',
-      },
-      badgeLabels: {
-        true: 'Активен',
-        false: 'Неактивен',
-      },
-      width: '120px',
-    },
-    {
-      key: 'actions',
-      header: 'Actions',
-      type: 'template',
-      templateName: 'actions',
-      width: '140px',
-      align: 'right',
-    },
-  ];
 
   filteredClients = computed(() => {
     const clients = this.clients.value() || [];
@@ -150,6 +110,11 @@ export class ClientsPage {
         c.address?.toLowerCase().includes(query),
     );
   });
+
+  // Copy to clipboard helper
+  copyToClipboard(val: string) {
+    navigator.clipboard.writeText(val); // Simple implementation for now
+  }
 
   // CRUD
   openClientDialog(client?: Client) {

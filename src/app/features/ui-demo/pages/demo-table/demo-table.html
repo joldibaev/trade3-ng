@@ -33,13 +33,57 @@
       </div>
     </div>
 
-    <ui-table
-      trackField="id"
-      [data]="tableData()"
-      [columns]="columns"
-      [loading]="configLoading()"
-      (selectedChanged)="onSelect($event)"
-    />
+    <ui-table [loading]="configLoading()" [isEmpty]="!tableData().length">
+      <tr header>
+        <th style="width: 40px">
+          <!-- Checkbox column header if needed -->
+        </th>
+        <th style="width: 60px">ID</th>
+        <th>User Name</th>
+        <th>System Role</th>
+        <th>Account Status</th>
+        <th>Last login activity</th>
+      </tr>
+
+      @for (row of tableData(); track row.id) {
+        <tr
+          class="cursor-pointer hover:bg-slate-50"
+          [class.bg-blue-50]="selectedUser()?.id === row.id"
+          (click)="selectedUser.set(row)"
+        >
+          <!-- Selection Checkbox (Simulated) -->
+          <td class="p-4" (click)="$event.stopPropagation()">
+            <input
+              type="checkbox"
+              name="select-user-{{ row.id }}"
+              class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              [checked]="selectedUser()?.id === row.id"
+              [value]="row.id"
+              (change)="toggleSelect(row, $event)"
+            />
+          </td>
+
+          <!-- ID -->
+          <td>{{ row.id }}</td>
+
+          <!-- Name -->
+          <td>{{ row.name }}</td>
+
+          <!-- Role -->
+          <td>{{ row.role }}</td>
+
+          <!-- Status -->
+          <td>
+            <ui-badge [variant]="row.status | userBadgeVariant">
+              {{ row.status | userBadgeLabel }}
+            </ui-badge>
+          </td>
+
+          <!-- Last Login -->
+          <td>{{ row.lastLogin | date }}</td>
+        </tr>
+      }
+    </ui-table>
   </ui-card>
 
   @if (selectedUser(); as user) {

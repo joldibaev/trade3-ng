@@ -1,103 +1,24 @@
-<table
-  ngGrid
-  class="w-full border-separate border-spacing-0 text-left text-sm"
-  [enableSelection]="true"
-  [disabled]="gridDisabled()"
->
-  <thead class="sticky top-0 z-10 bg-slate-50 text-xs text-slate-500">
-    <tr ngGridRow>
-      @for (col of columns(); track col.key) {
-        <th ngGridCell [style.width]="col.width" [style.text-align]="col.align || 'left'">
-          {{ col.header }}
-        </th>
-      }
-    </tr>
+<table class="w-full border-separate border-spacing-0 text-left text-sm">
+  <thead class="bg-slate-50 text-xs font-medium tracking-wider text-slate-500 uppercase">
+    <ng-content select="[header]"></ng-content>
   </thead>
-  <tbody class="divide-y divide-slate-100">
+  <tbody class="divide-y divide-slate-100 bg-white">
     @if (loading()) {
       <tr>
-        <td class="p-8 text-center" [attr.colspan]="columns().length">
+        <td colspan="100%" class="p-8 text-center">
           <ui-loading class="inline-block" [width]="32" [height]="32" />
         </td>
       </tr>
-    } @else if (data().length) {
-      @for (row of data(); track row[trackField()]; let i = $index) {
-        <tr ngGridRow [class]="rowClass() ? rowClass()!(row, i) : ''">
-          @for (col of columns(); track col.key; let j = $index) {
-            <td
-              ngGridCell
-              class="px-4 py-2 whitespace-nowrap text-slate-900"
-              [style.text-align]="col.align || 'left'"
-              [rowIndex]="i"
-              [colIndex]="j"
-              (selectedChange)="onSelectedChange()"
-            >
-              @let value = row | tableValueGetter: col : i;
-
-              @switch (col.type) {
-                @case ('id') {
-                  <div class="group flex items-center gap-2">
-                    <span class="font-mono text-xs font-semibold text-slate-500" [title]="value">
-                      ...{{ value | toString | slice: -10 }}
-                    </span>
-                    <button
-                      uiButton
-                      variant="ghost"
-                      icon="outline-copy"
-                      iconOnly
-                      size="sm"
-                      type="button"
-                      title="Копировать ID"
-                      class="opacity-0 group-hover:opacity-100"
-                      (click)="$event.stopPropagation(); copyToClipboard(value)"
-                    ></button>
-                  </div>
-                }
-                @case ('date') {
-                  {{ value | date: 'dd.MM.yyyy HH:mm' }}
-                }
-                @case ('number') {
-                  {{ value | number }}
-                }
-                @case ('badge') {
-                  <ui-badge [variant]="getBadgeVariant(col, value)">
-                    {{ getBadgeLabel(col, value) }}
-                  </ui-badge>
-                }
-                @case ('document-badge') {
-                  <app-document-status [status]="$any(value)" />
-                }
-                @case ('template') {
-                  @if (templates()?.[$any(col).templateName]) {
-                    <ng-container
-                      *ngTemplateOutlet="
-                        templates()![$any(col).templateName];
-                        context: { $implicit: row, index: i }
-                      "
-                    />
-                  }
-                }
-                @default {
-                  <div class="flex items-center gap-2" [class]="col.classList || ''">
-                    @if (col.icon) {
-                      <ui-icon width="16" height="16" class="text-slate-400" [name]="col.icon" />
-                    }
-                    <span class="truncate">{{ value }}</span>
-                  </div>
-                }
-              }
-            </td>
-          }
-        </tr>
-      }
-    } @else {
+    } @else if (isEmpty()) {
       <tr>
-        <td [attr.colspan]="columns().length">
+        <td colspan="100%">
           <div class="flex h-32 w-full items-center justify-center text-slate-500">
             <span>Нет данных</span>
           </div>
         </td>
       </tr>
+    } @else {
+      <ng-content></ng-content>
     }
   </tbody>
 </table>

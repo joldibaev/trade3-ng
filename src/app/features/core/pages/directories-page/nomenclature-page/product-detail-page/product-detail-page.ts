@@ -1,11 +1,10 @@
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common'; // keep imports
 import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { IconName } from '../../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
-import { TableColumn } from '../../../../../../core/ui/ui-table/table-column.interface';
-import { UiTable } from '../../../../../../core/ui/ui-table/ui-table';
+import { UiTable } from '../../../../../../core/ui/ui-table/ui-table'; // Removed TableColumn
 
 export interface Movement {
   id: string;
@@ -239,40 +238,6 @@ export class ProductDetailPage {
     { id: 'barcodes', label: 'Штрихкоды', icon: 'outline-barcode' as IconName },
     { id: 'stores', label: 'Остатки', icon: 'outline-building-store' as IconName },
     { id: 'price-history', label: 'История цен', icon: 'outline-currency-dollar' as IconName },
-  ];
-
-  /* Columns */
-  movementColumns: TableColumn<Movement>[] = [
-    { key: 'date', header: 'Дата', type: 'text' }, // templated
-    { key: 'documentType', header: 'Тип документа', type: 'text' },
-    { key: 'documentNumber', header: 'Номер документа', type: 'text' }, // templated (mono)
-    { key: 'type', header: 'Тип', type: 'text' }, // templated (badge)
-    { key: 'quantity', header: 'Количество', type: 'text' }, // templated (colored)
-    { key: 'store', header: 'Склад', type: 'text' },
-    { key: 'user', header: 'Пользователь', type: 'text' }, // templated (icon)
-  ];
-
-  barcodeColumns: TableColumn<Barcode>[] = [
-    { key: 'barcode', header: 'Штрихкод', type: 'text' }, // templated
-    { key: 'type', header: 'Тип', type: 'text' }, // templated
-    { key: 'createdDate', header: 'Дата создания', type: 'text' }, // templated
-  ];
-
-  storeColumns: TableColumn<StoreQuantity>[] = [
-    { key: 'store', header: 'Склад', type: 'text' }, // templated
-    { key: 'quantity', header: 'Общее количество', type: 'text' }, // templated (bold)
-    { key: 'reservedQuantity', header: 'Зарезервировано', type: 'text' }, // templated
-    { key: 'availableQuantity', header: 'Доступно', type: 'text' }, // templated
-    { key: 'lastUpdated', header: 'Последнее обновление', type: 'text' },
-  ];
-
-  priceHistoryColumns: TableColumn<PriceHistory>[] = [
-    { key: 'date', header: 'Дата', type: 'text' }, // templated
-    { key: 'oldPrice', header: 'Старая цена', type: 'text' }, // templated
-    { key: 'newPrice', header: 'Новая цена', type: 'text' }, // templated
-    { key: 'changePercent', header: 'Изменение', type: 'text' }, // templated
-    { key: 'user', header: 'Пользователь', type: 'text' }, // templated
-    { key: 'reason', header: 'Причина', type: 'text' },
   ];
 
   setActiveTab(id: string) {

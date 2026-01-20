@@ -1,5 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, SlicePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -27,7 +27,6 @@ import { IconName } from '../../../../../core/ui/ui-icon/data'; // Restore impor
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
-import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
 import { TreeNode } from '../../../../../core/ui/ui-tree/tree-item.interface';
 import { UiTree } from '../../../../../core/ui/ui-tree/ui-tree';
@@ -41,7 +40,18 @@ import { CategoryDialog } from './category-dialog/category-dialog';
 
 @Component({
   selector: 'app-nomenclature-page',
-  imports: [UiButton, UiIcon, UiInput, UiLoading, UiTable, UiTree, FormField, UiCard, DecimalPipe],
+  imports: [
+    UiButton,
+    UiIcon,
+    UiInput,
+    UiLoading,
+    UiTable,
+    UiTree,
+    FormField,
+    UiCard,
+    DecimalPipe,
+    SlicePipe,
+  ],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -85,6 +95,11 @@ export class NomenclaturePage {
     },
   });
 
+  categoryMap = computed(() => {
+    const list = this.categories.value() || [];
+    return new Map(list.map((c) => [c.id, c.name]));
+  });
+
   stats = computed(() => {
     const productsList = this.products.value() || [];
 
@@ -116,85 +131,6 @@ export class NomenclaturePage {
       },
     ];
   });
-
-  columns = computed<TableColumn<Product>[]>(() => {
-    const priceTypes = this.priceTypes.value() || [];
-
-    const baseColumns: TableColumn<Product>[] = [
-      {
-        key: 'id',
-        header: 'Код',
-        type: 'id',
-        width: '100px',
-      },
-      {
-        key: 'name',
-        header: 'Название товара',
-        type: 'template',
-        templateName: 'name',
-        width: '300px',
-      },
-    ];
-
-    // Using just one price type for main view (e.g. Retail) to match design, or first available
-    const mainPriceType = priceTypes[0];
-    const priceColumn: TableColumn<Product> = {
-      key: 'price',
-      header: 'Цена',
-      type: 'text',
-      width: '120px',
-      valueGetter: (row) => {
-        const price = row.prices?.find((p) => p.priceTypeId === mainPriceType?.id);
-        const val = price ? price.value : 0;
-        return `${val.toLocaleString('en-US')} UZS`;
-      },
-      classList: 'font-bold text-slate-900',
-    };
-
-    const stockColumn: TableColumn<Product> = {
-      key: 'stock',
-      header: 'Остаток',
-      type: 'text',
-      width: '100px',
-      valueGetter: (row) => {
-        const totalStock = row.stocks?.reduce((s, stock) => s + (stock.quantity || 0), 0) || 0;
-        return totalStock.toString();
-      },
-      classList: 'font-medium text-emerald-600', // Default color for now
-    };
-
-    const statusColumn: TableColumn<Product> = {
-      key: 'status',
-      header: 'Статус',
-      type: 'badge',
-      width: '120px',
-      valueGetter: () => 'active',
-      badgeVariants: {
-        active: 'success',
-        inactive: 'neutral',
-      },
-      badgeLabels: {
-        active: 'Активен',
-        inactive: 'Неактивен',
-      },
-    };
-
-    const actionColumn: TableColumn<Product> = {
-      key: 'actions',
-      header: 'Actions',
-      type: 'template',
-      templateName: 'actions',
-      width: '100px',
-      align: 'right',
-    };
-
-    return [...baseColumns, priceColumn, stockColumn, statusColumn, actionColumn];
-  });
-
-  getCategoryName(id?: string): string {
-    if (!id) return '';
-    return this.categories.value()?.find((c) => c.id === id)?.name || '';
-  }
 
   // Derived state: build hierarchy from flat list
   rootCategories = computed<TreeNode[]>(() => {
@@ -297,16 +233,32 @@ export class NomenclaturePage {
   filteredProducts = computed(() => {
     const products = this.products.value() || [];
     const query = this.formData().value().query.toLowerCase();
+    const catMap = this.categoryMap();
+    const priceTypes = this.priceTypes.value() || [];
+    const mainPriceType = priceTypes[0];
 
-    if (!query) {
-      return products;
+    let filtered = products;
+
+    if (query) {
+      filtered = products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          (p.article && p.article.toLowerCase().includes(query)),
+      );
     }
 
-    return products.filter(
-      (schemaPath) =>
-        schemaPath.name.toLowerCase().includes(query) ||
-        (schemaPath.article && schemaPath.article.toLowerCase().includes(query)),
-    );
+    return filtered.slice(0, 50).map((p) => {
+      const price = p.prices?.find((pr) => pr.priceTypeId === mainPriceType?.id);
+      const priceVal = price ? price.value : 0;
+      const totalStock = p.stocks?.reduce((s, stock) => s + (stock.quantity || 0), 0) || 0;
+
+      return {
+        ...p,
+        displayPrice: `${priceVal.toLocaleString('en-US')} UZS`,
+        displayStock: totalStock.toString(),
+        categoryName: catMap.get(p.categoryId) || '',
+      };
+    });
   });
 
   // Helper methods for template

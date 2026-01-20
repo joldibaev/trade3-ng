@@ -1,4 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
+import { SlicePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,7 +11,9 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
+import { ToStringPipe } from '../../../../../core/pipes/to-string-pipe';
 import { PriceTypesService } from '../../../../../core/services/price-types.service';
+import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
@@ -19,8 +22,7 @@ import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
-import { TableColumn } from '../../../../../core/ui/ui-table/table-column.interface';
-import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { UiTable } from '../../../../../core/ui/ui-table/ui-table'; // Removed TableColumn
 import {
   PriceTypeDialogData,
   PriceTypeDialogResult,
@@ -30,7 +32,18 @@ import { PriceTypeDialog } from './price-type-dialog/price-type-dialog';
 
 @Component({
   selector: 'app-price-types-page',
-  imports: [UiButton, UiCard, UiIcon, UiLoading, UiTable, UiInput, FormField],
+  imports: [
+    UiButton,
+    UiCard,
+    UiIcon,
+    UiLoading,
+    UiTable,
+    UiInput,
+    FormField,
+    UiBadge,
+    ToStringPipe,
+    SlicePipe,
+  ],
   templateUrl: './price-types-page.html',
   styleUrl: './price-types-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -70,43 +83,6 @@ export class PriceTypesPage {
     ];
   });
 
-  columns: TableColumn<PriceType>[] = [
-    {
-      key: 'id',
-      header: 'ID',
-      type: 'id',
-      width: '120px',
-    },
-    {
-      key: 'name',
-      header: 'Наименование',
-      type: 'text',
-      classList: 'font-medium text-slate-900',
-    },
-    {
-      key: 'isActive',
-      header: 'Статус',
-      type: 'badge',
-      badgeVariants: {
-        true: 'success',
-        false: 'neutral',
-      },
-      badgeLabels: {
-        true: 'Активен',
-        false: 'Неактивен',
-      },
-      width: '120px',
-    },
-    {
-      key: 'actions',
-      header: 'Действия',
-      type: 'template',
-      templateName: 'actions',
-      width: '140px',
-      align: 'right',
-    },
-  ];
-
   filteredPriceTypes = computed(() => {
     const list = this.priceTypes.value() || [];
     const query = this.searchForm().value().query.toLowerCase();
@@ -117,6 +93,11 @@ export class PriceTypesPage {
 
     return list.filter((v) => v.name.toLowerCase().includes(query));
   });
+
+  // Copy to clipboard helper
+  copyToClipboard(val: string) {
+    navigator.clipboard.writeText(val);
+  }
 
   // CRUD
   openPriceTypeDialog(priceType?: PriceType) {

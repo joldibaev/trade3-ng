@@ -45,51 +45,87 @@
       </button>
     </div>
 
-    <ui-table
-      gridDisabled
-      [columns]="columns()"
-      [data]="formState().items"
-      [trackField]="'productId'"
-      [templates]="{ actions: actions, status: status }"
-      [rowClass]="rowClass"
-    />
-
-    <ng-template #status let-item let-index="index">
-      @if (newIndices().has(index)) {
-        <div title="Не сохранено в БД" class="flex items-center justify-center text-orange-500">
-          <ui-icon name="outline-cloud" />
-        </div>
-      } @else {
-        <div title="Сохранено в БД" class="flex items-center justify-center text-green-500">
-          <ui-icon name="outline-cloud" />
-        </div>
-      }
-    </ng-template>
-
-    <ng-template #actions let-item let-index="index">
-      <div class="flex items-center justify-end gap-2">
-        @if (deletedIndices().has(index)) {
-          <button uiButton variant="ghost" size="sm" (click)="restoreProduct(index)">
-            Восстановить
-          </button>
-        } @else {
-          <button
-            uiButton
-            variant="ghost"
-            iconOnly
-            icon="outline-pencil"
-            (click)="openItemDialog(item, index)"
-          ></button>
-          <button
-            uiButton
-            variant="danger"
-            iconOnly
-            icon="outline-trash"
-            (click)="removeProduct(index)"
-          ></button>
+    <ui-table>
+      <tr header>
+        <th style="width: 40px"></th>
+        <th>Товар</th>
+        <th style="width: 100px" class="text-center">Кол-во</th>
+        <th style="width: 150px" class="text-center">Цена (Закуп)</th>
+        @for (pt of priceTypes.value(); track pt.id) {
+          <th style="width: 150px" class="text-center">{{ pt.name }}</th>
         }
-      </div>
-    </ng-template>
+        <th style="width: 150px" class="text-center">Сумма</th>
+        <th style="width: 100px" class="text-right">Actions</th>
+      </tr>
+
+      @for (item of formState().items; track item.productId + $index; let i = $index) {
+        <tr
+          [class.bg-red-50]="deletedIndices().has(i)"
+          [class.text-slate-500]="deletedIndices().has(i)"
+        >
+          <!-- Cloud Status -->
+          <td class="text-center">
+            @if (newIndices().has(i)) {
+              <div
+                title="Не сохранено в БД"
+                class="flex items-center justify-center text-orange-500"
+              >
+                <ui-icon name="outline-cloud" />
+              </div>
+            } @else {
+              <div title="Сохранено в БД" class="flex items-center justify-center text-green-500">
+                <ui-icon name="outline-cloud" />
+              </div>
+            }
+          </td>
+
+          <!-- Product Name -->
+          <td>{{ item.productName || '-' }}</td>
+
+          <!-- Quantity -->
+          <td class="text-center">{{ item.quantity }}</td>
+
+          <!-- Purchase Price -->
+          <td class="text-center">{{ item.price }}</td>
+
+          <!-- Dynamic Prices -->
+          @for (pt of priceTypes.value(); track pt.id) {
+            <td class="text-center">{{ item.newPrices | findPrice: pt.id }}</td>
+          }
+
+          <!-- Total Sum -->
+          <td class="text-center">
+            {{ (item.quantity || 0) * (item.price || 0) }}
+          </td>
+
+          <!-- Actions -->
+          <td class="text-right">
+            <div class="flex items-center justify-end gap-2">
+              @if (deletedIndices().has(i)) {
+                <button uiButton variant="ghost" size="sm" (click)="restoreProduct(i)">
+                  Восстановить
+                </button>
+              } @else {
+                <button
+                  uiButton
+                  variant="ghost"
+                  iconOnly
+                  icon="outline-pencil"
+                  (click)="openItemDialog(item, i)"
+                ></button>
+                <button
+                  uiButton
+                  variant="danger"
+                  iconOnly
+                  icon="outline-trash"
+                  (click)="removeProduct(i)"
+                ></button>
+              }
+            </div>
+          </td>
+        </tr>
+      }
+    </ui-table>
 
     <div class="flex items-center justify-end gap-8 border-t border-slate-200 p-4 font-semibold">
       <div>Итого кол-во: {{ totalQuantity() }}</div>

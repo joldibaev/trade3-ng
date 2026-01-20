@@ -47,56 +47,104 @@
 
   <!-- Data Table -->
   <ui-card>
-    <ui-table
-      trackField="id"
-      [columns]="columns"
-      [data]="filteredClients()"
-      [loading]="clients.isLoading()"
-      [templates]="{
-        name: nameTpl,
-        actions: actionsTpl,
-      }"
-    />
+    <ui-table [loading]="clients.isLoading()" [isEmpty]="!filteredClients().length">
+      <tr header>
+        <th style="width: 120px">Код</th>
+        <th>Имя клиента</th>
+        <th style="width: 160px">Телефон</th>
+        <th style="width: 200px">Местоположение</th>
+        <th style="width: 120px">Статус</th>
+        <th style="width: 140px" class="text-right">Actions</th>
+      </tr>
+
+      @for (row of filteredClients(); track row.id) {
+        <tr>
+          <!-- Code -->
+          <td>
+            <div class="group flex items-center gap-2">
+              <span class="font-mono text-xs font-semibold text-slate-500" [title]="row.id">
+                ...{{ row.id | toString | slice: -10 }}
+              </span>
+              <button
+                uiButton
+                variant="ghost"
+                icon="outline-copy"
+                iconOnly
+                size="sm"
+                type="button"
+                title="Копировать ID"
+                class="opacity-0 group-hover:opacity-100"
+                (click)="$event.stopPropagation(); copyToClipboard(row.id)"
+              ></button>
+            </div>
+          </td>
+
+          <!-- Name -->
+          <td>
+            <div class="flex items-center gap-3 py-2">
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-emerald-500 to-emerald-600 text-white shadow-sm"
+              >
+                <ui-icon name="outline-users" width="20" height="20" />
+              </div>
+              <div class="flex flex-col">
+                <span class="font-semibold text-slate-900">{{ row.name }}</span>
+                @if (row.email) {
+                  <div class="flex items-center gap-1 text-xs text-slate-500">
+                    <ui-icon name="outline-mail" width="12" height="12" />
+                    <span>{{ row.email }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </td>
+
+          <!-- Phone -->
+          <td>
+            <div class="flex items-center gap-2">
+              <ui-icon width="16" height="16" name="outline-phone" class="text-slate-400" />
+              <span class="truncate">{{ row.phone || '-' }}</span>
+            </div>
+          </td>
+
+          <!-- Address -->
+          <td>
+            <div class="flex items-center gap-2">
+              <ui-icon width="16" height="16" name="outline-map-pin" class="text-slate-400" />
+              <span class="truncate">{{ row.address || '-' }}</span>
+            </div>
+          </td>
+
+          <!-- Status -->
+          <td>
+            <ui-badge [variant]="row.isActive ? 'success' : 'neutral'">
+              {{ row.isActive ? 'Активен' : 'Неактивен' }}
+            </ui-badge>
+          </td>
+
+          <!-- Actions -->
+          <td class="text-right">
+            <div class="flex items-center justify-end gap-1">
+              <button
+                uiButton
+                variant="ghost"
+                size="sm"
+                iconOnly
+                icon="outline-edit"
+                (click)="openClientDialog(row)"
+              ></button>
+              <button
+                uiButton
+                variant="danger"
+                size="sm"
+                iconOnly
+                icon="outline-trash"
+                (click)="deleteClient(row)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      }
+    </ui-table>
   </ui-card>
 }
-
-<!-- Templates -->
-<ng-template #nameTpl let-row>
-  <div class="flex items-center gap-3 py-2">
-    <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-emerald-500 to-emerald-600 text-white shadow-sm"
-    >
-      <ui-icon name="outline-users" width="20" height="20" />
-    </div>
-    <div class="flex flex-col">
-      <span class="font-semibold text-slate-900">{{ row.name }}</span>
-      @if (row.email) {
-        <div class="flex items-center gap-1 text-xs text-slate-500">
-          <ui-icon name="outline-mail" width="12" height="12" />
-          <span>{{ row.email }}</span>
-        </div>
-      }
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #actionsTpl let-row>
-  <div class="flex items-center justify-end gap-1">
-    <button
-      uiButton
-      variant="ghost"
-      size="sm"
-      iconOnly
-      icon="outline-edit"
-      (click)="openClientDialog(row)"
-    ></button>
-    <button
-      uiButton
-      variant="danger"
-      size="sm"
-      iconOnly
-      icon="outline-trash"
-      (click)="deleteClient(row)"
-    ></button>
-  </div>
-</ng-template>
