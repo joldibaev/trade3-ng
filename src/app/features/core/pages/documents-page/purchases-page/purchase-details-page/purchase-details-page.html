@@ -2,9 +2,39 @@
   showBack
   [title]="purchase.value()?.code ? `Закупка №${purchase.value()?.code}` : 'Закупка'"
 >
-  <button actions uiButton variant="primary" [disabled]="purchase.isLoading()" (click)="save()">
-    Сохранить
-  </button>
+  <div actions class="flex gap-2">
+    @if (purchase.value()?.status === DocumentStatus.COMPLETED) {
+      <button
+        uiButton
+        variant="danger"
+        [disabled]="purchase.isLoading()"
+        (click)="updateStatus(DocumentStatus.DRAFT)"
+      >
+        Отменить проведение
+      </button>
+    }
+
+    @if (purchase.value()?.status === DocumentStatus.DRAFT) {
+      <button
+        uiButton
+        variant="secondary"
+        icon="outline-check"
+        [disabled]="purchase.isLoading()"
+        (click)="updateStatus(DocumentStatus.COMPLETED)"
+      >
+        Провести
+      </button>
+    }
+
+    <button
+      uiButton
+      variant="primary"
+      [disabled]="purchase.isLoading() || formData().invalid()"
+      (click)="save()"
+    >
+      Сохранить
+    </button>
+  </div>
 </ui-page-header>
 
 <ui-breadcrumb class="mb-2 block" [items]="breadcrumbItems()" />
@@ -12,127 +42,211 @@
 @if (purchase.isLoading()) {
   <ui-loading [width]="48" [height]="48" />
 } @else if (purchase.value(); as p) {
-  <!-- Main Info -->
-  <ui-card>
-    <div class="p-6">
-      <h2 class="mb-4 text-lg font-semibold">Общая информация</h2>
-      <div class="grid grid-cols-2 gap-y-4 text-sm">
-        <div class="text-slate-500">Статус:</div>
-        <div>
-          <app-document-status [status]="p.status" />
+  <div class="grid grid-cols-[1fr_300px] items-start gap-6">
+    <!-- Main Content -->
+    <div class="flex flex-col gap-6">
+      <!-- Order Info -->
+      <ui-card>
+        <div class="p-6">
+          <h2 class="mb-4 text-lg font-semibold">Информация о заказе</h2>
+          <div class="grid grid-cols-2 gap-4">
+            <ui-input label="Номер заказа" placeholder="Номер заказа" [formField]="formData.code" />
+            <ui-input
+              label="Дата заказа"
+              placeholder="Дата заказа"
+              type="datetime-local"
+              icon="outline-calendar"
+              [formField]="formData.date"
+            />
+
+            <ui-select
+              label="Поставщик"
+              placeholder="Выберите поставщика"
+              icon="outline-users"
+              optionLabel="name"
+              optionField="id"
+              [items]="vendors.value()"
+              [formField]="formData.vendorId"
+            />
+
+            <ui-select
+              label="Склад получения"
+              placeholder="Выберите склад"
+              icon="outline-building-store"
+              optionLabel="name"
+              optionField="id"
+              [items]="stores.value()"
+              [formField]="formData.storeId"
+            />
+          </div>
+        </div>
+      </ui-card>
+
+      <!-- Items Table -->
+      <ui-card class="overflow-hidden">
+        <div class="default-border-color flex items-center justify-between border-b p-4">
+          <div class="flex items-center gap-2">
+            <h2 class="text-lg font-semibold">Товары</h2>
+            <span class="text-sm text-slate-500">{{ totalPositions() }} позиций</span>
+          </div>
+          <button
+            uiButton
+            variant="secondary"
+            size="sm"
+            icon="outline-plus"
+            (click)="openItemDialog()"
+          >
+            <span>Добавить товар</span>
+          </button>
         </div>
 
-        <div class="text-slate-500">Код:</div>
-        <div class="font-medium">{{ p.code || '-' }}</div>
-
-        <div class="text-slate-500">Дата:</div>
-        <div class="font-medium">{{ p.date | date: 'dd.MM.yyyy HH:mm' }}</div>
-
-        <div class="text-slate-500">Поставщик:</div>
-        <div class="font-medium">{{ p.vendor?.name || '-' }}</div>
-
-        <div class="text-slate-500">Магазин:</div>
-        <div class="font-medium">{{ p.store.name || '-' }}</div>
-      </div>
-    </div>
-  </ui-card>
-
-  <!-- Items Table -->
-  <ui-card class="mt-4 block overflow-hidden">
-    <div class="default-border-color flex items-center justify-between border-b p-4">
-      <h2 class="text-lg font-semibold">Товары</h2>
-      <button uiButton variant="secondary" size="sm" icon="outline-plus" (click)="openItemDialog()">
-        <span>Добавить товар</span>
-      </button>
-    </div>
-
-    <ui-table>
-      <tr header>
-        <th style="width: 40px"></th>
-        <th>Товар</th>
-        <th style="width: 100px" class="text-center">Кол-во</th>
-        <th style="width: 150px" class="text-center">Цена (Закуп)</th>
-        @for (pt of priceTypes.value(); track pt.id) {
-          <th style="width: 150px" class="text-center">{{ pt.name }}</th>
-        }
-        <th style="width: 150px" class="text-center">Сумма</th>
-        <th style="width: 100px" class="text-right">Actions</th>
-      </tr>
-
-      @for (item of formState().items; track item.productId + $index; let i = $index) {
-        <tr
-          [class.bg-red-50]="deletedIndices().has(i)"
-          [class.text-slate-500]="deletedIndices().has(i)"
-        >
-          <!-- Cloud Status -->
-          <td class="text-center">
-            @if (newIndices().has(i)) {
-              <div
-                title="Не сохранено в БД"
-                class="flex items-center justify-center text-orange-500"
-              >
-                <ui-icon name="outline-cloud" />
-              </div>
-            } @else {
-              <div title="Сохранено в БД" class="flex items-center justify-center text-green-500">
-                <ui-icon name="outline-cloud" />
-              </div>
-            }
-          </td>
-
-          <!-- Product Name -->
-          <td>{{ item.productName || '-' }}</td>
-
-          <!-- Quantity -->
-          <td class="text-center">{{ item.quantity }}</td>
-
-          <!-- Purchase Price -->
-          <td class="text-center">{{ item.price }}</td>
-
-          <!-- Dynamic Prices -->
-          @for (pt of priceTypes.value(); track pt.id) {
-            <td class="text-center">{{ item.newPrices | findPrice: pt.id }}</td>
-          }
-
-          <!-- Total Sum -->
-          <td class="text-center">
-            {{ (item.quantity || 0) * (item.price || 0) }}
-          </td>
-
-          <!-- Actions -->
-          <td class="text-right">
-            <div class="flex items-center justify-end gap-2">
-              @if (deletedIndices().has(i)) {
-                <button uiButton variant="ghost" size="sm" (click)="restoreProduct(i)">
-                  Восстановить
-                </button>
-              } @else {
-                <button
-                  uiButton
-                  variant="ghost"
-                  iconOnly
-                  icon="outline-pencil"
-                  (click)="openItemDialog(item, i)"
-                ></button>
-                <button
-                  uiButton
-                  variant="danger"
-                  iconOnly
-                  icon="outline-trash"
-                  (click)="removeProduct(i)"
-                ></button>
+        <!-- Table Container -->
+        <div class="p-4">
+          <ui-table>
+            <tr header>
+              <th style="width: 40px"></th>
+              <th>Товар</th>
+              <th style="width: 100px" class="text-center">Кол-во</th>
+              <th style="width: 150px" class="text-center">Цена (Закуп)</th>
+              @for (pt of priceTypes.value(); track pt.id) {
+                <th style="width: 150px" class="text-center">{{ pt.name }}</th>
               }
-            </div>
-          </td>
-        </tr>
-      }
-    </ui-table>
+              <th style="width: 150px" class="text-center">Сумма</th>
+              <th style="width: 100px" class="text-right">Actions</th>
+            </tr>
 
-    <div class="flex items-center justify-end gap-8 border-t border-slate-200 p-4 font-semibold">
-      <div>Итого кол-во: {{ totalQuantity() }}</div>
-      <div>Итого сумма: {{ totalAmount() | currency: 'UZS' : 'symbol-narrow' }}</div>
+            @for (item of formState().items; track item.productId + $index; let i = $index) {
+              <tr
+                [class.bg-red-50]="deletedIndices().has(i)"
+                [class.text-slate-500]="deletedIndices().has(i)"
+              >
+                <!-- Cloud Status -->
+                <td class="text-center">
+                  @if (newIndices().has(i)) {
+                    <div
+                      title="Не сохранено в БД"
+                      class="flex items-center justify-center text-orange-500"
+                    >
+                      <ui-icon name="outline-cloud" />
+                    </div>
+                  } @else {
+                    <div
+                      title="Сохранено в БД"
+                      class="flex items-center justify-center text-green-500"
+                    >
+                      <ui-icon name="outline-cloud" />
+                    </div>
+                  }
+                </td>
+
+                <!-- Product Name -->
+                <td>{{ item.productName || '-' }}</td>
+
+                <!-- Quantity -->
+                <td class="text-center">{{ item.quantity }}</td>
+
+                <!-- Purchase Price -->
+                <td class="text-center">{{ item.price }}</td>
+
+                <!-- Dynamic Prices -->
+                @for (pt of priceTypes.value(); track pt.id) {
+                  <td class="text-center">{{ item.newPrices | findPrice: pt.id }}</td>
+                }
+
+                <!-- Total Sum -->
+                <td class="text-center">
+                  {{ (item.quantity || 0) * (item.price || 0) }}
+                </td>
+
+                <!-- Actions -->
+                <td class="text-right">
+                  <div class="flex items-center justify-end gap-2">
+                    @if (deletedIndices().has(i)) {
+                      <button uiButton variant="ghost" size="sm" (click)="restoreProduct(i)">
+                        Восстановить
+                      </button>
+                    } @else {
+                      <button
+                        uiButton
+                        variant="ghost"
+                        iconOnly
+                        icon="outline-pencil"
+                        (click)="openItemDialog(item, i)"
+                      ></button>
+                      <button
+                        uiButton
+                        variant="danger"
+                        iconOnly
+                        icon="outline-trash"
+                        (click)="removeProduct(i)"
+                      ></button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </ui-table>
+        </div>
+      </ui-card>
+
+      <!-- Notes -->
+      <ui-card>
+        <div class="p-6">
+          <h2 class="mb-4 text-lg font-semibold">Примечания</h2>
+          <ui-input
+            placeholder="Дополнительная информация о заказе..."
+            [formField]="formData.notes"
+          />
+        </div>
+      </ui-card>
     </div>
-  </ui-card>
+
+    <!-- Sidebar -->
+    <div class="sticky top-4 flex flex-col gap-6">
+      <ui-card>
+        <div class="p-6">
+          <h2 class="mb-4 text-lg font-semibold">Итого по заказу</h2>
+
+          <div class="flex flex-col gap-3 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Позиций:</span>
+              <span class="font-medium">{{ totalPositions() }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Единиц товара:</span>
+              <span class="font-medium">{{ totalQuantity() }}</span>
+            </div>
+            <div class="flex justify-between border-t border-dashed border-slate-200 pt-3">
+              <span class="text-slate-500">Сумма:</span>
+              <span class="font-medium">{{
+                totalAmount() | currency: 'UZS' : 'symbol-narrow'
+              }}</span>
+            </div>
+
+            <div class="mt-4 flex flex-col gap-1 border-t border-slate-200 pt-4">
+              <div class="flex items-end justify-between">
+                <span class="text-lg font-bold">Итого:</span>
+                <span class="text-2xl font-bold text-green-600">
+                  {{ totalAmount() | currency: 'UZS' : 'symbol-narrow' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ui-card>
+
+      <ui-card>
+        <div class="p-6">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-slate-500">Статус:</span>
+              <app-document-status [status]="p.status" />
+            </div>
+          </div>
+        </div>
+      </ui-card>
+    </div>
+  </div>
 } @else {
   <ui-card class="p-8 text-center text-slate-500"> Закупка не найдена</ui-card>
 }

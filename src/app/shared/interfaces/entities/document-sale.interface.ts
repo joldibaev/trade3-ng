@@ -1,6 +1,7 @@
 import { DocumentStatus } from '../constants';
 import { Cashbox } from './cashbox.interface';
 import { Client } from './client.interface';
+import { DocumentHistory } from './document-history.interface';
 import { DocumentSaleItem } from './document-sale-item.interface';
 import { PriceType } from './price-type.interface';
 import { StockMovement } from './stock-movement.interface';
@@ -21,7 +22,9 @@ export interface DocumentSale {
   status?: DocumentStatus;
   priceType?: PriceType;
   priceTypeId?: string;
+  notes?: string;
   createdAt?: string;
   updatedAt: string;
   movements: StockMovement[];
+  history: DocumentHistory[];
 }

@@ -1,5 +1,5 @@
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CurrencyPipe, DatePipe, Location } from '@angular/common'; // keep imports
+import { CurrencyPipe, Location } from '@angular/common'; // keep imports
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,19 +12,24 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { form } from '@angular/forms/signals';
+import { form, FormField, readonly, required } from '@angular/forms/signals';
 import { filter } from 'rxjs';
 import { DocumentPurchasesService } from '../../../../../../core/services/document-purchases.service';
 import { PriceTypesService } from '../../../../../../core/services/price-types.service';
+import { StoresService } from '../../../../../../core/services/stores.service';
+import { VendorsService } from '../../../../../../core/services/vendors.service';
 import { UiBreadcrumb } from '../../../../../../core/ui/ui-breadcrumb/ui-breadcrumb';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../../core/ui/ui-card/ui-card';
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
+import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../../core/ui/ui-loading/ui-loading';
 import { UiNotyfService } from '../../../../../../core/ui/ui-notyf/ui-notyf.service';
 import { UiPageHeader } from '../../../../../../core/ui/ui-page-header/ui-page-header';
+import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
 import { UiTable } from '../../../../../../core/ui/ui-table/ui-table'; // Removed TableColumn
 import { DocumentStatusComponent } from '../../../../../../shared/components/document-status/document-status.component';
+import { DocumentStatus } from '../../../../../../shared/interfaces/constants';
 import { CreateDocumentPurchaseItemInput } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
 import { UpdateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/update-document-purchase.interface';
 import { FindPricePipe } from '../../../../../../shared/pipes/find-price.pipe';
@@ -32,8 +37,13 @@ import { getCurrentDateAsString } from '../../../../../../shared/utils/get-curre
 import { ProductSelectDialog } from './product-select-dialog/product-select-dialog';
 import { PurchaseItemDialog } from './purchase-item-dialog/purchase-item-dialog';
 
-interface PurchaseFormState extends Omit<UpdateDocumentPurchaseDto, 'items'> {
+interface PurchaseFormState {
+  date: string;
+  storeId: string;
+  vendorId: string;
   items: (CreateDocumentPurchaseItemInput & { productName?: string })[];
+  notes: string;
+  code: string;
 }
 
 @Component({
@@ -44,7 +54,6 @@ interface PurchaseFormState extends Omit<UpdateDocumentPurchaseDto, 'items'> {
     UiCard,
     UiButton,
     UiLoading,
-    DatePipe,
     CurrencyPipe,
     UiBreadcrumb,
     FormsModule,
@@ -53,14 +62,20 @@ interface PurchaseFormState extends Omit<UpdateDocumentPurchaseDto, 'items'> {
     DocumentStatusComponent,
     UiIcon,
     FindPricePipe,
+    UiSelect,
+    UiInput,
+    FormField,
   ],
   templateUrl: './purchase-details-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'flex flex-col gap-4' },
 })
 export class PurchaseDetailsPage {
+  protected readonly DocumentStatus = DocumentStatus;
   private purchasesService = inject(DocumentPurchasesService);
   private priceTypesService = inject(PriceTypesService);
+  private storesService = inject(StoresService);
+  private vendorsService = inject(VendorsService);
   private notyf = inject(UiNotyfService);
   private location = inject(Location);
   private destroyRef = inject(DestroyRef);
@@ -72,6 +87,8 @@ export class PurchaseDetailsPage {
   // Resources
   purchase = this.purchasesService.getById(() => this.id());
   priceTypes = this.priceTypesService.getAll();
+  stores = this.storesService.getAll();
+  vendors = this.vendorsService.getAll();
 
   // State for tracking UI status
   deletedIndices = signal<Set<number>>(new Set());
@@ -79,13 +96,20 @@ export class PurchaseDetailsPage {
 
   // Main Form fields
   formState = signal<PurchaseFormState>({
-    date: '',
+    date: getCurrentDateAsString(),
     storeId: '',
     vendorId: '',
     items: [],
+    notes: '',
+    code: '',
   });
 
-  formData = form(this.formState);
+  formData = form(this.formState, (p) => {
+    readonly(p.code);
+    required(p.date, { message: 'Дата заказа обязательна' });
+    required(p.storeId, { message: 'Склад обязателен' });
+    required(p.vendorId, { message: 'Поставщик обязателен' });
+  });
 
   constructor() {
     // Sync form with purchase data when loaded
@@ -99,6 +123,7 @@ export class PurchaseDetailsPage {
 
       // todo delete getCurrentDateAsString this and fix dto script
       this.formState.set({
+        code: (purchase.code || '').toString(),
         date: getCurrentDateAsString(purchase.date),
         storeId: purchase.storeId,
         vendorId: purchase.vendorId || '',
@@ -113,6 +138,7 @@ export class PurchaseDetailsPage {
               value: np.value,
             })) || [],
         })),
+        notes: purchase.notes || '',
       });
     });
   }
@@ -213,6 +239,10 @@ export class PurchaseDetailsPage {
   // Removed rowClass helper (handled in template)
   // Removed columns computed
 
+  totalPositions = computed(() => {
+    return this.formState().items.filter((_, index) => !this.deletedIndices().has(index)).length;
+  });
+
   totalQuantity = computed(() => {
     return this.formState().items.reduce((sum, item, index) => {
       if (this.deletedIndices().has(index)) return sum;
@@ -236,10 +266,13 @@ export class PurchaseDetailsPage {
 
     if (this.purchase.isLoading()) return;
 
+    const { code, ...rest } = this.formState();
+
     const dto: UpdateDocumentPurchaseDto = {
-      ...this.formState(),
-      items: this.formState()
-        .items.filter((_, index) => !this.deletedIndices().has(index))
+      ...rest,
+      status: this.purchase.value()?.status,
+      items: rest.items
+        .filter((_, index) => !this.deletedIndices().has(index))
         .map((item) => {
           const { productId, quantity, price, newPrices } = item;
           return { productId, quantity, price, newPrices };
@@ -256,6 +289,22 @@ export class PurchaseDetailsPage {
         },
         error: (err) => {
           this.notyf.error('Ошибка при сохранении закупки');
+          console.error(err);
+        },
+      });
+  }
+
+  updateStatus(status: DocumentStatus) {
+    this.purchasesService
+      .updateStatus(this.id(), status)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notyf.success('Статус документа обновлен');
+          this.purchase.reload();
+        },
+        error: (err) => {
+          this.notyf.error('Ошибка при обновлении статуса');
           console.error(err);
         },
       });

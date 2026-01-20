@@ -15,8 +15,19 @@
     }
 
     <div class="ui-form-control relative">
+      @if (icon(); as iconName) {
+        <div
+          class="pointer-events-none absolute top-1/2 left-3 z-20 -translate-y-1/2 text-slate-400"
+        >
+          <ui-icon height="18" width="18" [name]="iconName" />
+        </div>
+      }
+
       @if (displayValue()) {
-        <span class="pointer-events-none absolute top-1/2 left-0 z-20 -translate-y-1/2 px-3 py-2">
+        <span
+          class="pointer-events-none absolute top-1/2 left-0 z-20 -translate-y-1/2 py-2 pr-3 pl-3"
+          [class.pl-10]="icon()"
+        >
           {{ displayValue() }}
         </span>
       }
@@ -31,6 +42,7 @@
         [placeholder]="placeholder()"
         [attr.aria-label]="label()"
         [class.invalid]="shouldShowError()"
+        [class.pl-10]="icon()"
         [attr.aria-invalid]="shouldShowError()"
         (blur)="touched.set(true)"
       />

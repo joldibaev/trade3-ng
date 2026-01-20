@@ -9,5 +9,6 @@ export interface CreateDocumentAdjustmentDto {
   storeId: string;
   date?: string;
   status?: DocumentStatus;
+  notes?: string;
   items?: CreateDocumentAdjustmentItemInput[];
 }

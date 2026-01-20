@@ -21,6 +21,7 @@ import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
+import { UiNotyfService } from '../../../../../core/ui/ui-notyf/ui-notyf.service';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
 import { DocumentStatusComponent } from '../../../../../shared/components/document-status/document-status.component'; // Added DocumentStatusComponent
 import { DocumentStatus } from '../../../../../shared/interfaces/constants';
@@ -55,6 +56,7 @@ export class PurchasesPage {
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
   private datePipe = inject(DatePipe);
+  private notyf = inject(UiNotyfService);
 
   protected readonly DocumentStatus = DocumentStatus;
 
@@ -115,12 +117,11 @@ export class PurchasesPage {
   openCreateDialog() {
     this.dialog
       .open<DocumentPurchase>(PurchaseDialog, { width: '400px' })
-      .closed.pipe(
-        filter(Boolean),
-        tap(() => this.purchases.reload()),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
+      .closed.subscribe((res) => {
+        if (res) {
+          void this.router.navigate(['core', 'documents', 'purchases', res.id]);
+        }
+      });
   }
 
   deletePurchase(item: DocumentPurchase) {
@@ -146,5 +147,21 @@ export class PurchasesPage {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+  }
+
+  updateStatus(id: string, status: DocumentStatus) {
+    this.documentPurchasesService
+      .updateStatus(id, status)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notyf.success('Статус документа обновлен');
+          this.purchases.reload();
+        },
+        error: (err) => {
+          this.notyf.error('Ошибка при обновлении статуса');
+          console.error(err);
+        },
+      });
   }
 }

@@ -17,5 +17,6 @@ export interface CreateDocumentPurchaseDto {
   vendorId: string;
   date: string;
   status?: DocumentStatus;
+  notes?: string;
   items?: CreateDocumentPurchaseItemInput[];
 }

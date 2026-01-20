@@ -111,6 +111,27 @@
             <!-- Actions -->
             <td class="text-right">
               <div class="flex items-center justify-end gap-1">
+                @if (row.status === DocumentStatus.DRAFT) {
+                  <button
+                    uiButton
+                    variant="ghost"
+                    size="sm"
+                    iconOnly
+                    icon="outline-check"
+                    title="Провести"
+                    (click)="updateStatus(row.id, DocumentStatus.COMPLETED)"
+                  ></button>
+                } @else if (row.status === DocumentStatus.COMPLETED) {
+                  <button
+                    uiButton
+                    variant="ghost"
+                    size="sm"
+                    iconOnly
+                    icon="outline-arrow-left"
+                    title="Отменить проведение"
+                    (click)="updateStatus(row.id, DocumentStatus.DRAFT)"
+                  ></button>
+                }
                 <button
                   uiButton
                   variant="ghost"

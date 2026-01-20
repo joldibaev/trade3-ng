@@ -1,4 +1,5 @@
 import { DocumentStatus } from '../constants';
+import { DocumentHistory } from './document-history.interface';
 import { DocumentPurchaseItem } from './document-purchase-item.interface';
 import { PriceHistory } from './price-history.interface';
 import { StockMovement } from './stock-movement.interface';
@@ -16,8 +17,10 @@ export interface DocumentPurchase {
   total?: number;
   items: DocumentPurchaseItem[];
   status?: DocumentStatus;
+  notes?: string;
   createdAt?: string;
   updatedAt: string;
   movements: StockMovement[];
+  history: DocumentHistory[];
   generatedPriceHistories: PriceHistory[];
 }

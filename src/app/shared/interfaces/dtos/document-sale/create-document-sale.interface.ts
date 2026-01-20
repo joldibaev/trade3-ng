@@ -13,5 +13,6 @@ export interface CreateDocumentSaleDto {
   priceTypeId?: string;
   date?: string;
   status?: DocumentStatus;
+  notes?: string;
   items?: CreateDocumentSaleItemInput[];
 }

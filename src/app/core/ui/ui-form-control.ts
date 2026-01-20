@@ -18,14 +18,14 @@ export abstract class UiFormControl<T> implements FormValueControl<T> {
   touched = model<boolean>(false);
 
   // Form State Inputs
-  disabled = input<boolean>(false);
+  disabled = input(false, { transform: booleanAttribute });
   disabledReasons = input<readonly WithOptionalField<DisabledReason>[]>([]);
-  readonly = input<boolean>(false);
-  hidden = input<boolean>(false);
-  invalid = input<boolean>(false);
+  readonly = input(false, { transform: booleanAttribute });
+  hidden = input(false, { transform: booleanAttribute });
+  invalid = input(false, { transform: booleanAttribute });
   errors = input<readonly WithOptionalField<ValidationError>[]>([]);
-  required = input<boolean>(false);
-  pending = input<boolean>(false);
+  required = input(false, { transform: booleanAttribute });
+  pending = input(false, { transform: booleanAttribute });
 
   // Common UI Inputs
   label = input<string>();
