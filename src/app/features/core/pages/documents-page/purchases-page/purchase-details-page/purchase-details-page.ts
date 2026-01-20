@@ -1,5 +1,5 @@
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CurrencyPipe, Location } from '@angular/common'; // keep imports
+import { DecimalPipe } from '@angular/common'; // keep imports
 import {
   ChangeDetectionStrategy,
   Component,
@@ -27,13 +27,13 @@ import { UiLoading } from '../../../../../../core/ui/ui-loading/ui-loading';
 import { UiNotyfService } from '../../../../../../core/ui/ui-notyf/ui-notyf.service';
 import { UiPageHeader } from '../../../../../../core/ui/ui-page-header/ui-page-header';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
-import { UiTable } from '../../../../../../core/ui/ui-table/ui-table'; // Removed TableColumn
+import { DocumentHistoryComponent } from '../../../../../../shared/components/document-history/document-history.component';
 import { DocumentStatusComponent } from '../../../../../../shared/components/document-status/document-status.component';
 import { DocumentStatus } from '../../../../../../shared/interfaces/constants';
 import { CreateDocumentPurchaseItemInput } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
 import { UpdateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/update-document-purchase.interface';
-import { FindPricePipe } from '../../../../../../shared/pipes/find-price.pipe';
 import { getCurrentDateAsString } from '../../../../../../shared/utils/get-current-date-as-string';
+import { PurchaseItemCardComponent } from './components/purchase-item-card/purchase-item-card.component';
 import { ProductSelectDialog } from './product-select-dialog/product-select-dialog';
 import { PurchaseItemDialog } from './purchase-item-dialog/purchase-item-dialog';
 
@@ -54,17 +54,17 @@ interface PurchaseFormState {
     UiCard,
     UiButton,
     UiLoading,
-    CurrencyPipe,
     UiBreadcrumb,
     FormsModule,
-    UiTable,
     UiPageHeader,
     DocumentStatusComponent,
     UiIcon,
-    FindPricePipe,
     UiSelect,
     UiInput,
     FormField,
+    DocumentHistoryComponent,
+    PurchaseItemCardComponent,
+    DecimalPipe,
   ],
   templateUrl: './purchase-details-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -77,7 +77,6 @@ export class PurchaseDetailsPage {
   private storesService = inject(StoresService);
   private vendorsService = inject(VendorsService);
   private notyf = inject(UiNotyfService);
-  private location = inject(Location);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(Dialog);
 
@@ -141,6 +140,9 @@ export class PurchaseDetailsPage {
         notes: purchase.notes || '',
       });
     });
+    effect(() => {
+      console.log('Product Map Computed:', this.productMap());
+    });
   }
 
   breadcrumbItems = computed(() => {
@@ -152,6 +154,18 @@ export class PurchaseDetailsPage {
       { label: 'Закупки', url: '/core/documents/purchases' },
       { label: code ? `Закупка №${code}` : 'Закупка' },
     ];
+  });
+
+  productMap = computed(() => {
+    const purchase = this.purchase.value();
+    if (!purchase?.items) return {};
+    return purchase.items.reduce(
+      (acc, item) => {
+        acc[item.productId] = item.product.name;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
   });
 
   openItemDialog(
@@ -308,9 +322,5 @@ export class PurchaseDetailsPage {
           console.error(err);
         },
       });
-  }
-
-  back() {
-    this.location.back();
   }
 }

@@ -1,0 +1,92 @@
+<div class="rounded-xl border border-slate-200 bg-white transition-all hover:border-slate-300">
+  <div class="flex items-center gap-4 p-4">
+    <!-- Expand Toggle -->
+    <button
+      uiButton
+      variant="ghost"
+      iconOnly
+      icon="outline-chevron-down"
+      class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
+      (click)="toggleExpand()"
+    ></button>
+
+    <!-- Product Icon -->
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+    >
+      <ui-icon name="outline-box" width="24" height="24" />
+    </div>
+
+    <!-- Info -->
+    <div class="min-w-0 flex-1">
+      <div class="truncate font-medium text-slate-900">{{ item().productName }}</div>
+      <div class="font-mono text-xs text-slate-500">PROD-{{ item().productId | slice: 0 : 4 }}</div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="flex items-center gap-8 text-right">
+      <div>
+        <div class="text-xs text-slate-500">Количество</div>
+        <div class="text-sm font-medium text-slate-900">{{ item().quantity }} шт.</div>
+      </div>
+
+      <div>
+        <div class="text-xs text-slate-500">Цена закупки</div>
+        <div class="text-sm font-medium text-slate-900">
+          {{ item().price | number }}
+        </div>
+      </div>
+
+      <div class="min-w-[100px]">
+        <div class="text-xs text-slate-500">Сумма</div>
+        <div class="text-lg font-bold text-emerald-600">
+          {{ total() | number }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    @if (!readonly()) {
+      <div class="flex items-center gap-2 border-l border-slate-100 pl-4">
+        <button uiButton variant="ghost" iconOnly title="Редактировать" (click)="edit.emit()">
+          <ui-icon name="outline-pencil" />
+        </button>
+        <button uiButton variant="ghost" iconOnly title="Удалить" (click)="remove.emit()">
+          <ui-icon name="outline-trash" />
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (isExpanded()) {
+    <div class="border-t border-slate-100 bg-slate-50/50 p-4">
+      <div
+        class="mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-500 uppercase"
+      >
+        <ui-icon name="outline-tag" />
+        <span>Цены продажи</span>
+      </div>
+
+      @if (item().newPrices?.length) {
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          @for (price of item().newPrices; track price.priceTypeId) {
+            <ui-card class="px-4 py-2">
+              <div class="mb-1 text-xs text-slate-500">
+                {{ priceTypeMap()[price.priceTypeId] || 'Неизвестный тип' }}
+              </div>
+              <div class="font-bold text-slate-900">
+                {{ price.value | number }}
+              </div>
+            </ui-card>
+          }
+        </div>
+      } @else {
+        <div
+          class="rounded-lg border border-dashed border-slate-200 p-4 text-center text-sm text-slate-500"
+        >
+          Новые цены продажи не установлены
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,5 +1,5 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { CurrencyPipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -43,9 +43,9 @@ export interface PurchaseItemDialogData {
     FormsModule,
     FormField,
     UiIcon,
-    CurrencyPipe,
     UiDialog,
     UiInputNumber,
+    DecimalPipe,
   ],
   templateUrl: './purchase-item-dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
