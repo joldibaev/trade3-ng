@@ -9,6 +9,6 @@ import { Aside } from './components/aside/aside';
   templateUrl: './core.html',
   styleUrl: './core.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'flex h-screen overflow-hidden min-h-[600px]' },
+  host: { class: 'flex' },
 })
 export class Core {}

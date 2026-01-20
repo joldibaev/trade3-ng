@@ -40,8 +40,7 @@
   <ui-card class="mt-4 block overflow-hidden">
     <div class="default-border-color flex items-center justify-between border-b p-4">
       <h2 class="text-lg font-semibold">Товары</h2>
-      <button uiButton variant="secondary" size="sm" (click)="openItemDialog()">
-        <ui-icon name="outline-plus"></ui-icon>
+      <button uiButton variant="secondary" size="sm" icon="outline-plus" (click)="openItemDialog()">
         <span>Добавить товар</span>
       </button>
     </div>
@@ -74,12 +73,20 @@
             Восстановить
           </button>
         } @else {
-          <button uiButton variant="ghost" iconOnly (click)="openItemDialog(item, index)">
-            <ui-icon name="outline-pencil"></ui-icon>
-          </button>
-          <button uiButton variant="danger" iconOnly (click)="removeProduct(index)">
-            <ui-icon name="outline-trash"></ui-icon>
-          </button>
+          <button
+            uiButton
+            variant="ghost"
+            iconOnly
+            icon="outline-pencil"
+            (click)="openItemDialog(item, index)"
+          ></button>
+          <button
+            uiButton
+            variant="danger"
+            iconOnly
+            icon="outline-trash"
+            (click)="removeProduct(index)"
+          ></button>
         }
       </div>
     </ng-template>

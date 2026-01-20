@@ -36,7 +36,7 @@ import { ClientDialog } from './client-dialog/client-dialog';
   styleUrl: './clients-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-4 h-full',
+    class: 'flex flex-col gap-4',
   },
 })
 export class ClientsPage {

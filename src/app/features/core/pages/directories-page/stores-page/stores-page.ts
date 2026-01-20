@@ -19,15 +19,12 @@ import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-sta
 import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
-import {
-  CashboxDialogData,
-  CashboxDialogResult,
-} from '../../../../../shared/interfaces/dialogs/cashbox-dialog.interface';
+import { CashboxDialogData } from '../../../../../shared/interfaces/dialogs/cashbox-dialog.interface';
 import { StoreDialogResult } from '../../../../../shared/interfaces/dialogs/store-dialog.interface';
 import { Cashbox } from '../../../../../shared/interfaces/entities/cashbox.interface';
 import { Store } from '../../../../../shared/interfaces/entities/store.interface';
 import { CashboxDialog } from './cashbox-dialog/cashbox-dialog';
-import { StoreCardComponent } from './components/store-card/store-card.component';
+import { StoreCardComponent } from './store-card/store-card.component';
 import { StoreDialog } from './store-dialog/store-dialog';
 
 interface StoreStat {
@@ -44,7 +41,7 @@ interface StoreStat {
   styleUrl: './stores-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-4 h-full',
+    class: 'flex flex-col gap-4',
   },
 })
 export class StoresPage {
@@ -157,7 +154,7 @@ export class StoresPage {
   }
 
   private openCashboxDialog(cashbox?: Cashbox, storeId?: string) {
-    const dialogRef = this.dialog.open<CashboxDialogResult, CashboxDialogData>(CashboxDialog, {
+    const dialogRef = this.dialog.open<Cashbox, CashboxDialogData>(CashboxDialog, {
       data: { cashbox, storeId },
     });
 

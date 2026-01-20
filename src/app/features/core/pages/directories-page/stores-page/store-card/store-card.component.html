@@ -22,19 +22,19 @@
           <div class="flex flex-col gap-1 text-sm text-slate-600">
             @if (store().address) {
               <div class="flex items-center gap-1.5 grayscale">
-                <ui-icon name="outline-map-pin" class="h-3.5 w-3.5" />
+                <ui-icon name="outline-map-pin" width="14" height="14" />
                 <span class="truncate">{{ store().address }}</span>
               </div>
             }
             @if (store().phone) {
               <div class="flex items-center gap-1.5 grayscale">
-                <ui-icon name="outline-phone" class="h-3.5 w-3.5" />
+                <ui-icon name="outline-phone" width="14" height="14" />
                 <span>{{ store().phone }}</span>
               </div>
             }
             @if (store().workingHours) {
               <div class="flex items-center gap-1.5 grayscale">
-                <ui-icon name="outline-clock" class="h-3.5 w-3.5" />
+                <ui-icon name="outline-clock" width="14" height="14" />
                 <span>{{ store().workingHours }}</span>
               </div>
             }
@@ -46,14 +46,18 @@
           uiButton
           variant="ghost"
           iconOnly
+          icon="outline-edit"
           class="h-8 w-8 text-slate-600"
           (click)="edit.emit()"
-        >
-          <ui-icon name="outline-edit" class="h-4 w-4" />
-        </button>
-        <button uiButton variant="danger" iconOnly class="h-8 w-8" (click)="delete.emit()">
-          <ui-icon name="outline-trash" class="h-4 w-4" />
-        </button>
+        ></button>
+        <button
+          uiButton
+          variant="danger"
+          iconOnly
+          icon="outline-trash"
+          class="h-8 w-8"
+          (click)="delete.emit()"
+        ></button>
       </div>
     </div>
 
@@ -79,8 +83,11 @@
         <span>Кассы ({{ store().cashboxes.length || 0 }})</span>
       </div>
       <ui-icon
-        class="h-4 w-4 text-slate-500"
-        [name]="expanded() ? 'outline-chevron-up' : 'outline-chevron-down'"
+        name="outline-chevron-down"
+        width="16"
+        height="16"
+        class="default-transition text-slate-500"
+        [class.-rotate-180]="expanded()"
       />
     </button>
 
@@ -88,7 +95,12 @@
       <div class="p-6">
         @if (!store().cashboxes || store().cashboxes.length === 0) {
           <div class="flex flex-col items-center justify-center py-8 text-center">
-            <ui-icon name="outline-device-desktop" class="mb-3 h-12 w-12 text-slate-300" />
+            <ui-icon
+              name="outline-device-desktop"
+              width="48"
+              height="48"
+              class="mb-3 text-slate-300"
+            />
             <p class="text-sm text-slate-500">Кассы не настроены</p>
             <button
               uiButton

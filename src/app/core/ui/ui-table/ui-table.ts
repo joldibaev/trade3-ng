@@ -1,16 +1,20 @@
 import { Grid, GridCell, GridRow } from '@angular/aria/grid';
-import { DatePipe, DecimalPipe, NgTemplateOutlet } from '@angular/common';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { DatePipe, DecimalPipe, NgTemplateOutlet, SlicePipe } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  inject,
   input,
   output,
   TemplateRef,
   viewChildren,
 } from '@angular/core';
 import { DocumentStatusComponent } from '../../../shared/components/document-status/document-status.component';
+import { ToStringPipe } from '../../pipes/to-string-pipe';
 import { UiBadge, UiBadgeVariant } from '../ui-badge/ui-badge';
+import { UiButton } from '../ui-button/ui-button';
 import { UiIcon } from '../ui-icon/ui-icon.component';
 import { UiLoading } from '../ui-loading/ui-loading';
 import { TableColumn, TableColumnBadge } from './table-column.interface';
@@ -30,6 +34,9 @@ import { TableValueGetterPipe } from './table-value-getter.pipe';
     DocumentStatusComponent,
     DecimalPipe,
     NgTemplateOutlet,
+    SlicePipe,
+    ToStringPipe,
+    UiButton,
   ],
   templateUrl: './ui-table.html',
   styleUrl: './ui-table.css',
@@ -39,6 +46,8 @@ import { TableValueGetterPipe } from './table-value-getter.pipe';
   },
 })
 export class UiTable<T extends object> {
+  private clipboard = inject(Clipboard);
+
   columns = input.required<TableColumn<T>[]>();
   data = input.required<T[]>();
   loading = input(false, { transform: booleanAttribute });
@@ -74,5 +83,9 @@ export class UiTable<T extends object> {
   ): string {
     const badgeCol = col as TableColumnBadge<T>;
     return badgeCol.badgeLabels[String(value ?? '')] || String(value ?? '');
+  }
+
+  protected copyToClipboard(value: any) {
+    this.clipboard.copy(String(value));
   }
 }

@@ -9,6 +9,6 @@ export interface TreeNode {
 
   icon?: IconName;
   routerLink?: string[];
-  queryParams?: Record<string, string>;
+  queryParams?: Record<string, string | null | undefined>;
   queryParamsHandling?: QueryParamsHandling;
 }

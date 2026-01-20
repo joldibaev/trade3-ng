@@ -1,322 +1,393 @@
 @if (initialLoading()) {
-<div class="flex h-64 items-center justify-center">
-  <ui-loading [width]="40" [height]="40" />
-</div>
+  <div class="flex h-64 items-center justify-center">
+    <ui-loading [width]="40" [height]="40" />
+  </div>
 } @else {
-<div class="mx-auto max-w-5xl space-y-6 p-6">
-  <!-- Success Message (Mock logic for visual) -->
-  <!-- @if (showSuccess()) {
+  <div class="mx-auto max-w-5xl space-y-6 p-6">
+    <!-- Success Message (Mock logic for visual) -->
+    <!-- @if (showSuccess()) {
       <div class="fixed top-6 right-6 z-50 flex animate-fade-in items-center gap-3 rounded-lg bg-emerald-600 px-4 py-3 text-white shadow-lg">
-        <ui-icon name="outline-check" class="h-5 w-5" />
+        <ui-icon name="outline-check" width="20" height="20" />
         <span class="font-medium">Товар успешно обновлён!</span>
       </div>
     } -->
 
-  <!-- Header -->
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-4">
-      <button
-        class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition-colors hover:bg-slate-50"
-        (click)="goBack()">
-        <ui-icon name="outline-arrow-left" class="h-5 w-5" />
-      </button>
-      <div>
-        <h1 class="text-2xl font-semibold text-slate-900">Редактировать товар</h1>
-        <p class="mt-1 text-slate-600">Обновление информации и цен товара</p>
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <button
+          uiButton
+          variant="secondary"
+          iconOnly
+          icon="outline-arrow-left"
+          class="h-10 w-10"
+          (click)="goBack()"
+        ></button>
+        <div>
+          <h1 class="text-2xl font-semibold text-slate-900">Редактировать товар</h1>
+          <p class="mt-1 text-slate-600">Обновление информации и цен товара</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button
+          uiButton
+          variant="secondary"
+          icon="outline-x"
+          [disabled]="loading()"
+          (click)="goBack()"
+        >
+          Отмена
+        </button>
+        <button
+          uiButton
+          variant="primary"
+          icon="outline-device-desktop"
+          class="bg-emerald-600 text-white hover:bg-emerald-700"
+          [disabled]="loading()"
+          (click)="save()"
+        >
+          {{ loading() ? 'Сохранение...' : 'Сохранить изменения' }}
+        </button>
       </div>
     </div>
-    <div class="flex items-center gap-3">
-      <button
-        class="flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
-        [disabled]="loading()" (click)="goBack()">
-        <ui-icon name="outline-x" class="h-5 w-5" />
-        Отмена
-      </button>
-      <button
-        class="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
-        [disabled]="loading()" (click)="save()">
-        <ui-icon name="outline-device-desktop" class="h-5 w-5" />
-        {{ loading() ? 'Сохранение...' : 'Сохранить изменения' }}
-      </button>
-    </div>
-  </div>
 
-  <!-- Form Grid -->
-  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-    <!-- Left Column: Main Info & Barcodes -->
-    <div class="space-y-6 lg:col-span-2">
-      <!-- General Info Card -->
-      <ui-card class="p-6">
-        <div class="mb-6 flex items-center gap-3">
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50">
-            <ui-icon name="outline-box" class="h-5 w-5 text-emerald-600" />
-          </div>
-          <h3 class="text-lg font-semibold text-slate-900">Общая информация</h3>
-        </div>
-
-        <div class="space-y-4">
-          <!-- Product Code -->
-          <div>
-            <label class="mb-1.5 block text-sm font-medium text-slate-700">
-              Код товара <em class="text-red-500">*</em>
-            </label>
-            <input type="text"
-              class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-              placeholder="например, PROD-001" [ngModel]="formState().article"
-              (ngModelChange)="updateState('article', $event)" />
-            @if (formData().article.invalid()) {
-            <small class="mt-1 flex items-center gap-1 text-red-600">
-              <ui-icon name="outline-alert-circle" class="h-3.5 w-3.5" />
-              {{ formData().article.errors?.[0]?.message }}
-            </small>
-            }
+    <!-- Form Grid -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <!-- Left Column: Main Info & Barcodes -->
+      <div class="space-y-6 lg:col-span-2">
+        <!-- General Info Card -->
+        <ui-card class="p-6">
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50">
+              <ui-icon name="outline-box" width="20" height="20" class="text-emerald-600" />
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900">Общая информация</h3>
           </div>
 
-          <!-- Product Name -->
-          <div>
-            <label class="mb-1.5 block text-sm font-medium text-slate-700">
-              Название товара <em class="text-red-500">*</em>
-            </label>
-            <input type="text"
-              class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-              placeholder="например, Ноутбук Dell XPS 15" [ngModel]="formState().name"
-              (ngModelChange)="updateState('name', $event)" />
-            @if (formData().name.invalid()) {
-            <small class="mt-1 flex items-center gap-1 text-red-600">
-              <ui-icon name="outline-alert-circle" class="h-3.5 w-3.5" />
-              {{ formData().name.errors?.[0]?.message }}
-            </small>
-            }
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <!-- Category -->
+          <div class="space-y-4">
+            <!-- Product Code -->
             <div>
               <label class="mb-1.5 block text-sm font-medium text-slate-700">
-                Категория <em class="text-red-500">*</em>
+                Код товара <em class="text-red-500">*</em>
               </label>
-              <select
+              <input
+                type="text"
+                placeholder="например, PROD-001"
                 class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                [ngModel]="formState().categoryId" (ngModelChange)="updateState('categoryId', $event)">
-                <option value="">Выберите категорию...</option>
-                @for (cat of categories(); track cat.id) {
-                <option [value]="cat.id">{{ cat.name }}</option>
-                }
-              </select>
+                [ngModel]="formState().article"
+                (ngModelChange)="updateState('article', $event)"
+              />
+              @if (formData().article.invalid()) {
+                <small class="mt-1 flex items-center gap-1 text-red-600">
+                  <ui-icon name="outline-alert-circle" width="14" height="14" />
+                  {{ formData().article.errors?.[0]?.message }}
+                </small>
+              }
             </div>
 
-            <!-- Unit -->
+            <!-- Product Name -->
             <div>
               <label class="mb-1.5 block text-sm font-medium text-slate-700">
-                Единица измерения <em class="text-red-500">*</em>
+                Название товара <em class="text-red-500">*</em>
               </label>
-              <select
+              <input
+                type="text"
+                placeholder="например, Ноутбук Dell XPS 15"
                 class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                [ngModel]="formState().unit" (ngModelChange)="updateState('unit', $event)">
-                @for (unit of unitOptions; track unit.value) {
-                <option [value]="unit.value">{{ unit.label }}</option>
-                }
-              </select>
+                [ngModel]="formState().name"
+                (ngModelChange)="updateState('name', $event)"
+              />
+              @if (formData().name.invalid()) {
+                <small class="mt-1 flex items-center gap-1 text-red-600">
+                  <ui-icon name="outline-alert-circle" width="14" height="14" />
+                  {{ formData().name.errors?.[0]?.message }}
+                </small>
+              }
             </div>
-          </div>
 
-          <!-- Description -->
-          <div>
-            <label class="mb-1.5 block text-sm font-medium text-slate-700"> Описание </label>
-            <textarea rows="4"
-              class="w-full resize-none rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-              placeholder="Описание товара..." [ngModel]="formState().description"
-              (ngModelChange)="updateState('description', $event)"></textarea>
-          </div>
-        </div>
-      </ui-card>
-
-      <!-- Barcodes Card -->
-      <ui-card class="p-6">
-        <div class="mb-6 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
-              <ui-icon name="outline-barcode" class="h-5 w-5 text-blue-600" />
-            </div>
-            <h3 class="text-lg font-semibold text-slate-900">Штрихкоды</h3>
-          </div>
-          <button
-            class="flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-emerald-700"
-            (click)="addBarcode()">
-            <ui-icon name="outline-plus" class="h-4 w-4" />
-            Добавить штрихкод
-          </button>
-        </div>
-
-        <div class="space-y-3">
-          @for (barcode of barcodes(); track barcode.id) {
-          <div
-            class="flex items-center gap-3 rounded-lg border border-slate-200 p-4 transition-colors hover:border-slate-300">
-            <div class="grid flex-1 grid-cols-2 gap-3">
+            <div class="grid grid-cols-2 gap-4">
+              <!-- Category -->
               <div>
-                <label class="mb-1 block text-xs text-slate-500">Значение штрихкода</label>
-                <input type="text"
-                  class="w-full rounded-lg border border-slate-200 px-3 py-1.5 font-mono text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                  placeholder="Введите штрихкод..." [ngModel]="barcode.value"
-                  (ngModelChange)="updateBarcode(barcode.id, 'value', $event)" />
-              </div>
-              <div>
-                <label class="mb-1 block text-xs text-slate-500">Тип</label>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">
+                  Категория <em class="text-red-500">*</em>
+                </label>
                 <select
-                  class="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                  [ngModel]="barcode.type" (ngModelChange)="updateBarcode(barcode.id, 'type', $event)">
-                  @for (opt of barcodeTypeOptions; track opt.value) {
-                  <option [value]="opt.value">{{ opt.label }}</option>
+                  class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                  [ngModel]="formState().categoryId"
+                  (ngModelChange)="updateState('categoryId', $event)"
+                >
+                  <option value="">Выберите категорию...</option>
+                  @for (cat of categories(); track cat.id) {
+                    <option [value]="cat.id">{{ cat.name }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Unit -->
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">
+                  Единица измерения <em class="text-red-500">*</em>
+                </label>
+                <select
+                  class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                  [ngModel]="formState().unit"
+                  (ngModelChange)="updateState('unit', $event)"
+                >
+                  @for (unit of unitOptions; track unit.value) {
+                    <option [value]="unit.value">{{ unit.label }}</option>
                   }
                 </select>
               </div>
             </div>
 
-            <div class="flex items-center gap-3">
-              <label class="flex cursor-pointer items-center gap-2">
-                <input type="radio" name="primary-barcode"
-                  class="h-4 w-4 border-slate-300 text-emerald-600 focus:ring-emerald-500" [checked]="barcode.isPrimary"
-                  (change)="setPrimaryBarcode(barcode.id)" />
-                <span class="text-xs text-slate-600">Основной</span>
-              </label>
-              <button
-                class="rounded p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-30"
-                [disabled]="barcodes().length === 1" (click)="removeBarcode(barcode.id)">
-                <ui-icon name="outline-trash" class="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-          } @empty {
-          <div class="py-8 text-center text-sm text-slate-500">
-            Нет штрихкодов. Добавьте хотя бы один.
-          </div>
-          }
-        </div>
-      </ui-card>
-    </div>
-
-    <!-- Right Column: Pricing & Info -->
-    <div class="space-y-6">
-      <!-- Cost Price Card -->
-      <ui-card class="p-6">
-        <div class="mb-6 flex items-center gap-3">
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50">
-            <ui-icon name="outline-cash" class="h-5 w-5 text-slate-600" />
-          </div>
-          <h3 class="text-lg font-semibold text-slate-900">Себестоимость</h3>
-        </div>
-
-        <div>
-          <label class="mb-1.5 block text-sm font-medium text-slate-700">
-            Цена закупки <em class="text-red-500">*</em>
-          </label>
-          <div class="relative">
-            <span class="absolute top-1/2 left-3 -translate-y-1/2 text-slate-500"> ₦ </span>
-            <input type="number"
-              class="w-full rounded-lg border border-slate-200 py-2 pr-3 pl-8 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-              placeholder="0.00" step="0.01" [ngModel]="formState().costPrice"
-              (ngModelChange)="updateState('costPrice', $event)" />
-          </div>
-          <p class="mt-2 text-xs text-slate-500">Базовая стоимость товара для расчёта наценки</p>
-        </div>
-      </ui-card>
-
-      <!-- Sales Prices Card -->
-      <ui-card class="p-6">
-        <div class="mb-6 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50">
-              <ui-icon name="outline-currency-dollar" class="h-5 w-5 text-amber-600" />
-            </div>
-            <h3 class="text-lg font-semibold text-slate-900">Цены продажи</h3>
-          </div>
-          <button
-            class="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-2.5 py-1.5 text-xs text-white transition-colors hover:bg-emerald-700"
-            (click)="addPriceType()">
-            <ui-icon name="outline-plus" class="h-3.5 w-3.5" />
-            Тип цены
-          </button>
-        </div>
-
-        <div class="space-y-3">
-          @for (priceItem of salesPrices(); track priceItem.priceTypeId) {
-          <div class="space-y-3 rounded-lg border border-slate-200 p-4 transition-colors hover:border-slate-300">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                <span class="text-sm font-medium text-slate-900">{{ priceItem.name }}</span>
-              </div>
-              @if (salesPrices().length > 1) {
-              <button class="rounded p-1 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
-                (click)="removePriceType(priceItem.priceTypeId)">
-                <ui-icon name="outline-trash" class="h-3.5 w-3.5" />
-              </button>
-              }
-            </div>
-
+            <!-- Description -->
             <div>
-              <label class="mb-1.5 block text-xs font-medium text-slate-600">
-                Цена <em class="text-red-500">*</em>
-              </label>
-              <div class="relative">
-                <span class="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-slate-500">
-                  ₦
-                </span>
-                <input type="number"
-                  class="w-full rounded-lg border border-slate-200 py-2 pr-3 pl-8 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                  placeholder="0.00" step="0.01" [ngModel]="priceItem.value"
-                  (ngModelChange)="updatePrice(priceItem.priceTypeId, $event)" />
-              </div>
+              <label class="mb-1.5 block text-sm font-medium text-slate-700"> Описание </label>
+              <textarea
+                rows="4"
+                placeholder="Описание товара..."
+                class="w-full resize-none rounded-lg border border-slate-200 px-3 py-2 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                [ngModel]="formState().description"
+                (ngModelChange)="updateState('description', $event)"
+              ></textarea>
             </div>
+          </div>
+        </ui-card>
 
-            @if (priceItem.value && formState().costPrice) {
-            <div class="space-y-1.5 border-t border-slate-100 pt-2 text-xs">
-              <div class="flex items-center justify-between">
-                <span class="text-slate-600">Наценка</span>
-                <span class="font-semibold" [class.text-emerald-600]="+markup(priceItem.value) > 0"
-                  [class.text-slate-400]="+markup(priceItem.value) <= 0">
-                  {{ markup(priceItem.value) }}%
-                </span>
+        <!-- Barcodes Card -->
+        <ui-card class="p-6">
+          <div class="mb-6 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
+                <ui-icon name="outline-barcode" width="20" height="20" class="text-blue-600" />
               </div>
-              <div class="flex items-center justify-between">
-                <span class="text-slate-600">Прибыль</span>
-                <span class="font-medium text-slate-900">
-                  ₦{{ profit(priceItem.value) | number: '1.2-2' }}
-                </span>
-              </div>
+              <h3 class="text-lg font-semibold text-slate-900">Штрихкоды</h3>
             </div>
+            <button
+              uiButton
+              variant="primary"
+              size="sm"
+              icon="outline-plus"
+              class="bg-emerald-600 text-white hover:bg-emerald-700"
+              (click)="addBarcode()"
+            >
+              Добавить штрихкод
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            @for (barcode of barcodes(); track barcode.id) {
+              <div
+                class="flex items-center gap-3 rounded-lg border border-slate-200 p-4 transition-colors hover:border-slate-300"
+              >
+                <div class="grid flex-1 grid-cols-2 gap-3">
+                  <div>
+                    <label class="mb-1 block text-xs text-slate-500">Значение штрихкода</label>
+                    <input
+                      type="text"
+                      placeholder="Введите штрихкод..."
+                      class="w-full rounded-lg border border-slate-200 px-3 py-1.5 font-mono text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                      [ngModel]="barcode.value"
+                      (ngModelChange)="updateBarcode(barcode.id, 'value', $event)"
+                    />
+                  </div>
+                  <div>
+                    <label class="mb-1 block text-xs text-slate-500">Тип</label>
+                    <select
+                      class="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                      [ngModel]="barcode.type"
+                      (ngModelChange)="updateBarcode(barcode.id, 'type', $event)"
+                    >
+                      @for (opt of barcodeTypeOptions; track opt.value) {
+                        <option [value]="opt.value">{{ opt.label }}</option>
+                      }
+                    </select>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                  <label class="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="primary-barcode"
+                      class="h-4 w-4 border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                      [checked]="barcode.isPrimary"
+                      (change)="setPrimaryBarcode(barcode.id)"
+                    />
+                    <span class="text-xs text-slate-600">Основной</span>
+                  </label>
+                  <button
+                    uiButton
+                    variant="ghost"
+                    iconOnly
+                    icon="outline-trash"
+                    class="text-slate-400 hover:text-red-600"
+                    [disabled]="barcodes().length === 1"
+                    (click)="removeBarcode(barcode.id)"
+                  ></button>
+                </div>
+              </div>
+            } @empty {
+              <div class="py-8 text-center text-sm text-slate-500">
+                Нет штрихкодов. Добавьте хотя бы один.
+              </div>
             }
           </div>
-          }
-        </div>
+        </ui-card>
+      </div>
 
-        @if (salesPrices().length > 1 && +formState().costPrice > 0) {
-        <div class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
-          <div class="flex items-center justify-between">
-            <span class="text-sm font-medium text-emerald-900"> Средняя наценка </span>
-            <span class="text-lg font-semibold text-emerald-600">
-              {{ averageMarkup() }}%
-            </span>
+      <!-- Right Column: Pricing & Info -->
+      <div class="space-y-6">
+        <!-- Cost Price Card -->
+        <ui-card class="p-6">
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50">
+              <ui-icon name="outline-cash" width="20" height="20" class="text-slate-600" />
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900">Себестоимость</h3>
           </div>
-        </div>
-        }
-      </ui-card>
 
-      <!-- Info Card -->
-      <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
-        <div class="flex gap-3">
-          <ui-icon name="outline-alert-circle" class="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
-          <div class="text-sm text-blue-900">
-            <p class="mb-1 font-medium">Важные заметки</p>
-            <ul class="space-y-1 text-blue-800">
-              <li>• Изменения вступят в силу немедленно</li>
-              <li>• История цен будет сохранена</li>
-              <li>• Уровни запасов останутся без изменений</li>
-            </ul>
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-slate-700">
+              Цена закупки <em class="text-red-500">*</em>
+            </label>
+            <div class="relative">
+              <span class="absolute top-1/2 left-3 -translate-y-1/2 text-slate-500"> ₦ </span>
+              <input
+                type="number"
+                placeholder="0.00"
+                step="0.01"
+                class="w-full rounded-lg border border-slate-200 py-2 pr-3 pl-8 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                [ngModel]="formState().costPrice"
+                (ngModelChange)="updateState('costPrice', $event)"
+              />
+            </div>
+            <p class="mt-2 text-xs text-slate-500">Базовая стоимость товара для расчёта наценки</p>
+          </div>
+        </ui-card>
+
+        <!-- Sales Prices Card -->
+        <ui-card class="p-6">
+          <div class="mb-6 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50">
+                <ui-icon
+                  name="outline-currency-dollar"
+                  width="20"
+                  height="20"
+                  class="text-amber-600"
+                />
+              </div>
+              <h3 class="text-lg font-semibold text-slate-900">Цены продажи</h3>
+            </div>
+            <button
+              uiButton
+              variant="primary"
+              size="sm"
+              icon="outline-plus"
+              class="bg-emerald-600 text-white hover:bg-emerald-700"
+              (click)="addPriceType()"
+            >
+              Тип цены
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            @for (priceItem of salesPrices(); track priceItem.priceTypeId) {
+              <div
+                class="space-y-3 rounded-lg border border-slate-200 p-4 transition-colors hover:border-slate-300"
+              >
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                    <span class="text-sm font-medium text-slate-900">{{ priceItem.name }}</span>
+                  </div>
+                  @if (salesPrices().length > 1) {
+                    <button
+                      uiButton
+                      variant="ghost"
+                      iconOnly
+                      icon="outline-trash"
+                      size="sm"
+                      class="text-slate-400 hover:text-red-600"
+                      (click)="removePriceType(priceItem.priceTypeId)"
+                    ></button>
+                  }
+                </div>
+
+                <div>
+                  <label class="mb-1.5 block text-xs font-medium text-slate-600">
+                    Цена <em class="text-red-500">*</em>
+                  </label>
+                  <div class="relative">
+                    <span class="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-slate-500">
+                      ₦
+                    </span>
+                    <input
+                      type="number"
+                      placeholder="0.00"
+                      step="0.01"
+                      class="w-full rounded-lg border border-slate-200 py-2 pr-3 pl-8 text-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                      [ngModel]="priceItem.value"
+                      (ngModelChange)="updatePrice(priceItem.priceTypeId, $event)"
+                    />
+                  </div>
+                </div>
+
+                @if (priceItem.value && formState().costPrice) {
+                  <div class="space-y-1.5 border-t border-slate-100 pt-2 text-xs">
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-600">Наценка</span>
+                      <span
+                        class="font-semibold"
+                        [class.text-emerald-600]="+markup(priceItem.value) > 0"
+                        [class.text-slate-400]="+markup(priceItem.value) <= 0"
+                      >
+                        {{ markup(priceItem.value) }}%
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-600">Прибыль</span>
+                      <span class="font-medium text-slate-900">
+                        ₦{{ profit(priceItem.value) | number: '1.2-2' }}
+                      </span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          @if (salesPrices().length > 1 && +formState().costPrice > 0) {
+            <div class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-emerald-900"> Средняя наценка </span>
+                <span class="text-lg font-semibold text-emerald-600"> {{ averageMarkup() }}% </span>
+              </div>
+            </div>
+          }
+        </ui-card>
+
+        <!-- Info Card -->
+        <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+          <div class="flex gap-3">
+            <ui-icon
+              name="outline-alert-circle"
+              width="20"
+              height="20"
+              class="mt-0.5 shrink-0 text-blue-600"
+            />
+            <div class="text-sm text-blue-900">
+              <p class="mb-1 font-medium">Важные заметки</p>
+              <ul class="space-y-1 text-blue-800">
+                <li>• Изменения вступят в силу немедленно</li>
+                <li>• История цен будет сохранена</li>
+                <li>• Уровни запасов останутся без изменений</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 }

@@ -14,6 +14,12 @@
   }
 
   <div class="ui-form-control relative">
+    @if (icon(); as iconName) {
+      <div class="pointer-events-none absolute top-1/2 left-3 z-20 -translate-y-1/2 text-slate-400">
+        <ui-icon height="18" width="18" [name]="iconName" />
+      </div>
+    }
+
     <input
       [attr.aria-label]="label()"
       [attr.enterkeyhint]="enterKeyHint()"
@@ -28,6 +34,7 @@
       [disabled]="disabled()"
       [readonly]="readonly()"
       [class.invalid]="shouldShowError()"
+      [class.pl-10]="icon()"
       [attr.aria-invalid]="shouldShowError()"
       (input)="onInput($event.target)"
       (blur)="touched.set(true)"

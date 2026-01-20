@@ -1,62 +1,60 @@
-<div class="flex flex-col gap-6 p-6">
-  <!-- Header -->
-  <div class="flex items-center justify-between">
-    <div>
-      <h1 class="text-2xl font-semibold">Магазины</h1>
-      <p class="mt-1 text-sm text-slate-600">Управление магазинами и кассами</p>
-    </div>
-    <button uiButton variant="primary" icon="outline-plus" (click)="onCreate()">
-      Добавить магазин
-    </button>
+<!-- Header -->
+<div class="flex items-center justify-between">
+  <div>
+    <h1 class="text-2xl font-semibold">Магазины</h1>
+    <p class="mt-1 text-sm text-slate-600">Управление магазинами и кассами</p>
   </div>
-
-  @if (stores.isLoading()) {
-    <div class="flex h-64 items-center justify-center">
-      <ui-loading [width]="40" [height]="40" />
-    </div>
-  } @else if (stores.hasValue()) {
-    @if (stores.value().length) {
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        @for (stat of stats(); track stat.label) {
-          <ui-card class="flex items-center gap-4 p-4">
-            <div
-              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-              [ngClass]="stat.color"
-            >
-              <ui-icon width="20" height="20" [name]="stat.icon" />
-            </div>
-
-            <div>
-              <p class="text-sm text-slate-600">{{ stat.label }}</p>
-              <p class="text-2xl font-semibold">{{ stat.value }}</p>
-            </div>
-          </ui-card>
-        }
-      </div>
-
-      <!-- Stores Grid -->
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        @for (store of stores.value(); track store.id) {
-          <app-store-card
-            [store]="store"
-            [isExpanded]="expandedStores()[store.id]"
-            (edit)="onEdit(store)"
-            (delete)="onDelete(store)"
-            (addCashbox)="onAddCashbox(store)"
-            (editCashbox)="onEditCashbox($event)"
-            (deleteCashbox)="onDeleteCashbox($event)"
-          />
-        }
-      </div>
-    } @else {
-      <ui-empty-state
-        title="Список магазинов пуст"
-        description="Создайте первый магазин, чтобы добавить кассы и товары."
-        icon="outline-building-store"
-        actionLabel="Создать магазин"
-        (action)="onCreate()"
-      />
-    }
-  }
+  <button uiButton variant="primary" icon="outline-plus" (click)="onCreate()">
+    Добавить магазин
+  </button>
 </div>
+
+@if (stores.isLoading()) {
+  <div class="flex h-64 items-center justify-center">
+    <ui-loading [width]="40" [height]="40" />
+  </div>
+} @else if (stores.hasValue()) {
+  @if (stores.value().length) {
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      @for (stat of stats(); track stat.label) {
+        <ui-card class="flex items-center gap-4 p-4">
+          <div
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+            [ngClass]="stat.color"
+          >
+            <ui-icon width="20" height="20" [name]="stat.icon" />
+          </div>
+
+          <div>
+            <p class="text-sm text-slate-600">{{ stat.label }}</p>
+            <p class="text-2xl font-semibold">{{ stat.value }}</p>
+          </div>
+        </ui-card>
+      }
+    </div>
+
+    <!-- Stores Grid -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      @for (store of stores.value(); track store.id) {
+        <app-store-card
+          [store]="store"
+          [isExpanded]="expandedStores()[store.id]"
+          (edit)="onEdit(store)"
+          (delete)="onDelete(store)"
+          (addCashbox)="onAddCashbox(store)"
+          (editCashbox)="onEditCashbox($event)"
+          (deleteCashbox)="onDeleteCashbox($event)"
+        />
+      }
+    </div>
+  } @else {
+    <ui-empty-state
+      title="Список магазинов пуст"
+      description="Создайте первый магазин, чтобы добавить кассы и товары."
+      icon="outline-building-store"
+      actionLabel="Создать магазин"
+      (action)="onCreate()"
+    />
+  }
+}

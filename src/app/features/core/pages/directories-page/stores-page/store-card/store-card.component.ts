@@ -1,10 +1,10 @@
 import { Component, input, OnInit, output, signal } from '@angular/core';
-import { UiBadge } from '../../../../../../../core/ui/ui-badge/ui-badge';
-import { UiButton } from '../../../../../../../core/ui/ui-button/ui-button';
-import { UiCard } from '../../../../../../../core/ui/ui-card/ui-card';
-import { UiIcon } from '../../../../../../../core/ui/ui-icon/ui-icon.component';
-import { Cashbox } from '../../../../../../../shared/interfaces/entities/cashbox.interface';
-import { Store } from '../../../../../../../shared/interfaces/entities/store.interface';
+import { UiBadge } from '../../../../../../core/ui/ui-badge/ui-badge';
+import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
+import { UiCard } from '../../../../../../core/ui/ui-card/ui-card';
+import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
+import { Cashbox } from '../../../../../../shared/interfaces/entities/cashbox.interface';
+import { Store } from '../../../../../../shared/interfaces/entities/store.interface';
 import { CashboxListItemComponent } from '../cashbox-list-item/cashbox-list-item.component';
 
 @Component({

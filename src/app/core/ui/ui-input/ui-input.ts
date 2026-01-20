@@ -1,5 +1,7 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 import { UiFormControl } from '../ui-form-control';
+import { IconName } from '../ui-icon/data';
+import { UiIcon } from '../ui-icon/ui-icon.component';
 import { UiLoading } from '../ui-loading/ui-loading';
 import { InputAutocomplete } from './input-autocomplete.type';
 import { InputMode } from './input-inputmode.type';
@@ -13,7 +15,7 @@ import { InputType } from './input-type.type';
   host: {
     class: 'flex flex-col gap-1 w-full empty:hidden',
   },
-  imports: [UiLoading],
+  imports: [UiLoading, UiIcon],
 })
 export class UiInput<T = string> extends UiFormControl<T> {
   value = model<T>(undefined as unknown as T);
@@ -27,6 +29,7 @@ export class UiInput<T = string> extends UiFormControl<T> {
   inputMode = input<InputMode>();
   spellCheck = input(false, { transform: booleanAttribute });
   override loading = input(false, { transform: booleanAttribute });
+  icon = input<IconName>();
 
   protected override getIdPrefix(): string {
     return 'input';

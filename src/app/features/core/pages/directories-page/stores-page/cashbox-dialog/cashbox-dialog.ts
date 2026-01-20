@@ -17,20 +17,22 @@ import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
+import { UiSwitch } from '../../../../../../core/ui/ui-switch/ui-switch';
 import {
   CashboxDialogData,
   CashboxDialogResult,
 } from '../../../../../../shared/interfaces/dialogs/cashbox-dialog.interface';
+import { Cashbox } from '../../../../../../shared/interfaces/entities/cashbox.interface';
 
 @Component({
   selector: 'app-cashbox-dialog',
-  imports: [UiInput, UiButton, UiDialog, UiSelect, FormField, FormsModule],
+  imports: [UiInput, UiButton, UiDialog, UiSelect, FormField, FormsModule, UiSwitch],
   templateUrl: './cashbox-dialog.html',
   styleUrl: './cashbox-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CashboxDialog {
-  private dialogRef = inject<DialogRef<CashboxDialogResult>>(DialogRef);
+  private dialogRef = inject<DialogRef<Cashbox>>(DialogRef);
   private data = inject<CashboxDialogData>(DIALOG_DATA);
   private storesService = inject(StoresService);
   private destroyRef = inject(DestroyRef);
@@ -43,6 +45,7 @@ export class CashboxDialog {
   formState = signal<CashboxDialogResult>({
     name: this.data.cashbox?.name ?? '',
     storeId: this.data.storeId ?? '',
+    isActive: this.data.cashbox?.isActive ?? true,
   });
   formData = form(this.formState, (schemaPath) => {
     required(schemaPath.name, { message: 'Наименование обязательно' });

@@ -8,4 +8,5 @@ export interface CashboxDialogData {
 export interface CashboxDialogResult {
   name: string;
   storeId: string;
+  isActive: boolean;
 }

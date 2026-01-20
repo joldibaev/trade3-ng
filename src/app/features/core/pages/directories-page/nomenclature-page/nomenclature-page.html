@@ -1,141 +1,123 @@
-<div class="flex flex-col gap-6">
-  <!-- Header -->
-  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-    <div>
-      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Номенклатура</h1>
-      <p class="text-sm text-slate-500">Управление каталогом товаров и запасами</p>
-    </div>
-    <button
-      uiButton
-      variant="primary"
-      icon="outline-plus"
-      class="bg-emerald-600 text-white hover:bg-emerald-700"
-      (click)="createProduct()"
-    >
-      Добавить товар
-    </button>
+<!-- Header -->
+<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+  <div>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Номенклатура</h1>
+    <p class="text-sm text-slate-500">Управление каталогом товаров и запасами</p>
+  </div>
+  <button
+    uiButton
+    variant="primary"
+    icon="outline-plus"
+    class="bg-emerald-600 text-white hover:bg-emerald-700"
+    (click)="createProduct()"
+  >
+    Добавить товар
+  </button>
+</div>
+
+@if (products.isLoading() && !products.value()) {
+  <div class="flex h-64 items-center justify-center">
+    <ui-loading [width]="40" [height]="40" />
+  </div>
+} @else {
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+    @for (stat of stats(); track stat.label) {
+      <ui-card class="flex items-center gap-4 p-6">
+        <div
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"
+        >
+          <ui-icon width="24" height="24" [name]="stat.icon || 'outline-box'" />
+        </div>
+
+        <div>
+          <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
+          <p class="text-2xl font-bold text-slate-900">{{ stat.value | number }}</p>
+        </div>
+      </ui-card>
+    }
   </div>
 
-  @if (products.isLoading() && !products.value()) {
-    <div class="flex h-64 items-center justify-center">
-      <ui-loading [width]="40" [height]="40" />
-    </div>
-  } @else {
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
-      @for (stat of stats(); track stat.label) {
-        <ui-card class="flex items-center gap-4 p-6">
-          <!-- Icon placeholder or keep clean if designed -->
-          <!-- The React design had NO icons for stats, but Clients/Vendors HAVE icons.
-                The user provided a React design *specifically* for Nomenclature.
-                If I align strictly with Clients/Vendors, I added icons.
-                If I align with the React Design, I remove icons.
-                The user said "stylistics differs".
-                I should probably try to blend them: Use UiCard structure but maybe keep the data presentation similar to the React design if that was specific, OR standardize it completely with icons like Clients/Vendors.
-                Given "stylistics differs from other pages", I should likely make it look *like* the other pages (Standardization).
-                So I will add Icons back to stats in NomenclaturePage and use the same layout.
-           -->
-          <div
-            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"
+  <!-- Main Content: Split View -->
+  <div class="grid flex-1 grid-cols-12 gap-6 pb-6">
+    <!-- Left Panel: Categories -->
+    <div class="hidden lg:col-span-3 lg:block">
+      <div class="flex flex-col rounded-lg border border-slate-200 bg-white p-4">
+        <div class="mb-4">
+          <h2>Категории</h2>
+          <p class="text-xs text-slate-500">
+            Выбрано:
+            {{ selectedCategoryId() ? getCategoryName(selectedCategoryId()) : 'Все товары' }}
+          </p>
+        </div>
+
+        <div class="mb-2 flex items-center gap-1">
+          <button
+            uiButton
+            variant="secondary"
+            size="sm"
+            icon="outline-plus"
+            (click)="openCategoryDialog()"
           >
-            <ui-icon width="24" height="24" [name]="stat.icon || 'outline-box'" />
-          </div>
-
-          <div>
-            <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
-            <p class="text-2xl font-bold text-slate-900">{{ stat.value | number }}</p>
-          </div>
-        </ui-card>
-      }
-    </div>
-
-    <!-- Main Content: Split View -->
-    <div class="grid grid-cols-12 gap-6 pb-6">
-      <!-- Left Panel: Categories -->
-      <div class="hidden lg:col-span-3 lg:block">
-        <div class="flex h-[600px] flex-col rounded-lg border border-slate-200 bg-white p-4">
-          <div class="mb-4">
-            <h2 class="mb-1 font-medium text-slate-900">Категории</h2>
-            <p class="text-xs text-slate-500">
-              Выбрано:
-              {{ selectedCategoryId() ? getCategoryName(selectedCategoryId()) : 'Все товары' }}
-            </p>
-          </div>
-
-          <div class="mb-2 flex items-center gap-1">
+            Категория
+          </button>
+          @if (selectedCategoryId()) {
             <button
               uiButton
-              variant="secondary"
+              variant="ghost"
               size="sm"
-              class="w-full justify-center"
-              (click)="openCategoryDialog()"
-            >
-              <ui-icon name="outline-plus" class="mr-1 h-4 w-4" />
-              Категория
-            </button>
-            @if (selectedCategoryId()) {
-              <button
-                uiButton
-                variant="ghost"
-                size="sm"
-                iconOnly
-                icon="outline-edit"
-                title="Редактировать категорию"
-                (click)="editCurrentCategory()"
-              ></button>
-              <button
-                uiButton
-                variant="danger"
-                size="sm"
-                iconOnly
-                icon="outline-trash"
-                title="Удалить категорию"
-                (click)="deleteCurrentCategory()"
-              ></button>
-            }
-          </div>
-
-          <div class="-mx-2 flex-1 overflow-y-auto px-2">
-            @if (categories.hasValue()) {
-              <ui-tree [items]="rootCategories()" [(selected)]="selectedTree" />
-            }
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Panel: Products Table -->
-      <div class="col-span-12 flex flex-col gap-4 lg:col-span-9">
-        <!-- Search Toolbar -->
-        <div>
-          <ui-input
-            placeholder="Поиск по названию, коду или категории..."
-            icon="outline-search"
-            class="w-full md:w-80"
-            [formField]="formData.query"
-          ></ui-input>
+              iconOnly
+              icon="outline-edit"
+              (click)="editCurrentCategory()"
+            ></button>
+            <button
+              uiButton
+              variant="danger"
+              size="sm"
+              iconOnly
+              icon="outline-trash"
+              (click)="deleteCurrentCategory()"
+            ></button>
+          }
         </div>
 
-        <ui-card class="flex h-[600px] flex-col">
-          <!-- Table -->
-          <div class="flex-1 overflow-hidden">
-            <ui-table
-              class="h-full"
-              [columns]="columns()"
-              [trackField]="'id'"
-              [data]="filteredProducts()"
-              [loading]="products.isLoading()"
-              [templates]="{
-                name: nameTpl,
-                actions: actionsTpl,
-              }"
-              (selectedChanged)="selectedProduct.set($event)"
-            />
-          </div>
+        <ui-card class="flex-1 p-2">
+          @if (categories.hasValue()) {
+            <ui-tree [items]="rootCategories()" [(selected)]="selectedTree" />
+          }
         </ui-card>
       </div>
     </div>
-  }
-</div>
+
+    <!-- Right Panel: Products Table -->
+    <div class="col-span-12 flex flex-col gap-4 lg:col-span-9">
+      <!-- Search Toolbar -->
+      <div>
+        <ui-input
+          placeholder="Поиск по названию, коду или категории..."
+          icon="outline-search"
+          class="w-full md:w-80"
+          [formField]="formData.query"
+        ></ui-input>
+      </div>
+
+      <ui-card class="flex flex-col">
+        <!-- Table -->
+        <ui-table
+          [columns]="columns()"
+          [trackField]="'id'"
+          [data]="filteredProducts()"
+          [loading]="products.isLoading()"
+          [templates]="{
+            name: nameTpl,
+            actions: actionsTpl,
+          }"
+          (selectedChanged)="selectedProduct.set($event)"
+        />
+      </ui-card>
+    </div>
+  </div>
+}
 
 <!-- Templates -->
 <ng-template #nameTpl let-row>
@@ -143,7 +125,7 @@
     <div
       class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100/80 p-2 text-slate-500"
     >
-      <ui-icon name="outline-box" class="h-5 w-5" />
+      <ui-icon name="outline-box" width="20" height="20" />
     </div>
     <div class="flex flex-col overflow-hidden">
       <span class="truncate font-semibold text-slate-900">{{ row.name }}</span>
@@ -159,30 +141,27 @@
       variant="ghost"
       size="sm"
       iconOnly
+      icon="outline-eye"
       class="text-slate-400 hover:text-slate-600"
       (click)="selectedProduct.set(row); openProductPage()"
-    >
-      <ui-icon name="outline-eye" width="16" height="16" />
-    </button>
+    ></button>
     <button
       uiButton
       variant="ghost"
       size="sm"
       iconOnly
+      icon="outline-edit"
       class="text-slate-400 hover:text-slate-600"
       (click)="editProduct(row)"
-    >
-      <ui-icon name="outline-edit" width="16" height="16" />
-    </button>
+    ></button>
     <button
       uiButton
       variant="ghost"
       size="sm"
       iconOnly
+      icon="outline-trash"
       class="text-slate-400 hover:text-red-600"
       (click)="deleteProduct(row)"
-    >
-      <ui-icon name="outline-trash" width="16" height="16" />
-    </button>
+    ></button>
   </div>
 </ng-template>

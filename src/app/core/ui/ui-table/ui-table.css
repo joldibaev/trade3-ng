@@ -11,7 +11,7 @@ th {
 
 tr {
   &:not(:last-child) td {
-    @apply default-border-color border-b;
+    @apply border-b border-slate-200/75;
   }
 
   &:has(> td[data-active='true']) {

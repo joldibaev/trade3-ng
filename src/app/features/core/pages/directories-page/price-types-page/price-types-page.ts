@@ -35,7 +35,7 @@ import { PriceTypeDialog } from './price-type-dialog/price-type-dialog';
   styleUrl: './price-types-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-4 h-full',
+    class: 'flex flex-col gap-4',
   },
 })
 export class PriceTypesPage {

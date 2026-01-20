@@ -36,7 +36,7 @@ import { VendorDialog } from './vendor-dialog/vendor-dialog';
   styleUrl: './vendors-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-4 h-full',
+    class: 'flex flex-col gap-4',
   },
 })
 export class VendorsPage {

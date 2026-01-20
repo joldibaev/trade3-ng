@@ -8,7 +8,7 @@
         class="h-10 w-10 justify-center !p-0"
         (click)="navigateBack()"
       >
-        <ui-icon name="outline-arrow-left" class="h-5 w-5" />
+        <ui-icon name="outline-arrow-left" width="20" height="20" />
       </button>
       <div>
         <div class="flex items-center gap-3">
@@ -28,7 +28,7 @@
       class="gap-2 bg-emerald-600 text-white hover:bg-emerald-700"
       (click)="editProduct()"
     >
-      <ui-icon name="outline-edit" class="h-5 w-5" />
+      <ui-icon name="outline-edit" width="20" height="20" />
       Редактировать
     </button>
   </div>
@@ -45,7 +45,7 @@
           [class.text-slate-600]="activeTab() !== tab.id"
           (click)="setActiveTab(tab.id)"
         >
-          <ui-icon class="h-4 w-4" [name]="tab.icon" />
+          <ui-icon width="16" height="16" [name]="tab.icon" />
           {{ tab.label }}
         </button>
       }
@@ -102,7 +102,12 @@
       <div class="space-y-6">
         <div class="rounded-xl border border-slate-200 bg-white p-6">
           <div class="mb-4 flex items-center gap-2">
-            <ui-icon name="outline-currency-dollar" class="h-5 w-5 text-emerald-600" />
+            <ui-icon
+              name="outline-currency-dollar"
+              width="20"
+              height="20"
+              class="text-emerald-600"
+            />
             <h3 class="text-lg font-semibold text-slate-900">Цены</h3>
           </div>
           <div class="space-y-3">
@@ -132,7 +137,7 @@
 
         <div class="rounded-xl border border-slate-200 bg-white p-6">
           <div class="mb-4 flex items-center gap-2">
-            <ui-icon name="outline-box" class="h-5 w-5 text-blue-600" />
+            <ui-icon name="outline-box" width="20" height="20" class="text-blue-600" />
             <h3 class="text-lg font-semibold text-slate-900">Остатки</h3>
           </div>
           <div class="space-y-3">
@@ -165,7 +170,7 @@
       <div class="mb-4 flex items-center justify-between">
         <h3 class="text-lg font-semibold text-slate-900">Движения товара</h3>
         <div class="flex items-center gap-2 text-sm text-slate-600">
-          <ui-icon name="outline-file-text" class="h-4 w-4" />
+          <ui-icon name="outline-file-text" width="16" height="16" />
           <span>{{ movements().length }} записей</span>
         </div>
       </div>
@@ -193,7 +198,7 @@
           variant="primary"
           class="gap-2 bg-emerald-600 text-sm text-white hover:bg-emerald-700"
         >
-          <ui-icon name="outline-barcode" class="h-4 w-4" />
+          <ui-icon name="outline-barcode" width="16" height="16" />
           Добавить штрихкод
         </button>
       </div>
@@ -215,7 +220,7 @@
       <div class="mb-4 flex items-center justify-between">
         <h3 class="text-lg font-semibold text-slate-900">Остатки по складам</h3>
         <div class="flex items-center gap-2 text-sm text-slate-600">
-          <ui-icon name="outline-building-store" class="h-4 w-4" />
+          <ui-icon name="outline-building-store" width="16" height="16" />
           <span>{{ storeQuantities().length }} складов</span>
         </div>
       </div>
@@ -238,7 +243,7 @@
       <div class="mb-4 flex items-center justify-between">
         <h3 class="text-lg font-semibold text-slate-900">История изменения цен</h3>
         <div class="flex items-center gap-2 text-sm text-slate-600">
-          <ui-icon name="outline-clock" class="h-4 w-4" />
+          <ui-icon name="outline-clock" width="16" height="16" />
           <span>{{ priceHistory().length }} изменений</span>
         </div>
       </div>
@@ -261,7 +266,7 @@
 <!-- Templates -->
 <ng-template #dateTpl let-value>
   <div class="flex items-center gap-1.5 text-sm text-slate-600">
-    <ui-icon name="outline-calendar" class="h-3.5 w-3.5" />
+    <ui-icon name="outline-calendar" width="14" height="14" />
     {{ value | date: 'mediumDate' }}
   </div>
 </ng-template>
@@ -279,7 +284,8 @@
     [class.text-red-700]="value === 'out'"
   >
     <ui-icon
-      class="h-3 w-3"
+      width="12"
+      height="12"
       [name]="value === 'in' ? 'outline-trending-up' : 'outline-trending-down'"
     />
     {{ value === 'in' ? 'Приход' : 'Расход' }}
@@ -298,14 +304,14 @@
 
 <ng-template #userTpl let-value>
   <div class="flex items-center gap-1.5 text-sm text-slate-600">
-    <ui-icon name="outline-users" class="h-3.5 w-3.5" />
+    <ui-icon name="outline-users" width="14" height="14" />
     {{ value }}
   </div>
 </ng-template>
 
 <ng-template #barcodeTpl let-value let-row="row">
   <div class="flex items-center gap-3">
-    <ui-icon name="outline-barcode" class="h-5 w-5 text-slate-400" />
+    <ui-icon name="outline-barcode" width="20" height="20" class="text-slate-400" />
     <div>
       <p class="font-mono text-sm font-medium text-slate-900">{{ value }}</p>
       @if (row.isPrimary) {
@@ -328,7 +334,7 @@
     <div
       class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600"
     >
-      <ui-icon name="outline-building-store" class="h-4 w-4 text-white" />
+      <ui-icon name="outline-building-store" width="16" height="16" class="text-white" />
     </div>
     <span class="font-medium text-slate-900">{{ value }}</span>
   </div>
@@ -357,7 +363,8 @@
 <ng-template #changePercentTpl let-value>
   <div class="flex items-center gap-1.5">
     <ui-icon
-      class="h-4 w-4"
+      width="16"
+      height="16"
       [name]="value > 0 ? 'outline-trending-up' : 'outline-trending-down'"
       [class.text-emerald-600]="value > 0"
       [class.text-red-600]="value <= 0"

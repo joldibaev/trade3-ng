@@ -7,7 +7,6 @@ import { TreeNode } from './tree-item.interface';
 
 @Component({
   selector: 'ui-tree',
-  standalone: true,
   imports: [Tree, TreeItem, TreeItemGroup, NgTemplateOutlet, UiIcon, RouterLink, RouterLinkActive],
   templateUrl: './ui-tree.html',
   styleUrl: './ui-tree.css',

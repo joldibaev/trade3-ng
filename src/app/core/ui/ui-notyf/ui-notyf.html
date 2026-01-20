@@ -9,13 +9,13 @@
     <!-- Icon -->
     <div aria-hidden="true" class="shrink-0">
       @if (toast.type === 'success') {
-        <ui-icon name="outline-circle-check" class="h-5 w-5" />
+        <ui-icon name="outline-circle-check" width="20" height="20" />
       }
       @if (toast.type === 'error') {
-        <ui-icon name="outline-alert-circle" class="h-5 w-5" />
+        <ui-icon name="outline-alert-circle" width="20" height="20" />
       }
       @if (toast.type === 'info') {
-        <ui-icon name="outline-info-circle" class="h-5 w-5" />
+        <ui-icon name="outline-info-circle" width="20" height="20" />
       }
     </div>
 
@@ -37,10 +37,9 @@
       uiButton
       variant="ghost"
       iconOnly
+      icon="outline-x"
       aria-label="Закрыть уведомление"
       (click)="notyf.dismiss(toast.id)"
-    >
-      <ui-icon name="outline-x" class="h-4 w-4" />
-    </button>
+    ></button>
   </div>
 }

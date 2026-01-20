@@ -46,7 +46,7 @@ import { CategoryDialog } from './category-dialog/category-dialog';
   styleUrl: './nomenclature-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-4 h-full',
+    class: 'flex flex-col gap-4',
   },
 })
 export class NomenclaturePage {
@@ -70,7 +70,7 @@ export class NomenclaturePage {
 
   selectedTree = linkedSignal<string[]>(() => {
     const categoryId = this.categoryId();
-    return categoryId ? [categoryId] : [];
+    return categoryId ? [categoryId] : ['all'];
   });
 
   // Resources
@@ -122,11 +122,9 @@ export class NomenclaturePage {
 
     const baseColumns: TableColumn<Product>[] = [
       {
-        key: 'code',
+        key: 'id',
         header: 'Код',
-        type: 'text',
-        valueGetter: (row) => row.article || 'PRD-001',
-        classList: 'font-mono text-xs text-slate-500',
+        type: 'id',
         width: '100px',
       },
       {
@@ -135,14 +133,6 @@ export class NomenclaturePage {
         type: 'template',
         templateName: 'name',
         width: '300px',
-      },
-      {
-        key: 'unit',
-        header: 'Ед. изм.',
-        type: 'text',
-        valueGetter: () => 'шт',
-        width: '80px',
-        classList: 'text-sm text-slate-600',
       },
     ];
 
@@ -213,13 +203,26 @@ export class NomenclaturePage {
     const rootNodes: TreeNode[] = [];
     const idMap = new Map<string, TreeNode>();
 
+    // 0. Начальный узел "Все товары"
+    rootNodes.push({
+      id: 'all',
+      label: 'Все товары',
+      expanded: false,
+      children: [],
+      icon: 'outline-box',
+      routerLink: [],
+      queryParams: { categoryId: null },
+      queryParamsHandling: 'merge',
+    });
+
     // 1. Первый проход: создание всех узлов
     all.forEach((c) => {
       idMap.set(c.id, {
         id: c.id,
         label: c.name,
-        expanded: false, // По умолчанию закрыто
+        expanded: false,
         children: [],
+        icon: 'outline-folder',
       });
     });
 
@@ -244,6 +247,9 @@ export class NomenclaturePage {
       let subtreeHasSelected = false;
 
       nodes.forEach((node) => {
+        // Пропускаем узел "Все товары", так как он уже настроен
+        if (node.id === 'all') return;
+
         // Проверяем, выбран ли текущий узел
         const isCurrentSelected = node.id === selectedId;
 
@@ -258,16 +264,20 @@ export class NomenclaturePage {
           subtreeHasSelected = true;
         }
 
-        // Добавляем роутинг только листьям
-        if (node.children.length === 0) {
-          node.routerLink = [];
-          node.queryParams = { categoryId: node.id };
-          node.queryParamsHandling = 'merge';
-        }
+        // Обновляем иконку в зависимости от наличия детей
+        node.icon = node.children.length > 0 ? 'outline-folder' : 'outline-tag';
+
+        // Роутинг для всех категорий
+        node.routerLink = [];
+        node.queryParams = { categoryId: node.id };
+        node.queryParamsHandling = 'merge';
       });
 
-      // Сортировка (сначала папки, потом листки, затем по алфавиту)
+      // Сортировка (сначала "Все товары", затем папки, потом листки, затем по алфавиту)
       nodes.sort((a, b) => {
+        if (a.id === 'all') return -1;
+        if (b.id === 'all') return 1;
+
         const aHasChildren = a.children.length > 0;
         const bHasChildren = b.children.length > 0;
         if (aHasChildren && !bHasChildren) return -1;

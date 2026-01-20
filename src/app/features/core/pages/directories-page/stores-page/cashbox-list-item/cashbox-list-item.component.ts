@@ -1,11 +1,11 @@
 import { Component, input, output } from '@angular/core';
-import { UiButton } from '../../../../../../../core/ui/ui-button/ui-button';
-import { UiIcon } from '../../../../../../../core/ui/ui-icon/ui-icon.component';
-import { Cashbox } from '../../../../../../../shared/interfaces/entities/cashbox.interface';
+import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
+import { UiCard } from '../../../../../../core/ui/ui-card/ui-card';
+import { Cashbox } from '../../../../../../shared/interfaces/entities/cashbox.interface';
 
 @Component({
   selector: 'app-cashbox-list-item',
-  imports: [UiButton, UiIcon],
+  imports: [UiButton, UiCard],
   templateUrl: './cashbox-list-item.component.html',
 })
 export class CashboxListItemComponent {

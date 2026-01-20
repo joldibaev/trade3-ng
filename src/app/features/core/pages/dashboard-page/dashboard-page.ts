@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { UiButton } from '../../../../core/ui/ui-button/ui-button';
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [],
+  imports: [UiButton],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardPage {}
+export class DashboardPage {
+  showMore = signal(false);
+}
