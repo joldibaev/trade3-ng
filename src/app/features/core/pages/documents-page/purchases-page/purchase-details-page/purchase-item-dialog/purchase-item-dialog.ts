@@ -19,6 +19,7 @@ import { UiCheckbox } from '../../../../../../../core/ui/ui-checkbox/ui-checkbox
 import { UiDialog } from '../../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiIcon } from '../../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../../core/ui/ui-input/ui-input';
+import { UiInputNumber } from '../../../../../../../core/ui/ui-input/ui-input-number';
 import { UiNotyfService } from '../../../../../../../core/ui/ui-notyf/ui-notyf.service';
 import {
   CreateDocumentPurchaseItemInput,
@@ -35,7 +36,17 @@ export interface PurchaseItemDialogData {
 @Component({
   selector: 'app-purchase-item-dialog',
   standalone: true,
-  imports: [UiButton, UiInput, UiCheckbox, FormsModule, FormField, UiIcon, CurrencyPipe, UiDialog],
+  imports: [
+    UiButton,
+    UiInput,
+    UiCheckbox,
+    FormsModule,
+    FormField,
+    UiIcon,
+    CurrencyPipe,
+    UiDialog,
+    UiInputNumber,
+  ],
   templateUrl: './purchase-item-dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -17,7 +17,6 @@ import { UiIcon } from '../ui-icon/ui-icon.component';
 
 @Component({
   selector: 'ui-checkbox',
-  standalone: true,
   imports: [UiIcon],
   templateUrl: './ui-checkbox.html',
   styleUrl: './ui-checkbox.css',

@@ -1,13 +1,16 @@
 <div class="flex flex-wrap items-center justify-between gap-4">
-  <div class="flex items-center gap-3">
+  <div class="flex items-center gap-4">
     @if (showBack()) {
-      <button uiButton variant="ghost" iconOnly icon="outline-arrow-left" (click)="back()"></button>
+      <button
+        uiButton
+        variant="secondary"
+        iconOnly
+        icon="outline-arrow-left"
+        (click)="back()"
+      ></button>
     }
 
-    <h1 class="h1 flex items-center gap-2">
-      {{ title() }}
-      <ng-content />
-    </h1>
+    <h1 class="text-2xl font-medium">{{ title() }}</h1>
   </div>
 
   <div class="flex items-center gap-2">

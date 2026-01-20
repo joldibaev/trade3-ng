@@ -4,7 +4,7 @@ import { UiIcon } from '../ui-icon/ui-icon.component';
 import { UiLoading } from '../ui-loading/ui-loading';
 
 @Component({
-  selector: 'ui-input',
+  selector: 'ui-input-number',
   templateUrl: './ui-input.html',
   styleUrl: './ui-input.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -13,8 +13,8 @@ import { UiLoading } from '../ui-loading/ui-loading';
   },
   imports: [UiLoading, UiIcon],
 })
-export class UiInput extends UiFormControl<string> {
-  value = model('');
+export class UiInputNumber extends UiFormControl<number> {
+  value = model(0);
 
   protected override getIdPrefix(): string {
     return 'input';
@@ -23,7 +23,7 @@ export class UiInput extends UiFormControl<string> {
   protected onInput(target: EventTarget | null) {
     if (!(target && target instanceof HTMLInputElement)) return;
 
-    const value = target.value;
+    const value = target.valueAsNumber;
     this.value.set(value);
   }
 }

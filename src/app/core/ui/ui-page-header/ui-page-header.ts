@@ -4,7 +4,6 @@ import { UiButton } from '../ui-button/ui-button';
 
 @Component({
   selector: 'ui-page-header',
-  standalone: true,
   imports: [UiButton],
   templateUrl: './ui-page-header.html',
   styleUrl: './ui-page-header.css',

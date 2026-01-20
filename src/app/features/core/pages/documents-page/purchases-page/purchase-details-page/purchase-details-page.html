@@ -1,9 +1,10 @@
-<ui-page-header [title]="purchase.value()?.code ? 'Закупка №' + purchase.value()?.code : 'Закупка'">
-  <div actions>
-    <button uiButton variant="primary" [disabled]="purchase.isLoading()" (click)="save()">
-      Сохранить
-    </button>
-  </div>
+<ui-page-header
+  showBack
+  [title]="purchase.value()?.code ? `Закупка №${purchase.value()?.code}` : 'Закупка'"
+>
+  <button actions uiButton variant="primary" [disabled]="purchase.isLoading()" (click)="save()">
+    Сохранить
+  </button>
 </ui-page-header>
 
 <ui-breadcrumb class="mb-2 block" [items]="breadcrumbItems()" />

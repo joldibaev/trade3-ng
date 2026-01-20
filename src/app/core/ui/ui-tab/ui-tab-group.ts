@@ -11,7 +11,6 @@ import { UiTab } from './ui-tab';
 
 @Component({
   selector: 'ui-tab-group',
-  standalone: true,
   imports: [CommonModule, Tabs, TabList, Tab, TabPanel],
   templateUrl: './ui-tab-group.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

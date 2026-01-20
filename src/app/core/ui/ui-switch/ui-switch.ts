@@ -8,7 +8,6 @@ import {
 
 @Component({
   selector: 'ui-switch',
-  standalone: true,
   templateUrl: './ui-switch.html',
   styleUrl: './ui-switch.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
