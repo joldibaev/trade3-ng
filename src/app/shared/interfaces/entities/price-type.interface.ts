@@ -13,4 +13,5 @@ export interface PriceType {
   isActive?: boolean;
   createdAt?: string;
   updatedAt: string;
+  deletedAt?: string;
 }

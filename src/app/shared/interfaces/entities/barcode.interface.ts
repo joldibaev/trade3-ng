@@ -9,4 +9,5 @@ export interface Barcode {
   productId: string;
   createdAt?: string;
   updatedAt: string;
+  deletedAt?: string;
 }

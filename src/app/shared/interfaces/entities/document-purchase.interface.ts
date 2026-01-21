@@ -20,6 +20,7 @@ export interface DocumentPurchase {
   notes?: string;
   createdAt?: string;
   updatedAt: string;
+  deletedAt?: string;
   movements: StockMovement[];
   history: DocumentHistory[];
   generatedPriceHistories: PriceHistory[];

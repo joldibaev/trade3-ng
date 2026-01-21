@@ -27,6 +27,7 @@ export interface Product {
   barcodes: Barcode[];
   movements: StockMovement[];
   isActive?: boolean;
+  deletedAt?: string;
   createdAt?: string;
   updatedAt: string;
 }

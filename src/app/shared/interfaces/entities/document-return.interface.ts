@@ -19,6 +19,7 @@ export interface DocumentReturn {
   notes?: string;
   createdAt?: string;
   updatedAt: string;
+  deletedAt?: string;
   movements: StockMovement[];
-  documentHistories: DocumentHistory[];
+  history: DocumentHistory[];
 }

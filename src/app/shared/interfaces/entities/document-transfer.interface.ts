@@ -17,6 +17,7 @@ export interface DocumentTransfer {
   notes?: string;
   createdAt?: string;
   updatedAt: string;
+  deletedAt?: string;
   movements: StockMovement[];
   history: DocumentHistory[];
 }

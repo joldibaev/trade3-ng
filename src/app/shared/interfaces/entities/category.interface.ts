@@ -10,4 +10,5 @@ export interface Category {
   isActive?: boolean;
   createdAt?: string;
   updatedAt: string;
+  deletedAt?: string;
 }
