@@ -72,9 +72,8 @@
                 iconOnly
                 size="sm"
                 type="button"
-                title="Копировать ID"
                 class="opacity-0 group-hover:opacity-100"
-                (click)="$event.stopPropagation(); copyToClipboard(row.id)"
+                (click)="copyToClipboard(row.id)"
               ></button>
             </div>
           </td>

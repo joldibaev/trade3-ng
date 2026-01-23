@@ -1,8 +1,9 @@
 import { DocumentStatus } from '../constants';
-import { DocumentHistory } from './document-history.interface';
+import { DocumentLedger } from './document-ledger.interface';
+import { DocumentPriceChange } from './document-price-change.interface';
 import { DocumentPurchaseItem } from './document-purchase-item.interface';
-import { PriceHistory } from './price-history.interface';
-import { StockMovement } from './stock-movement.interface';
+import { InventoryReprocessing } from './inventory-reprocessing.interface';
+import { StockLedger } from './stock-ledger.interface';
 import { Store } from './store.interface';
 import { Vendor } from './vendor.interface';
 
@@ -20,8 +21,8 @@ export interface DocumentPurchase {
   notes?: string;
   createdAt?: string;
   updatedAt: string;
-  deletedAt?: string;
-  movements: StockMovement[];
-  history: DocumentHistory[];
-  generatedPriceHistories: PriceHistory[];
+  stockLedger: StockLedger[];
+  documentLedger: DocumentLedger[];
+  inventoryReprocessings: InventoryReprocessing[];
+  generatedPriceChange?: DocumentPriceChange;
 }

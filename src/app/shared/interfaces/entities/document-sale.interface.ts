@@ -1,10 +1,11 @@
 import { DocumentStatus } from '../constants';
 import { Cashbox } from './cashbox.interface';
 import { Client } from './client.interface';
-import { DocumentHistory } from './document-history.interface';
+import { DocumentLedger } from './document-ledger.interface';
 import { DocumentSaleItem } from './document-sale-item.interface';
+import { InventoryReprocessing } from './inventory-reprocessing.interface';
 import { PriceType } from './price-type.interface';
-import { StockMovement } from './stock-movement.interface';
+import { StockLedger } from './stock-ledger.interface';
 import { Store } from './store.interface';
 
 export interface DocumentSale {
@@ -25,7 +26,7 @@ export interface DocumentSale {
   notes?: string;
   createdAt?: string;
   updatedAt: string;
-  deletedAt?: string;
-  movements: StockMovement[];
-  history: DocumentHistory[];
+  stockLedger: StockLedger[];
+  documentLedger: DocumentLedger[];
+  inventoryReprocessings: InventoryReprocessing[];
 }

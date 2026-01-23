@@ -155,11 +155,9 @@
 
               <!-- Status -->
               <td>
-                <span
-                  class="inline-flex items-center rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-600/20 ring-inset"
-                >
-                  Активен
-                </span>
+                <ui-badge [variant]="row.isActive ? 'success' : 'neutral'">
+                  {{ row.isActive ? 'Активен' : 'Неактивен' }}
+                </ui-badge>
               </td>
 
               <!-- Actions -->

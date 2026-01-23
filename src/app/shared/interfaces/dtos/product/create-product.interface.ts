@@ -3,5 +3,4 @@ export interface CreateProductDto {
   article?: string;
   categoryId: string;
   isActive?: boolean;
-  deletedAt?: string;
 }

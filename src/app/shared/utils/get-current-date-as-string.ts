@@ -26,3 +26,14 @@ export function getCurrentDateAsString(date: string | Date = new Date()): string
 
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
+
+/**
+ * Converts a string from <input type="datetime-local"> (YYYY-MM-DDTHH:mm)
+ * to a UTC ISO string, assuming the input is in Asia/Tashkent (+05:00).
+ */
+export function formatDateToIso(localString: string): string {
+  if (!localString) return new Date().toISOString();
+  // We append the timezone offset to ensure it's parsed as Tashkent time
+  // regardless of the browser's local timezone.
+  return new Date(`${localString}+05:00`).toISOString();
+}

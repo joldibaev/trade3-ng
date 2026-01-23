@@ -4,5 +4,4 @@ export interface CreateStoreDto {
   phone?: string;
   workingHours?: string;
   isActive?: boolean;
-  deletedAt?: string;
 }

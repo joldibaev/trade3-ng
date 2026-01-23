@@ -1,17 +1,16 @@
-import { DocumentPurchaseItemPrice } from './document-purchase-item-price.interface';
+import { DocumentPriceChangeItem } from './document-price-change-item.interface';
 import { DocumentSale } from './document-sale.interface';
-import { PriceHistory } from './price-history.interface';
+import { PriceLedger } from './price-ledger.interface';
 import { Price } from './price.interface';
 
 export interface PriceType {
   id: string;
   name: string;
-  priceHistory: PriceHistory[];
+  priceLedger: PriceLedger[];
   prices: Price[];
   sales: DocumentSale[];
-  documentPurchaseItemPrices: DocumentPurchaseItemPrice[];
+  priceChangeItems: DocumentPriceChangeItem[];
   isActive?: boolean;
   createdAt?: string;
   updatedAt: string;
-  deletedAt?: string;
 }

@@ -1,5 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { DatePipe, DecimalPipe } from '@angular/common'; // Added DatePipe for manual formatting if needed, though usually better injected or used in template
+import { DatePipe, DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,12 +11,9 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
 import { Router } from '@angular/router';
-import { filter, switchMap, tap } from 'rxjs';
 import { DocumentPurchasesService } from '../../../../../core/services/document-purchases.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
-import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
-import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
@@ -55,7 +52,6 @@ export class PurchasesPage {
   private router = inject(Router);
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
-  private datePipe = inject(DatePipe);
   private notyf = inject(UiNotyfService);
 
   protected readonly DocumentStatus = DocumentStatus;
@@ -122,31 +118,6 @@ export class PurchasesPage {
           void this.router.navigate(['core', 'documents', 'purchases', res.id]);
         }
       });
-  }
-
-  deletePurchase(item: DocumentPurchase) {
-    this.dialog
-      .open<boolean, UiDialogConfirmData>(UiDialogConfirm, {
-        data: {
-          title: 'Удалить закупку?',
-          message: `Вы действительно хотите удалить закупку #${item.code} от ${this.datePipe.transform(item.date, 'dd.MM.yyyy')}?`,
-          variant: 'danger',
-          confirmLabel: 'Удалить',
-        },
-        width: '400px',
-      })
-      .closed.pipe(
-        filter(Boolean),
-        switchMap(() => this.documentPurchasesService.delete(item.id)),
-        tap(() => {
-          this.purchases.reload();
-          if (this.selectedPurchase()?.id === item.id) {
-            this.selectedPurchase.set(undefined);
-          }
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
   }
 
   updateStatus(id: string, status: DocumentStatus) {

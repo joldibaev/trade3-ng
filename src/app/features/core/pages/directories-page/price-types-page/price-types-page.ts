@@ -96,7 +96,7 @@ export class PriceTypesPage {
 
   // Copy to clipboard helper
   copyToClipboard(val: string) {
-    navigator.clipboard.writeText(val);
+    void navigator.clipboard.writeText(val);
   }
 
   // CRUD

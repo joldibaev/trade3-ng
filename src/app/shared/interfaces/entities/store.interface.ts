@@ -4,7 +4,8 @@ import { DocumentPurchase } from './document-purchase.interface';
 import { DocumentReturn } from './document-return.interface';
 import { DocumentSale } from './document-sale.interface';
 import { DocumentTransfer } from './document-transfer.interface';
-import { StockMovement } from './stock-movement.interface';
+import { InventoryReprocessingItem } from './inventory-reprocessing-item.interface';
+import { StockLedger } from './stock-ledger.interface';
 import { Stock } from './stock.interface';
 
 export interface Store {
@@ -17,7 +18,6 @@ export interface Store {
   cashboxes: Cashbox[];
   createdAt?: string;
   updatedAt: string;
-  deletedAt?: string;
   stocks: Stock[];
   sales: DocumentSale[];
   purchases: DocumentPurchase[];
@@ -25,5 +25,6 @@ export interface Store {
   adjustments: DocumentAdjustment[];
   transfersFrom: DocumentTransfer[];
   transfersTo: DocumentTransfer[];
-  movements: StockMovement[];
+  stockLedger: StockLedger[];
+  inventoryReprocessingItems: InventoryReprocessingItem[];
 }

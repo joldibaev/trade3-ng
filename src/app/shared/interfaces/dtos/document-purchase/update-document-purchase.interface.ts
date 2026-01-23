@@ -1,3 +1,16 @@
-import { CreateDocumentPurchaseDto } from './create-document-purchase.interface';
+import { DocumentStatus } from '../../constants';
 
-export type UpdateDocumentPurchaseDto = CreateDocumentPurchaseDto;
+export interface UpdateDocumentPurchaseItemInput {
+  productId: string;
+  quantity: number;
+  price: number;
+}
+
+export interface UpdateDocumentPurchaseDto {
+  storeId: string;
+  vendorId: string;
+  date: string;
+  status?: DocumentStatus;
+  notes?: string;
+  items?: UpdateDocumentPurchaseItemInput[];
+}

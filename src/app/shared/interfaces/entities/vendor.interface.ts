@@ -10,5 +10,4 @@ export interface Vendor {
   isActive?: boolean;
   createdAt?: string;
   updatedAt: string;
-  deletedAt?: string;
 }

@@ -113,7 +113,7 @@ export class ClientsPage {
 
   // Copy to clipboard helper
   copyToClipboard(val: string) {
-    navigator.clipboard.writeText(val); // Simple implementation for now
+    void navigator.clipboard.writeText(val);
   }
 
   // CRUD

@@ -14,12 +14,14 @@ export class DocumentStatusComponent {
 
   statusLabels: Record<DocumentStatus, string> = {
     [DocumentStatus.DRAFT]: 'Черновик',
+    [DocumentStatus.SCHEDULED]: 'Запланировано',
     [DocumentStatus.COMPLETED]: 'Проведен',
     [DocumentStatus.CANCELLED]: 'Отменен',
   };
 
   statusVariants: Record<DocumentStatus, UiBadgeVariant> = {
     [DocumentStatus.DRAFT]: 'neutral',
+    [DocumentStatus.SCHEDULED]: 'processing',
     [DocumentStatus.COMPLETED]: 'success',
     [DocumentStatus.CANCELLED]: 'destructive',
   };

@@ -2,6 +2,7 @@ export const DocumentStatus = {
   DRAFT: 'DRAFT',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED',
+  SCHEDULED: 'SCHEDULED',
 } as const;
 
 export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus];

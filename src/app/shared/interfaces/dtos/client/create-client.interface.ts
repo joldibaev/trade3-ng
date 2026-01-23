@@ -4,5 +4,4 @@ export interface CreateClientDto {
   email?: string;
   address?: string;
   isActive?: boolean;
-  deletedAt?: string;
 }

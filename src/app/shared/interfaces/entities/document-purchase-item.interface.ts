@@ -1,4 +1,3 @@
-import { DocumentPurchaseItemPrice } from './document-purchase-item-price.interface';
 import { DocumentPurchase } from './document-purchase.interface';
 import { Product } from './product.interface';
 
@@ -11,7 +10,6 @@ export interface DocumentPurchaseItem {
   quantity: number;
   price: number;
   total: number;
-  newPrices: DocumentPurchaseItemPrice[];
   createdAt?: string;
   updatedAt: string;
 }

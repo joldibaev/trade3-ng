@@ -78,7 +78,7 @@
             <td>
               <div class="flex items-center gap-2">
                 <ui-icon width="16" height="16" name="outline-calendar" class="text-slate-400" />
-                <span>{{ row.date ? (row.date | date: 'dd.MM.yyyy') : '-' }}</span>
+                <span>{{ row.date | date }}</span>
               </div>
             </td>
 
@@ -116,21 +116,21 @@
                     uiButton
                     variant="ghost"
                     size="sm"
-                    iconOnly
-                    icon="outline-check"
-                    title="Провести"
                     (click)="updateStatus(row.id, DocumentStatus.COMPLETED)"
-                  ></button>
-                } @else if (row.status === DocumentStatus.COMPLETED) {
+                  >
+                    Провести
+                  </button>
+                } @else if (
+                  row.status === DocumentStatus.COMPLETED || row.status === DocumentStatus.SCHEDULED
+                ) {
                   <button
                     uiButton
                     variant="ghost"
                     size="sm"
-                    iconOnly
-                    icon="outline-arrow-left"
-                    title="Отменить проведение"
                     (click)="updateStatus(row.id, DocumentStatus.DRAFT)"
-                  ></button>
+                  >
+                    Отменить проведение
+                  </button>
                 }
                 <button
                   uiButton
@@ -139,14 +139,6 @@
                   iconOnly
                   icon="outline-eye"
                   (click)="openDetails(row)"
-                ></button>
-                <button
-                  uiButton
-                  variant="danger"
-                  size="sm"
-                  iconOnly
-                  icon="outline-trash"
-                  (click)="deletePurchase(row)"
                 ></button>
               </div>
             </td>

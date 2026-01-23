@@ -13,7 +13,10 @@ import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
 import { CreateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
-import { getCurrentDateAsString } from '../../../../../../shared/utils/get-current-date-as-string';
+import {
+  formatDateToIso,
+  getCurrentDateAsString,
+} from '../../../../../../shared/utils/get-current-date-as-string';
 
 @Component({
   selector: 'app-purchase-dialog',
@@ -57,7 +60,7 @@ export class PurchaseDialog {
     const dto: CreateDocumentPurchaseDto = {
       storeId: formValue.storeId,
       vendorId: formValue.vendorId,
-      date: formValue.date,
+      date: formatDateToIso(formValue.date),
     };
 
     this.service

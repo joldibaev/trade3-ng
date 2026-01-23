@@ -14,6 +14,9 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([httpInterceptor])),
 
-    { provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { timezone: '+0500' } },
+    {
+      provide: DATE_PIPE_DEFAULT_OPTIONS,
+      useValue: { dateFormat: 'dd.MM.yyyy HH:mm', timezone: '+0500' },
+    },
   ],
 };

@@ -37,6 +37,7 @@ import {
 import { Category } from '../../../../../shared/interfaces/entities/category.interface';
 import { Product } from '../../../../../shared/interfaces/entities/product.interface';
 import { CategoryDialog } from './category-dialog/category-dialog';
+import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
 
 @Component({
   selector: 'app-nomenclature-page',
@@ -51,6 +52,7 @@ import { CategoryDialog } from './category-dialog/category-dialog';
     UiCard,
     DecimalPipe,
     SlicePipe,
+    UiBadge,
   ],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
