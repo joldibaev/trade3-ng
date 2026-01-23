@@ -1,5 +1,0 @@
-@reference './../../../../../styles.css';
-
-li[aria-expanded='false'] + [role='group'] {
-  @apply hidden;
-}

@@ -1,88 +1,117 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { UiButton } from '../../../../core/ui/ui-button/ui-button';
+import { IconName } from '../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../core/ui/ui-icon/ui-icon.component';
-import { TreeNode } from '../../../../core/ui/ui-tree/tree-item.interface';
-import { UiTree } from '../../../../core/ui/ui-tree/ui-tree';
+
+interface NavItem {
+  id: string;
+  label: string;
+  icon: IconName;
+  routerLink?: string[];
+  children?: NavItem[];
+}
+
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
 
 @Component({
   selector: 'app-aside',
-  imports: [UiIcon, UiTree],
+  imports: [UiIcon, RouterLink, RouterLinkActive, UiButton],
   templateUrl: './aside.html',
   styleUrl: './aside.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class:
+      'default-border-color sticky top-0 h-screen shrink-0 border-e bg-white default-transition flex flex-col',
+    '[class.w-72]': '!isCollapsed()',
+    '[class.w-20]': 'isCollapsed()',
+  },
 })
 export class Aside {
-  menuItems = signal<TreeNode[]>([
+  isCollapsed = signal(false);
+  protected expandedGroups = signal<Set<string>>(new Set(['directories', 'documents']));
+
+  menuGroups = signal<NavGroup[]>([
     {
-      id: 'dashboard',
-      label: 'Главная',
-      routerLink: ['/core', 'dashboard'],
-      icon: 'outline-home',
-      expanded: false,
-      children: [],
+      label: 'ОБЗОР',
+      items: [
+        {
+          id: 'dashboard',
+          label: 'Главная',
+          routerLink: ['/core', 'dashboard'],
+          icon: 'outline-home',
+        },
+      ],
     },
     {
-      id: 'directories',
-      label: 'Справочники',
-      icon: 'outline-folder',
-      expanded: true,
-      children: [
+      label: 'СПРАВОЧНИКИ',
+      items: [
         {
-          id: 'stores',
-          label: 'Магазины',
-          routerLink: ['/core', 'directories', 'stores'],
-          icon: 'outline-building-store',
-          expanded: false,
-          children: [],
-        },
-        {
-          id: 'nomenclature',
-          label: 'Номенклатура',
+          id: 'stocks',
+          label: 'Товары',
           routerLink: ['/core', 'directories', 'nomenclature'],
           icon: 'outline-box',
-          expanded: false,
-          children: [],
         },
         {
           id: 'clients',
           label: 'Клиенты',
           routerLink: ['/core', 'directories', 'clients'],
           icon: 'outline-users',
-          expanded: false,
-          children: [],
         },
         {
           id: 'vendors',
           label: 'Поставщики',
           routerLink: ['/core', 'directories', 'vendors'],
           icon: 'outline-truck',
-          expanded: false,
-          children: [],
         },
         {
-          id: 'price-types',
-          label: 'Типы цен',
-          routerLink: ['/core', 'directories', 'price-types'],
-          icon: 'outline-currency-dollar',
-          expanded: false,
-          children: [],
+          id: 'stores',
+          label: 'Магазины',
+          routerLink: ['/core', 'directories', 'stores'],
+          icon: 'outline-building-store',
         },
       ],
     },
     {
-      id: 'documents',
-      label: 'Документы',
-      icon: 'outline-file-text',
-      expanded: true,
-      children: [
+      label: 'ДОКУМЕНТЫ',
+      items: [
         {
           id: 'purchases',
-          label: 'Приходные накладные',
+          label: 'Закупки',
           routerLink: ['/core', 'documents', 'purchases'],
           icon: 'outline-file-import',
-          expanded: false,
-          children: [],
+        },
+      ],
+    },
+    {
+      label: 'СИСТЕМА',
+      items: [
+        {
+          id: 'settings',
+          label: 'Настройки',
+          routerLink: ['/core', 'settings'],
+          icon: 'outline-settings',
         },
       ],
     },
   ]);
+
+  toggle() {
+    this.isCollapsed.update((v) => !v);
+  }
+
+  toggleGroup(id: string) {
+    this.expandedGroups.update((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
 }

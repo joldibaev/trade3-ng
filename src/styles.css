@@ -27,9 +27,7 @@
 
 @layer base {
   body {
-    @apply selection:bg-primary-100 bg-slate-50 text-shadow-slate-900;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply selection:bg-primary-100 bg-slate-50 antialiased text-shadow-slate-900;
   }
 }
 

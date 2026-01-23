@@ -1,8 +1,9 @@
 @reference './../../../../styles.css';
 
 .ui-button {
-  @apply relative inline-flex cursor-pointer items-center justify-center gap-2 border border-transparent antialiased outline-none select-none;
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 border border-transparent outline-none;
   @apply default-transition rounded-squircle focus-ring rounded-lg leading-none active:scale-[0.98];
+  @apply font-medium;
 
   /* variants */
   &.ui-button-variant-primary {
@@ -15,6 +16,9 @@
 
   &.ui-button-variant-ghost {
     @apply text-slate-700 hover:bg-slate-100;
+    &.active {
+      @apply bg-primary-50 text-primary-600;
+    }
   }
 
   &.ui-button-variant-danger {
@@ -32,15 +36,15 @@
 
   /* sizes */
   &.ui-button-size-sm {
-    @apply px-3 py-1.5 text-sm font-medium;
+    @apply px-3 py-1.5 text-sm;
   }
 
   &.ui-button-size-md {
-    @apply px-4 py-2.5 text-sm font-medium;
+    @apply px-4 py-2.5 text-sm;
   }
 
   &.ui-button-size-lg {
-    @apply px-6 py-3.5 text-base font-medium;
+    @apply px-6 py-3.5 text-base;
   }
 
   /* Square icon state */
