@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UiButton } from '../../../../core/ui/ui-button/ui-button';
 import { IconName } from '../../../../core/ui/ui-icon/data';
-import { UiIcon } from '../../../../core/ui/ui-icon/ui-icon.component';
+import { NgOptimizedImage } from '@angular/common';
 
 interface NavItem {
   id: string;
@@ -19,7 +19,7 @@ interface NavGroup {
 
 @Component({
   selector: 'app-aside',
-  imports: [UiIcon, RouterLink, RouterLinkActive, UiButton],
+  imports: [RouterLink, RouterLinkActive, UiButton, NgOptimizedImage],
   templateUrl: './aside.html',
   styleUrl: './aside.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
