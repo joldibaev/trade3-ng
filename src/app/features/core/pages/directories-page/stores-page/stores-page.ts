@@ -63,7 +63,7 @@ export class StoresPage {
         label: 'Всего магазинов',
         value: list.length,
         icon: 'outline-building-store',
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Активных касс',
@@ -81,7 +81,7 @@ export class StoresPage {
         label: 'Активных магазинов',
         value: activeStores,
         icon: 'outline-circle-check',
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
     ];
   });

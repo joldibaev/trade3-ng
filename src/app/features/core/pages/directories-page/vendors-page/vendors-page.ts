@@ -1,5 +1,17 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { DecimalPipe, SlicePipe } from '@angular/common';
+import {
+  CdkCell,
+  CdkCellDef,
+  CdkColumnDef,
+  CdkHeaderCell,
+  CdkHeaderCellDef,
+  CdkHeaderRow,
+  CdkHeaderRowDef,
+  CdkNoDataRow,
+  CdkRow,
+  CdkRowDef,
+} from '@angular/cdk/table';
+import { DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,13 +23,13 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
-import { ToStringPipe } from '../../../../../core/pipes/to-string-pipe';
 import { VendorsService } from '../../../../../core/services/vendors.service';
 import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
+import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
 import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
@@ -37,13 +49,22 @@ import { VendorDialog } from './vendor-dialog/vendor-dialog';
     UiCard,
     UiIcon,
     UiLoading,
-    UiTable,
     DecimalPipe,
     UiInput,
     FormField,
+    UiTable,
+    CdkColumnDef,
+    CdkHeaderCellDef,
+    CdkHeaderCell,
+    CdkCellDef,
+    CdkCell,
+    CdkHeaderRow,
+    CdkHeaderRowDef,
+    CdkRowDef,
+    CdkRow,
     UiBadge,
-    ToStringPipe,
-    SlicePipe, // Added SlicePipe for ID truncation if needed
+    CdkNoDataRow,
+    UiEmptyState,
   ],
   templateUrl: './vendors-page.html',
   styleUrl: './vendors-page.css',
@@ -56,6 +77,15 @@ export class VendorsPage {
   private vendorsService = inject(VendorsService);
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
+
+  displayedColumns: (keyof Vendor | 'action')[] = [
+    'id',
+    'name',
+    'phone',
+    'address',
+    'isActive',
+    'action',
+  ];
 
   // State
   selectedVendor = signal<Vendor | undefined>(undefined);
@@ -78,19 +108,19 @@ export class VendorsPage {
         label: 'Всего поставщиков',
         value: list.length,
         icon: 'outline-users' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Активных поставщиков',
         value: list.filter((v) => v.isActive).length,
         icon: 'outline-users' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Общие закупки',
         value: totalPurchases,
         icon: 'outline-users' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
     ];
   });

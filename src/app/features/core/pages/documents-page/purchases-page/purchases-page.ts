@@ -1,4 +1,16 @@
 import { Dialog } from '@angular/cdk/dialog';
+import {
+  CdkCell,
+  CdkCellDef,
+  CdkColumnDef,
+  CdkHeaderCell,
+  CdkHeaderCellDef,
+  CdkHeaderRow,
+  CdkHeaderRowDef,
+  CdkNoDataRow,
+  CdkRow,
+  CdkRowDef,
+} from '@angular/cdk/table';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -14,13 +26,14 @@ import { Router } from '@angular/router';
 import { DocumentPurchasesService } from '../../../../../core/services/document-purchases.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
+import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
 import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { UiNotyfService } from '../../../../../core/ui/ui-notyf/ui-notyf.service';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
-import { DocumentStatusComponent } from '../../../../../shared/components/document-status/document-status.component'; // Added DocumentStatusComponent
+import { DocumentStatusComponent } from '../../../../../shared/components/document-status/document-status.component';
 import { DocumentStatus } from '../../../../../shared/interfaces/constants';
 import { DocumentPurchase } from '../../../../../shared/interfaces/entities/document-purchase.interface';
 import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
@@ -32,12 +45,23 @@ import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
     UiCard,
     UiIcon,
     UiLoading,
-    UiTable,
     UiInput,
     FormField,
     DecimalPipe,
-    DocumentStatusComponent,
+    UiTable,
+    CdkColumnDef,
+    CdkHeaderCellDef,
+    CdkHeaderCell,
+    CdkCellDef,
+    CdkCell,
+    CdkHeaderRow,
+    CdkHeaderRowDef,
+    CdkRowDef,
+    CdkRow,
+    CdkNoDataRow,
+    UiEmptyState,
     DatePipe,
+    DocumentStatusComponent,
   ],
   templateUrl: './purchases-page.html',
   styleUrl: './purchases-page.css',
@@ -54,10 +78,20 @@ export class PurchasesPage {
   private destroyRef = inject(DestroyRef);
   private notyf = inject(UiNotyfService);
 
+  displayedColumns: (keyof DocumentPurchase | 'action')[] = [
+    'id',
+    'code',
+    'date',
+    'vendor',
+    'store',
+    'total',
+    'status',
+    'action',
+  ];
+
   protected readonly DocumentStatus = DocumentStatus;
 
   // State
-  selectedPurchase = signal<DocumentPurchase | undefined>(undefined);
   searchForm = form(signal({ query: '' }));
 
   // Resources
@@ -78,13 +112,13 @@ export class PurchasesPage {
         label: 'Проведено',
         value: list.filter((i) => i.status === DocumentStatus.COMPLETED).length,
         icon: 'outline-check' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Сумма закупок',
         value: totalSum,
         icon: 'outline-cash' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
         isCurrency: true,
       },
     ];

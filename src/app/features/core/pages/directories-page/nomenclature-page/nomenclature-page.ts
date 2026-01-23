@@ -1,5 +1,17 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { DecimalPipe, SlicePipe } from '@angular/common';
+import {
+  CdkCell,
+  CdkCellDef,
+  CdkColumnDef,
+  CdkHeaderCell,
+  CdkHeaderCellDef,
+  CdkHeaderRow,
+  CdkHeaderRowDef,
+  CdkNoDataRow,
+  CdkRow,
+  CdkRowDef,
+} from '@angular/cdk/table';
+import { DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,14 +28,16 @@ import { form, FormField } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { CategoriesService } from '../../../../../core/services/categories.service';
-import { PriceTypesService } from '../../../../../core/services/price-types.service'; // [NEW]
+import { PriceTypesService } from '../../../../../core/services/price-types.service';
 import { ProductsService } from '../../../../../core/services/products.service';
-import { StoresService } from '../../../../../core/services/stores.service'; // [NEW]
+import { StoresService } from '../../../../../core/services/stores.service';
+import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
-import { IconName } from '../../../../../core/ui/ui-icon/data'; // Restore import
+import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
+import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
@@ -37,7 +51,6 @@ import {
 import { Category } from '../../../../../shared/interfaces/entities/category.interface';
 import { Product } from '../../../../../shared/interfaces/entities/product.interface';
 import { CategoryDialog } from './category-dialog/category-dialog';
-import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
 
 @Component({
   selector: 'app-nomenclature-page',
@@ -46,13 +59,23 @@ import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
     UiIcon,
     UiInput,
     UiLoading,
-    UiTable,
     UiTree,
     FormField,
     UiCard,
     DecimalPipe,
-    SlicePipe,
+    UiTable,
+    CdkColumnDef,
+    CdkHeaderCellDef,
+    CdkHeaderCell,
+    CdkCellDef,
+    CdkCell,
+    CdkHeaderRow,
+    CdkHeaderRowDef,
+    CdkRowDef,
+    CdkRow,
     UiBadge,
+    CdkNoDataRow,
+    UiEmptyState,
   ],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
@@ -75,8 +98,6 @@ export class NomenclaturePage {
   categoryId = input<string>();
   selectedCategoryId = computed(() => this.categoryId());
 
-  selectedProduct = signal<Product | undefined>(undefined);
-
   formState = signal({ query: '' });
   formData = form(this.formState);
 
@@ -84,6 +105,15 @@ export class NomenclaturePage {
     const categoryId = this.categoryId();
     return categoryId ? [categoryId] : ['all'];
   });
+
+  displayedColumns: (keyof Product | 'action')[] = [
+    'name',
+    'article',
+    'category',
+    'stocks',
+    'isActive',
+    'action',
+  ];
 
   // Resources
   categories = this.categoriesService.getAll();
@@ -235,9 +265,6 @@ export class NomenclaturePage {
   filteredProducts = computed(() => {
     const products = this.products.value() || [];
     const query = this.formData().value().query.toLowerCase();
-    const catMap = this.categoryMap();
-    const priceTypes = this.priceTypes.value() || [];
-    const mainPriceType = priceTypes[0];
 
     let filtered = products;
 
@@ -249,18 +276,7 @@ export class NomenclaturePage {
       );
     }
 
-    return filtered.slice(0, 50).map((p) => {
-      const price = p.prices?.find((pr) => pr.priceTypeId === mainPriceType?.id);
-      const priceVal = price ? price.value : 0;
-      const totalStock = p.stocks?.reduce((s, stock) => s + (stock.quantity || 0), 0) || 0;
-
-      return {
-        ...p,
-        displayPrice: `${priceVal.toLocaleString('en-US')} UZS`,
-        displayStock: totalStock.toString(),
-        categoryName: catMap.get(p.categoryId) || '',
-      };
-    });
+    return filtered;
   });
 
   // Helper methods for template
@@ -280,21 +296,7 @@ export class NomenclaturePage {
     }
   }
 
-  editCurrentProduct() {
-    const product = this.selectedProduct();
-    if (!product) return;
-    void this.router.navigate([product.id, 'edit'], { relativeTo: this.activatedRoute });
-  }
-
-  deleteCurrentProduct() {
-    const product = this.selectedProduct();
-    if (!product) return;
-    this.deleteProduct(product);
-  }
-
-  openProductPage() {
-    const product = this.selectedProduct();
-    if (!product) return;
+  openProductPage(product: Product) {
     void this.router.navigate([product.id], { relativeTo: this.activatedRoute });
   }
 
@@ -339,7 +341,6 @@ export class NomenclaturePage {
       .subscribe();
   }
 
-  // Products CRUD
   createProduct() {
     void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
@@ -347,8 +348,6 @@ export class NomenclaturePage {
   editProduct(product: Product) {
     void this.router.navigate([product.id, 'edit'], { relativeTo: this.activatedRoute });
   }
-
-  /* Deprecated/Removed Dialog Logic */
 
   deleteProduct(product: Product) {
     this.dialog
@@ -363,13 +362,7 @@ export class NomenclaturePage {
       .closed.pipe(
         filter(Boolean),
         switchMap(() => this.productsService.delete(product.id)),
-        tap(() => {
-          this.products.reload();
-
-          if (this.selectedProduct()?.id === product.id) {
-            this.selectedProduct.set(undefined);
-          }
-        }),
+        tap(() => this.products.reload()),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();

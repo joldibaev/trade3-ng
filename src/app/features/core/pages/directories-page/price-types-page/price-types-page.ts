@@ -1,4 +1,16 @@
 import { Dialog } from '@angular/cdk/dialog';
+import {
+  CdkCell,
+  CdkCellDef,
+  CdkColumnDef,
+  CdkHeaderCell,
+  CdkHeaderCellDef,
+  CdkHeaderRow,
+  CdkHeaderRowDef,
+  CdkNoDataRow,
+  CdkRow,
+  CdkRowDef,
+} from '@angular/cdk/table';
 import { SlicePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -18,11 +30,12 @@ import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
+import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
 import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
-import { UiTable } from '../../../../../core/ui/ui-table/ui-table'; // Removed TableColumn
+import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
 import {
   PriceTypeDialogData,
   PriceTypeDialogResult,
@@ -37,12 +50,23 @@ import { PriceTypeDialog } from './price-type-dialog/price-type-dialog';
     UiCard,
     UiIcon,
     UiLoading,
-    UiTable,
     UiInput,
     FormField,
+    UiTable,
+    CdkColumnDef,
+    CdkHeaderCellDef,
+    CdkHeaderCell,
+    CdkCellDef,
+    CdkCell,
+    CdkHeaderRow,
+    CdkHeaderRowDef,
+    CdkRowDef,
+    CdkRow,
     UiBadge,
-    ToStringPipe,
+    CdkNoDataRow,
+    UiEmptyState,
     SlicePipe,
+    ToStringPipe,
   ],
   templateUrl: './price-types-page.html',
   styleUrl: './price-types-page.css',
@@ -55,6 +79,8 @@ export class PriceTypesPage {
   private priceTypesService = inject(PriceTypesService);
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
+
+  displayedColumns: (keyof PriceType | 'action')[] = ['id', 'name', 'isActive', 'action'];
 
   // State
   selectedPriceType = signal<PriceType | undefined>(undefined);
@@ -72,13 +98,13 @@ export class PriceTypesPage {
         label: 'Всего типов цен',
         value: list.length,
         icon: 'outline-tag' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Активных типов',
         value: list.filter((v) => v.isActive).length,
         icon: 'outline-check' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
     ];
   });

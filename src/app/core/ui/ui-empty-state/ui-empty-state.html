@@ -4,11 +4,15 @@
   >
     <ui-icon [name]="icon()" [width]="32" [height]="32" />
   </div>
+
   <h3 class="mb-1 text-lg font-semibold text-slate-900">{{ title() }}</h3>
   <p class="mb-6 max-w-sm text-sm text-balance text-slate-500">
     {{ description() }}
   </p>
-  <button uiButton variant="primary" [icon]="actionIcon()" (click)="action.emit()">
-    {{ actionLabel() }}
-  </button>
+
+  @if (actionLabel()) {
+    <button uiButton variant="primary" [icon]="actionIcon()" (click)="action.emit()">
+      {{ actionLabel() }}
+    </button>
+  }
 </div>

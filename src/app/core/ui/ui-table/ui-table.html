@@ -1,24 +1,15 @@
-<table class="w-full border-separate border-spacing-0 text-left text-sm">
-  <thead class="bg-slate-50 text-xs font-medium tracking-wider text-slate-500 uppercase">
-    <ng-content select="[header]"></ng-content>
+<table class="ui-table w-full">
+  <ng-content select="caption" />
+  <ng-content select="colgroup, col" />
+
+  <thead role="rowgroup">
+    <ng-container headerRowOutlet />
   </thead>
-  <tbody class="divide-y divide-slate-100 bg-white">
-    @if (loading()) {
-      <tr>
-        <td colspan="100%" class="p-8 text-center">
-          <ui-loading class="inline-block" [width]="32" [height]="32" />
-        </td>
-      </tr>
-    } @else if (isEmpty()) {
-      <tr>
-        <td colspan="100%">
-          <div class="flex h-32 w-full items-center justify-center text-slate-500">
-            <span>Нет данных</span>
-          </div>
-        </td>
-      </tr>
-    } @else {
-      <ng-content></ng-content>
-    }
+
+  <tbody role="rowgroup">
+    <ng-container rowOutlet />
   </tbody>
+
+  <ng-container noDataRowOutlet />
+  <ng-container footerRowOutlet />
 </table>

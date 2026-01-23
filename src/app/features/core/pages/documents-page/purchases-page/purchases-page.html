@@ -51,99 +51,122 @@
 
     <!-- Data Table -->
     <ui-card>
-      <ui-table [loading]="purchases.isLoading()" [isEmpty]="!filteredPurchases().length">
-        <tr header>
-          <th style="width: 80px">Код</th>
-          <th style="width: 120px">Статус</th>
-          <th style="width: 140px">Дата</th>
-          <th>Поставщик</th>
-          <th>Магазин</th>
-          <th style="width: 160px">Сумма</th>
-          <th style="width: 120px" class="text-right">Действия</th>
-        </tr>
+      <ui-table [dataSource]="filteredPurchases()">
+        <ng-container cdkColumnDef="id">
+          <th *cdkHeaderCellDef cdk-header-cell>ID</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            {{ element.id }}
+          </td>
+        </ng-container>
 
-        @for (row of filteredPurchases(); track row.id) {
-          <tr class="hover:bg-slate-50/50">
-            <!-- Code -->
-            <td>
-              <span class="font-mono text-slate-500">#{{ row.code || '-' }}</span>
-            </td>
+        <ng-container cdkColumnDef="code">
+          <th *cdkHeaderCellDef cdk-header-cell>Код</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <span class="font-mono text-slate-500">#{{ element.code || '-' }}</span>
+          </td>
+        </ng-container>
 
-            <!-- Status -->
-            <td>
-              <app-document-status [status]="row.status" />
-            </td>
+        <ng-container cdkColumnDef="status">
+          <th *cdkHeaderCellDef cdk-header-cell>Статус</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <app-document-status [status]="element.status" />
+          </td>
+        </ng-container>
 
-            <!-- Date -->
-            <td>
-              <div class="flex items-center gap-2">
-                <ui-icon width="16" height="16" name="outline-calendar" class="text-slate-400" />
-                <span>{{ row.date | date }}</span>
-              </div>
-            </td>
+        <ng-container cdkColumnDef="date">
+          <th *cdkHeaderCellDef cdk-header-cell>Дата</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <div class="flex items-center gap-2">
+              <ui-icon width="16" height="16" name="outline-calendar" class="text-slate-400" />
+              <span>{{ element.date | date }}</span>
+            </div>
+          </td>
+        </ng-container>
 
-            <!-- Vendor -->
-            <td>
-              <div class="flex items-center gap-2">
-                <ui-icon width="16" height="16" name="outline-truck" class="text-slate-400" />
-                <span class="truncate">{{ row.vendor?.name || '-' }}</span>
-              </div>
-            </td>
+        <ng-container cdkColumnDef="vendor">
+          <th *cdkHeaderCellDef cdk-header-cell>Поставщик</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <div class="flex items-center gap-2">
+              <ui-icon width="16" height="16" name="outline-truck" class="text-slate-400" />
+              <span>{{ element.vendor?.name || '-' }}</span>
+            </div>
+          </td>
+        </ng-container>
 
-            <!-- Store -->
-            <td>
-              <div class="flex items-center gap-2">
-                <ui-icon
-                  width="16"
-                  height="16"
-                  name="outline-building-store"
-                  class="text-slate-400"
-                />
-                <span class="truncate">{{ row.store.name || '-' }}</span>
-              </div>
-            </td>
+        <ng-container cdkColumnDef="store">
+          <th *cdkHeaderCellDef cdk-header-cell>Магазин</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <div class="flex items-center gap-2">
+              <ui-icon
+                width="16"
+                height="16"
+                name="outline-building-store"
+                class="text-slate-400"
+              />
+              <span>{{ element.store?.name || '-' }}</span>
+            </div>
+          </td>
+        </ng-container>
 
-            <!-- Total -->
-            <td>
-              <span class="font-bold text-slate-900"> {{ row.total | number: '1.0-0' }} UZS </span>
-            </td>
+        <ng-container cdkColumnDef="total">
+          <th *cdkHeaderCellDef cdk-header-cell>Сумма</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <span class="font-bold text-slate-900">
+              {{ element.total | number: '1.0-0' }} UZS
+            </span>
+          </td>
+        </ng-container>
 
-            <!-- Actions -->
-            <td class="text-right">
-              <div class="flex items-center justify-end gap-1">
-                @if (row.status === DocumentStatus.DRAFT) {
-                  <button
-                    uiButton
-                    variant="ghost"
-                    size="sm"
-                    (click)="updateStatus(row.id, DocumentStatus.COMPLETED)"
-                  >
-                    Провести
-                  </button>
-                } @else if (
-                  row.status === DocumentStatus.COMPLETED || row.status === DocumentStatus.SCHEDULED
-                ) {
-                  <button
-                    uiButton
-                    variant="ghost"
-                    size="sm"
-                    (click)="updateStatus(row.id, DocumentStatus.DRAFT)"
-                  >
-                    Отменить проведение
-                  </button>
-                }
+        <ng-container cdkColumnDef="action">
+          <th *cdkHeaderCellDef cdk-header-cell class="text-right"></th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <div class="flex items-center justify-end gap-1">
+              @if (element.status === DocumentStatus.DRAFT) {
                 <button
                   uiButton
                   variant="ghost"
                   size="sm"
-                  iconOnly
-                  icon="outline-eye"
-                  (click)="openDetails(row)"
-                ></button>
-              </div>
-            </td>
-          </tr>
-        }
+                  (click)="updateStatus(element.id, DocumentStatus.COMPLETED)"
+                >
+                  Провести
+                </button>
+              } @else if (
+                element.status === DocumentStatus.COMPLETED ||
+                element.status === DocumentStatus.SCHEDULED
+              ) {
+                <button
+                  uiButton
+                  variant="ghost"
+                  size="sm"
+                  (click)="updateStatus(element.id, DocumentStatus.DRAFT)"
+                >
+                  Отменить проведение
+                </button>
+              }
+              <button
+                uiButton
+                variant="ghost"
+                size="sm"
+                iconOnly
+                icon="outline-eye"
+                (click)="openDetails(element)"
+              ></button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr *cdkHeaderRowDef="displayedColumns" cdk-header-row></tr>
+        <tr *cdkRowDef="let row; columns: displayedColumns" cdk-row></tr>
+
+        <tr *cdkNoDataRow>
+          <td [attr.colspan]="displayedColumns.length">
+            <ui-empty-state
+              title="Закупки не найдены"
+              icon="outline-file-text"
+              description="Попробуйте изменить параметры поиска"
+            />
+          </td>
+        </tr>
       </ui-table>
     </ui-card>
   }

@@ -21,11 +21,11 @@
   /* success (Active) */
   &.ui-badge-variant-success {
     &.ui-badge-mode-subtle {
-      @apply border-transparent bg-emerald-50 text-emerald-700;
+      @apply bg-primary-50 border-transparent text-emerald-700;
     }
 
     &.ui-badge-mode-solid {
-      @apply border-transparent bg-emerald-600 text-white;
+      @apply bg-primary-600 border-transparent text-white;
     }
   }
 

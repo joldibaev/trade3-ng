@@ -31,7 +31,7 @@
 
   &.ui-button-variant-dashed {
     @apply border-2 border-dashed border-slate-200 bg-transparent text-slate-500;
-    @apply hover:border-emerald-300 hover:bg-emerald-50/50 hover:text-emerald-600;
+    @apply hover:bg-primary-50/50 hover:border-emerald-300 hover:text-emerald-600;
   }
 
   /* sizes */

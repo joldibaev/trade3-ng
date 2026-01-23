@@ -6,7 +6,7 @@
   <div class="mx-auto max-w-5xl space-y-6 p-6">
     <!-- Success Message (Mock logic for visual) -->
     <!-- @if (showSuccess()) {
-      <div class="fixed top-6 right-6 z-50 flex animate-fade-in items-center gap-3 rounded-lg bg-emerald-600 px-4 py-3 text-white shadow-lg">
+      <div class="fixed top-6 right-6 z-50 flex animate-fade-in items-center gap-3 rounded-lg bg-primary-600 px-4 py-3 text-white shadow-lg">
         <ui-icon name="outline-check" width="20" height="20" />
         <span class="font-medium">Товар успешно обновлён!</span>
       </div>
@@ -42,7 +42,7 @@
           uiButton
           variant="primary"
           icon="outline-device-desktop"
-          class="bg-emerald-600 text-white hover:bg-emerald-700"
+          class="bg-primary-600 hover:bg-primary-700 text-white"
           [disabled]="loading()"
           (click)="save()"
         >
@@ -58,7 +58,7 @@
         <!-- General Info Card -->
         <ui-card class="p-6">
           <div class="mb-6 flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50">
+            <div class="bg-primary-50 flex h-10 w-10 items-center justify-center rounded-lg">
               <ui-icon name="outline-box" width="20" height="20" class="text-emerald-600" />
             </div>
             <h3 class="text-lg font-semibold text-slate-900">Общая информация</h3>
@@ -181,7 +181,7 @@
               variant="primary"
               size="sm"
               icon="outline-plus"
-              class="bg-emerald-600 text-white hover:bg-emerald-700"
+              class="bg-primary-600 hover:bg-primary-700 text-white"
               (click)="addBarcode()"
             >
               Добавить штрихкод
@@ -309,7 +309,7 @@
               variant="primary"
               size="sm"
               icon="outline-plus"
-              class="bg-emerald-600 text-white hover:bg-emerald-700"
+              class="bg-primary-600 hover:bg-primary-700 text-white"
               (click)="addPriceType()"
             >
               Тип цены
@@ -323,7 +323,7 @@
               >
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
-                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                    <span class="bg-primary-500 h-2 w-2 rounded-full"></span>
                     <span class="text-sm font-medium text-slate-900">{{ priceItem.name }}</span>
                   </div>
                   @if (salesPrices().length > 1) {
@@ -387,7 +387,7 @@
           </div>
 
           @if (salesPrices().length > 1 && +formState().costPrice > 0) {
-            <div class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+            <div class="bg-primary-50 mt-4 rounded-lg border border-emerald-200 p-3">
               <div class="flex items-center justify-between">
                 <span class="text-sm font-medium text-emerald-900"> Средняя наценка </span>
                 <span class="text-lg font-semibold text-emerald-600"> {{ averageMarkup() }}% </span>

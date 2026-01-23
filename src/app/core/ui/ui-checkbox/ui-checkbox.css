@@ -5,7 +5,7 @@
   @apply focus-ring bg-white;
 
   &.ui-checkbox-checked {
-    @apply border-emerald-600 bg-emerald-600 text-white;
+    @apply bg-primary-600 border-emerald-600 text-white;
   }
 
   &.ui-checkbox-disabled {

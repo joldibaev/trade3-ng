@@ -1,5 +1,17 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { DecimalPipe, SlicePipe } from '@angular/common'; // Added SlicePipe
+import {
+  CdkCell,
+  CdkCellDef,
+  CdkColumnDef,
+  CdkHeaderCell,
+  CdkHeaderCellDef,
+  CdkHeaderRow,
+  CdkHeaderRowDef,
+  CdkNoDataRow,
+  CdkRow,
+  CdkRowDef,
+} from '@angular/cdk/table';
+import { DecimalPipe } from '@angular/common'; // Added SlicePipe
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,13 +23,13 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
-import { ToStringPipe } from '../../../../../core/pipes/to-string-pipe';
 import { ClientsService } from '../../../../../core/services/clients.service';
-import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge'; // Added UiBadge
+import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
+import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
 import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
@@ -37,13 +49,22 @@ import { ClientDialog } from './client-dialog/client-dialog';
     UiCard,
     UiIcon,
     UiLoading,
-    UiTable,
     DecimalPipe,
     UiInput,
     FormField,
+    UiTable,
+    CdkColumnDef,
+    CdkHeaderCellDef,
+    CdkHeaderCell,
+    CdkCellDef,
+    CdkCell,
+    CdkHeaderRow,
+    CdkHeaderRowDef,
+    CdkRowDef,
+    CdkRow,
     UiBadge,
-    ToStringPipe,
-    SlicePipe,
+    CdkNoDataRow,
+    UiEmptyState,
   ],
   templateUrl: './clients-page.html',
   styleUrl: './clients-page.css',
@@ -56,6 +77,15 @@ export class ClientsPage {
   private clientsService = inject(ClientsService);
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
+
+  displayedColumns: (keyof Client | 'action')[] = [
+    'id',
+    'name',
+    'phone',
+    'address',
+    'isActive',
+    'action',
+  ];
 
   // State
   selectedClient = signal<Client | undefined>(undefined);
@@ -77,19 +107,19 @@ export class ClientsPage {
         label: 'Всего клиентов',
         value: list.length,
         icon: 'outline-users' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Активных клиентов',
         value: list.filter((c) => c.isActive).length,
         icon: 'outline-users' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Общая выручка',
         value: totalPurchases,
         icon: 'outline-users' as IconName,
-        color: 'bg-emerald-50 text-emerald-600',
+        color: 'bg-primary-50 text-emerald-600',
       },
     ];
   });
