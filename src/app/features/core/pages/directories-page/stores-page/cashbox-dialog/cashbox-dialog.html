@@ -1,5 +1,5 @@
 <ui-dialog [title]="isEdit() ? 'Редактировать кассу' : 'Создать кассу'" (closeAction)="close()">
-  <form id="cashbox-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+  <form id="cashbox-form" class="space-y-4" (ngSubmit)="save()">
     <ui-input
       label="Название кассы"
       placeholder="Введите название кассы"

@@ -81,7 +81,7 @@ import { CategoryDialog } from './category-dialog/category-dialog';
   styleUrl: './nomenclature-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-4',
+    class: 'space-y-4',
   },
 })
 export class NomenclaturePage {
@@ -106,7 +106,7 @@ export class NomenclaturePage {
     return categoryId ? [categoryId] : ['all'];
   });
 
-  displayedColumns: (keyof Product | 'action')[] = [
+  displayedColumns: (keyof Product | string)[] = [
     'name',
     'article',
     'category',

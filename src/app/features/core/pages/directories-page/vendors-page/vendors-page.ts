@@ -70,7 +70,7 @@ import { VendorDialog } from './vendor-dialog/vendor-dialog';
   styleUrl: './vendors-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-4',
+    class: 'space-y-4',
   },
 })
 export class VendorsPage {
@@ -78,7 +78,7 @@ export class VendorsPage {
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
 
-  displayedColumns: (keyof Vendor | 'action')[] = [
+  displayedColumns: (keyof Vendor | string)[] = [
     'id',
     'name',
     'phone',

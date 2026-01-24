@@ -72,7 +72,7 @@ import { PriceTypeDialog } from './price-type-dialog/price-type-dialog';
   styleUrl: './price-types-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-4',
+    class: 'space-y-4',
   },
 })
 export class PriceTypesPage {
@@ -80,7 +80,7 @@ export class PriceTypesPage {
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
 
-  displayedColumns: (keyof PriceType | 'action')[] = ['id', 'name', 'isActive', 'action'];
+  displayedColumns: (keyof PriceType | string)[] = ['id', 'name', 'isActive', 'action'];
 
   // State
   selectedPriceType = signal<PriceType | undefined>(undefined);

@@ -1,7 +1,7 @@
 @reference './../../../../styles.css';
 
 .ui-tree {
-  @apply flex flex-col gap-1;
+  @apply space-y-1;
 }
 
 .ui-tree-item {

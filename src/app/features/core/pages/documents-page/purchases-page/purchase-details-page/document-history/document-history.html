@@ -1,0 +1,52 @@
+<ui-card class="p-6">
+  <div class="mb-4 flex items-center gap-2">
+    <ui-icon name="outline-clock" class="h-5 w-5 text-slate-600" />
+    <h2 class="text-lg font-semibold">
+      История <span class="font-normal text-slate-400">({{ viewModels().length }})</span>
+    </h2>
+  </div>
+
+  <div class="space-y-4">
+    @for (vm of viewModels(); track vm.id) {
+      <div class="flex gap-4">
+        <div
+          class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+          [class]="vm.bgColor + ' ' + vm.iconColor"
+        >
+          <ui-icon size="sm" [name]="vm.icon" />
+        </div>
+
+        <div class="flex-1">
+          <div class="mb-1 text-sm leading-relaxed text-balance" [innerHTML]="vm.title"></div>
+
+          @if (vm.details) {
+            <div class="mb-2 text-xs text-slate-500" [innerHTML]="vm.details"></div>
+          }
+
+          <div
+            class="mt-1 flex items-center gap-2 text-[10px] font-medium tracking-wider text-slate-400 uppercase"
+          >
+            <div class="flex items-center gap-1">
+              <ui-icon name="outline-clock" class="h-3 w-3" />
+              <time>{{ vm.createdAt | date: 'dd MMM, HH:mm' }}</time>
+            </div>
+            @if (vm.userId) {
+              <div class="flex items-center gap-1">
+                <span>•</span>
+                <ui-icon name="outline-user" class="h-3 w-3" />
+                <span>{{ vm.userId }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (!viewModels().length) {
+      <div class="py-8 text-center text-slate-500">
+        <ui-icon name="outline-clock" class="mx-auto mb-3 h-12 w-12 opacity-30" />
+        <p class="text-sm">История изменений пуста</p>
+      </div>
+    }
+  </div>
+</ui-card>

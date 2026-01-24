@@ -1,5 +1,5 @@
 <ui-dialog [title]="isEdit() ? 'Редактировать магазин' : 'Создать магазин'" (closeAction)="close()">
-  <form id="store-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+  <form id="store-form" class="space-y-4" (ngSubmit)="save()">
     <ui-input
       label="Название магазина"
       placeholder="Введите название магазина"

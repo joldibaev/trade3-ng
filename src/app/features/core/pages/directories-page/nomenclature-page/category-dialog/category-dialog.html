@@ -2,7 +2,7 @@
   [title]="isEdit() ? 'Редактировать категорию' : 'Создать категорию'"
   (closeAction)="close()"
 >
-  <form id="category-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+  <form id="category-form" class="space-y-4" (ngSubmit)="save()">
     <ui-input
       label="Название"
       placeholder="Введите название категории"

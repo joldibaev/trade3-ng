@@ -70,7 +70,7 @@ import { ClientDialog } from './client-dialog/client-dialog';
   styleUrl: './clients-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-4',
+    class: 'space-y-4',
   },
 })
 export class ClientsPage {
@@ -78,7 +78,7 @@ export class ClientsPage {
   private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
 
-  displayedColumns: (keyof Client | 'action')[] = [
+  displayedColumns: (keyof Client | string)[] = [
     'id',
     'name',
     'phone',

@@ -2,7 +2,7 @@
   [title]="isEdit() ? 'Редактировать поставщика' : 'Создать поставщика'"
   (closeAction)="close()"
 >
-  <form id="vendor-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+  <form id="vendor-form" class="space-y-4" (ngSubmit)="save()">
     <ui-input
       label="Наименование"
       placeholder="Введите имя поставщика"

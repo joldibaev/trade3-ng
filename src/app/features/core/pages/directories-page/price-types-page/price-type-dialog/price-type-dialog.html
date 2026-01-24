@@ -2,7 +2,7 @@
   [title]="isEdit() ? 'Редактировать тип цены' : 'Создать тип цены'"
   (closeAction)="close()"
 >
-  <form id="price-type-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+  <form id="price-type-form" class="space-y-4" (ngSubmit)="save()">
     <ui-input label="Наименование" placeholder="Введите название" [formField]="formData.name" />
     <div class="flex items-center justify-between rounded-lg border border-slate-200 p-3">
       <div>

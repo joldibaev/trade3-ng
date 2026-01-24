@@ -1,5 +1,5 @@
 <ui-dialog [title]="isEdit() ? 'Редактировать клиента' : 'Создать клиента'" (closeAction)="close()">
-  <form id="client-form" class="flex flex-col gap-4" (ngSubmit)="save()">
+  <form id="client-form" class="space-y-4" (ngSubmit)="save()">
     <ui-input label="Наименование" placeholder="Введите имя клиента" [formField]="formData.name" />
     <ui-input label="Телефон" placeholder="Введите телефон" [formField]="formData.phone" />
     <ui-input label="Email" placeholder="Введите email" [formField]="formData.email" />

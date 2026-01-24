@@ -68,7 +68,7 @@ import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DatePipe],
   host: {
-    class: 'flex flex-col gap-4 h-full',
+    class: 'space-y-4',
   },
 })
 export class PurchasesPage {
@@ -78,7 +78,7 @@ export class PurchasesPage {
   private destroyRef = inject(DestroyRef);
   private notyf = inject(UiNotyfService);
 
-  displayedColumns: (keyof DocumentPurchase | 'action')[] = [
+  displayedColumns: (keyof DocumentPurchase | string)[] = [
     'id',
     'code',
     'date',

@@ -3,7 +3,20 @@
 .ui-button {
   @apply inline-flex cursor-pointer items-center justify-center gap-2 border border-transparent outline-none;
   @apply default-transition rounded-squircle focus-ring rounded-lg leading-none active:scale-[0.98];
-  @apply font-medium;
+  @apply align-middle font-medium;
+
+  /* sizes */
+  &.ui-button-size-sm {
+    @apply h-8 px-3 text-sm;
+  }
+
+  &.ui-button-size-md {
+    @apply h-10 px-4 text-sm;
+  }
+
+  &.ui-button-size-lg {
+    @apply h-12 px-6 text-base;
+  }
 
   /* variants */
   &.ui-button-variant-primary {
@@ -16,6 +29,7 @@
 
   &.ui-button-variant-ghost {
     @apply text-slate-700 hover:bg-slate-100;
+
     &.active {
       @apply bg-primary-50 text-primary-600;
     }
@@ -32,19 +46,6 @@
   &.ui-button-variant-dashed {
     @apply border-2 border-dashed border-slate-200 bg-transparent text-slate-500;
     @apply hover:bg-primary-50/50 hover:border-emerald-300 hover:text-emerald-600;
-  }
-
-  /* sizes */
-  &.ui-button-size-sm {
-    @apply px-3 py-1.5 text-sm;
-  }
-
-  &.ui-button-size-md {
-    @apply px-4 py-2.5 text-sm;
-  }
-
-  &.ui-button-size-lg {
-    @apply px-6 py-3.5 text-base;
   }
 
   /* Square icon state */
