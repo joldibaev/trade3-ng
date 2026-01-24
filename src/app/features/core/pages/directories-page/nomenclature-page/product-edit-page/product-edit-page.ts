@@ -19,6 +19,7 @@ import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../../core/ui/ui-card/ui-card';
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiLoading } from '../../../../../../core/ui/ui-loading/ui-loading';
+import { BarcodeType } from '../../../../../../shared/interfaces/constants';
 import { Category } from '../../../../../../shared/interfaces/entities/category.interface';
 import { Product } from '../../../../../../shared/interfaces/entities/product.interface';
 
@@ -164,7 +165,7 @@ export class ProductEditPage implements OnInit {
         if (this.id()) {
           this.initialLoading.set(true);
           this.productsService
-            .fetchById(this.id()!, ['barcodes', 'stocks', 'prices', 'prices.priceType'] as any)
+            .fetchById(this.id()!, ['barcodes', 'stocks', 'prices'])
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((product) => {
               if (product) {
@@ -305,7 +306,7 @@ export class ProductEditPage implements OnInit {
           this.barcodesService.create({
             value: cb.value,
             productId: product.id,
-            type: cb.type as any,
+            type: cb.type as BarcodeType,
           }),
         );
       }

@@ -9,17 +9,17 @@ import { Vendor } from './vendor.interface';
 
 export interface DocumentPurchase {
   id: string;
-  code?: number;
-  date?: string;
+  code: string;
+  date: string;
   vendor?: Vendor;
   vendorId?: string;
   store: Store;
   storeId: string;
-  total?: number;
+  total: number;
   items: DocumentPurchaseItem[];
-  status?: DocumentStatus;
+  status: DocumentStatus;
   notes?: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
   documentLedger: DocumentLedger[];

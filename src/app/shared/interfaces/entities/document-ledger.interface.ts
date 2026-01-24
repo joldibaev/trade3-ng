@@ -21,7 +21,7 @@ export interface DocumentLedger {
   documentTransferId?: string;
   documentPriceChange?: DocumentPriceChange;
   documentPriceChangeId?: string;
-  date?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  date: string;
+  createdAt: string;
+  updatedAt: string;
 }

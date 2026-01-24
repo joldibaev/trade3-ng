@@ -14,6 +14,7 @@ import { Stock } from './stock.interface';
 
 export interface Product {
   id: string;
+  code: string;
   name: string;
   article?: string;
   category: Category;
@@ -30,7 +31,7 @@ export interface Product {
   barcodes: Barcode[];
   stockLedger: StockLedger[];
   inventoryReprocessingItems: InventoryReprocessingItem[];
-  isActive?: boolean;
-  createdAt?: string;
+  isActive: boolean;
+  createdAt: string;
   updatedAt: string;
 }

@@ -1,0 +1,41 @@
+@if (purchase.hasValue()) {
+  <ui-title [title]="`Закупка ${purchase.value().code}`" [caption]="`ID: ${purchase.value().id}`" />
+
+  {{ purchase.value() | json }}
+
+  <div class="grid grid-cols-3 gap-4">
+    <ui-card class="col-span-2 p-4">
+      <h2 class="mb-4 font-medium">Общая информация</h2>
+
+      <ui-list>
+        <ui-list-item label="Дата документа">{{ purchase.value().date | date }}</ui-list-item>
+        <ui-list-item label="Склад">{{ purchase.value().store.name }}</ui-list-item>
+        <ui-list-item label="Поставщик">{{ purchase.value().vendor?.name }}</ui-list-item>
+        <ui-list-item label="Количество позиций">{{ purchase.value().items.length }}</ui-list-item>
+
+        @if (purchase.value().notes) {
+          <ui-list-item label="Примечания">
+            <p>{{ purchase.value().notes }}</p>
+          </ui-list-item>
+        }
+      </ui-list>
+    </ui-card>
+
+    <div class="flex flex-col gap-4">
+      <ui-card class="col-span-2 p-4">
+        <h2 class="mb-4 font-medium">Служебная информация</h2>
+
+        <ui-list>
+          <ui-list-item label="Создан">{{ purchase.value().createdAt | date }}</ui-list-item>
+          <ui-list-item label="Изменен">{{ purchase.value().updatedAt | date }}</ui-list-item>
+        </ui-list>
+      </ui-card>
+
+      <ui-card class="col-span-2 flex-auto p-4">
+        <h2 class="mb-4 font-medium">Итого</h2>
+
+        <div class="text-primary-500 text-3xl font-semibold">{{ purchase.value().total }} UZS</div>
+      </ui-card>
+    </div>
+  </div>
+}

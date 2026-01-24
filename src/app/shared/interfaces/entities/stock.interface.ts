@@ -3,12 +3,12 @@ import { Store } from './store.interface';
 
 export interface Stock {
   id: string;
-  quantity?: number;
-  averagePurchasePrice?: number;
+  quantity: number;
+  averagePurchasePrice: number;
   product: Product;
   productId: string;
   store: Store;
   storeId: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
 }

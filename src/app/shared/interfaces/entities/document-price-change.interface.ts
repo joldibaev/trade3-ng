@@ -6,12 +6,12 @@ import { PriceLedger } from './price-ledger.interface';
 
 export interface DocumentPriceChange {
   id: string;
-  code?: number;
-  date?: string;
-  status?: DocumentStatus;
+  code: string;
+  date: string;
+  status: DocumentStatus;
   notes?: string;
   items: DocumentPriceChangeItem[];
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
   documentLedger: DocumentLedger[];
   generatedPriceLedger: PriceLedger[];

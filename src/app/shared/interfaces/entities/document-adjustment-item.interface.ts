@@ -8,8 +8,8 @@ export interface DocumentAdjustmentItem {
   product: Product;
   productId: string;
   quantity: number;
-  quantityBefore?: number;
-  quantityAfter?: number;
-  createdAt?: string;
+  quantityBefore: number;
+  quantityAfter: number;
+  createdAt: string;
   updatedAt: string;
 }

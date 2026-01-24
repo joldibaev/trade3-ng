@@ -8,17 +8,17 @@ import { Store } from './store.interface';
 
 export interface DocumentReturn {
   id: string;
-  code?: number;
-  date?: string;
+  code: string;
+  date: string;
   store: Store;
   storeId: string;
   client?: Client;
   clientId?: string;
-  total?: number;
+  total: number;
   items: DocumentReturnItem[];
-  status?: DocumentStatus;
+  status: DocumentStatus;
   notes?: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
   documentLedger: DocumentLedger[];

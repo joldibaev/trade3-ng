@@ -10,6 +10,6 @@ export interface DocumentPurchaseItem {
   quantity: number;
   price: number;
   total: number;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
 }

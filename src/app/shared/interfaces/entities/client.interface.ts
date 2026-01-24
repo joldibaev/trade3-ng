@@ -9,7 +9,7 @@ export interface Client {
   address?: string;
   sales: DocumentSale[];
   returns: DocumentReturn[];
-  isActive?: boolean;
-  createdAt?: string;
+  isActive: boolean;
+  createdAt: string;
   updatedAt: string;
 }

@@ -7,7 +7,7 @@ export interface Cashbox {
   store: Store;
   storeId: string;
   sales: DocumentSale[];
-  isActive?: boolean;
-  createdAt?: string;
+  isActive: boolean;
+  createdAt: string;
   updatedAt: string;
 }

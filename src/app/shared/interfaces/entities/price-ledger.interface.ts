@@ -4,7 +4,7 @@ import { Product } from './product.interface';
 
 export interface PriceLedger {
   id: string;
-  valueBefore?: number;
+  valueBefore: number;
   value: number;
   product: Product;
   productId: string;
@@ -13,7 +13,7 @@ export interface PriceLedger {
   documentPriceChange?: DocumentPriceChange;
   documentPriceChangeId?: string;
   batchId?: string;
-  date?: string;
-  createdAt?: string;
+  date: string;
+  createdAt: string;
   updatedAt: string;
 }

@@ -14,9 +14,9 @@ export interface Store {
   address?: string;
   phone?: string;
   workingHours?: string;
-  isActive?: boolean;
+  isActive: boolean;
   cashboxes: Cashbox[];
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
   stocks: Stock[];
   sales: DocumentSale[];

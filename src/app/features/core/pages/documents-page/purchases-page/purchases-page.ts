@@ -96,27 +96,27 @@ export class PurchasesPage {
 
   // Resources
   purchases = this.documentPurchasesService.getAll();
+  summary = this.documentPurchasesService.getSummary();
 
   stats = computed(() => {
-    const list = this.purchases.value() || [];
-    const totalSum = list.reduce((sum, item) => sum + (item.total || 0), 0);
+    const data = this.summary.value();
 
     return [
       {
         label: 'Всего закупок',
-        value: list.length,
+        value: data?.totalCount || 0,
         icon: 'outline-file-text' as IconName,
         color: 'bg-indigo-50 text-indigo-600',
       },
       {
         label: 'Проведено',
-        value: list.filter((i) => i.status === DocumentStatus.COMPLETED).length,
+        value: data?.completedCount || 0,
         icon: 'outline-check' as IconName,
         color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Сумма закупок',
-        value: totalSum,
+        value: data?.totalAmount || 0,
         icon: 'outline-cash' as IconName,
         color: 'bg-primary-50 text-emerald-600',
         isCurrency: true,

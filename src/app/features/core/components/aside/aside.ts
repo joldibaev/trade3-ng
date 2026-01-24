@@ -1,8 +1,8 @@
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UiButton } from '../../../../core/ui/ui-button/ui-button';
 import { IconName } from '../../../../core/ui/ui-icon/data';
-import { NgOptimizedImage } from '@angular/common';
 
 interface NavItem {
   id: string;

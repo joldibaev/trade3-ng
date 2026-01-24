@@ -1,4 +1,5 @@
 export interface CreateProductDto {
+  code: string;
   name: string;
   article?: string;
   categoryId: string;

@@ -8,6 +8,6 @@ export interface DocumentTransferItem {
   product: Product;
   productId: string;
   quantity: number;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
 }

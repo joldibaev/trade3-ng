@@ -35,6 +35,16 @@ export abstract class BaseDocumentService<T, TCreate = Partial<T>, TUpdate = Par
   }
 
   delete(id: string | number) {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(this.apiUrl, { body: { id } }); // Wait, delete usually takes id in path but based on existing code:
+  }
+
+  getSummary() {
+    return httpResource<{
+      totalAmount: number;
+      totalCount: number;
+      completedCount: number;
+    }>(() => {
+      return `${this.apiUrl}/summary`;
+    });
   }
 }

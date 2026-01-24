@@ -8,6 +8,6 @@ export interface Price {
   productId: string;
   priceType: PriceType;
   priceTypeId: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
 }

@@ -1,0 +1,9 @@
+<div class="text-sm text-slate-500">
+  @if (icon(); as icon) {
+    <ui-icon width="16" height="16" [name]="icon" />
+  }
+
+  <span>{{ label() }}</span>
+</div>
+
+<ng-content />

@@ -4,9 +4,9 @@ import { Product } from './product.interface';
 export interface Barcode {
   id: string;
   value: string;
-  type?: BarcodeType;
+  type: BarcodeType;
   product: Product;
   productId: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
 }

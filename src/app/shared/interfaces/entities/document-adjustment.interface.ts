@@ -7,14 +7,14 @@ import { Store } from './store.interface';
 
 export interface DocumentAdjustment {
   id: string;
-  code?: number;
-  date?: string;
+  code: string;
+  date: string;
   store: Store;
   storeId: string;
   items: DocumentAdjustmentItem[];
-  status?: DocumentStatus;
+  status: DocumentStatus;
   notes?: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
   documentLedger: DocumentLedger[];

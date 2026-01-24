@@ -9,8 +9,8 @@ export interface DocumentSaleItem {
   productId: string;
   quantity: number;
   price: number;
-  costPrice?: number;
+  costPrice: number;
   total: number;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
 }

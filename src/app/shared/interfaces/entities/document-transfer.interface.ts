@@ -7,16 +7,16 @@ import { Store } from './store.interface';
 
 export interface DocumentTransfer {
   id: string;
-  code?: number;
-  date?: string;
+  code: string;
+  date: string;
   sourceStore: Store;
   sourceStoreId: string;
   destinationStore: Store;
   destinationStoreId: string;
   items: DocumentTransferItem[];
-  status?: DocumentStatus;
+  status: DocumentStatus;
   notes?: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
   documentLedger: DocumentLedger[];

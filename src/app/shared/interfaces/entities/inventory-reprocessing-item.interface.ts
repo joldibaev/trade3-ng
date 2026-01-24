@@ -15,6 +15,6 @@ export interface InventoryReprocessingItem {
   oldQuantity: number;
   newQuantity: number;
   affectedLedgerCount: number;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
 }

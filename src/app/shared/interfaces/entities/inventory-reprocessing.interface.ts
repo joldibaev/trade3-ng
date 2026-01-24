@@ -7,7 +7,7 @@ import { InventoryReprocessingItem } from './inventory-reprocessing-item.interfa
 
 export interface InventoryReprocessing {
   id: string;
-  date?: string;
+  date: string;
   status: string;
   documentPurchase?: DocumentPurchase;
   documentPurchaseId?: string;
@@ -20,6 +20,6 @@ export interface InventoryReprocessing {
   documentTransfer?: DocumentTransfer;
   documentTransferId?: string;
   items: InventoryReprocessingItem[];
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
 }

@@ -10,21 +10,21 @@ import { Store } from './store.interface';
 
 export interface DocumentSale {
   id: string;
-  code?: number;
-  date?: string;
+  code: string;
+  date: string;
   store: Store;
   storeId: string;
   cashbox?: Cashbox;
   cashboxId?: string;
   client?: Client;
   clientId?: string;
-  total?: number;
+  total: number;
   items: DocumentSaleItem[];
-  status?: DocumentStatus;
+  status: DocumentStatus;
   priceType?: PriceType;
   priceTypeId?: string;
   notes?: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
   documentLedger: DocumentLedger[];

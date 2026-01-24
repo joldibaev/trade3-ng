@@ -12,6 +12,6 @@ export interface DocumentPriceChangeItem {
   priceTypeId: string;
   oldValue: number;
   newValue: number;
-  createdAt?: string;
+  createdAt: string;
   updatedAt: string;
 }
