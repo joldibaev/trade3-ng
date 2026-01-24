@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 import { UiFormControl } from '../ui-form-control';
 import { UiIcon } from '../ui-icon/ui-icon.component';
 import { UiLoading } from '../ui-loading/ui-loading';
+import { InputType } from './input-type.type';
 
 @Component({
   selector: 'ui-input-number',
@@ -15,6 +16,8 @@ import { UiLoading } from '../ui-loading/ui-loading';
 })
 export class UiInputNumber extends UiFormControl<number> {
   value = model(0);
+
+  override type = input<InputType>('number');
 
   protected override getIdPrefix(): string {
     return 'input';
