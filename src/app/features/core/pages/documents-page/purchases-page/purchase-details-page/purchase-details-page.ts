@@ -11,7 +11,16 @@ import {
   CdkRowDef,
 } from '@angular/cdk/table';
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  input,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { FindPipe } from '../../../../../../core/pipes/find-pipe';
 import { ToNumberPipe } from '../../../../../../core/pipes/to-number-pipe';
 import { DocumentPurchasesService } from '../../../../../../core/services/document-purchases.service';
@@ -23,8 +32,10 @@ import { UiEmptyState } from '../../../../../../core/ui/ui-empty-state/ui-empty-
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiList } from '../../../../../../core/ui/ui-list/ui-list';
 import { UiListItem } from '../../../../../../core/ui/ui-list/ui-list-item/ui-list-item';
+import { UiNotyfService } from '../../../../../../core/ui/ui-notyf/ui-notyf.service';
 import { UiTable } from '../../../../../../core/ui/ui-table/ui-table';
 import { UiTitle } from '../../../../../../core/ui/ui-title/ui-title';
+import { DocumentStatus } from '../../../../../../shared/interfaces/constants';
 import { DocumentPurchaseItem } from '../../../../../../shared/interfaces/entities/document-purchase-item.interface';
 import { DocumentHistory } from './document-history/document-history';
 
@@ -65,6 +76,8 @@ import { DocumentHistory } from './document-history/document-history';
 export class PurchaseDetailsPage {
   private purchaseService = inject(DocumentPurchasesService);
   private priceTypesService = inject(PriceTypesService);
+  private destroyRef = inject(DestroyRef);
+  private notyf = inject(UiNotyfService);
 
   id = input.required<string>();
 
@@ -90,4 +103,33 @@ export class PurchaseDetailsPage {
     });
     return map;
   });
+
+  complete() {
+    this.updateStatus(DocumentStatus.COMPLETED);
+  }
+
+  revert() {
+    this.updateStatus(DocumentStatus.DRAFT);
+  }
+
+  edit() {
+    this.notyf.info('Редактирование будет доступно в ближайшее время');
+  }
+
+  private updateStatus(status: DocumentStatus) {
+    const id = this.id();
+    this.purchaseService
+      .updateStatus(id, status)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notyf.success('Статус документа обновлен');
+          this.purchase.reload();
+        },
+        error: (err) => {
+          this.notyf.error('Ошибка при обновлении статуса');
+          console.error(err);
+        },
+      });
+  }
 }

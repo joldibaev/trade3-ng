@@ -7,11 +7,17 @@
 
     @if (purchase.value().status === 'DRAFT') {
       <div class="space-x-4">
-        <button uiButton icon="outline-checks" variant="primary">Провести</button>
-        <button uiButton icon="outline-edit" variant="secondary">Редактировать</button>
+        <button uiButton icon="outline-checks" variant="primary" (click)="complete()">
+          Провести
+        </button>
+        <button uiButton icon="outline-edit" variant="secondary" (click)="edit()">
+          Редактировать
+        </button>
       </div>
     } @else if (purchase.value().status === 'COMPLETED') {
-      <button uiButton icon="outline-cancel" variant="danger">Отменить проведение</button>
+      <button uiButton icon="outline-cancel" variant="danger" (click)="revert()">
+        Отменить проведение
+      </button>
     }
   </div>
 
