@@ -14,4 +14,8 @@ export class ProductsService extends BaseService<Product> {
       return `${this.apiUrl}?query=${encodeURIComponent(q)}`;
     });
   }
+
+  getLastPurchasePrice(id: string) {
+    return this.http.get<number>(`${this.apiUrl}/${id}/last-purchase-price`);
+  }
 }

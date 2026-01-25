@@ -1,0 +1,143 @@
+<div class="flex flex-col gap-6">
+  <!-- Header -->
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Изменение цен</h1>
+      <p class="text-sm text-slate-500">Управляйте изменениями цен на товары</p>
+    </div>
+    <button uiButton variant="primary" icon="outline-plus" (click)="openCreateDialog()">
+      Создать документ
+    </button>
+  </div>
+
+  @if (priceChanges.isLoading()) {
+    <div class="flex h-64 items-center justify-center">
+      <ui-loading [width]="40" [height]="40" />
+    </div>
+  } @else {
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      @for (stat of stats(); track stat.label) {
+        <ui-card class="flex items-center gap-4 p-6">
+          <div
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-colors duration-200"
+            [class]="stat.color"
+          >
+            <ui-icon width="24" height="24" [name]="stat.icon" />
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
+            <p class="text-2xl font-bold text-slate-900">{{ stat.value }}</p>
+          </div>
+        </ui-card>
+      }
+    </div>
+
+    <!-- Search Area -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+      <ui-input
+        placeholder="Поиск по коду..."
+        class="lg:col-span-1"
+        [formField]="searchForm.query"
+      ></ui-input>
+    </div>
+
+    <!-- Data Table -->
+    <ui-card>
+      <ui-table [dataSource]="filteredPriceChanges()">
+        <ng-container cdkColumnDef="id">
+          <th *cdkHeaderCellDef cdk-header-cell>ID</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            {{ element.id }}
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="code">
+          <th *cdkHeaderCellDef cdk-header-cell>Код</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <span class="font-mono text-slate-500">#{{ element.code || '-' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="status">
+          <th *cdkHeaderCellDef cdk-header-cell>Статус</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <app-document-status [status]="element.status" />
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="date">
+          <th *cdkHeaderCellDef cdk-header-cell>Дата</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <div class="flex items-center gap-2">
+              <ui-icon width="16" height="16" name="outline-calendar" class="text-slate-400" />
+              <span>{{ element.date | date }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="itemsCount">
+          <th *cdkHeaderCellDef cdk-header-cell>Товаров</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <div class="flex items-center gap-2">
+              <ui-icon width="16" height="16" name="outline-tag" class="text-slate-400" />
+              <span class="font-medium">{{ element.items?.length || 0 }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="action">
+          <th *cdkHeaderCellDef cdk-header-cell class="text-right"></th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <div class="flex items-center justify-end gap-1">
+              @if (element.status === DocumentStatus.DRAFT) {
+                <button
+                  uiButton
+                  variant="ghost"
+                  size="sm"
+                  (click)="updateStatus(element.id, DocumentStatus.COMPLETED)"
+                >
+                  Провести
+                </button>
+              } @else if (
+                element.status === DocumentStatus.COMPLETED ||
+                element.status === DocumentStatus.SCHEDULED
+              ) {
+                <button
+                  uiButton
+                  variant="ghost"
+                  size="sm"
+                  (click)="updateStatus(element.id, DocumentStatus.DRAFT)"
+                >
+                  Отменить проведение
+                </button>
+              }
+              <button
+                uiButton
+                variant="ghost"
+                size="sm"
+                iconOnly
+                icon="outline-eye"
+                (click)="openDetails(element)"
+              ></button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr *cdkHeaderRowDef="displayedColumns" cdk-header-row></tr>
+        <tr *cdkRowDef="let row; columns: displayedColumns" cdk-row></tr>
+
+        <tr *cdkNoDataRow>
+          <td [attr.colspan]="displayedColumns.length">
+            <ui-empty-state
+              title="Документы не найдены"
+              icon="outline-file-text"
+              description="Попробуйте изменить параметры поиска"
+            />
+          </td>
+        </tr>
+      </ui-table>
+    </ui-card>
+  }
+</div>

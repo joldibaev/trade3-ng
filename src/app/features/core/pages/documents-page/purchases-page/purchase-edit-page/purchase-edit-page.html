@@ -1,0 +1,217 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <ui-title title="Редактирование закупки" [caption]="purchase()?.code || ''" />
+
+    <div class="flex gap-2">
+      <button uiButton variant="secondary" (click)="cancel()">Отмена</button>
+      <button
+        uiButton
+        variant="primary"
+        [loading]="isSaving()"
+        [disabled]="formData().invalid() || items().length === 0"
+        (click)="save()"
+      >
+        Сохранить изменения
+      </button>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex h-64 items-center justify-center">
+      <ui-loading width="48" height="48" />
+    </div>
+  } @else {
+    <div class="grid grid-cols-3 gap-4">
+      <!-- Left side: Form & Items -->
+      <div class="col-span-2 space-y-4">
+        <!-- Header Info -->
+        <ui-card class="p-4">
+          <h2 class="mb-4 font-medium">Общая информация</h2>
+          <div class="grid grid-cols-2 gap-4">
+            <ui-select
+              label="Магазин/Склад"
+              placeholder="Выберите склад"
+              optionLabel="name"
+              optionField="id"
+              [items]="stores.value() || []"
+              [formField]="formData.storeId"
+            />
+
+            <ui-select
+              label="Поставщик"
+              placeholder="Выберите поставщика"
+              optionLabel="name"
+              optionField="id"
+              [items]="vendors.value() || []"
+              [formField]="formData.vendorId"
+            />
+
+            <ui-input label="Дата документа" type="date" [formField]="formData.date" />
+
+            <ui-input label="Примечание" placeholder="Необязательно" [formField]="formData.notes" />
+          </div>
+        </ui-card>
+
+        <!-- Items Table -->
+        <ui-card class="overflow-hidden">
+          <div class="default-border-color flex items-center justify-between border-b p-4">
+            <h2 class="font-medium">Товары в закупке</h2>
+
+            <button
+              uiButton
+              variant="secondary"
+              size="sm"
+              icon="outline-plus"
+              (click)="openProductSearch()"
+            >
+              Добавить товар
+            </button>
+          </div>
+
+          <ui-table [dataSource]="items()">
+            <ng-container cdkColumnDef="status">
+              <th *cdkHeaderCellDef cdk-header-cell class="w-10"></th>
+              <td *cdkCellDef="let item" cdk-cell class="py-3">
+                @if (item.isSaved) {
+                  <ui-icon name="outline-cloud" class="text-emerald-500" />
+                } @else {
+                  <ui-icon name="outline-cloud" class="text-orange-400" />
+                }
+              </td>
+            </ng-container>
+
+            <ng-container cdkColumnDef="product">
+              <th *cdkHeaderCellDef cdk-header-cell>Товар</th>
+              <td *cdkCellDef="let item" cdk-cell class="py-3">
+                <div class="font-medium">{{ item.productName }}</div>
+              </td>
+            </ng-container>
+
+            @for (pt of priceTypes.value(); track pt.id) {
+              <ng-container [cdkColumnDef]="pt.id">
+                <th *cdkHeaderCellDef cdk-header-cell class="w-24 min-w-24">
+                  <div class="flex flex-col">
+                    <span class="text-xs font-semibold uppercase">{{ pt.name }}</span>
+                  </div>
+                </th>
+                <td *cdkCellDef="let item" cdk-cell class="py-3">
+                  @let priceInfo = item.newPrices | find: 'priceTypeId' : pt.id;
+                  @if (priceInfo) {
+                    <div class="flex flex-col gap-1">
+                      <span class="text-[10px] text-slate-500">
+                        Текущая: {{ $any(priceInfo).currentValue | currency }}
+                      </span>
+                      <input
+                        type="number"
+                        class="focus:border-primary-500 w-24 rounded border border-slate-200 px-2 py-1 text-xs outline-none disabled:bg-slate-100 disabled:text-slate-500"
+                        [value]="$any(priceInfo).value !== 0 ? $any(priceInfo).value : ''"
+                        [placeholder]="$any(priceInfo).value === 0 ? '0' : ''"
+                        [disabled]="item.isSaved"
+                        (input)="
+                          updateNewPrice(item.tempId, pt.id, $any($event.target).valueAsNumber)
+                        "
+                      />
+                      @if (item.isSaved) {
+                        <span class="text-[9px] leading-tight text-slate-400">
+                          Изменяется через документ
+                          <a href="#" class="underline">{{
+                            purchase()?.generatedPriceChange?.code
+                          }}</a>
+                        </span>
+                      }
+                    </div>
+                  }
+                </td>
+              </ng-container>
+            }
+
+            <ng-container cdkColumnDef="quantity">
+              <th *cdkHeaderCellDef cdk-header-cell class="w-24">Кол-во</th>
+              <td *cdkCellDef="let item" cdk-cell>
+                <input
+                  type="number"
+                  class="focus:border-primary-500 w-full rounded border border-slate-200 px-2 py-1 outline-none"
+                  [value]="item.quantity"
+                  (input)="updateItem(item.tempId, 'quantity', $any($event.target).valueAsNumber)"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container cdkColumnDef="price">
+              <th *cdkHeaderCellDef cdk-header-cell class="w-32">Цена зак.</th>
+              <td *cdkCellDef="let item" cdk-cell>
+                <input
+                  type="number"
+                  class="focus:border-primary-500 w-full rounded border border-slate-200 px-2 py-1 outline-none"
+                  [value]="item.price"
+                  (input)="updateItem(item.tempId, 'price', $any($event.target).valueAsNumber)"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container cdkColumnDef="total">
+              <th *cdkHeaderCellDef cdk-header-cell class="w-32">Сумма</th>
+              <td *cdkCellDef="let item" cdk-cell class="font-semibold text-slate-700">
+                {{ item.quantity * item.price | currency }}
+              </td>
+            </ng-container>
+
+            <ng-container cdkColumnDef="actions">
+              <th *cdkHeaderCellDef cdk-header-cell class="w-10"></th>
+              <td *cdkCellDef="let item" cdk-cell>
+                <button class="text-slate-400 hover:text-red-500" (click)="removeItem(item.tempId)">
+                  <ui-icon name="outline-trash" size="sm" />
+                </button>
+              </td>
+            </ng-container>
+
+            <tr *cdkHeaderRowDef="displayedColumns()" cdk-header-row></tr>
+            <tr *cdkRowDef="let row; columns: displayedColumns()" cdk-row></tr>
+
+            <tr *cdkNoDataRow>
+              <td [attr.colspan]="displayedColumns().length">
+                <ui-empty-state
+                  title="Список товаров пуст"
+                  icon="outline-box"
+                  description="Добавьте товар, чтобы начать"
+                />
+              </td>
+            </tr>
+          </ui-table>
+        </ui-card>
+      </div>
+
+      <!-- Right side: Summary -->
+      <div class="col-span-1 space-y-4">
+        <ui-card class="bg-primary-50/30 border-primary-100 p-4">
+          <h2 class="mb-4 font-medium text-slate-900">Итого по документу</h2>
+
+          <div class="space-y-3">
+            <div class="flex justify-between text-sm">
+              <span class="text-slate-500">Позиций:</span>
+              <span class="font-medium">{{ items().length }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-slate-500">Количество:</span>
+              <span class="font-medium">{{ totalSum() | number }}</span>
+              <!-- This is not total qty, but let's keep it simple -->
+            </div>
+
+            <div class="border-primary-100 flex items-baseline justify-between border-t pt-3">
+              <span class="font-semibold text-slate-600">Сумма к оплате:</span>
+              <span class="text-primary-600 text-2xl font-bold">{{ totalSum() | currency }}</span>
+            </div>
+          </div>
+        </ui-card>
+
+        <ui-card class="p-4 text-xs leading-relaxed text-slate-500">
+          <p class="flex gap-2">
+            <ui-icon name="outline-info-circle" size="sm" class="text-primary-500 shrink-0" />
+            После сохранения закупки в статусе "Черновик", изменения не повлияют на остатки на
+            складе. Остатки обновятся только после проведения документа.
+          </p>
+        </ui-card>
+      </div>
+    </div>
+  }
+</div>

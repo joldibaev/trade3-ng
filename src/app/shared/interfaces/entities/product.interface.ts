@@ -34,4 +34,5 @@ export interface Product {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  lastPurchasePrice?: number;
 }

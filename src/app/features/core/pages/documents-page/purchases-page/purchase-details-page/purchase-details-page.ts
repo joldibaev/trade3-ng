@@ -78,6 +78,7 @@ export class PurchaseDetailsPage {
   private priceTypesService = inject(PriceTypesService);
   private destroyRef = inject(DestroyRef);
   private notyf = inject(UiNotyfService);
+  private router = inject(Router);
 
   id = input.required<string>();
 
@@ -113,7 +114,7 @@ export class PurchaseDetailsPage {
   }
 
   edit() {
-    this.notyf.info('Редактирование будет доступно в ближайшее время');
+    void this.router.navigate(['core', 'documents', 'purchases', this.id(), 'edit']);
   }
 
   private updateStatus(status: DocumentStatus) {

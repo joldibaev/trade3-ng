@@ -19,4 +19,9 @@ export const routes: Routes = [
         (m) => m.PurchaseEditPage,
       ),
   },
+  {
+    path: 'price-change',
+    loadComponent: () =>
+      import('./price-change-page/price-change-page').then((m) => m.PriceChangePage),
+  },
 ];

@@ -73,7 +73,7 @@ export class DocumentHistory {
   data = input.required<DocumentLedger[]>();
   productMap = input<Record<string, string>>({});
 
-  private formatValue(value: any, key: string): string {
+  private formatValue(value: string | number, key: string): string {
     if (typeof value !== 'number' && isNaN(Number(value))) return `"${value}"`;
     const num = Number(value);
 
@@ -110,7 +110,7 @@ export class DocumentHistory {
   });
 
   private mapToViewModel(item: DocumentLedger, productName: string): ViewModel {
-    const details = (item.details || {}) as any;
+    const details = (item.details || {}) as Record<string, unknown>;
     const base = {
       id: item.id,
       action: item.action,
@@ -134,7 +134,7 @@ export class DocumentHistory {
             const label = FIELD_MAP[key] || key;
             if (key === 'date')
               return `${label}: <i>${new Date(value as string).toLocaleDateString()}</i>`;
-            return `${label}: <i>${this.formatValue(value, key)}</i>`;
+            return `${label}: <i>${this.formatValue(value as string | number, key)}</i>`;
           })
           .join(', ');
 
@@ -149,8 +149,9 @@ export class DocumentHistory {
       }
 
       case 'STATUS_CHANGED': {
-        const from = STATUS_MAP[details.from as string] || { label: details.from, color: '' };
-        const to = STATUS_MAP[details.to as string] || { label: details.to, color: '' };
+        const d = details as unknown as StatusDetails;
+        const from = STATUS_MAP[d.from as string] || { label: d.from, color: '' };
+        const to = STATUS_MAP[d.to as string] || { label: d.to, color: '' };
 
         return {
           ...base,
@@ -162,7 +163,8 @@ export class DocumentHistory {
       }
 
       case 'ITEM_ADDED': {
-        const qty = details.quantity ? ` — <b>${details.quantity} шт.</b>` : '';
+        const d = details as Record<string, unknown>;
+        const qty = d['quantity'] ? ` — <b>${d['quantity']} шт.</b>` : '';
         return {
           ...base,
           title: `Добавлен товар: <b>${productName}</b>${qty}`,

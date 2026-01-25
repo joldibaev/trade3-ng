@@ -84,6 +84,12 @@ export class Aside {
           routerLink: ['/core', 'documents', 'purchases'],
           icon: 'outline-file-import',
         },
+        {
+          id: 'price-change',
+          label: 'Изменение цен',
+          routerLink: ['/core', 'documents', 'price-change'],
+          icon: 'outline-tag',
+        },
       ],
     },
     {
