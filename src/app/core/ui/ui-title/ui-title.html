@@ -1,5 +1,17 @@
-<h1 class="text-3xl font-semibold">{{ title() }}</h1>
-
-@if (caption(); as caption) {
-  <p class="text-sm text-slate-500">{{ caption }}</p>
+@if (withBackBtn()) {
+  <button
+    uiButton
+    variant="ghost"
+    icon="outline-arrow-left"
+    iconOnly
+    (click)="backClicked()"
+  ></button>
 }
+
+<div class="flex flex-col gap-1">
+  <h1 class="text-3xl font-semibold">{{ title() }}</h1>
+
+  @if (caption(); as caption) {
+    <p class="text-sm text-slate-500">{{ caption }}</p>
+  }
+</div>

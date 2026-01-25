@@ -1,52 +1,157 @@
-<ui-card class="p-6">
-  <div class="mb-4 flex items-center gap-2">
-    <ui-icon name="outline-clock" class="h-5 w-5 text-slate-600" />
-    <h2 class="text-lg font-semibold">
-      История <span class="font-normal text-slate-400">({{ viewModels().length }})</span>
-    </h2>
-  </div>
+<div class="mb-4 flex items-center gap-2">
+  <ui-icon name="outline-clock" class="h-5 w-5 text-slate-500" />
+  <h2 class="font-medium">История изменений</h2>
+</div>
 
-  <div class="space-y-4">
-    @for (vm of viewModels(); track vm.id) {
-      <div class="flex gap-4">
-        <div
-          class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-          [class]="vm.bgColor + ' ' + vm.iconColor"
+<div class="space-y-4">
+  @for (vm of viewModels(); track vm.id) {
+    @switch (vm.action) {
+      @case ('CREATED') {
+        <app-document-history-entry
+          icon="outline-box"
+          colorClass="bg-green-100 text-green-600"
+          [createdAt]="vm.createdAt"
+          [userId]="vm.userId"
         >
-          <ui-icon size="sm" [name]="vm.icon" />
-        </div>
+          <span title>Заказ создан</span>
+        </app-document-history-entry>
+      }
 
-        <div class="flex-1">
-          <div class="mb-1 text-sm leading-relaxed text-balance" [innerHTML]="vm.title"></div>
+      @case ('UPDATED') {
+        <app-document-history-entry
+          icon="outline-pencil"
+          colorClass="bg-orange-50 text-orange-500"
+          [createdAt]="vm.createdAt"
+          [userId]="vm.userId"
+        >
+          <span title>Заказ обновлен</span>
 
-          @if (vm.details) {
-            <div class="mb-2 text-xs text-slate-500" [innerHTML]="vm.details"></div>
-          }
-
-          <div
-            class="mt-1 flex items-center gap-2 text-[10px] font-medium tracking-wider text-slate-400 uppercase"
-          >
-            <div class="flex items-center gap-1">
-              <ui-icon name="outline-clock" class="h-3 w-3" />
-              <time>{{ vm.createdAt | date: 'dd MMM, HH:mm' }}</time>
-            </div>
-            @if (vm.userId) {
-              <div class="flex items-center gap-1">
-                <span>•</span>
-                <ui-icon name="outline-user" class="h-3 w-3" />
-                <span>{{ vm.userId }}</span>
+          <div details class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500">
+            @for (change of vm.changes; track $index) {
+              <div>
+                <span class="text-slate-400">{{ change.label }}:</span>
+                <span class="ml-1 font-medium text-slate-600">
+                  @if (change.isCurrency) {
+                    {{ change.value | currency }}
+                  } @else if (change.label === 'Дата документа') {
+                    {{ change.value | date: 'dd.MM.yyyy' }}
+                  } @else {
+                    {{ change.value }}
+                  }
+                </span>
               </div>
             }
           </div>
-        </div>
-      </div>
-    }
+        </app-document-history-entry>
+      }
 
-    @if (!viewModels().length) {
-      <div class="py-8 text-center text-slate-500">
-        <ui-icon name="outline-clock" class="mx-auto mb-3 h-12 w-12 opacity-30" />
-        <p class="text-sm">История изменений пуста</p>
-      </div>
+      @case ('STATUS_CHANGED') {
+        <app-document-history-entry
+          icon="outline-refresh"
+          colorClass="bg-blue-50 text-blue-500"
+          [createdAt]="vm.createdAt"
+          [userId]="vm.userId"
+        >
+          <span title>Статус изменен</span>
+
+          @let from = vm.details['from'] | lookup: STATUS_MAP;
+          @let to = vm.details['to'] | lookup: STATUS_MAP;
+          <div details class="mt-1 flex items-center gap-1 text-[11px]">
+            <span [class]="from?.color">{{ from?.label || vm.details['from'] }}</span>
+            <span class="mx-1 text-slate-400">→</span>
+            <span class="font-medium" [class]="to?.color">{{ to?.label || vm.details['to'] }}</span>
+          </div>
+        </app-document-history-entry>
+      }
+
+      @case ('ITEM_ADDED') {
+        <app-document-history-entry
+          icon="outline-plus"
+          colorClass="bg-blue-100 text-blue-600"
+          [createdAt]="vm.createdAt"
+          [userId]="vm.userId"
+        >
+          <div title>
+            <span>Добавлен товар: </span>
+            <span class="font-bold">{{ vm.productName }}</span>
+            @if (vm.details['quantity']) {
+              <span> — {{ vm.details['quantity'] }} шт.</span>
+            }
+          </div>
+        </app-document-history-entry>
+      }
+
+      @case ('ITEM_REMOVED') {
+        <app-document-history-entry
+          icon="outline-trash"
+          colorClass="bg-red-100 text-red-600"
+          [createdAt]="vm.createdAt"
+          [userId]="vm.userId"
+        >
+          <div title>
+            <span>Удален товар: </span>
+            <span class="font-bold">{{ vm.productName }}</span>
+          </div>
+        </app-document-history-entry>
+      }
+
+      @case ('ITEM_CHANGED') {
+        <app-document-history-entry
+          icon="outline-pencil"
+          colorClass="bg-orange-50 text-orange-500"
+          [createdAt]="vm.createdAt"
+          [userId]="vm.userId"
+        >
+          <div title>
+            <span>Изменен товар: </span>
+            <span class="font-bold">{{ vm.productName }}</span>
+          </div>
+
+          <div details class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500">
+            @for (change of vm.changes; track $index) {
+              <div>
+                <span class="text-slate-400">{{ change.label }}:</span>
+                <span class="mx-1 line-through opacity-60">
+                  @if (change.isCurrency) {
+                    {{ change.from | currency }}
+                  } @else {
+                    {{ change.from | number }}
+                  }
+                </span>
+                <span class="font-medium text-slate-700">
+                  @if (change.isCurrency) {
+                    {{ change.to | currency }}
+                  } @else {
+                    {{ change.to | number }}
+                  }
+                </span>
+              </div>
+            }
+          </div>
+        </app-document-history-entry>
+      }
+
+      @case ('DELETED') {
+        <app-document-history-entry
+          icon="outline-trash"
+          colorClass="bg-red-100 text-red-600"
+          [createdAt]="vm.createdAt"
+          [userId]="vm.userId"
+        >
+          <span title>Заказ удален</span>
+        </app-document-history-entry>
+      }
+
+      @default {
+        <app-document-history-entry
+          icon="outline-info-circle"
+          colorClass="bg-slate-100 text-slate-500"
+          [createdAt]="vm.createdAt"
+          [userId]="vm.userId"
+        >
+          <span title>Операция: {{ vm.action }}</span>
+        </app-document-history-entry>
+      }
     }
-  </div>
-</ui-card>
+  }
+</div>

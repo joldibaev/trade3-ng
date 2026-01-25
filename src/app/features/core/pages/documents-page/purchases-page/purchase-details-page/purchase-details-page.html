@@ -1,6 +1,7 @@
 @if (purchase.hasValue()) {
   <div class="flex items-center justify-between gap-4">
     <ui-title
+      withBackBtn
       [title]="`Закупка ${purchase.value().code}`"
       [caption]="`ID: ${purchase.value().id}`"
     />
@@ -22,130 +23,116 @@
   </div>
 
   <section class="grid grid-cols-3 gap-4">
-    <section class="col-span-2 space-y-4">
-      <ui-card class="p-4">
-        <h2 class="mb-4 font-medium">Общая информация</h2>
+    <ui-card class="col-span-2 space-y-4 p-4">
+      <h2 class="font-medium">Общая информация</h2>
 
-        <ui-list columnCount="2">
-          <ui-list-item label="Склад">{{ purchase.value().store.name }}</ui-list-item>
-          <ui-list-item label="Поставщик">{{ purchase.value().vendor?.name }}</ui-list-item>
-          <ui-list-item label="Количество позиций">{{
-            purchase.value().items.length
-          }}</ui-list-item>
-          <ui-list-item label="Дата документа">{{ purchase.value().date | date }}</ui-list-item>
-          <ui-list-item label="Создан">{{ purchase.value().createdAt | date }}</ui-list-item>
-          <ui-list-item label="Изменен">{{ purchase.value().updatedAt | date }}</ui-list-item>
+      <ui-list columnCount="2">
+        <ui-list-item label="Склад">{{ purchase.value().store.name }}</ui-list-item>
+        <ui-list-item label="Поставщик">{{ purchase.value().vendor?.name }}</ui-list-item>
+        <ui-list-item label="Количество позиций">{{ purchase.value().items.length }} </ui-list-item>
+        <ui-list-item label="Дата документа">{{ purchase.value().date | date }}</ui-list-item>
+        <ui-list-item label="Создан">{{ purchase.value().createdAt | date }}</ui-list-item>
+        <ui-list-item label="Изменен">{{ purchase.value().updatedAt | date }}</ui-list-item>
 
-          @if (purchase.value().notes) {
-            <ui-list-item label="Примечания">
-              <p>{{ purchase.value().notes }}</p>
-            </ui-list-item>
-          }
-        </ui-list>
-      </ui-card>
+        @if (purchase.value().notes) {
+          <ui-list-item label="Примечания">
+            <p>{{ purchase.value().notes }}</p>
+          </ui-list-item>
+        }
+      </ui-list>
+    </ui-card>
 
-      @if (priceTypes.hasValue()) {
-        <ui-card>
-          <ui-table [dataSource]="purchase.value().items">
-            <ng-container cdkColumnDef="id">
-              <th *cdkHeaderCellDef cdk-header-cell>ID</th>
-              <td *cdkCellDef="let element" cdk-cell>
-                {{ element.id }}
-              </td>
-            </ng-container>
-
-            <ng-container cdkColumnDef="product">
-              <th *cdkHeaderCellDef cdk-header-cell>Продукт</th>
-              <td *cdkCellDef="let element" cdk-cell class="font-medium">
-                {{ element.product.name }}
-              </td>
-            </ng-container>
-
-            <ng-container cdkColumnDef="quantity">
-              <th *cdkHeaderCellDef cdk-header-cell>Количество</th>
-              <td *cdkCellDef="let element" cdk-cell>
-                {{ element.quantity | number }}
-              </td>
-            </ng-container>
-
-            <ng-container cdkColumnDef="price">
-              <th *cdkHeaderCellDef cdk-header-cell>Цена закупки</th>
-              <td *cdkCellDef="let element" cdk-cell>
-                {{ element.price | currency }}
-              </td>
-            </ng-container>
-
-            <ng-container cdkColumnDef="total">
-              <th *cdkHeaderCellDef cdk-header-cell>Сумма</th>
-              <td *cdkCellDef="let element" cdk-cell class="font-semibold">
-                {{ element.total | currency }}
-              </td>
-            </ng-container>
-
-            @for (priceType of priceTypes.value(); track priceType.id) {
-              <ng-container [cdkColumnDef]="priceType.id">
-                <th *cdkHeaderCellDef cdk-header-cell>{{ priceType.name }}</th>
-                <td *cdkCellDef="let element" cdk-cell>
-                  @let priceChangeItem =
-                    element.product.priceChangeItems | find: 'priceTypeId' : priceType.id;
-
-                  @if (priceChangeItem) {
-                    @let newValue = $any(priceChangeItem).newValue | toNumber;
-                    @let oldValue = $any(priceChangeItem).oldValue | toNumber;
-                    @let percent = oldValue === 0 ? 0 : ((newValue - oldValue) / oldValue) * 100;
-
-                    <div class="w-fit text-end">
-                      <div class="flex gap-2">
-                        <div class="text-primary-500 text-sm font-semibold">
-                          {{ newValue | currency }}
-                        </div>
-
-                        @if (percent) {
-                          <div
-                            class="text-primary-300 flex items-center gap-0.5 text-xs font-semibold"
-                          >
-                            <ui-icon name="outline-trending-up" />
-                            <span>{{ percent }} %</span>
-                          </div>
-                        } @else {
-                          <ui-badge variant="processing">Новая</ui-badge>
-                        }
-                      </div>
-
-                      @if (oldValue) {
-                        <div class="text-xs text-slate-500 line-through">
-                          было: {{ oldValue | currency }}
-                        </div>
-                      }
-                    </div>
-                  } @else {
-                    -
-                  }
-                </td>
-              </ng-container>
-            }
-
-            <tr *cdkHeaderRowDef="displayedColumns()" cdk-header-row></tr>
-            <tr *cdkRowDef="let row; columns: displayedColumns()" cdk-row></tr>
-
-            <tr *cdkNoDataRow>
-              <td [attr.colspan]="displayedColumns().length">
-                <ui-empty-state
-                  title="Поставщики не найдены"
-                  icon="outline-users"
-                  description="Попробуйте изменить параметры поиска"
-                />
-              </td>
-            </tr>
-          </ui-table>
-        </ui-card>
-      }
-    </section>
-
-    <app-document-history
-      class="flex-auto overflow-hidden"
-      [data]="purchase.value().documentLedger"
-      [productMap]="productMap()"
-    />
+    <ui-card class="max-h-80 overflow-scroll p-4">
+      <app-document-history [data]="purchase.value().documentLedger" [productMap]="productMap()" />
+    </ui-card>
   </section>
+
+  @if (priceTypes.hasValue()) {
+    <ui-card>
+      <ui-table [dataSource]="purchase.value().items">
+        <ng-container cdkColumnDef="product">
+          <th *cdkHeaderCellDef cdk-header-cell>Товар</th>
+          <td *cdkCellDef="let element" cdk-cell class="font-semibold">
+            {{ element.product.name }}
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="quantity">
+          <th *cdkHeaderCellDef cdk-header-cell>Кол-во</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            {{ element.quantity | number }}
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="price">
+          <th *cdkHeaderCellDef cdk-header-cell>Цена закупки</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            {{ element.price | currency }}
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="total">
+          <th *cdkHeaderCellDef cdk-header-cell>Сумма</th>
+          <td *cdkCellDef="let element" cdk-cell class="font-medium">
+            {{ element.total | currency }}
+          </td>
+        </ng-container>
+
+        @for (priceType of priceTypes.value(); track priceType.id) {
+          <ng-container [cdkColumnDef]="priceType.id">
+            <th *cdkHeaderCellDef cdk-header-cell>{{ priceType.name }}</th>
+            <td *cdkCellDef="let element" cdk-cell>
+              @let priceChangeItem =
+                element.product.priceChangeItems | find: 'priceTypeId' : priceType.id;
+
+              @if (priceChangeItem) {
+                <!--todo fix-->
+                @let newValue = $any(priceChangeItem).newValue | toNumber;
+                @let oldValue = $any(priceChangeItem).oldValue | toNumber;
+                @let percent = oldValue === 0 ? 0 : ((newValue - oldValue) / oldValue) * 100;
+
+                <div class="w-fit text-end">
+                  <div class="flex gap-2">
+                    <div class="text-primary-500 text-sm font-semibold">
+                      {{ newValue | currency }}
+                    </div>
+
+                    @if (percent) {
+                      <div class="text-primary-300 flex items-center gap-0.5 text-xs font-semibold">
+                        <ui-icon name="outline-trending-up" />
+                        <span>{{ percent }} %</span>
+                      </div>
+                    } @else {
+                      <ui-badge variant="processing" size="xs">Новая</ui-badge>
+                    }
+                  </div>
+
+                  @if (oldValue) {
+                    <div class="text-xs text-slate-500 line-through">
+                      было: {{ oldValue | currency }}
+                    </div>
+                  }
+                </div>
+              } @else {
+                -
+              }
+            </td>
+          </ng-container>
+        }
+
+        <tr *cdkHeaderRowDef="displayedColumns()" cdk-header-row></tr>
+        <tr *cdkRowDef="let row; columns: displayedColumns()" cdk-row></tr>
+
+        <tr *cdkNoDataRow>
+          <td [attr.colspan]="displayedColumns().length">
+            <ui-empty-state
+              title="Поставщики не найдены"
+              icon="outline-users"
+              description="Попробуйте изменить параметры поиска"
+            />
+          </td>
+        </tr>
+      </ui-table>
+    </ui-card>
+  }
 }

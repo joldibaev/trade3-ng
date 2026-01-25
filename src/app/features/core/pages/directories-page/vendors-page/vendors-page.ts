@@ -11,7 +11,6 @@ import {
   CdkRow,
   CdkRowDef,
 } from '@angular/cdk/table';
-import { DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -30,11 +29,12 @@ import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
-import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
+import { StatList, UiStatCard } from '../../../../../core/ui/ui-stat-card/ui-stat-card';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { UiTitle } from '../../../../../core/ui/ui-title/ui-title';
 import {
   VendorDialogData,
   VendorDialogResult,
@@ -49,7 +49,6 @@ import { VendorDialog } from './vendor-dialog/vendor-dialog';
     UiCard,
     UiIcon,
     UiLoading,
-    DecimalPipe,
     UiInput,
     FormField,
     UiTable,
@@ -65,6 +64,8 @@ import { VendorDialog } from './vendor-dialog/vendor-dialog';
     UiBadge,
     CdkNoDataRow,
     UiEmptyState,
+    UiStatCard,
+    UiTitle,
   ],
   templateUrl: './vendors-page.html',
   styleUrl: './vendors-page.css',
@@ -79,8 +80,8 @@ export class VendorsPage {
   private destroyRef = inject(DestroyRef);
 
   displayedColumns: (keyof Vendor | string)[] = [
-    'id',
     'name',
+    'email',
     'phone',
     'address',
     'isActive',
@@ -107,22 +108,22 @@ export class VendorsPage {
       {
         label: 'Всего поставщиков',
         value: list.length,
-        icon: 'outline-users' as IconName,
+        icon: 'outline-users',
         color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Активных поставщиков',
         value: list.filter((v) => v.isActive).length,
-        icon: 'outline-users' as IconName,
+        icon: 'outline-users',
         color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Общие закупки',
         value: totalPurchases,
-        icon: 'outline-users' as IconName,
+        icon: 'outline-users',
         color: 'bg-primary-50 text-emerald-600',
       },
-    ];
+    ] satisfies StatList[];
   });
 
   filteredVendors = computed(() => {

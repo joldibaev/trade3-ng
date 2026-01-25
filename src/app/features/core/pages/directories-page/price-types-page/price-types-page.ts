@@ -11,7 +11,6 @@ import {
   CdkRow,
   CdkRowDef,
 } from '@angular/cdk/table';
-import { SlicePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,7 +22,6 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
 import { filter, switchMap, tap } from 'rxjs';
-import { ToStringPipe } from '../../../../../core/pipes/to-string-pipe';
 import { PriceTypesService } from '../../../../../core/services/price-types.service';
 import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
@@ -31,11 +29,11 @@ import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
-import { IconName } from '../../../../../core/ui/ui-icon/data';
-import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
+import { StatList, UiStatCard } from '../../../../../core/ui/ui-stat-card/ui-stat-card';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { UiTitle } from '../../../../../core/ui/ui-title/ui-title';
 import {
   PriceTypeDialogData,
   PriceTypeDialogResult,
@@ -48,7 +46,6 @@ import { PriceTypeDialog } from './price-type-dialog/price-type-dialog';
   imports: [
     UiButton,
     UiCard,
-    UiIcon,
     UiLoading,
     UiInput,
     FormField,
@@ -65,8 +62,8 @@ import { PriceTypeDialog } from './price-type-dialog/price-type-dialog';
     UiBadge,
     CdkNoDataRow,
     UiEmptyState,
-    SlicePipe,
-    ToStringPipe,
+    UiStatCard,
+    UiTitle,
   ],
   templateUrl: './price-types-page.html',
   styleUrl: './price-types-page.css',
@@ -97,16 +94,16 @@ export class PriceTypesPage {
       {
         label: 'Всего типов цен',
         value: list.length,
-        icon: 'outline-tag' as IconName,
+        icon: 'outline-tag',
         color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Активных типов',
         value: list.filter((v) => v.isActive).length,
-        icon: 'outline-check' as IconName,
+        icon: 'outline-check',
         color: 'bg-primary-50 text-emerald-600',
       },
-    ];
+    ] satisfies StatList[];
   });
 
   filteredPriceTypes = computed(() => {

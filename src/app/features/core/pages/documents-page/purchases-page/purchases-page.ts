@@ -11,7 +11,7 @@ import {
   CdkRow,
   CdkRowDef,
 } from '@angular/cdk/table';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,17 +22,17 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DocumentPurchasesService } from '../../../../../core/services/document-purchases.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
-import { IconName } from '../../../../../core/ui/ui-icon/data';
-import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { UiNotyfService } from '../../../../../core/ui/ui-notyf/ui-notyf.service';
+import { StatList, UiStatCard } from '../../../../../core/ui/ui-stat-card/ui-stat-card';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { UiTitle } from '../../../../../core/ui/ui-title/ui-title';
 import { DocumentStatusComponent } from '../../../../../shared/components/document-status/document-status.component';
 import { DocumentStatus } from '../../../../../shared/interfaces/constants';
 import { DocumentPurchase } from '../../../../../shared/interfaces/entities/document-purchase.interface';
@@ -43,11 +43,9 @@ import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
   imports: [
     UiButton,
     UiCard,
-    UiIcon,
     UiLoading,
     UiInput,
     FormField,
-    DecimalPipe,
     UiTable,
     CdkColumnDef,
     CdkHeaderCellDef,
@@ -62,6 +60,10 @@ import { PurchaseDialog } from './purchase-dialog/purchase-dialog';
     UiEmptyState,
     DatePipe,
     DocumentStatusComponent,
+    UiTitle,
+    UiStatCard,
+    CurrencyPipe,
+    RouterLink,
   ],
   templateUrl: './purchases-page.html',
   styleUrl: './purchases-page.css',
@@ -79,12 +81,12 @@ export class PurchasesPage {
   private notyf = inject(UiNotyfService);
 
   displayedColumns: (keyof DocumentPurchase | string)[] = [
-    'id',
     'code',
     'date',
     'vendor',
     'store',
     'total',
+    'generatedPriceChange',
     'status',
     'action',
   ];
@@ -105,23 +107,22 @@ export class PurchasesPage {
       {
         label: 'Всего закупок',
         value: data?.totalCount || 0,
-        icon: 'outline-file-text' as IconName,
+        icon: 'outline-file-text',
         color: 'bg-indigo-50 text-indigo-600',
       },
       {
         label: 'Проведено',
         value: data?.completedCount || 0,
-        icon: 'outline-check' as IconName,
+        icon: 'outline-check',
         color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Сумма закупок',
         value: data?.totalAmount || 0,
-        icon: 'outline-cash' as IconName,
+        icon: 'outline-cash',
         color: 'bg-primary-50 text-emerald-600',
-        isCurrency: true,
       },
-    ];
+    ] satisfies StatList[];
   });
 
   filteredPurchases = computed(() => {

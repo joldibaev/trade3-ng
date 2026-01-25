@@ -1,9 +1,7 @@
 <!-- Header -->
 <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-  <div>
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Номенклатура</h1>
-    <p class="text-sm text-slate-500">Управление каталогом товаров и запасами</p>
-  </div>
+  <ui-title title="Номенклатура" caption="Управление каталогом товаров и запасами" />
+
   <button
     uiButton
     variant="primary"
@@ -22,19 +20,13 @@
 } @else {
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
-    @for (stat of stats(); track stat.label) {
-      <ui-card class="flex items-center gap-4 p-6">
-        <div
-          class="bg-primary-50 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-emerald-600"
-        >
-          <ui-icon width="24" height="24" [name]="stat.icon || 'outline-box'" />
-        </div>
-
-        <div>
-          <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
-          <p class="text-2xl font-bold text-slate-900">{{ stat.value | number }}</p>
-        </div>
-      </ui-card>
+    @for (stat of stats(); track stat) {
+      <ui-stat-card
+        [label]="stat.label"
+        [value]="stat.value"
+        [icon]="stat.icon"
+        [color]="stat.color"
+      />
     }
   </div>
 
@@ -112,16 +104,14 @@
                 <div class="flex items-center gap-2">
                   <!-- icon -->
                   <div
-                    class="bg-primary-50 rounded-squircle text-primary-600 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg p-2"
+                    class="rounded-squircle flex h-10 w-10 shrink-0 items-center justify-center bg-linear-to-br from-purple-500 to-purple-600 text-white shadow-sm"
                   >
                     <ui-icon name="outline-box" width="20" height="20" />
                   </div>
 
                   <div class="flex flex-col">
                     <span class="font-semibold">{{ element.name }}</span>
-                    <span class="text-xs text-slate-500">
-                      {{ element.id }}
-                    </span>
+                    <span class="text-xs text-slate-500">{{ element.id }}</span>
                   </div>
                 </div>
               </td>

@@ -7,7 +7,6 @@ interface PriceItem {
 
 @Pipe({
   name: 'findPrice',
-  standalone: true,
 })
 export class FindPricePipe implements PipeTransform {
   transform(prices: PriceItem[] | undefined | null, typeId: string): number {

@@ -1,9 +1,7 @@
 <!-- Header -->
 <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-  <div>
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Типы цен</h1>
-    <p class="text-sm text-slate-500">Управляйте типами цен для товаров</p>
-  </div>
+  <ui-title title="Типы цен" caption="Управляйте типами цен для товаров" />
+
   <button uiButton variant="primary" icon="outline-plus" (click)="openPriceTypeDialog()">
     Добавить тип цены
   </button>
@@ -17,18 +15,12 @@
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
     @for (stat of stats(); track stat.label) {
-      <ui-card class="flex items-center gap-4 p-6">
-        <div
-          class="bg-primary-50 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-emerald-600"
-        >
-          <ui-icon width="24" height="24" [name]="stat.icon" />
-        </div>
-
-        <div>
-          <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
-          <p class="text-2xl font-bold text-slate-900">{{ stat.value }}</p>
-        </div>
-      </ui-card>
+      <ui-stat-card
+        [label]="stat.label"
+        [value]="stat.value"
+        [icon]="stat.icon"
+        [color]="stat.color"
+      />
     }
   </div>
 
@@ -45,23 +37,9 @@
   <ui-card>
     <ui-table [dataSource]="filteredPriceTypes()">
       <ng-container cdkColumnDef="id">
-        <th *cdkHeaderCellDef cdk-header-cell style="width: 120px">ID</th>
+        <th *cdkHeaderCellDef cdk-header-cell>ID</th>
         <td *cdkCellDef="let element" cdk-cell>
-          <div class="group flex items-center gap-2">
-            <span class="font-mono text-xs font-semibold text-slate-500" [title]="element.id">
-              ...{{ element.id | toString | slice: -10 }}
-            </span>
-            <button
-              uiButton
-              variant="ghost"
-              icon="outline-copy"
-              iconOnly
-              size="sm"
-              type="button"
-              class="opacity-0 group-hover:opacity-100"
-              (click)="copyToClipboard(element.id)"
-            ></button>
-          </div>
+          {{ element.id }}
         </td>
       </ng-container>
 

@@ -1,9 +1,7 @@
 <!-- Header -->
 <div class="flex items-center justify-between">
-  <div>
-    <h1 class="text-2xl font-semibold">Магазины</h1>
-    <p class="mt-1 text-sm text-slate-600">Управление магазинами и кассами</p>
-  </div>
+  <ui-title title="Магазины" caption="Управление магазинами и кассами" />
+
   <button uiButton variant="primary" icon="outline-plus" (click)="onCreate()">
     Добавить магазин
   </button>
@@ -21,7 +19,7 @@
         <ui-card class="flex items-center gap-4 p-4">
           <div
             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-            [ngClass]="stat.color"
+            [class]="stat.color"
           >
             <ui-icon width="20" height="20" [name]="stat.icon" />
           </div>

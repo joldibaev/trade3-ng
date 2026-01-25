@@ -50,10 +50,10 @@ export class Aside {
       label: 'СПРАВОЧНИКИ',
       items: [
         {
-          id: 'stocks',
-          label: 'Товары',
-          routerLink: ['/core', 'directories', 'nomenclature'],
-          icon: 'outline-box',
+          id: 'stores',
+          label: 'Магазины',
+          routerLink: ['/core', 'directories', 'stores'],
+          icon: 'outline-building-store',
         },
         {
           id: 'clients',
@@ -68,10 +68,16 @@ export class Aside {
           icon: 'outline-truck',
         },
         {
-          id: 'stores',
-          label: 'Магазины',
-          routerLink: ['/core', 'directories', 'stores'],
-          icon: 'outline-building-store',
+          id: 'price-types',
+          label: 'Типы цен',
+          routerLink: ['/core', 'directories', 'price-types'],
+          icon: 'outline-tag',
+        },
+        {
+          id: 'stocks',
+          label: 'Товары',
+          routerLink: ['/core', 'directories', 'nomenclature'],
+          icon: 'outline-box',
         },
       ],
     },

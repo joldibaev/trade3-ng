@@ -82,6 +82,7 @@ try {
 
     // Minify
     content = content
+      .replace(/<!--[\s\S]*?-->/g, '') // Remove SVG comments
       .replace(/\r?\n|\r/g, '')
       .replace(/\s+/g, ' ')
       .trim();

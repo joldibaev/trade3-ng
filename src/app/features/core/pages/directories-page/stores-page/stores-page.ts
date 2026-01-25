@@ -1,5 +1,4 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,6 +18,7 @@ import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-sta
 import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
+import { UiTitle } from '../../../../../core/ui/ui-title/ui-title';
 import { CashboxDialogData } from '../../../../../shared/interfaces/dialogs/cashbox-dialog.interface';
 import { StoreDialogResult } from '../../../../../shared/interfaces/dialogs/store-dialog.interface';
 import { Cashbox } from '../../../../../shared/interfaces/entities/cashbox.interface';
@@ -36,7 +36,7 @@ interface StoreStat {
 
 @Component({
   selector: 'app-stores-page',
-  imports: [UiButton, UiCard, UiEmptyState, UiLoading, UiIcon, NgClass, StoreCardComponent],
+  imports: [UiButton, UiCard, UiEmptyState, UiLoading, UiIcon, StoreCardComponent, UiTitle],
   templateUrl: './stores-page.html',
   styleUrl: './stores-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,9 +1,9 @@
-<div class="text-sm text-slate-500">
+<div class="flex items-center gap-1">
   @if (icon(); as icon) {
-    <ui-icon width="16" height="16" [name]="icon" />
+    <ui-icon width="14" height="14" class="text-slate-400" [name]="icon" />
   }
 
-  <span>{{ label() }}</span>
+  <span class="text-sm text-slate-500">{{ label() }}</span>
 </div>
 
 <ng-content />

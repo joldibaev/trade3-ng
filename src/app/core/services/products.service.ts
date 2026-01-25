@@ -15,7 +15,12 @@ export class ProductsService extends BaseService<Product> {
     });
   }
 
-  getLastPurchasePrice(id: string) {
-    return this.http.get<number>(`${this.apiUrl}/${id}/last-purchase-price`);
+  getLastPurchasePrice(id: () => string | undefined | null) {
+    return httpResource<number>(() => {
+      const actualId = id();
+      if (!actualId) return undefined;
+
+      return `${this.apiUrl}/${actualId}/last-purchase-price`;
+    });
   }
 }

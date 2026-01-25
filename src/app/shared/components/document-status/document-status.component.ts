@@ -4,7 +4,7 @@ import { DocumentStatus } from '../../interfaces/constants';
 
 @Component({
   selector: 'app-document-status',
-  standalone: true,
+
   imports: [UiBadge],
   templateUrl: './document-status.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -11,7 +11,6 @@ import {
   CdkRow,
   CdkRowDef,
 } from '@angular/cdk/table';
-import { DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,7 +27,6 @@ import { form, FormField } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { CategoriesService } from '../../../../../core/services/categories.service';
-import { PriceTypesService } from '../../../../../core/services/price-types.service';
 import { ProductsService } from '../../../../../core/services/products.service';
 import { StoresService } from '../../../../../core/services/stores.service';
 import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
@@ -37,11 +35,12 @@ import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
-import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
+import { StatList, UiStatCard } from '../../../../../core/ui/ui-stat-card/ui-stat-card';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { UiTitle } from '../../../../../core/ui/ui-title/ui-title';
 import { TreeNode } from '../../../../../core/ui/ui-tree/tree-item.interface';
 import { UiTree } from '../../../../../core/ui/ui-tree/ui-tree';
 import {
@@ -62,7 +61,6 @@ import { CategoryDialog } from './category-dialog/category-dialog';
     UiTree,
     FormField,
     UiCard,
-    DecimalPipe,
     UiTable,
     CdkColumnDef,
     CdkHeaderCellDef,
@@ -76,6 +74,8 @@ import { CategoryDialog } from './category-dialog/category-dialog';
     UiBadge,
     CdkNoDataRow,
     UiEmptyState,
+    UiStatCard,
+    UiTitle,
   ],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
@@ -87,7 +87,6 @@ import { CategoryDialog } from './category-dialog/category-dialog';
 export class NomenclaturePage {
   private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
-  private priceTypesService = inject(PriceTypesService);
   private storesService = inject(StoresService);
   private dialog = inject(Dialog);
   private router = inject(Router);
@@ -117,7 +116,6 @@ export class NomenclaturePage {
 
   // Resources
   categories = this.categoriesService.getAll();
-  priceTypes = this.priceTypesService.getAll();
   stores = this.storesService.getAll();
   products = this.productsService.getAll({
     includes: ['category', 'prices', 'stocks', 'barcodes'],
@@ -144,24 +142,28 @@ export class NomenclaturePage {
       {
         label: 'Всего товаров',
         value: productsList.length,
-        icon: 'outline-box' as IconName,
+        icon: 'outline-box',
+        color: 'bg-indigo-50 text-indigo-600',
       },
       {
         label: 'Активные',
         value: activeCount,
-        icon: 'outline-check' as IconName,
+        icon: 'outline-check',
+        color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Мало на складе',
         value: lowStockCount,
-        icon: 'outline-alert-circle' as IconName,
+        icon: 'outline-alert-circle',
+        color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Нет в наличии',
         value: outOfStockCount,
-        icon: 'outline-x' as IconName,
+        icon: 'outline-x',
+        color: 'bg-primary-50 text-emerald-600',
       },
-    ];
+    ] satisfies StatList[];
   });
 
   // Derived state: build hierarchy from flat list

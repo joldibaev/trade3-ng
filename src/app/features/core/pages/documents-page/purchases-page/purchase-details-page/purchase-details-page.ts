@@ -41,7 +41,7 @@ import { DocumentHistory } from './document-history/document-history';
 
 @Component({
   selector: 'app-purchase-details-page',
-  standalone: true,
+
   imports: [
     DatePipe,
     UiCard,
@@ -86,7 +86,7 @@ export class PurchaseDetailsPage {
   priceTypes = this.priceTypesService.getAll();
 
   displayedColumns = computed<(keyof DocumentPurchaseItem | string)[]>(() => {
-    const list = ['id', 'product', 'quantity', 'price', 'total'];
+    const list = ['product', 'quantity', 'price', 'total'];
 
     if (this.priceTypes.hasValue()) {
       this.priceTypes.value()?.forEach((priceType) => {

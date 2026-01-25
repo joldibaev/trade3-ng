@@ -11,27 +11,25 @@ import {
   CdkRow,
   CdkRowDef,
 } from '@angular/cdk/table';
-import { CurrencyPipe, DecimalPipe, Location } from '@angular/common';
+import { CurrencyPipe, Location } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
   DestroyRef,
+  effect,
   inject,
-  Injector,
   input,
-  OnInit,
   signal,
+  untracked,
 } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { form, FormField, required } from '@angular/forms/signals';
-import { Router } from '@angular/router';
-import { combineLatest, filter, finalize, switchMap } from 'rxjs';
+import { filter, finalize, switchMap } from 'rxjs';
 import { FindPipe } from '../../../../../../core/pipes/find-pipe';
 import { DocumentPurchasesService } from '../../../../../../core/services/document-purchases.service';
 import { PriceTypesService } from '../../../../../../core/services/price-types.service';
-import { ProductsService } from '../../../../../../core/services/products.service';
 import { StoresService } from '../../../../../../core/services/stores.service';
 import { VendorsService } from '../../../../../../core/services/vendors.service';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
@@ -39,6 +37,7 @@ import { UiCard } from '../../../../../../core/ui/ui-card/ui-card';
 import { UiEmptyState } from '../../../../../../core/ui/ui-empty-state/ui-empty-state';
 import { UiIcon } from '../../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
+import { UiInputNumber } from '../../../../../../core/ui/ui-input/ui-input-number';
 import { UiLoading } from '../../../../../../core/ui/ui-loading/ui-loading';
 import { UiNotyfService } from '../../../../../../core/ui/ui-notyf/ui-notyf.service';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
@@ -46,7 +45,6 @@ import { UiTable } from '../../../../../../core/ui/ui-table/ui-table';
 import { UiTitle } from '../../../../../../core/ui/ui-title/ui-title';
 import { UpdateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/update-document-purchase.interface';
 import { DocumentPurchaseItem } from '../../../../../../shared/interfaces/entities/document-purchase-item.interface';
-import { DocumentPurchase } from '../../../../../../shared/interfaces/entities/document-purchase.interface';
 import { Product } from '../../../../../../shared/interfaces/entities/product.interface';
 import {
   formatDateToIso,
@@ -72,18 +70,17 @@ interface EditableItem {
 
 @Component({
   selector: 'app-purchase-edit-page',
-  standalone: true,
   imports: [
     FormsModule,
     FormField,
     UiTitle,
     UiCard,
     UiInput,
+    UiInputNumber,
     UiSelect,
     UiButton,
     UiIcon,
     UiLoading,
-    DecimalPipe,
     CurrencyPipe,
     UiTable,
     CdkHeaderCellDef,
@@ -103,17 +100,14 @@ interface EditableItem {
   styleUrl: './purchase-edit-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PurchaseEditPage implements OnInit {
+export class PurchaseEditPage {
   private purchaseService = inject(DocumentPurchasesService);
   private storeService = inject(StoresService);
   private vendorService = inject(VendorsService);
-  private productService = inject(ProductsService);
   private priceTypesService = inject(PriceTypesService);
   private destroyRef = inject(DestroyRef);
   private notyf = inject(UiNotyfService);
-  private router = inject(Router);
   private location = inject(Location);
-  private injector = inject(Injector);
   private dialog = inject(Dialog);
 
   id = input.required<string>();
@@ -124,10 +118,8 @@ export class PurchaseEditPage implements OnInit {
   priceTypes = this.priceTypesService.getAll();
 
   // State
-  isLoading = signal(false);
   isSaving = signal(false);
   purchaseResource = this.purchaseService.getById(() => this.id());
-  purchase = signal<DocumentPurchase | null>(null);
   items = signal<EditableItem[]>([]);
 
   // Form
@@ -144,6 +136,49 @@ export class PurchaseEditPage implements OnInit {
     required(schema.date, { message: 'Выберите дату' });
   });
 
+  constructor() {
+    effect(() => {
+      const doc = this.purchaseResource.value();
+      const pts = this.priceTypes.value();
+
+      if (doc && pts) {
+        untracked(() => {
+          this.formState.set({
+            storeId: doc.storeId,
+            vendorId: doc.vendorId || '',
+            date: doc.date.split('T')[0],
+            notes: doc.notes || '',
+          });
+
+          this.items.set(
+            doc.items.map((item: DocumentPurchaseItem) => ({
+              tempId: crypto.randomUUID(),
+              productId: item.productId,
+              productName: item.product.name,
+              quantity: item.quantity,
+              price: item.price,
+              isSaved: true,
+              newPrices: pts.map((pt) => {
+                const change = item.product.priceChangeItems?.find(
+                  (pci) => pci.priceTypeId === pt.id,
+                );
+                const currentPrice =
+                  item.product.prices?.find((p) => p.priceTypeId === pt.id)?.value || 0;
+
+                return {
+                  priceTypeId: pt.id,
+                  name: pt.name,
+                  value: change ? change.newValue : 0,
+                  currentValue: currentPrice,
+                };
+              }),
+            })),
+          );
+        });
+      }
+    });
+  }
+
   totalSum = computed(() => {
     return this.items().reduce((sum, item) => sum + item.quantity * item.price, 0);
   });
@@ -156,61 +191,6 @@ export class PurchaseEditPage implements OnInit {
     list.push('actions');
     return list;
   });
-
-  ngOnInit() {
-    this.loadData();
-  }
-
-  loadData() {
-    toObservable(this.purchaseResource.isLoading, { injector: this.injector })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((loading) => this.isLoading.set(loading));
-
-    combineLatest([
-      toObservable(this.purchaseResource.value, { injector: this.injector }),
-      toObservable(this.priceTypes.value, { injector: this.injector }),
-    ])
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        filter(([doc, pts]) => !!doc && !!pts),
-      )
-      .subscribe(([doc, pts]) => {
-        if (!doc || !pts) return;
-
-        this.purchase.set(doc);
-        this.formState.set({
-          storeId: doc.storeId,
-          vendorId: doc.vendorId || '',
-          date: doc.date.split('T')[0],
-          notes: doc.notes || '',
-        });
-
-        this.items.set(
-          doc.items.map((item: DocumentPurchaseItem) => ({
-            tempId: crypto.randomUUID(),
-            productId: item.productId,
-            productName: item.product.name,
-            quantity: item.quantity,
-            price: item.price,
-            isSaved: true,
-            newPrices: pts.map((pt) => {
-              const change = item.product.priceChangeItems?.find(
-                (pci) => pci.priceTypeId === pt.id,
-              );
-              const currentPrice =
-                item.product.prices?.find((p) => p.priceTypeId === pt.id)?.value || 0;
-
-              return {
-                priceTypeId: pt.id,
-                name: pt.name,
-                value: change ? change.newValue : 0,
-                currentValue: currentPrice,
-              };
-            }),
-          })),
-        );
-      });
-  }
 
   openProductSearch() {
     this.dialog
@@ -309,16 +289,12 @@ export class PurchaseEditPage implements OnInit {
       .subscribe({
         next: () => {
           this.notyf.success('Закупка успешно обновлена');
-          void this.router.navigate(['core', 'documents', 'purchases', this.id()]);
+          this.location.back();
         },
         error: (err) => {
           this.notyf.error('Ошибка при сохранении');
           console.error(err);
         },
       });
-  }
-
-  cancel() {
-    this.location.back();
   }
 }

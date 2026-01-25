@@ -6,7 +6,6 @@ import { UiComboboxControl } from '../ui-combobox-control';
 import { UiIcon } from '../ui-icon/ui-icon.component';
 import { UiLoading } from '../ui-loading/ui-loading';
 
-// todo validation and required state
 @Component({
   selector: 'ui-select',
   templateUrl: './ui-select.html',
@@ -22,6 +21,7 @@ import { UiLoading } from '../ui-loading/ui-loading';
     UiLoading,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block' },
 })
 export class UiSelect<T> extends UiComboboxControl<T> {
   value = model(''); // Implements abstract value from UiFormControl

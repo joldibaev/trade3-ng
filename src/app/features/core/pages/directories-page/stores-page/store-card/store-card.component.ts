@@ -1,4 +1,4 @@
-import { Component, input, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnInit, output, signal } from '@angular/core';
 import { UiBadge } from '../../../../../../core/ui/ui-badge/ui-badge';
 import { UiButton } from '../../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../../core/ui/ui-card/ui-card';
@@ -11,6 +11,7 @@ import { CashboxListItemComponent } from '../cashbox-list-item/cashbox-list-item
   selector: 'app-store-card',
   imports: [UiButton, UiIcon, UiBadge, UiCard, CashboxListItemComponent],
   templateUrl: './store-card.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreCardComponent implements OnInit {
   store = input.required<Store>();

@@ -2,7 +2,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
-import { debounceTime, distinctUntilChanged, forkJoin } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ProductsService } from '../../../../../../../core/services/products.service';
 import { UiButton } from '../../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../../core/ui/ui-dialog/ui-dialog';
@@ -12,13 +12,13 @@ import { Product } from '../../../../../../../shared/interfaces/entities/product
 
 @Component({
   selector: 'app-product-select-dialog',
-  standalone: true,
+
   imports: [UiInput, UiButton, FormField, UiListbox, UiDialog],
   templateUrl: './product-select-dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductSelectDialog {
-  private dialogRef = inject(DialogRef);
+  private dialogRef = inject<DialogRef<Product>>(DialogRef);
   private productsService = inject(ProductsService);
   private destroyRef = inject(DestroyRef);
 
@@ -28,6 +28,9 @@ export class ProductSelectDialog {
   searchQuery = signal(''); // Bound to API request
   products = this.productsService.search(this.searchQuery);
   selectedProduct = signal<Product | undefined>(undefined);
+
+  fullProduct = this.productsService.getById(() => this.selectedProduct()?.id);
+  lastPrice = this.productsService.getLastPurchasePrice(() => this.selectedProduct()?.id);
 
   private query$ = toObservable(this.formState);
 
@@ -45,21 +48,17 @@ export class ProductSelectDialog {
   }
 
   next() {
-    const product = this.selectedProduct();
-    if (!product) return;
+    if (!this.fullProduct.hasValue() || !this.lastPrice.hasValue()) return;
 
-    forkJoin({
-      fullProduct: this.productsService.fetchById(product.id, [
-        'prices',
-        'stocks',
-        'stocks.store',
-        'purchaseItems',
-      ] as any),
-      lastPrice: this.productsService.getLastPurchasePrice(product.id),
-    }).subscribe(({ fullProduct, lastPrice }) => {
-      fullProduct.lastPurchasePrice = lastPrice;
-      this.dialogRef.close(fullProduct);
-    });
+    const product = this.fullProduct.value();
+
+    // Включаем последнюю цену в объект товара перед возвратом
+    const result = {
+      ...product,
+      lastPurchasePrice: this.lastPrice.value(),
+    };
+
+    this.dialogRef.close(result);
   }
 
   cancel() {

@@ -9,7 +9,7 @@ import { UiIcon } from '../../ui-icon/ui-icon.component';
   styleUrl: './ui-list-item.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-1',
+    class: 'block',
   },
 })
 export class UiListItem {

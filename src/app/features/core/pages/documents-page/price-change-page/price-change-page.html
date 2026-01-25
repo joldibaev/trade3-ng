@@ -1,10 +1,8 @@
 <div class="flex flex-col gap-6">
   <!-- Header -->
   <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-    <div>
-      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Изменение цен</h1>
-      <p class="text-sm text-slate-500">Управляйте изменениями цен на товары</p>
-    </div>
+    <ui-title title="Изменение цен" caption="Управляйте изменениями цен на товары" />
+
     <button uiButton variant="primary" icon="outline-plus" (click)="openCreateDialog()">
       Создать документ
     </button>
@@ -46,17 +44,37 @@
     <!-- Data Table -->
     <ui-card>
       <ui-table [dataSource]="filteredPriceChanges()">
-        <ng-container cdkColumnDef="id">
-          <th *cdkHeaderCellDef cdk-header-cell>ID</th>
-          <td *cdkCellDef="let element" cdk-cell>
-            {{ element.id }}
-          </td>
-        </ng-container>
-
         <ng-container cdkColumnDef="code">
           <th *cdkHeaderCellDef cdk-header-cell>Код</th>
           <td *cdkCellDef="let element" cdk-cell>
-            <span class="font-mono text-slate-500">#{{ element.code || '-' }}</span>
+            <div class="flex flex-col">
+              <span class="font-semibold">#{{ element.code }}</span>
+              <span class="text-xs text-slate-500">{{ element.id }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="date">
+          <th *cdkHeaderCellDef cdk-header-cell>Дата</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <div class="flex flex-col">
+              <span class="text-sm">{{ element.date | date: 'dd.MM.yyyy' }}</span>
+              <span class="text-xs text-slate-500">{{ element.date | date: 'HH:mm' }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container cdkColumnDef="documentPurchase">
+          <th *cdkHeaderCellDef cdk-header-cell>Связан с</th>
+          <td *cdkCellDef="let element" cdk-cell>
+            <a
+              uiButton
+              variant="link"
+              icon="outline-package"
+              [routerLink]="['/core/documents/purchases', element.documentPurchase.id]"
+            >
+              {{ element.documentPurchase.code }}
+            </a>
           </td>
         </ng-container>
 
@@ -64,26 +82,6 @@
           <th *cdkHeaderCellDef cdk-header-cell>Статус</th>
           <td *cdkCellDef="let element" cdk-cell>
             <app-document-status [status]="element.status" />
-          </td>
-        </ng-container>
-
-        <ng-container cdkColumnDef="date">
-          <th *cdkHeaderCellDef cdk-header-cell>Дата</th>
-          <td *cdkCellDef="let element" cdk-cell>
-            <div class="flex items-center gap-2">
-              <ui-icon width="16" height="16" name="outline-calendar" class="text-slate-400" />
-              <span>{{ element.date | date }}</span>
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container cdkColumnDef="itemsCount">
-          <th *cdkHeaderCellDef cdk-header-cell>Товаров</th>
-          <td *cdkCellDef="let element" cdk-cell>
-            <div class="flex items-center gap-2">
-              <ui-icon width="16" height="16" name="outline-tag" class="text-slate-400" />
-              <span class="font-medium">{{ element.items?.length || 0 }}</span>
-            </div>
           </td>
         </ng-container>
 

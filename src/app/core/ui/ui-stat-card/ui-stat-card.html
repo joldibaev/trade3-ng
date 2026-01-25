@@ -1,0 +1,10 @@
+<ui-card class="flex items-center gap-4 p-4">
+  <ui-icon-wrapper class="h-12 w-12" [class]="color()">
+    <ui-icon width="24" height="24" [name]="icon()" />
+  </ui-icon-wrapper>
+
+  <div>
+    <p class="text-sm font-medium text-slate-500">{{ label() }}</p>
+    <p class="text-2xl font-bold">{{ value() }}</p>
+  </div>
+</ui-card>

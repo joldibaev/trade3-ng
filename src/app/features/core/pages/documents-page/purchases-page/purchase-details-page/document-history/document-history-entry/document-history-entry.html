@@ -1,0 +1,29 @@
+<div class="flex gap-4">
+  <ui-icon-wrapper class="h-8 w-8" [class]="colorClass()">
+    <ui-icon size="sm" [name]="icon()" />
+  </ui-icon-wrapper>
+
+  <div class="flex-1 space-y-1">
+    <div class="text-xs">
+      <ng-content select="[title]"></ng-content>
+    </div>
+
+    <div class="text-xs">
+      <ng-content select="[details]"></ng-content>
+    </div>
+
+    <div class="flex items-center gap-3 text-[10px] text-slate-400">
+      @if (userId()) {
+        <div class="flex items-center gap-1">
+          <ui-icon name="outline-user" class="h-3 w-3" />
+          <span>{{ userId() }}</span>
+        </div>
+      }
+
+      <div class="flex items-center gap-1">
+        <ui-icon name="outline-clock" class="h-3 w-3" />
+        <time>{{ createdAt() | date: 'dd MMM yyyy, HH:mm' }}</time>
+      </div>
+    </div>
+  </div>
+</div>

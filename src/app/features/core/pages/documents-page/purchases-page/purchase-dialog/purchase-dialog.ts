@@ -13,6 +13,7 @@ import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
 import { CreateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
+import { DocumentPurchase } from '../../../../../../shared/interfaces/entities/document-purchase.interface';
 import {
   formatDateToIso,
   getCurrentDateAsString,
@@ -26,7 +27,7 @@ import {
   providers: [DatePipe],
 })
 export class PurchaseDialog {
-  private dialogRef = inject(DialogRef);
+  private dialogRef = inject<DialogRef<DocumentPurchase>>(DialogRef);
   private service = inject(DocumentPurchasesService);
   private storeService = inject(StoresService);
   private vendorService = inject(VendorsService);

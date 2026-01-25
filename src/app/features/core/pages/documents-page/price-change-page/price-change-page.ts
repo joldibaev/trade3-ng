@@ -1,4 +1,3 @@
-import { Dialog } from '@angular/cdk/dialog';
 import {
   CdkCell,
   CdkCellDef,
@@ -22,17 +21,18 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DocumentPriceChangesService } from '../../../../../core/services/document-price-changes.service';
 import { UiButton } from '../../../../../core/ui/ui-button/ui-button';
 import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
-import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { UiNotyfService } from '../../../../../core/ui/ui-notyf/ui-notyf.service';
+import { StatList } from '../../../../../core/ui/ui-stat-card/ui-stat-card';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { UiTitle } from '../../../../../core/ui/ui-title/ui-title';
 import { DocumentStatusComponent } from '../../../../../shared/components/document-status/document-status.component';
 import { DocumentStatus } from '../../../../../shared/interfaces/constants';
 import { DocumentPriceChange } from '../../../../../shared/interfaces/entities/document-price-change.interface';
@@ -60,6 +60,8 @@ import { DocumentPriceChange } from '../../../../../shared/interfaces/entities/d
     UiEmptyState,
     DatePipe,
     DocumentStatusComponent,
+    RouterLink,
+    UiTitle,
   ],
   templateUrl: './price-change-page.html',
   styleUrl: './price-change-page.css',
@@ -72,15 +74,13 @@ import { DocumentPriceChange } from '../../../../../shared/interfaces/entities/d
 export class PriceChangePage {
   private documentPriceChangesService = inject(DocumentPriceChangesService);
   private router = inject(Router);
-  private dialog = inject(Dialog);
   private destroyRef = inject(DestroyRef);
   private notyf = inject(UiNotyfService);
 
   displayedColumns: (keyof DocumentPriceChange | string)[] = [
-    'id',
     'code',
     'date',
-    'itemsCount',
+    'documentPurchase',
     'status',
     'action',
   ];
@@ -101,22 +101,22 @@ export class PriceChangePage {
       {
         label: 'Всего изменений',
         value: data?.totalCount || 0,
-        icon: 'outline-file-text' as IconName,
+        icon: 'outline-file-text',
         color: 'bg-indigo-50 text-indigo-600',
       },
       {
         label: 'Проведено',
         value: data?.completedCount || 0,
-        icon: 'outline-check' as IconName,
+        icon: 'outline-check',
         color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Товаров изменено',
         value: data?.totalCount || 0,
-        icon: 'outline-tag' as IconName,
+        icon: 'outline-tag',
         color: 'bg-amber-50 text-amber-600',
       },
-    ];
+    ] satisfies StatList[];
   });
 
   filteredPriceChanges = computed(() => {

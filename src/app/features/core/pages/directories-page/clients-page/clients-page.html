@@ -1,9 +1,7 @@
 <!-- Header -->
 <div class="flex items-center justify-between">
-  <div>
-    <h1 class="text-2xl font-semibold text-slate-900">Клиенты</h1>
-    <p class="mt-1 text-sm text-slate-600">Управление базой клиентов</p>
-  </div>
+  <ui-title title="Клиенты" caption="Управление базой клиентов" />
+
   <button uiButton variant="primary" icon="outline-plus" (click)="openClientDialog()">
     Добавить клиента
   </button>
@@ -17,22 +15,12 @@
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
     @for (stat of stats(); track stat.label) {
-      <ui-card class="flex items-center gap-4 p-6">
-        <div
-          class="bg-primary-50 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-emerald-600"
-        >
-          <ui-icon width="24" height="24" [name]="stat.icon" />
-        </div>
-
-        <div>
-          <p class="text-sm font-medium text-slate-500">{{ stat.label }}</p>
-          @if (stat.label === 'Общая выручка') {
-            <p class="text-2xl font-bold text-slate-900">{{ stat.value | number: '1.0-0' }} UZS</p>
-          } @else {
-            <p class="text-2xl font-bold text-slate-900">{{ stat.value }}</p>
-          }
-        </div>
-      </ui-card>
+      <ui-stat-card
+        [label]="stat.label"
+        [value]="stat.value"
+        [icon]="stat.icon"
+        [color]="stat.color"
+      />
     }
   </div>
 
@@ -48,34 +36,31 @@
   <!-- Data Table -->
   <ui-card>
     <ui-table [dataSource]="filteredClients()">
-      <ng-container cdkColumnDef="id">
-        <th *cdkHeaderCellDef cdk-header-cell>Код</th>
-        <td *cdkCellDef="let element" cdk-cell>
-          {{ element.id }}
-        </td>
-      </ng-container>
-
       <ng-container cdkColumnDef="name">
         <th *cdkHeaderCellDef cdk-header-cell>Имя клиента</th>
         <td *cdkCellDef="let element" cdk-cell>
           <div class="flex items-center gap-3 py-2">
             <!-- icon -->
             <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-emerald-500 to-emerald-600 text-white shadow-sm"
+              class="from-primary-500 to-primary-600 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br text-white shadow-sm"
             >
               <ui-icon name="outline-users" width="20" height="20" />
             </div>
 
             <div class="flex flex-col">
-              <span class="font-semibold text-slate-900">{{ element.name }}</span>
-
-              @if (element.email) {
-                <div class="flex items-center gap-1 text-xs text-slate-500">
-                  <ui-icon name="outline-mail" width="12" height="12" />
-                  <span>{{ element.email }}</span>
-                </div>
-              }
+              <span class="font-semibold">{{ element.name }}</span>
+              <span class="text-xs text-slate-500">{{ element.id }}</span>
             </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="email">
+        <th *cdkHeaderCellDef cdk-header-cell style="width: 160px">Телефон</th>
+        <td *cdkCellDef="let element" cdk-cell>
+          <div class="flex items-center gap-2">
+            <ui-icon width="16" height="16" name="outline-mail" class="text-slate-400" />
+            <span>{{ element.email || '-' }}</span>
           </div>
         </td>
       </ng-container>

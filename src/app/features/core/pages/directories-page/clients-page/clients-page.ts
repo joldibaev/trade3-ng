@@ -11,7 +11,6 @@ import {
   CdkRow,
   CdkRowDef,
 } from '@angular/cdk/table';
-import { DecimalPipe } from '@angular/common'; // Added SlicePipe
 import {
   ChangeDetectionStrategy,
   Component,
@@ -30,11 +29,12 @@ import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
-import { IconName } from '../../../../../core/ui/ui-icon/data';
 import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
+import { StatList, UiStatCard } from '../../../../../core/ui/ui-stat-card/ui-stat-card';
 import { UiTable } from '../../../../../core/ui/ui-table/ui-table';
+import { UiTitle } from '../../../../../core/ui/ui-title/ui-title';
 import {
   ClientDialogData,
   ClientDialogResult,
@@ -49,7 +49,6 @@ import { ClientDialog } from './client-dialog/client-dialog';
     UiCard,
     UiIcon,
     UiLoading,
-    DecimalPipe,
     UiInput,
     FormField,
     UiTable,
@@ -65,6 +64,8 @@ import { ClientDialog } from './client-dialog/client-dialog';
     UiBadge,
     CdkNoDataRow,
     UiEmptyState,
+    UiStatCard,
+    UiTitle,
   ],
   templateUrl: './clients-page.html',
   styleUrl: './clients-page.css',
@@ -79,8 +80,8 @@ export class ClientsPage {
   private destroyRef = inject(DestroyRef);
 
   displayedColumns: (keyof Client | string)[] = [
-    'id',
     'name',
+    'email',
     'phone',
     'address',
     'isActive',
@@ -106,22 +107,22 @@ export class ClientsPage {
       {
         label: 'Всего клиентов',
         value: list.length,
-        icon: 'outline-users' as IconName,
+        icon: 'outline-users',
         color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Активных клиентов',
         value: list.filter((c) => c.isActive).length,
-        icon: 'outline-users' as IconName,
+        icon: 'outline-users',
         color: 'bg-primary-50 text-emerald-600',
       },
       {
         label: 'Общая выручка',
         value: totalPurchases,
-        icon: 'outline-users' as IconName,
+        icon: 'outline-users',
         color: 'bg-primary-50 text-emerald-600',
       },
-    ];
+    ] satisfies StatList[];
   });
 
   filteredClients = computed(() => {

@@ -15,9 +15,22 @@ interface DialogData {
   priceTypes: PriceType[];
 }
 
+export interface ProductDetailsResult {
+  tempId: string;
+  productId: string;
+  productName: string;
+  quantity: number;
+  price: number;
+  newPrices: {
+    priceTypeId: string;
+    name: string;
+    value: number;
+    currentValue: number;
+  }[];
+}
+
 @Component({
   selector: 'app-product-details-dialog',
-  standalone: true,
   imports: [
     UiDialog,
     UiButton,
@@ -32,7 +45,7 @@ interface DialogData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailsDialog {
-  private dialogRef = inject(DialogRef);
+  private dialogRef = inject<DialogRef<ProductDetailsResult>>(DialogRef);
   private data = inject<DialogData>(DIALOG_DATA);
 
   product = this.data.product;
