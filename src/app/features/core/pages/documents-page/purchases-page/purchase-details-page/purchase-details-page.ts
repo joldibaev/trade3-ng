@@ -40,8 +40,8 @@ import { UiTable } from '../../../../../../core/ui/ui-table/ui-table';
 import { UiTitle } from '../../../../../../core/ui/ui-title/ui-title';
 import { DocumentStatus } from '../../../../../../shared/interfaces/constants';
 import { CreateDocumentPurchaseItemInput } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
-import { DocumentPurchaseItem } from '../../../../../../shared/interfaces/entities/document-purchase-item.interface';
 import { DocumentPriceChangeItem } from '../../../../../../shared/interfaces/entities/document-price-change-item.interface';
+import { DocumentPurchaseItem } from '../../../../../../shared/interfaces/entities/document-purchase-item.interface';
 import {
   ProductDetailsDialog,
   ProductDetailsResult,

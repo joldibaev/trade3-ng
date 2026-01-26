@@ -1,0 +1,134 @@
+@if (priceChange.hasValue()) {
+  <div class="flex items-center justify-between gap-4">
+    <ui-title
+      withBackBtn
+      [title]="`Изменение цен #${priceChange.value().code}`"
+      [caption]="`ID: ${priceChange.value().id}`"
+    />
+
+    @if (priceChange.value().status === 'DRAFT') {
+      <div class="space-x-4">
+        <button uiButton icon="outline-checks" variant="primary" (click)="complete()">
+          Провести
+        </button>
+      </div>
+    } @else if (priceChange.value().status === 'COMPLETED') {
+      <button uiButton icon="outline-cancel" variant="danger" (click)="revert()">
+        Отменить проведение
+      </button>
+    }
+  </div>
+
+  <section class="grid grid-cols-3 gap-4">
+    <ui-card class="col-span-2 space-y-4 p-4">
+      <h2 class="font-medium">Общая информация</h2>
+
+      <ui-list columnCount="2">
+        <ui-list-item label="Дата документа">{{ priceChange.value().date | date }}</ui-list-item>
+        <ui-list-item label="Статус">
+          <ui-badge
+            [variant]="priceChange.value().status === 'COMPLETED' ? 'success' : 'processing'"
+          >
+            {{ priceChange.value().status === 'COMPLETED' ? 'Проведен' : 'Черновик' }}
+          </ui-badge>
+        </ui-list-item>
+        <ui-list-item label="Количество позиций">{{
+          priceChange.value().items.length
+        }}</ui-list-item>
+        @if (priceChange.value().documentPurchase) {
+          <ui-list-item label="Основание">
+            Закупка #{{ priceChange.value().documentPurchase?.code }}
+          </ui-list-item>
+        }
+        <ui-list-item label="Создан">{{
+          priceChange.value().createdAt | date: 'short'
+        }}</ui-list-item>
+        <ui-list-item label="Изменен">{{
+          priceChange.value().updatedAt | date: 'short'
+        }}</ui-list-item>
+
+        @if (priceChange.value().notes) {
+          <ui-list-item label="Примечания" class="col-span-2">
+            <p>{{ priceChange.value().notes }}</p>
+          </ui-list-item>
+        }
+      </ui-list>
+    </ui-card>
+
+    <ui-card class="max-h-80 overflow-scroll p-4">
+      <app-document-history
+        [data]="priceChange.value().documentLedger"
+        [productMap]="productMap()"
+      />
+    </ui-card>
+  </section>
+
+  <ui-card>
+    <div class="default-border-color border-b bg-slate-50/50 p-4">
+      <h3 class="font-medium">Список изменений</h3>
+    </div>
+
+    <ui-table [dataSource]="priceChange.value().items">
+      <ng-container cdkColumnDef="product">
+        <th *cdkHeaderCellDef cdk-header-cell>Товар</th>
+        <td *cdkCellDef="let element" cdk-cell class="font-semibold">
+          {{ element.product.name }}
+        </td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="priceType">
+        <th *cdkHeaderCellDef cdk-header-cell>Тип цены</th>
+        <td *cdkCellDef="let element" cdk-cell>
+          {{ element.priceType.name }}
+        </td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="oldValue">
+        <th *cdkHeaderCellDef cdk-header-cell>Старая цена</th>
+        <td *cdkCellDef="let element" cdk-cell class="text-slate-500">
+          {{ element.oldValue | currency }}
+        </td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="newValue">
+        <th *cdkHeaderCellDef cdk-header-cell>Новая цена</th>
+        <td *cdkCellDef="let element" cdk-cell class="font-semibold text-emerald-600">
+          {{ element.newValue | currency }}
+        </td>
+      </ng-container>
+
+      <ng-container cdkColumnDef="change">
+        <th *cdkHeaderCellDef cdk-header-cell>Изменение</th>
+        <td *cdkCellDef="let element" cdk-cell>
+          @let old = element.oldValue | toNumber; @let new = element.newValue | toNumber;
+          @let percent = old === 0 ? 0 : ((new - old) / old) * 100;
+
+          <div
+            class="flex items-center gap-1 font-medium"
+            [class.text-emerald-600]="percent > 0"
+            [class.text-red-600]="percent < 0"
+          >
+            @if (percent > 0) {
+              <ui-icon name="outline-trending-up" size="16" />
+              <span>+{{ percent | number: '1.0-1' }}%</span>
+            } @else if (percent < 0) {
+              <ui-icon name="outline-trending-down" size="16" />
+              <span>{{ percent | number: '1.0-1' }}%</span>
+            } @else {
+              <ui-badge size="xs">Новое</ui-badge>
+            }
+          </div>
+        </td>
+      </ng-container>
+
+      <tr *cdkHeaderRowDef="displayedColumns" cdk-header-row></tr>
+      <tr *cdkRowDef="let row; columns: displayedColumns" cdk-row></tr>
+
+      <tr *cdkNoDataRow>
+        <td [attr.colspan]="displayedColumns.length">
+          <ui-empty-state title="Нет позиций" icon="outline-box" description="Ничего не найдено" />
+        </td>
+      </tr>
+    </ui-table>
+  </ui-card>
+}

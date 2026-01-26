@@ -11,6 +11,7 @@ import {
   CdkRow,
   CdkRowDef,
 } from '@angular/cdk/table';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,7 +27,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
+import { FindPipe } from '../../../../../core/pipes/find-pipe';
 import { CategoriesService } from '../../../../../core/services/categories.service';
+import { PriceTypesService } from '../../../../../core/services/price-types.service';
 import { ProductsService } from '../../../../../core/services/products.service';
 import { StoresService } from '../../../../../core/services/stores.service';
 import { UiBadge } from '../../../../../core/ui/ui-badge/ui-badge';
@@ -35,7 +38,6 @@ import { UiCard } from '../../../../../core/ui/ui-card/ui-card';
 import { UiDialogConfirm } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm';
 import { UiDialogConfirmData } from '../../../../../core/ui/ui-dialog-confirm/ui-dialog-confirm-data.interface';
 import { UiEmptyState } from '../../../../../core/ui/ui-empty-state/ui-empty-state';
-import { UiIcon } from '../../../../../core/ui/ui-icon/ui-icon.component';
 import { UiInput } from '../../../../../core/ui/ui-input/ui-input';
 import { UiLoading } from '../../../../../core/ui/ui-loading/ui-loading';
 import { StatList, UiStatCard } from '../../../../../core/ui/ui-stat-card/ui-stat-card';
@@ -55,7 +57,6 @@ import { CategoryDialog } from './category-dialog/category-dialog';
   selector: 'app-nomenclature-page',
   imports: [
     UiButton,
-    UiIcon,
     UiInput,
     UiLoading,
     UiTree,
@@ -76,6 +77,9 @@ import { CategoryDialog } from './category-dialog/category-dialog';
     UiEmptyState,
     UiStatCard,
     UiTitle,
+    FindPipe,
+    CurrencyPipe,
+    DecimalPipe,
   ],
   templateUrl: './nomenclature-page.html',
   styleUrl: './nomenclature-page.css',
@@ -88,6 +92,7 @@ export class NomenclaturePage {
   private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
   private storesService = inject(StoresService);
+  private priceTypesService = inject(PriceTypesService);
   private dialog = inject(Dialog);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
@@ -110,6 +115,7 @@ export class NomenclaturePage {
     'article',
     'category',
     'stocks',
+    'prices',
     'isActive',
     'action',
   ];
@@ -117,6 +123,8 @@ export class NomenclaturePage {
   // Resources
   categories = this.categoriesService.getAll();
   stores = this.storesService.getAll();
+  priceTypes = this.priceTypesService.getAll();
+
   products = this.productsService.getAll({
     includes: ['category', 'prices', 'stocks', 'barcodes'],
     params: () => {

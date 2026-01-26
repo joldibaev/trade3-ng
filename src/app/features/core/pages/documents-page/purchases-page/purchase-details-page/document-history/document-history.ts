@@ -21,6 +21,9 @@ interface ViewModel {
   productName?: string;
   details: Record<string, unknown>;
   changes?: ChangeDetail[];
+  isAutomatic?: boolean;
+  sourceCode?: string;
+  sourceType?: string;
 }
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
@@ -90,9 +93,12 @@ export class DocumentHistory {
       id: item.id,
       action: item.action,
       createdAt: item.createdAt,
-      userId: 'Система',
+      userId: details['isAutomatic'] ? 'Авто-действие' : 'Система',
       productName,
       details,
+      isAutomatic: !!details['isAutomatic'],
+      sourceCode: details['sourceCode'] as string,
+      sourceType: details['sourceType'] as string,
     };
 
     if (item.action === 'ITEM_CHANGED') {

@@ -13,7 +13,15 @@
           [createdAt]="vm.createdAt"
           [userId]="vm.userId"
         >
-          <span title>Заказ создан</span>
+          <span title>
+            {{ vm.isAutomatic ? 'Автоматически создан' : 'Документ создан' }}
+          </span>
+
+          @if (vm.isAutomatic && vm.sourceCode) {
+            <div details class="mt-1 text-[10px] text-slate-400 italic">
+              Основание: Закупка #{{ vm.sourceCode }}
+            </div>
+          }
         </app-document-history-entry>
       }
 
@@ -52,7 +60,9 @@
           [createdAt]="vm.createdAt"
           [userId]="vm.userId"
         >
-          <span title>Статус изменен</span>
+          <span title>
+            {{ vm.isAutomatic ? 'Авто-смена статуса' : 'Статус изменен' }}
+          </span>
 
           @let from = vm.details['from'] | lookup: STATUS_MAP;
           @let to = vm.details['to'] | lookup: STATUS_MAP;
@@ -61,6 +71,12 @@
             <span class="mx-1 text-slate-400">→</span>
             <span class="font-medium" [class]="to?.color">{{ to?.label || vm.details['to'] }}</span>
           </div>
+
+          @if (vm.isAutomatic && vm.sourceCode) {
+            <div details class="mt-2 text-[10px] text-slate-400 italic">
+              Причина: Мастер-документ #{{ vm.sourceCode }}
+            </div>
+          }
         </app-document-history-entry>
       }
 
@@ -75,7 +91,7 @@
             <span>Добавлен товар: </span>
             <span class="font-bold">{{ vm.productName }}</span>
             @if (vm.details['quantity']) {
-              <span> — {{ vm.details['quantity'] }} шт.</span>
+              <span> - {{ vm.details['quantity'] }} шт.</span>
             }
           </div>
         </app-document-history-entry>
