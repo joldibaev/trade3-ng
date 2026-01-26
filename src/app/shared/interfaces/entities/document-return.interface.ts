@@ -1,6 +1,6 @@
 import { DocumentStatus } from '../constants';
 import { Client } from './client.interface';
-import { DocumentLedger } from './document-ledger.interface';
+import { DocumentHistory } from './document-history.interface';
 import { DocumentReturnItem } from './document-return-item.interface';
 import { InventoryReprocessing } from './inventory-reprocessing.interface';
 import { StockLedger } from './stock-ledger.interface';
@@ -21,6 +21,6 @@ export interface DocumentReturn {
   createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
-  documentLedger: DocumentLedger[];
+  history: DocumentHistory[];
   inventoryReprocessings: InventoryReprocessing[];
 }

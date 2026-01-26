@@ -1,5 +1,5 @@
 import { DocumentStatus } from '../constants';
-import { DocumentLedger } from './document-ledger.interface';
+import { DocumentHistory } from './document-history.interface';
 import { DocumentPriceChange } from './document-price-change.interface';
 import { DocumentPurchaseItem } from './document-purchase-item.interface';
 import { InventoryReprocessing } from './inventory-reprocessing.interface';
@@ -22,7 +22,7 @@ export interface DocumentPurchase {
   createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
-  documentLedger: DocumentLedger[];
+  history: DocumentHistory[];
   inventoryReprocessings: InventoryReprocessing[];
   generatedPriceChange?: DocumentPriceChange;
 }

@@ -22,7 +22,6 @@ import {
   input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-// ...
 import { Router } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
 import { ToNumberPipe } from '../../../../../../core/pipes/to-number-pipe';
@@ -51,7 +50,7 @@ import {
   ProductSelectionResult,
 } from '../components/product-select-dialog/product-select-dialog';
 import { PurchaseDialog } from '../purchase-dialog/purchase-dialog';
-import { DocumentHistory } from './document-history/document-history';
+import { DocumentHistoryList } from './document-history-list/document-history-list';
 
 @Component({
   selector: 'app-purchase-details-page',
@@ -79,8 +78,8 @@ import { DocumentHistory } from './document-history/document-history';
     ToNumberPipe,
     CurrencyPipe,
     UiBadge,
-    DocumentHistory,
     UiButton,
+    DocumentHistoryList,
   ],
   templateUrl: './purchase-details-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

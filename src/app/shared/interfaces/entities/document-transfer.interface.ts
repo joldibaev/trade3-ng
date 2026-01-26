@@ -1,5 +1,5 @@
 import { DocumentStatus } from '../constants';
-import { DocumentLedger } from './document-ledger.interface';
+import { DocumentHistory } from './document-history.interface';
 import { DocumentTransferItem } from './document-transfer-item.interface';
 import { InventoryReprocessing } from './inventory-reprocessing.interface';
 import { StockLedger } from './stock-ledger.interface';
@@ -19,6 +19,6 @@ export interface DocumentTransfer {
   createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
-  documentLedger: DocumentLedger[];
+  history: DocumentHistory[];
   inventoryReprocessings: InventoryReprocessing[];
 }

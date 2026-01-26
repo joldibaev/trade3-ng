@@ -34,7 +34,7 @@ import { UiTable } from '../../../../../../core/ui/ui-table/ui-table';
 import { UiTitle } from '../../../../../../core/ui/ui-title/ui-title';
 import { DocumentStatus } from '../../../../../../shared/interfaces/constants';
 import { DocumentPriceChangeItem } from '../../../../../../shared/interfaces/entities/document-price-change-item.interface';
-import { DocumentHistory } from '../../purchases-page/purchase-details-page/document-history/document-history';
+import { DocumentHistoryList } from '../../purchases-page/purchase-details-page/document-history-list/document-history-list';
 
 @Component({
   selector: 'app-price-change-details-page',
@@ -61,8 +61,8 @@ import { DocumentHistory } from '../../purchases-page/purchase-details-page/docu
     ToNumberPipe,
     CurrencyPipe,
     UiBadge,
-    DocumentHistory,
     UiButton,
+    DocumentHistoryList,
   ],
   templateUrl: './price-change-details-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

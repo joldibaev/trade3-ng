@@ -5,7 +5,7 @@ import { DocumentReturn } from './document-return.interface';
 import { DocumentSale } from './document-sale.interface';
 import { DocumentTransfer } from './document-transfer.interface';
 
-export interface DocumentLedger {
+export interface DocumentHistory {
   id: string;
   action: string;
   details?: Record<string, unknown>;

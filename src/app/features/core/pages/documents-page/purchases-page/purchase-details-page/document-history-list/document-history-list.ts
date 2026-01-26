@@ -2,7 +2,7 @@ import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { LookupPipe } from '../../../../../../../core/pipes/lookup-pipe';
 import { UiIcon } from '../../../../../../../core/ui/ui-icon/ui-icon.component';
-import { DocumentLedger } from '../../../../../../../shared/interfaces/entities/document-ledger.interface';
+import { DocumentHistory } from '../../../../../../../shared/interfaces/entities/document-history.interface';
 import { DocumentHistoryEntry } from './document-history-entry/document-history-entry';
 
 interface ChangeDetail {
@@ -45,16 +45,16 @@ const FIELD_MAP: Record<string, string> = {
 };
 
 @Component({
-  selector: 'app-document-history',
+  selector: 'app-document-history-list',
   imports: [UiIcon, DatePipe, CurrencyPipe, DecimalPipe, DocumentHistoryEntry, LookupPipe],
-  templateUrl: './document-history.html',
-  styleUrl: './document-history.css',
+  templateUrl: './document-history-list.html',
+  styleUrl: './document-history-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DocumentHistory {
+export class DocumentHistoryList {
   readonly STATUS_MAP = STATUS_MAP;
 
-  data = input.required<DocumentLedger[]>();
+  data = input.required<DocumentHistory[]>();
   productMap = input<Record<string, string>>({});
 
   viewModels = computed(() => {
@@ -85,7 +85,7 @@ export class DocumentHistory {
   }
 
   private mapToViewModel(
-    item: DocumentLedger,
+    item: DocumentHistory,
     productName: string,
     details: Record<string, unknown>,
   ): ViewModel {
