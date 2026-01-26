@@ -12,3 +12,11 @@ export interface CreateDocumentTransferDto {
   status?: DocumentStatus;
   notes?: string;
 }
+
+export interface CreateDocumentTransferItemsInput {
+  items: CreateDocumentTransferItemInput[];
+}
+
+export interface RemoveDocumentTransferItemsInput {
+  itemIds: string[];
+}

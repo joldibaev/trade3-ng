@@ -15,3 +15,11 @@ export interface CreateDocumentSaleDto {
   status?: DocumentStatus;
   notes?: string;
 }
+
+export interface CreateDocumentSaleItemsInput {
+  items: CreateDocumentSaleItemInput[];
+}
+
+export interface RemoveDocumentSaleItemsInput {
+  itemIds: string[];
+}

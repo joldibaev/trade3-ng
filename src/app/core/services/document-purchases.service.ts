@@ -15,8 +15,8 @@ export class DocumentPurchasesService extends BaseDocumentService<
 > {
   protected apiUrl = '/api/document-purchases';
 
-  addItem(id: string, item: CreateDocumentPurchaseItemInput) {
-    return this.http.post<DocumentPurchase>(`${this.apiUrl}/${id}/items`, item);
+  addItems(id: string, items: CreateDocumentPurchaseItemInput[]) {
+    return this.http.post<DocumentPurchase>(`${this.apiUrl}/${id}/items`, { items });
   }
 
   updateItem(id: string, productId: string, item: CreateDocumentPurchaseItemInput) {
@@ -24,7 +24,9 @@ export class DocumentPurchasesService extends BaseDocumentService<
     return this.http.patch<DocumentPurchase>(`${this.apiUrl}/${id}/items/${productId}`, item);
   }
 
-  removeItem(id: string, productId: string) {
-    return this.http.delete<DocumentPurchase>(`${this.apiUrl}/${id}/items/${productId}`);
+  removeItems(id: string, productIds: string[]) {
+    return this.http.delete<DocumentPurchase>(`${this.apiUrl}/${id}/items`, {
+      body: { productIds },
+    });
   }
 }

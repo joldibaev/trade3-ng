@@ -14,15 +14,17 @@ export class DocumentAdjustmentsService extends BaseDocumentService<
 > {
   protected apiUrl = '/api/document-adjustments';
 
-  addItem(id: string, item: CreateDocumentAdjustmentItemInput) {
-    return this.http.post<DocumentAdjustment>(`${this.apiUrl}/${id}/items`, item);
+  addItems(id: string, items: CreateDocumentAdjustmentItemInput[]) {
+    return this.http.post<DocumentAdjustment>(`${this.apiUrl}/${id}/items`, { items });
   }
 
   updateItem(id: string, itemId: string, item: CreateDocumentAdjustmentItemInput) {
     return this.http.patch<DocumentAdjustment>(`${this.apiUrl}/${id}/items/${itemId}`, item);
   }
 
-  removeItem(id: string, itemId: string) {
-    return this.http.delete<void>(`${this.apiUrl}/${id}/items/${itemId}`);
+  removeItems(id: string, itemIds: string[]) {
+    return this.http.delete<DocumentAdjustment>(`${this.apiUrl}/${id}/items`, {
+      body: { itemIds },
+    });
   }
 }

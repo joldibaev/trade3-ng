@@ -19,3 +19,11 @@ export interface CreateDocumentPurchaseDto {
   status?: DocumentStatus;
   notes?: string;
 }
+
+export interface CreateDocumentPurchaseItemsInput {
+  items: CreateDocumentPurchaseItemInput[];
+}
+
+export interface RemoveDocumentPurchaseItemsInput {
+  productIds: string[];
+}

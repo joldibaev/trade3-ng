@@ -11,3 +11,11 @@ export interface CreateDocumentAdjustmentDto {
   status?: DocumentStatus;
   notes?: string;
 }
+
+export interface CreateDocumentAdjustmentItemsInput {
+  items: CreateDocumentAdjustmentItemInput[];
+}
+
+export interface RemoveDocumentAdjustmentItemsInput {
+  itemIds: string[];
+}

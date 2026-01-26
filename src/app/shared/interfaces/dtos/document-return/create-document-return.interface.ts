@@ -13,3 +13,11 @@ export interface CreateDocumentReturnDto {
   status?: DocumentStatus;
   notes?: string;
 }
+
+export interface CreateDocumentReturnItemsInput {
+  items: CreateDocumentReturnItemInput[];
+}
+
+export interface RemoveDocumentReturnItemsInput {
+  itemIds: string[];
+}

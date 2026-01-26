@@ -195,7 +195,7 @@ export class PurchaseDetailsPage {
             })),
           };
 
-          this.purchaseService.addItem(this.id(), itemInput).subscribe({
+          this.purchaseService.addItems(this.id(), [itemInput]).subscribe({
             next: () => {
               this.notyf.success('Товар добавлен');
               this.purchase.reload();
@@ -279,7 +279,7 @@ export class PurchaseDetailsPage {
   removeItem(item: DocumentPurchaseItem) {
     if (!confirm('Вы уверены, что хотите удалить этот товар?')) return;
 
-    this.purchaseService.removeItem(this.id(), item.productId).subscribe({
+    this.purchaseService.removeItems(this.id(), [item.productId]).subscribe({
       next: () => {
         this.notyf.success('Товар удален');
         this.purchase.reload();

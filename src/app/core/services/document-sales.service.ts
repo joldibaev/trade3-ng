@@ -14,15 +14,15 @@ export class DocumentSalesService extends BaseDocumentService<
 > {
   protected apiUrl = '/api/document-sales';
 
-  addItem(id: string, item: CreateDocumentSaleItemInput) {
-    return this.http.post<DocumentSale>(`${this.apiUrl}/${id}/items`, item);
+  addItems(id: string, items: CreateDocumentSaleItemInput[]) {
+    return this.http.post<DocumentSale>(`${this.apiUrl}/${id}/items`, { items });
   }
 
   updateItem(id: string, itemId: string, item: CreateDocumentSaleItemInput) {
     return this.http.patch<DocumentSale>(`${this.apiUrl}/${id}/items/${itemId}`, item);
   }
 
-  removeItem(id: string, itemId: string) {
-    return this.http.delete<void>(`${this.apiUrl}/${id}/items/${itemId}`);
+  removeItems(id: string, itemIds: string[]) {
+    return this.http.delete<DocumentSale>(`${this.apiUrl}/${id}/items`, { body: { itemIds } });
   }
 }

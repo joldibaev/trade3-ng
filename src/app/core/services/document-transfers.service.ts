@@ -14,15 +14,15 @@ export class DocumentTransfersService extends BaseDocumentService<
 > {
   protected apiUrl = '/api/document-transfers';
 
-  addItem(id: string, item: CreateDocumentTransferItemInput) {
-    return this.http.post<DocumentTransfer>(`${this.apiUrl}/${id}/items`, item);
+  addItems(id: string, items: CreateDocumentTransferItemInput[]) {
+    return this.http.post<DocumentTransfer>(`${this.apiUrl}/${id}/items`, { items });
   }
 
   updateItem(id: string, itemId: string, item: CreateDocumentTransferItemInput) {
     return this.http.patch<DocumentTransfer>(`${this.apiUrl}/${id}/items/${itemId}`, item);
   }
 
-  removeItem(id: string, itemId: string) {
-    return this.http.delete<void>(`${this.apiUrl}/${id}/items/${itemId}`);
+  removeItems(id: string, itemIds: string[]) {
+    return this.http.delete<DocumentTransfer>(`${this.apiUrl}/${id}/items`, { body: { itemIds } });
   }
 }
