@@ -22,7 +22,7 @@ export interface DocumentPurchase {
   createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
-  history: DocumentHistory[];
+  documentHistory: DocumentHistory[];
   inventoryReprocessings: InventoryReprocessing[];
   generatedPriceChange?: DocumentPriceChange;
 }

@@ -13,7 +13,7 @@ export interface DocumentPriceChange {
   items: DocumentPriceChangeItem[];
   createdAt: string;
   updatedAt: string;
-  history: DocumentHistory[];
+  documentHistory: DocumentHistory[];
   generatedPriceLedger: PriceLedger[];
   documentPurchase?: DocumentPurchase;
   documentPurchaseId?: string;

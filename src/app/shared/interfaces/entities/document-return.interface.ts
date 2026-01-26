@@ -21,6 +21,6 @@ export interface DocumentReturn {
   createdAt: string;
   updatedAt: string;
   stockLedger: StockLedger[];
-  history: DocumentHistory[];
+  documentHistory: DocumentHistory[];
   inventoryReprocessings: InventoryReprocessing[];
 }
