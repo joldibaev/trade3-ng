@@ -12,13 +12,7 @@ export const routes: Routes = [
         (m) => m.PurchaseDetailsPage,
       ),
   },
-  {
-    path: 'purchases/:id/edit',
-    loadComponent: () =>
-      import('./purchases-page/purchase-edit-page/purchase-edit-page').then(
-        (m) => m.PurchaseEditPage,
-      ),
-  },
+
   {
     path: 'price-change',
     loadComponent: () =>

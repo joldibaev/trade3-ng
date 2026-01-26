@@ -49,6 +49,17 @@
 
   @if (priceTypes.hasValue()) {
     <ui-card>
+      <div
+        class="default-border-color flex items-center justify-between border-b bg-slate-50/50 p-4"
+      >
+        <h3 class="font-medium">Список товаров</h3>
+        @if (purchase.value().status === 'DRAFT') {
+          <button uiButton variant="secondary" size="sm" icon="outline-plus" (click)="addItem()">
+            Добавить товар
+          </button>
+        }
+      </div>
+
       <ui-table [dataSource]="purchase.value().items">
         <ng-container cdkColumnDef="product">
           <th *cdkHeaderCellDef cdk-header-cell>Товар</th>
@@ -82,8 +93,7 @@
           <ng-container [cdkColumnDef]="priceType.id">
             <th *cdkHeaderCellDef cdk-header-cell>{{ priceType.name }}</th>
             <td *cdkCellDef="let element" cdk-cell>
-              @let priceChangeItem =
-                element.product.priceChangeItems | find: 'priceTypeId' : priceType.id;
+              @let priceChangeItem = priceChangeItemsMap()[element.productId]?.[priceType.id];
 
               @if (priceChangeItem) {
                 <!--todo fix-->
@@ -120,15 +130,35 @@
           </ng-container>
         }
 
+        <ng-container cdkColumnDef="actions">
+          <th *cdkHeaderCellDef cdk-header-cell class="w-10"></th>
+          <td *cdkCellDef="let item" cdk-cell>
+            <div class="flex justify-end gap-2">
+              <button
+                class="text-slate-400 transition-colors hover:text-blue-500"
+                (click)="editItem(item)"
+              >
+                <ui-icon name="outline-pencil" size="sm" />
+              </button>
+              <button
+                class="text-slate-400 transition-colors hover:text-red-500"
+                (click)="removeItem(item)"
+              >
+                <ui-icon name="outline-trash" size="sm" />
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
         <tr *cdkHeaderRowDef="displayedColumns()" cdk-header-row></tr>
         <tr *cdkRowDef="let row; columns: displayedColumns()" cdk-row></tr>
 
         <tr *cdkNoDataRow>
           <td [attr.colspan]="displayedColumns().length">
             <ui-empty-state
-              title="Поставщики не найдены"
-              icon="outline-users"
-              description="Попробуйте изменить параметры поиска"
+              title="Список товаров пуст"
+              icon="outline-box"
+              description="Добавьте товар, чтобы начать"
             />
           </td>
         </tr>

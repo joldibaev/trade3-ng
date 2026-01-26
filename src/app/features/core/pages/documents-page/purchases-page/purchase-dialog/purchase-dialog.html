@@ -1,4 +1,7 @@
-<ui-dialog title="Создание закупки" (closeAction)="close()">
+<ui-dialog
+  [title]="isEditMode ? 'Редактирование закупки' : 'Создание закупки'"
+  (closeAction)="close()"
+>
   <div class="space-y-4">
     <ui-select
       label="Магазин"
@@ -31,6 +34,6 @@
     [loading]="isLoading()"
     (click)="save()"
   >
-    Создать
+    {{ isEditMode ? 'Сохранить' : 'Создать' }}
   </button>
 </ui-dialog>

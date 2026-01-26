@@ -13,6 +13,13 @@ import { Product } from '../../../../../../../shared/interfaces/entities/product
 interface DialogData {
   product: Product;
   priceTypes: PriceType[];
+  lastPurchasePrice?: number;
+  initialData?: {
+    tempId: string;
+    quantity: number;
+    price: number;
+    newPrices: Record<string, number>;
+  };
 }
 
 export interface ProductDetailsResult {
@@ -50,16 +57,19 @@ export class ProductDetailsDialog {
 
   product = this.data.product;
   priceTypes = this.data.priceTypes;
+  lastPurchasePrice = this.data.lastPurchasePrice;
 
   // We need a structured state for the form
   // newPrices is an object where key is priceTypeId
   formState = signal({
-    quantity: 1,
-    price: this.product.lastPurchasePrice || 0,
+    quantity: this.data.initialData?.quantity ?? 1,
+    price: this.data.initialData?.price ?? (this.lastPurchasePrice || 0),
     newPrices: this.priceTypes.reduce(
       (acc, pt) => {
-        const currentPrice = this.product.prices?.find((p) => p.priceTypeId === pt.id)?.value || 0;
-        return { ...acc, [pt.id]: currentPrice };
+        const value =
+          this.data.initialData?.newPrices[pt.id] ??
+          (this.product.prices?.find((p) => p.priceTypeId === pt.id)?.value || 0);
+        return { ...acc, [pt.id]: value };
       },
       {} as Record<string, number>,
     ),
@@ -101,7 +111,7 @@ export class ProductDetailsDialog {
 
   // Calculate percentage change for purchase price
   purchasePriceChangePercentage = computed(() => {
-    const currentPrice = this.product.lastPurchasePrice || 0;
+    const currentPrice = this.lastPurchasePrice || 0;
     const newPrice = this.formState().price || 0;
 
     if (currentPrice > 0 && newPrice > 0 && currentPrice !== newPrice) {
@@ -122,7 +132,7 @@ export class ProductDetailsDialog {
 
     const state = this.formState();
     const result = {
-      tempId: crypto.randomUUID(),
+      tempId: this.data.initialData?.tempId ?? crypto.randomUUID(),
       productId: this.product.id,
       productName: this.product.name,
       quantity: state.quantity,

@@ -1,4 +1,4 @@
-import { DialogRef } from '@angular/cdk/dialog';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
@@ -8,18 +8,25 @@ import { UiButton } from '../../../../../../../core/ui/ui-button/ui-button';
 import { UiDialog } from '../../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../../core/ui/ui-input/ui-input';
 import { UiListbox } from '../../../../../../../core/ui/ui-listbox/ui-listbox';
+import { UiNotyfService } from '../../../../../../../core/ui/ui-notyf/ui-notyf.service';
 import { Product } from '../../../../../../../shared/interfaces/entities/product.interface';
+
+export interface ProductSelectionResult {
+  product: Product;
+  lastPurchasePrice: number;
+}
 
 @Component({
   selector: 'app-product-select-dialog',
-
   imports: [UiInput, UiButton, FormField, UiListbox, UiDialog],
   templateUrl: './product-select-dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductSelectDialog {
-  private dialogRef = inject<DialogRef<Product>>(DialogRef);
+  private dialogRef = inject<DialogRef<ProductSelectionResult>>(DialogRef);
+  private data = inject<{ existingItems?: string[] }>(DIALOG_DATA, { optional: true });
   private productsService = inject(ProductsService);
+  private notyf = inject(UiNotyfService);
   private destroyRef = inject(DestroyRef);
 
   formState = signal({ search: '' });
@@ -52,13 +59,16 @@ export class ProductSelectDialog {
 
     const product = this.fullProduct.value();
 
-    // Включаем последнюю цену в объект товара перед возвратом
-    const result = {
-      ...product,
-      lastPurchasePrice: this.lastPrice.value(),
-    };
+    if (this.data?.existingItems?.includes(product.id)) {
+      this.notyf.info('Этот товар уже есть в списке');
+      return;
+    }
 
-    this.dialogRef.close(result);
+    // Возвращаем объект результата без изменения сущности Product
+    this.dialogRef.close({
+      product,
+      lastPurchasePrice: this.lastPrice.value() ?? 0,
+    });
   }
 
   cancel() {

@@ -1,4 +1,4 @@
-import { DialogRef } from '@angular/cdk/dialog';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -13,6 +13,7 @@ import { UiDialog } from '../../../../../../core/ui/ui-dialog/ui-dialog';
 import { UiInput } from '../../../../../../core/ui/ui-input/ui-input';
 import { UiSelect } from '../../../../../../core/ui/ui-select/ui-select';
 import { CreateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
+import { UpdateDocumentPurchaseDto } from '../../../../../../shared/interfaces/dtos/document-purchase/update-document-purchase.interface';
 import { DocumentPurchase } from '../../../../../../shared/interfaces/entities/document-purchase.interface';
 import {
   formatDateToIso,
@@ -32,6 +33,9 @@ export class PurchaseDialog {
   private storeService = inject(StoresService);
   private vendorService = inject(VendorsService);
   private destroyRef = inject(DestroyRef);
+  private data = inject<{ purchase?: DocumentPurchase }>(DIALOG_DATA, { optional: true });
+
+  isEditMode = !!this.data?.purchase;
 
   // Resources
   stores = this.storeService.getAll().value;
@@ -39,9 +43,11 @@ export class PurchaseDialog {
 
   // Form
   formState = signal({
-    storeId: '',
-    vendorId: '',
-    date: getCurrentDateAsString(),
+    storeId: this.data?.purchase?.storeId || '',
+    vendorId: this.data?.purchase?.vendorId || '',
+    date: this.data?.purchase?.date
+      ? getCurrentDateAsString(this.data.purchase.date)
+      : getCurrentDateAsString(),
   });
 
   formData = form(this.formState, (schema) => {
@@ -58,14 +64,17 @@ export class PurchaseDialog {
     this.isLoading.set(true);
     const formValue = this.formData().value();
 
-    const dto: CreateDocumentPurchaseDto = {
+    const dto: CreateDocumentPurchaseDto | UpdateDocumentPurchaseDto = {
       storeId: formValue.storeId,
       vendorId: formValue.vendorId,
       date: formatDateToIso(formValue.date),
     };
 
-    this.service
-      .create(dto)
+    const request$ = this.isEditMode
+      ? this.service.update(this.data!.purchase!.id, dto as UpdateDocumentPurchaseDto)
+      : this.service.create(dto as CreateDocumentPurchaseDto);
+
+    request$
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.isLoading.set(false)),

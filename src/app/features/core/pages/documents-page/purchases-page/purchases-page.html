@@ -81,14 +81,18 @@
         <ng-container cdkColumnDef="generatedPriceChange">
           <th *cdkHeaderCellDef cdk-header-cell>Связан с</th>
           <td *cdkCellDef="let element" cdk-cell>
-            <a
-              uiButton
-              variant="link"
-              icon="outline-package"
-              [routerLink]="['/core/documents/purchases', element.generatedPriceChange.id]"
-            >
-              {{ element.generatedPriceChange.code }}
-            </a>
+            @if (element.generatedPriceChange) {
+              <a
+                uiButton
+                variant="link"
+                icon="outline-package"
+                [routerLink]="['/core/documents/purchases', element.generatedPriceChange.id]"
+              >
+                {{ element.generatedPriceChange.code }}
+              </a>
+            } @else {
+              -
+            }
           </td>
         </ng-container>
 

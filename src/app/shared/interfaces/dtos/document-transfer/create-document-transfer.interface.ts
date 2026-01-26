@@ -1,7 +1,7 @@
 import { DocumentStatus } from '../../constants';
 
 export interface CreateDocumentTransferItemInput {
-  productId: string;
+  productId?: string;
   quantity: number;
 }
 
@@ -11,5 +11,4 @@ export interface CreateDocumentTransferDto {
   date?: string;
   status?: DocumentStatus;
   notes?: string;
-  items?: CreateDocumentTransferItemInput[];
 }

@@ -18,5 +18,4 @@ export interface CreateDocumentPurchaseDto {
   date: string;
   status?: DocumentStatus;
   notes?: string;
-  items?: CreateDocumentPurchaseItemInput[];
 }

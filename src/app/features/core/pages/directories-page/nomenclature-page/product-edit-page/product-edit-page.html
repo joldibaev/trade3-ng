@@ -24,7 +24,7 @@
           (click)="goBack()"
         ></button>
         <div>
-          <h1 class="text-2xl font-semibold text-slate-900">Редактировать товар</h1>
+          <h1 class="text-2xl font-semibold">Редактировать товар</h1>
           <p class="mt-1 text-slate-600">Обновление информации и цен товара</p>
         </div>
       </div>
@@ -61,7 +61,7 @@
             <div class="bg-primary-50 flex h-10 w-10 items-center justify-center rounded-lg">
               <ui-icon name="outline-box" width="20" height="20" class="text-emerald-600" />
             </div>
-            <h3 class="text-lg font-semibold text-slate-900">Общая информация</h3>
+            <h3 class="text-lg font-semibold">Общая информация</h3>
           </div>
 
           <div class="space-y-4">
@@ -174,7 +174,7 @@
               <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
                 <ui-icon name="outline-barcode" width="20" height="20" class="text-blue-600" />
               </div>
-              <h3 class="text-lg font-semibold text-slate-900">Штрихкоды</h3>
+              <h3 class="text-lg font-semibold">Штрихкоды</h3>
             </div>
             <button
               uiButton
@@ -267,7 +267,7 @@
             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50">
               <ui-icon name="outline-cash" width="20" height="20" class="text-slate-600" />
             </div>
-            <h3 class="text-lg font-semibold text-slate-900">Себестоимость</h3>
+            <h3 class="text-lg font-semibold">Себестоимость</h3>
           </div>
 
           <div>
@@ -302,7 +302,7 @@
                   class="text-amber-600"
                 />
               </div>
-              <h3 class="text-lg font-semibold text-slate-900">Цены продажи</h3>
+              <h3 class="text-lg font-semibold">Цены продажи</h3>
             </div>
             <button
               uiButton
@@ -324,7 +324,7 @@
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
                     <span class="bg-primary-500 h-2 w-2 rounded-full"></span>
-                    <span class="text-sm font-medium text-slate-900">{{ priceItem.name }}</span>
+                    <span class="text-sm font-medium">{{ priceItem.name }}</span>
                   </div>
                   @if (salesPrices().length > 1) {
                     <button
@@ -376,7 +376,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                       <span class="text-slate-600">Прибыль</span>
-                      <span class="font-medium text-slate-900">
+                      <span class="font-medium">
                         ₦{{ profit(priceItem.value) | number: '1.2-2' }}
                       </span>
                     </div>
