@@ -1,0 +1,122 @@
+<div class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[1.1fr_0.9fr]">
+  <!-- Left Side: Hero Information -->
+  <aside
+    class="relative hidden h-full flex-col items-center justify-center overflow-hidden bg-linear-to-br from-[#064e3b] to-[#065f46] p-12 text-white lg:flex"
+  >
+    <div class="relative z-10 w-full max-w-[480px]">
+      <div class="mb-16 flex items-center gap-4">
+        <img
+          src="./assets/logo.jpg"
+          alt="Trade3Ng"
+          class="h-12 w-12 rounded-xl border-2 border-white/20 bg-white p-0.5"
+        />
+        <span class="text-2xl font-bold tracking-tight">Trade3Ng</span>
+      </div>
+
+      <div class="animate-fadeInUp">
+        <h1 class="mb-6 text-[2.75rem] leading-[1.1] font-extrabold tracking-tighter">
+          Управляйте вашим торговым предприятием на новом уровне.
+        </h1>
+        <p class="mb-12 text-lg leading-relaxed text-emerald-200">
+          Современная ERP-система для автоматизации закупок, продаж, складского учета и анализа цен.
+        </p>
+
+        <ul class="mb-16 flex flex-col gap-5">
+          <li class="flex items-center gap-3.5 text-base font-medium">
+            <ui-icon
+              name="outline-check"
+              class="h-5 w-5 shrink-0 rounded-full bg-white p-0.5 text-emerald-500"
+            />
+            <span>Синхронизация документов в реальном времени</span>
+          </li>
+          <li class="flex items-center gap-3.5 text-base font-medium">
+            <ui-icon
+              name="outline-check"
+              class="h-5 w-5 shrink-0 rounded-full bg-white p-0.5 text-emerald-500"
+            />
+            <span>Продвинутая аналитика и дашборды</span>
+          </li>
+          <li class="flex items-center gap-3.5 text-base font-medium">
+            <ui-icon
+              name="outline-check"
+              class="h-5 w-5 shrink-0 rounded-full bg-white p-0.5 text-emerald-500"
+            />
+            <span>Гибкое управление каталогами товаров</span>
+          </li>
+          <li class="flex items-center gap-3.5 text-base font-medium">
+            <ui-icon
+              name="outline-check"
+              class="h-5 w-5 shrink-0 rounded-full bg-white p-0.5 text-emerald-500"
+            />
+            <span>Автоматизация ценообразования</span>
+          </li>
+        </ul>
+      </div>
+
+      <footer class="text-sm text-white/50">
+        <p>© 2026 Trade3Ng ERP Systems. Все права защищены.</p>
+      </footer>
+    </div>
+  </aside>
+
+  <!-- Right Side: Login Form -->
+  <main class="flex items-center justify-center bg-[#fafafa] p-8">
+    <div class="animate-fadeInUp w-full max-w-[400px]">
+      <header class="mb-10">
+        <ui-title title="С возвращением" />
+        <p class="mt-2 text-[0.9375rem] text-slate-500">Введите свои данные для входа в систему</p>
+      </header>
+
+      <form class="flex flex-col gap-6" (ngSubmit)="onSubmit()">
+        <ui-input
+          label="Электронная почта"
+          placeholder="name@company.com"
+          icon="outline-mail"
+          [formField]="formData.email"
+        />
+
+        <div class="flex flex-col gap-2">
+          <ui-input
+            label="Пароль"
+            type="password"
+            placeholder="••••••••"
+            icon="outline-settings"
+            [formField]="formData.password"
+          />
+          <a
+            routerLink="/auth/forgot-password"
+            class="self-end text-[0.8125rem] font-semibold text-emerald-500 transition-colors hover:text-emerald-600"
+          >
+            Забыли пароль?
+          </a>
+        </div>
+
+        <div class="mt-4">
+          <button
+            uiButton
+            type="submit"
+            fluid
+            variant="primary"
+            [loading]="isLoading()"
+            [disabled]="formData().invalid() || isLoading()"
+          >
+            Войти в систему
+            <ui-icon name="outline-chevron-right" />
+          </button>
+        </div>
+      </form>
+
+      <footer class="mt-10 border-t border-slate-200 pt-8 text-center text-sm text-slate-500">
+        <p>
+          Нет аккаунта?
+          <a
+            routerLink="/auth/register"
+            class="font-semibold text-emerald-500 transition-colors hover:text-emerald-600"
+          >
+            Зарегистрироваться
+          </a>
+        </p>
+      </footer>
+    </div>
+  </main>
+</div>

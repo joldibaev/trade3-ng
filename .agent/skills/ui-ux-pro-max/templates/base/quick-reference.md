@@ -1,6 +1,7 @@
 ## When to Apply
 
 Reference these guidelines when:
+
 - Designing new UI components or pages
 - Choosing color palettes and typography
 - Reviewing code for UX issues
@@ -9,16 +10,16 @@ Reference these guidelines when:
 
 ## Rule Categories by Priority
 
-| Priority | Category | Impact | Domain |
-|----------|----------|--------|--------|
-| 1 | Accessibility | CRITICAL | `ux` |
-| 2 | Touch & Interaction | CRITICAL | `ux` |
-| 3 | Performance | HIGH | `ux` |
-| 4 | Layout & Responsive | HIGH | `ux` |
-| 5 | Typography & Color | MEDIUM | `typography`, `color` |
-| 6 | Animation | MEDIUM | `ux` |
-| 7 | Style Selection | MEDIUM | `style`, `product` |
-| 8 | Charts & Data | LOW | `chart` |
+| Priority | Category            | Impact   | Domain                |
+| -------- | ------------------- | -------- | --------------------- |
+| 1        | Accessibility       | CRITICAL | `ux`                  |
+| 2        | Touch & Interaction | CRITICAL | `ux`                  |
+| 3        | Performance         | HIGH     | `ux`                  |
+| 4        | Layout & Responsive | HIGH     | `ux`                  |
+| 5        | Typography & Color  | MEDIUM   | `typography`, `color` |
+| 6        | Animation           | MEDIUM   | `ux`                  |
+| 7        | Style Selection     | MEDIUM   | `style`, `product`    |
+| 8        | Charts & Data       | LOW      | `chart`               |
 
 ## Quick Reference
 
@@ -81,4 +82,3 @@ Reference these guidelines when:
 Search specific domains using the CLI tool below.
 
 ---
-

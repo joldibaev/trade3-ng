@@ -50,7 +50,32 @@
 </div>
 
 <!-- Toggle Button -->
-<div class="p-4">
+<div class="flex flex-col gap-2 p-4">
+  @if (authService.currentUser(); as user) {
+    <div
+      class="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3"
+      [class.p-2]="isCollapsed()"
+    >
+      <div
+        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 font-bold text-slate-600"
+      >
+        {{ user.email.charAt(0).toUpperCase() }}
+      </div>
+      @if (!isCollapsed()) {
+        <div class="flex flex-1 flex-col overflow-hidden">
+          <span class="truncate text-xs font-semibold">{{ user.email }}</span>
+          <span class="text-[10px] text-slate-500 uppercase">{{ user.role }}</span>
+        </div>
+      }
+    </div>
+
+    <button uiButton fluid variant="ghost" icon="outline-logout" color="danger" (click)="logout()">
+      @if (!isCollapsed()) {
+        Выйти
+      }
+    </button>
+  }
+
   <button
     uiButton
     fluid
@@ -59,7 +84,7 @@
     (click)="toggle()"
   >
     @if (!isCollapsed()) {
-      Collapse
+      Свернуть
     }
   </button>
 </div>

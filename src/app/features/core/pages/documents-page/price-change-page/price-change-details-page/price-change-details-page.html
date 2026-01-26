@@ -56,7 +56,10 @@
     </ui-card>
 
     <ui-card class="max-h-80 overflow-scroll p-4">
-      <app-document-history-list [data]="priceChange.value().documentHistory" [productMap]="productMap()" />
+      <app-document-history-list
+        [data]="priceChange.value().documentHistory"
+        [productMap]="productMap()"
+      />
     </ui-card>
   </section>
 

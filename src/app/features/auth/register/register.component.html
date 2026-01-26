@@ -1,0 +1,139 @@
+<div class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[1.1fr_0.9fr]">
+  <!-- Left Side: Hero Information -->
+  <aside
+    class="relative hidden h-full flex-col items-center justify-center overflow-hidden bg-linear-to-br from-[#064e3b] to-[#065f46] p-12 text-white lg:flex"
+  >
+    <div class="relative z-10 w-full max-w-[480px]">
+      <div class="mb-16 flex items-center gap-4">
+        <img
+          src="./assets/logo.jpg"
+          alt="Trade3Ng"
+          class="h-12 w-12 rounded-xl border-2 border-white/20 bg-white p-0.5"
+        />
+        <span class="text-2xl font-bold tracking-tight">Trade3Ng</span>
+      </div>
+
+      <div class="animate-fadeInUp">
+        <h1 class="mb-6 text-[2.75rem] leading-[1.1] font-extrabold tracking-tighter">
+          Начните управлять вашим бизнесом эффективнее.
+        </h1>
+        <p class="mb-12 text-lg leading-relaxed text-emerald-200">
+          Полный контроль над закупками, складом и финансами в одной современной системе.
+        </p>
+
+        <ul class="mb-16 flex flex-col gap-5">
+          <li class="flex items-center gap-3.5 text-base font-medium">
+            <ui-icon
+              name="outline-check"
+              class="h-5 w-5 shrink-0 rounded-full bg-white p-0.5 text-emerald-500"
+            />
+            <span>Управление складом и товарами</span>
+          </li>
+          <li class="flex items-center gap-3.5 text-base font-medium">
+            <ui-icon
+              name="outline-check"
+              class="h-5 w-5 shrink-0 rounded-full bg-white p-0.5 text-emerald-500"
+            />
+            <span>Продажи и заказы</span>
+          </li>
+          <li class="flex items-center gap-3.5 text-base font-medium">
+            <ui-icon
+              name="outline-check"
+              class="h-5 w-5 shrink-0 rounded-full bg-white p-0.5 text-emerald-500"
+            />
+            <span>Финансовая отчетность</span>
+          </li>
+          <li class="flex items-center gap-3.5 text-base font-medium">
+            <ui-icon
+              name="outline-check"
+              class="h-5 w-5 shrink-0 rounded-full bg-white p-0.5 text-emerald-500"
+            />
+            <span>Аналитика в реальном времени</span>
+          </li>
+        </ul>
+
+        <div class="mb-16 flex gap-8 rounded-2xl border border-white/10 bg-white/5 p-6">
+          <div class="flex flex-col">
+            <span class="text-xl font-bold text-white">1000+</span>
+            <span class="text-[0.75rem] tracking-widest text-emerald-200 uppercase">Компаний</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xl font-bold text-white">24/7</span>
+            <span class="text-[0.75rem] tracking-widest text-emerald-200 uppercase">Поддержка</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xl font-bold text-white">99.9%</span>
+            <span class="text-[0.75rem] tracking-widest text-emerald-200 uppercase">Uptime</span>
+          </div>
+        </div>
+      </div>
+
+      <footer class="text-sm text-white/50">
+        <p>© 2026 Trade3Ng ERP Systems. Все права защищены.</p>
+      </footer>
+    </div>
+  </aside>
+
+  <!-- Right Side: Register Form -->
+  <main class="flex items-center justify-center bg-[#fafafa] p-8">
+    <div class="animate-fadeInUp w-full max-w-[400px]">
+      <header class="mb-10">
+        <ui-title title="Регистрация" />
+        <p class="mt-2 text-[0.9375rem] text-slate-500">
+          Создайте аккаунт для начала работы с Trade3
+        </p>
+      </header>
+
+      <form class="flex flex-col gap-6" (ngSubmit)="onSubmit()">
+        <ui-input
+          label="Email"
+          placeholder="example@mail.com"
+          icon="outline-mail"
+          [formField]="formData.email"
+        />
+
+        <ui-input
+          label="Пароль"
+          type="password"
+          placeholder="••••••••"
+          icon="outline-settings"
+          [formField]="formData.password"
+        />
+
+        <ui-input
+          label="Подтвердите пароль"
+          type="password"
+          placeholder="••••••••"
+          icon="outline-settings"
+          [formField]="formData.confirmPassword"
+        />
+
+        <div class="mt-4">
+          <button
+            uiButton
+            type="submit"
+            fluid
+            variant="primary"
+            [loading]="isLoading()"
+            [disabled]="formData().invalid() || isLoading()"
+          >
+            Создать аккаунт
+            <ui-icon name="outline-chevron-right" />
+          </button>
+        </div>
+      </form>
+
+      <footer class="mt-10 border-t border-slate-200 pt-8 text-center text-sm text-slate-500">
+        <p>
+          Уже есть аккаунт?
+          <a
+            routerLink="/auth/login"
+            class="font-semibold text-emerald-500 transition-colors hover:text-emerald-600"
+          >
+            Войти
+          </a>
+        </p>
+      </footer>
+    </div>
+  </main>
+</div>

@@ -1,6 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth.service';
 import { UiButton } from '../../../../core/ui/ui-button/ui-button';
 import { IconName } from '../../../../core/ui/ui-icon/data';
 
@@ -31,6 +32,7 @@ interface NavGroup {
   },
 })
 export class Aside {
+  protected authService = inject(AuthService);
   isCollapsed = signal(false);
   protected expandedGroups = signal<Set<string>>(new Set(['directories', 'documents']));
 
@@ -125,5 +127,9 @@ export class Aside {
       }
       return next;
     });
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

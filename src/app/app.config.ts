@@ -11,6 +11,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import localeRu from '@angular/common/locales/ru';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { routes } from './app.routes';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { httpInterceptor } from './core/interceptors/http.interceptor';
 
 registerLocaleData(localeRu);
@@ -20,7 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withFetch(), withInterceptors([httpInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor, httpInterceptor])),
 
     {
       provide: LOCALE_ID,
