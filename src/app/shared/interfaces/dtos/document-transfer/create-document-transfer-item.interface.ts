@@ -1,5 +1,6 @@
+// This file is auto-generated. Do not edit.
+
 export interface CreateDocumentTransferItemDto {
-  transferId: string;
   productId: string;
   quantity: number;
 }

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  CreateDocumentTransferDto,
-  CreateDocumentTransferItemInput,
-} from '../../shared/interfaces/dtos/document-transfer/create-document-transfer.interface';
+import { CreateDocumentTransferItemDto } from '../../shared/interfaces/dtos/document-transfer/create-document-transfer-item.interface';
+import { CreateDocumentTransferDto } from '../../shared/interfaces/dtos/document-transfer/create-document-transfer.interface';
 import { DocumentTransfer } from '../../shared/interfaces/entities/document-transfer.interface';
 import { BaseDocumentService } from './base-document.service';
 
@@ -14,11 +12,11 @@ export class DocumentTransfersService extends BaseDocumentService<
 > {
   protected apiUrl = '/api/document-transfers';
 
-  addItems(id: string, items: CreateDocumentTransferItemInput[]) {
+  addItems(id: string, items: CreateDocumentTransferItemDto[]) {
     return this.http.post<DocumentTransfer>(`${this.apiUrl}/${id}/items`, { items });
   }
 
-  updateItem(id: string, itemId: string, item: CreateDocumentTransferItemInput) {
+  updateItem(id: string, itemId: string, item: CreateDocumentTransferItemDto) {
     return this.http.patch<DocumentTransfer>(`${this.apiUrl}/${id}/items/${itemId}`, item);
   }
 

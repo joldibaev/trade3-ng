@@ -1,9 +1,12 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentStatus } from '../constants';
 import { DocumentHistory } from './document-history.interface';
 import { DocumentTransferItem } from './document-transfer-item.interface';
 import { InventoryReprocessing } from './inventory-reprocessing.interface';
 import { StockLedger } from './stock-ledger.interface';
 import { Store } from './store.interface';
+import { User } from './user.interface';
 
 export interface DocumentTransfer {
   id: string;
@@ -21,4 +24,6 @@ export interface DocumentTransfer {
   stockLedger: StockLedger[];
   documentHistory: DocumentHistory[];
   inventoryReprocessings: InventoryReprocessing[];
+  author?: User;
+  authorId?: string;
 }

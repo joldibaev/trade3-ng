@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 export const DocumentStatus = {
   DRAFT: 'DRAFT',
   COMPLETED: 'COMPLETED',
@@ -6,6 +8,15 @@ export const DocumentStatus = {
 } as const;
 
 export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus];
+
+export const Role = {
+  ADMIN: 'ADMIN',
+  MANAGER: 'MANAGER',
+  CASHIER: 'CASHIER',
+  USER: 'USER',
+} as const;
+
+export type Role = (typeof Role)[keyof typeof Role];
 
 export const BarcodeType = {
   EAN13: 'EAN13',

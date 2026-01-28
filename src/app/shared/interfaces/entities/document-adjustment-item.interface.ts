@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentAdjustment } from './document-adjustment.interface';
 import { Product } from './product.interface';
 

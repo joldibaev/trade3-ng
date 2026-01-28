@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  CreateDocumentSaleDto,
-  CreateDocumentSaleItemInput,
-} from '../../shared/interfaces/dtos/document-sale/create-document-sale.interface';
+import { CreateDocumentSaleItemDto } from '../../shared/interfaces/dtos/document-sale/create-document-sale-item.interface';
+import { CreateDocumentSaleDto } from '../../shared/interfaces/dtos/document-sale/create-document-sale.interface';
 import { DocumentSale } from '../../shared/interfaces/entities/document-sale.interface';
 import { BaseDocumentService } from './base-document.service';
 
@@ -14,11 +12,11 @@ export class DocumentSalesService extends BaseDocumentService<
 > {
   protected apiUrl = '/api/document-sales';
 
-  addItems(id: string, items: CreateDocumentSaleItemInput[]) {
+  addItems(id: string, items: CreateDocumentSaleItemDto[]) {
     return this.http.post<DocumentSale>(`${this.apiUrl}/${id}/items`, { items });
   }
 
-  updateItem(id: string, itemId: string, item: CreateDocumentSaleItemInput) {
+  updateItem(id: string, itemId: string, item: CreateDocumentSaleItemDto) {
     return this.http.patch<DocumentSale>(`${this.apiUrl}/${id}/items/${itemId}`, item);
   }
 

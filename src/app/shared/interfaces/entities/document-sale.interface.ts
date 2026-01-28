@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentStatus } from '../constants';
 import { Cashbox } from './cashbox.interface';
 import { Client } from './client.interface';
@@ -7,6 +9,7 @@ import { InventoryReprocessing } from './inventory-reprocessing.interface';
 import { PriceType } from './price-type.interface';
 import { StockLedger } from './stock-ledger.interface';
 import { Store } from './store.interface';
+import { User } from './user.interface';
 
 export interface DocumentSale {
   id: string;
@@ -29,4 +32,6 @@ export interface DocumentSale {
   stockLedger: StockLedger[];
   documentHistory: DocumentHistory[];
   inventoryReprocessings: InventoryReprocessing[];
+  author?: User;
+  authorId?: string;
 }

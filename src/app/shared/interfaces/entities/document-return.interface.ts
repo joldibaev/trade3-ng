@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentStatus } from '../constants';
 import { Client } from './client.interface';
 import { DocumentHistory } from './document-history.interface';
@@ -5,6 +7,7 @@ import { DocumentReturnItem } from './document-return-item.interface';
 import { InventoryReprocessing } from './inventory-reprocessing.interface';
 import { StockLedger } from './stock-ledger.interface';
 import { Store } from './store.interface';
+import { User } from './user.interface';
 
 export interface DocumentReturn {
   id: string;
@@ -23,4 +26,6 @@ export interface DocumentReturn {
   stockLedger: StockLedger[];
   documentHistory: DocumentHistory[];
   inventoryReprocessings: InventoryReprocessing[];
+  author?: User;
+  authorId?: string;
 }

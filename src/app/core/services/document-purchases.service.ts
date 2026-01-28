@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  CreateDocumentPurchaseDto,
-  CreateDocumentPurchaseItemInput,
-} from '../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
+import { CreateDocumentPurchaseItemDto } from '../../shared/interfaces/dtos/document-purchase/create-document-purchase-item.interface';
+import { CreateDocumentPurchaseDto } from '../../shared/interfaces/dtos/document-purchase/create-document-purchase.interface';
 import { UpdateDocumentPurchaseDto } from '../../shared/interfaces/dtos/document-purchase/update-document-purchase.interface';
 import { DocumentPurchase } from '../../shared/interfaces/entities/document-purchase.interface';
 import { BaseDocumentService } from './base-document.service';
@@ -15,11 +13,11 @@ export class DocumentPurchasesService extends BaseDocumentService<
 > {
   protected apiUrl = '/api/document-purchases';
 
-  addItems(id: string, items: CreateDocumentPurchaseItemInput[]) {
+  addItems(id: string, items: CreateDocumentPurchaseItemDto[]) {
     return this.http.post<DocumentPurchase>(`${this.apiUrl}/${id}/items`, { items });
   }
 
-  updateItem(id: string, productId: string, item: CreateDocumentPurchaseItemInput) {
+  updateItem(id: string, productId: string, item: CreateDocumentPurchaseItemDto) {
     // Note: productId is used as itemId in the backend implementation as per our logic
     return this.http.patch<DocumentPurchase>(`${this.apiUrl}/${id}/items/${productId}`, item);
   }

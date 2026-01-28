@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  CreateDocumentReturnDto,
-  CreateDocumentReturnItemInput,
-} from '../../shared/interfaces/dtos/document-return/create-document-return.interface';
+import { CreateDocumentReturnItemDto } from '../../shared/interfaces/dtos/document-return/create-document-return-item.interface';
+import { CreateDocumentReturnDto } from '../../shared/interfaces/dtos/document-return/create-document-return.interface';
 import { DocumentReturn } from '../../shared/interfaces/entities/document-return.interface';
 import { BaseDocumentService } from './base-document.service';
 
@@ -14,11 +12,11 @@ export class DocumentReturnsService extends BaseDocumentService<
 > {
   protected apiUrl = '/api/document-returns';
 
-  addItems(id: string, items: CreateDocumentReturnItemInput[]) {
+  addItems(id: string, items: CreateDocumentReturnItemDto[]) {
     return this.http.post<DocumentReturn>(`${this.apiUrl}/${id}/items`, { items });
   }
 
-  updateItem(id: string, itemId: string, item: CreateDocumentReturnItemInput) {
+  updateItem(id: string, itemId: string, item: CreateDocumentReturnItemDto) {
     return this.http.patch<DocumentReturn>(`${this.apiUrl}/${id}/items/${itemId}`, item);
   }
 

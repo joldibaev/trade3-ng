@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { StockMovementType } from '../../constants';
 
 export interface CreateStockLedgerDto {
@@ -10,6 +12,7 @@ export interface CreateStockLedgerDto {
   averagePurchasePrice?: number;
   transactionAmount?: number;
   batchId?: string;
+  date?: string;
   documentPurchaseId?: string;
   documentSaleId?: string;
   documentReturnId?: string;

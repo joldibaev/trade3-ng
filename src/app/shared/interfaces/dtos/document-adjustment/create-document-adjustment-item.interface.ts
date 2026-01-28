@@ -1,7 +1,6 @@
+// This file is auto-generated. Do not edit.
+
 export interface CreateDocumentAdjustmentItemDto {
-  adjustmentId: string;
   productId: string;
   quantity: number;
-  quantityBefore?: number;
-  quantityAfter?: number;
 }

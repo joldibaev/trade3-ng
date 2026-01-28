@@ -1,9 +1,12 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentAdjustment } from './document-adjustment.interface';
 import { DocumentPriceChange } from './document-price-change.interface';
 import { DocumentPurchase } from './document-purchase.interface';
 import { DocumentReturn } from './document-return.interface';
 import { DocumentSale } from './document-sale.interface';
 import { DocumentTransfer } from './document-transfer.interface';
+import { User } from './user.interface';
 
 export interface DocumentHistory {
   id: string;
@@ -24,4 +27,6 @@ export interface DocumentHistory {
   date: string;
   createdAt: string;
   updatedAt: string;
+  author?: User;
+  authorId?: string;
 }

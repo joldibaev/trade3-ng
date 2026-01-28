@@ -1,21 +1,10 @@
-import { DocumentStatus } from '../../constants';
+// This file is auto-generated. Do not edit.
 
-export interface CreateDocumentAdjustmentItemInput {
-  productId?: string;
-  quantity: number;
-}
+import { DocumentStatus } from '../../constants';
 
 export interface CreateDocumentAdjustmentDto {
   storeId: string;
   date?: string;
   status?: DocumentStatus;
   notes?: string;
-}
-
-export interface CreateDocumentAdjustmentItemsInput {
-  items: CreateDocumentAdjustmentItemInput[];
-}
-
-export interface RemoveDocumentAdjustmentItemsInput {
-  itemIds: string[];
 }

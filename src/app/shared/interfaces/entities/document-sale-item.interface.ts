@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentSale } from './document-sale.interface';
 import { Product } from './product.interface';
 

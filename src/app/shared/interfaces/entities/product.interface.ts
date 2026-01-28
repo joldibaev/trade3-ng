@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { Barcode } from './barcode.interface';
 import { Category } from './category.interface';
 import { DocumentAdjustmentItem } from './document-adjustment-item.interface';

@@ -1,10 +1,6 @@
-import { DocumentStatus } from '../../constants';
+// This file is auto-generated. Do not edit.
 
-export interface CreateDocumentReturnItemInput {
-  productId?: string;
-  quantity: number;
-  price?: number;
-}
+import { DocumentStatus } from '../../constants';
 
 export interface CreateDocumentReturnDto {
   storeId: string;
@@ -12,12 +8,4 @@ export interface CreateDocumentReturnDto {
   date?: string;
   status?: DocumentStatus;
   notes?: string;
-}
-
-export interface CreateDocumentReturnItemsInput {
-  items: CreateDocumentReturnItemInput[];
-}
-
-export interface RemoveDocumentReturnItemsInput {
-  itemIds: string[];
 }

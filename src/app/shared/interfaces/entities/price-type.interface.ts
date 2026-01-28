@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentPriceChangeItem } from './document-price-change-item.interface';
 import { DocumentSale } from './document-sale.interface';
 import { PriceLedger } from './price-ledger.interface';

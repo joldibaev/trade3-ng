@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentReturn } from './document-return.interface';
 import { Product } from './product.interface';
 

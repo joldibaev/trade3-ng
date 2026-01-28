@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { StockMovementType } from '../constants';
 import { DocumentAdjustment } from './document-adjustment.interface';
 import { DocumentPurchase } from './document-purchase.interface';

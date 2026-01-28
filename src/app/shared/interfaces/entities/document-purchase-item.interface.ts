@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentPurchase } from './document-purchase.interface';
 import { Product } from './product.interface';
 

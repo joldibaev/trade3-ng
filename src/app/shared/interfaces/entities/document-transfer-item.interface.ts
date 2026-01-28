@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentTransfer } from './document-transfer.interface';
 import { Product } from './product.interface';
 

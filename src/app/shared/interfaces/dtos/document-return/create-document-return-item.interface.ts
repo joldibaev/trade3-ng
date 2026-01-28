@@ -1,7 +1,7 @@
+// This file is auto-generated. Do not edit.
+
 export interface CreateDocumentReturnItemDto {
-  returnId: string;
   productId: string;
   quantity: number;
-  price: number;
-  total: number;
+  price?: number;
 }

@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { InventoryReprocessing } from './inventory-reprocessing.interface';
 import { Product } from './product.interface';
 import { Store } from './store.interface';

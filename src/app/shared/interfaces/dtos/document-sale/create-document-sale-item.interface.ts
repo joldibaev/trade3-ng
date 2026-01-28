@@ -1,8 +1,7 @@
+// This file is auto-generated. Do not edit.
+
 export interface CreateDocumentSaleItemDto {
-  saleId: string;
   productId: string;
   quantity: number;
-  price: number;
-  costPrice?: number;
-  total: number;
+  price?: number;
 }

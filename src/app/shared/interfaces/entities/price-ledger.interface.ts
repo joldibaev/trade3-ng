@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { DocumentPriceChange } from './document-price-change.interface';
 import { PriceType } from './price-type.interface';
 import { Product } from './product.interface';

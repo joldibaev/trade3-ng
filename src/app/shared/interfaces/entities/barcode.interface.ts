@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 import { BarcodeType } from '../constants';
 import { Product } from './product.interface';
 

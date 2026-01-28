@@ -1,9 +1,6 @@
-import { DocumentStatus } from '../../constants';
+// This file is auto-generated. Do not edit.
 
-export interface CreateDocumentTransferItemInput {
-  productId?: string;
-  quantity: number;
-}
+import { DocumentStatus } from '../../constants';
 
 export interface CreateDocumentTransferDto {
   sourceStoreId: string;
@@ -11,12 +8,4 @@ export interface CreateDocumentTransferDto {
   date?: string;
   status?: DocumentStatus;
   notes?: string;
-}
-
-export interface CreateDocumentTransferItemsInput {
-  items: CreateDocumentTransferItemInput[];
-}
-
-export interface RemoveDocumentTransferItemsInput {
-  itemIds: string[];
 }

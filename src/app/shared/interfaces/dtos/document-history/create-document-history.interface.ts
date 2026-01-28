@@ -1,3 +1,5 @@
+// This file is auto-generated. Do not edit.
+
 export interface CreateDocumentHistoryDto {
   action: string;
   details?: Record<string, unknown>;
@@ -7,4 +9,6 @@ export interface CreateDocumentHistoryDto {
   documentAdjustmentId?: string;
   documentTransferId?: string;
   documentPriceChangeId?: string;
+  date?: string;
+  authorId?: string;
 }
