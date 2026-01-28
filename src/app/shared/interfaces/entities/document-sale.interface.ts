@@ -5,7 +5,6 @@ import { Cashbox } from './cashbox.interface';
 import { Client } from './client.interface';
 import { DocumentHistory } from './document-history.interface';
 import { DocumentSaleItem } from './document-sale-item.interface';
-import { InventoryReprocessing } from './inventory-reprocessing.interface';
 import { PriceType } from './price-type.interface';
 import { StockLedger } from './stock-ledger.interface';
 import { Store } from './store.interface';
@@ -31,7 +30,6 @@ export interface DocumentSale {
   updatedAt: string;
   stockLedger: StockLedger[];
   documentHistory: DocumentHistory[];
-  inventoryReprocessings: InventoryReprocessing[];
   author?: User;
   authorId?: string;
 }

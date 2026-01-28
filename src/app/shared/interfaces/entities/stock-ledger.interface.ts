@@ -1,6 +1,6 @@
 // This file is auto-generated. Do not edit.
 
-import { StockMovementType } from '../constants';
+import { LedgerReason, StockMovementType } from '../constants';
 import { DocumentAdjustment } from './document-adjustment.interface';
 import { DocumentPurchase } from './document-purchase.interface';
 import { DocumentReturn } from './document-return.interface';
@@ -22,6 +22,11 @@ export interface StockLedger {
   averagePurchasePrice: number;
   transactionAmount: number;
   batchId?: string;
+  reason: LedgerReason;
+  parentLedgerId?: string;
+  parentLedger?: StockLedger;
+  nextVersions: StockLedger[];
+  causationId?: string;
   date: string;
   createdAt: string;
   updatedAt: string;

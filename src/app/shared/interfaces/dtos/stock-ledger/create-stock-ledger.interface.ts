@@ -1,6 +1,6 @@
 // This file is auto-generated. Do not edit.
 
-import { StockMovementType } from '../../constants';
+import { LedgerReason, StockMovementType } from '../../constants';
 
 export interface CreateStockLedgerDto {
   type: StockMovementType;
@@ -12,6 +12,9 @@ export interface CreateStockLedgerDto {
   averagePurchasePrice?: number;
   transactionAmount?: number;
   batchId?: string;
+  reason?: LedgerReason;
+  parentLedgerId?: string;
+  causationId?: string;
   date?: string;
   documentPurchaseId?: string;
   documentSaleId?: string;

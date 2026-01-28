@@ -8,7 +8,6 @@ import { DocumentPurchaseItem } from './document-purchase-item.interface';
 import { DocumentReturnItem } from './document-return-item.interface';
 import { DocumentSaleItem } from './document-sale-item.interface';
 import { DocumentTransferItem } from './document-transfer-item.interface';
-import { InventoryReprocessingItem } from './inventory-reprocessing-item.interface';
 import { PriceLedger } from './price-ledger.interface';
 import { Price } from './price.interface';
 import { StockLedger } from './stock-ledger.interface';
@@ -32,7 +31,6 @@ export interface Product {
   priceChangeItems: DocumentPriceChangeItem[];
   barcodes: Barcode[];
   stockLedger: StockLedger[];
-  inventoryReprocessingItems: InventoryReprocessingItem[];
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

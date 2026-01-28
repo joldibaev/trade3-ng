@@ -38,3 +38,11 @@ export const StockMovementType = {
 } as const;
 
 export type StockMovementType = (typeof StockMovementType)[keyof typeof StockMovementType];
+
+export const LedgerReason = {
+  INITIAL: 'INITIAL',
+  REVERSAL: 'REVERSAL',
+  CORRECTION: 'CORRECTION',
+} as const;
+
+export type LedgerReason = (typeof LedgerReason)[keyof typeof LedgerReason];

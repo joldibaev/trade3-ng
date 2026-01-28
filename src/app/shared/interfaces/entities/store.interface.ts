@@ -6,7 +6,6 @@ import { DocumentPurchase } from './document-purchase.interface';
 import { DocumentReturn } from './document-return.interface';
 import { DocumentSale } from './document-sale.interface';
 import { DocumentTransfer } from './document-transfer.interface';
-import { InventoryReprocessingItem } from './inventory-reprocessing-item.interface';
 import { StockLedger } from './stock-ledger.interface';
 import { Stock } from './stock.interface';
 
@@ -28,5 +27,4 @@ export interface Store {
   transfersFrom: DocumentTransfer[];
   transfersTo: DocumentTransfer[];
   stockLedger: StockLedger[];
-  inventoryReprocessingItems: InventoryReprocessingItem[];
 }

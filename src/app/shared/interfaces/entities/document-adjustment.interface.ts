@@ -3,7 +3,6 @@
 import { DocumentStatus } from '../constants';
 import { DocumentAdjustmentItem } from './document-adjustment-item.interface';
 import { DocumentHistory } from './document-history.interface';
-import { InventoryReprocessing } from './inventory-reprocessing.interface';
 import { StockLedger } from './stock-ledger.interface';
 import { Store } from './store.interface';
 import { User } from './user.interface';
@@ -21,7 +20,6 @@ export interface DocumentAdjustment {
   updatedAt: string;
   stockLedger: StockLedger[];
   documentHistory: DocumentHistory[];
-  inventoryReprocessings: InventoryReprocessing[];
   author?: User;
   authorId?: string;
 }
